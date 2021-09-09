@@ -1,4 +1,4 @@
-.swap-btn{   
+.send-btn{   
     background: #792EC0;
     border-radius: 4px;
     color: white;
@@ -9,7 +9,11 @@
     line-height: 18px;
     color: #9099A3;
 }
-
+.formItem-row{
+    display: flex;
+    color: rgb(129, 141, 153);
+    font-size: 14px;
+}
 .send-amount{
     color: #67A5EB;
     font-size: 16px;
@@ -17,24 +21,6 @@
     font-family: 'Panton Bold';
 }
 
-.max-btn{
-    padding: 0px 16px;
-    position: absolute;
-    width: 60px;
-    height: 28px;
-    background: #CCD3FF;
-    z-index: 10;
-    border: none;
-    border-radius: 4px;
-    right: 30px;
-    font-size: 14px;
-    color: #5965B3;
-    cursor: pointer;
-}
-
-.input-custom{
-    width: 100%;
-}
 
 .vkuiInput__el{
     outline-color: #792EC0 !important;
@@ -42,4 +28,25 @@
 
 .vkuiFormField__border, .FormField__border{
     outline-color: #792EC0 !important;
+}
+
+.alarm-block{
+    margin: 0 15px;
+    display: flex;
+    align-items: center;
+    background: #E9F6FF;
+    border-radius: 8px;
+}
+
+.alarm-block img{
+    margin: 15px;
+}
+
+.alarm-block p{
+    color: #00A3FF;
+    font-size: 14px;
+}
+
+.bridge-container{
+    margin-bottom: 160px;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/transactions.css';
+import '../styles/components/transactionsItem.css';
 import moment from 'moment'
 const TransactionItem = ({data}) =>{
     let statusClass = () => {

@@ -1,0 +1,15 @@
+@font-face {
+    font-family: Panton;
+    src: url(./panton/Panton.otf);
+}
+@font-face {
+    font-family: 'Panton Bold';
+    src: url(./panton/Panton\ Bold.otf);
+}
+@font-face {
+    font-family: 'Panton Medium';
+    src: url(./panton/Panton\ SemiBold.otf);
+}
+body, * {
+    font-family: Panton;
+}

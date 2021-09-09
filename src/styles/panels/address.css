@@ -1,0 +1,92 @@
+.address-item{
+    border-radius: 4px;
+    padding: 17px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.address-card{
+    margin: 0 15px 15px;
+    border-radius: 4px;
+}
+.address-row{
+    display: flex;
+    align-items: center;
+}
+
+.address-content{
+    width: 85%;
+}
+
+.address-icon{
+    width: 40px;
+    margin-right: 10px;
+}
+
+.address-icon img{
+    width: 100%;
+}
+.address-name{
+    margin: 0 5px 0 0;
+    font-size: 16px;
+    font-family: 'Panton Medium';
+    line-height: 22px;
+}
+
+.address-item .address{
+    color: #818C99;
+    font-family: 'Panton Medium';
+    line-height: 22px;
+}
+
+.address-amount{
+    color: #792EC0;
+}
+.address-network{
+    color: #818C99;
+    line-height: 22px;
+    text-transform: uppercase;
+}
+
+.active-address,.active-address:hover .address-item{
+    background-color: #792EC0;
+}
+.active-address .address-name{
+    color: #fff;
+}
+
+.active-address .address, .active-address .address-network{
+    color: #A393F5;
+}
+
+.address-block{
+    border-radius: 4px 4px 0 0;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.address-block-card{
+    position: fixed;
+    bottom: 80px;
+    width: 100%;
+    z-index: 10;
+    background: #EBF4FF;
+}
+
+.address-block-amount{
+    color: #2787F5;
+    margin: 0;
+    margin-right: 5px;
+    font-family: 'Panton Medium';
+}
+
+.address-text{
+    color: #2787F5;
+}
+
+.address-item:hover{
+    background-color: #E8E8E8;
+    border-radius: 4px;
+}

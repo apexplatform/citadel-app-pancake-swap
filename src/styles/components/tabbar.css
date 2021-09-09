@@ -1,0 +1,29 @@
+.tabbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 0px 0px 16px 16px;
+    padding: 15px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    z-index: 100;
+    height: 50px;
+}
+
+.tabbar-item{
+    text-align: center;
+    cursor: pointer;
+}
+
+.tabbar-item p{
+    font-size: 12px;
+    margin: 0;
+}
+
+.tabbar-item:hover p, #active-bar p{
+    color: white !important;
+}
+.tabbar-item:hover .rrr path{
+    fill: white;
+}
