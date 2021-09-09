@@ -41,6 +41,3 @@ const mapStateToProps=(state)=>({
 })
 
 export default connect(mapStateToProps, {initApp,setUser}) (App);
-
-
-// посмотреть разделение логов error/warning/info

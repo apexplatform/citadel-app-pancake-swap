@@ -12,7 +12,7 @@ const SelectTokenPanel = (props) => {
             <Header title="Select token to send" back={true} />
             <Search after={null} placeholder='Search'/>  
             {tokens.map(item => (
-                <TokenItem item={item} key={item.value}/>
+                <TokenItem item={item} withAmount={true} key={item.value}/>
             ))}
         </Panel>
     )

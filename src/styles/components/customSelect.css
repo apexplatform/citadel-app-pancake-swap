@@ -18,7 +18,7 @@
 }
 .select-dropdawn{
     position: absolute;
-    width: 95.5%;
+    width: 100%;
     border-radius: 0 0 10px 10px;
     z-index: 120;
     box-shadow:0 0 2px 2px rgba(0, 0, 0, 0.1);
@@ -28,4 +28,8 @@
 }
 .custom-select-option:hover{
     background: #F5F5F5 !important;
+}
+
+.select-container{
+    position: relative;
 }

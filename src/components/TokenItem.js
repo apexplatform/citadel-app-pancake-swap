@@ -5,7 +5,7 @@ import {setSelectedToken} from '../store/actions/addressActions'
 import {setActivePage} from '../store/actions/panelActions'
 import ROUTES from '../routes'
 import fileRoutes from '../config/file-routes-config.json'
-
+import {prettyNumber} from '../helpers/numberFormatter'
 const TokenItem = (props) => {
     const selectToken = (item) =>{
         props.setSelectedToken(item)
@@ -20,6 +20,11 @@ const TokenItem = (props) => {
                 <div className="token-content">
                     <p className="token-name">{props.item.label}</p>
                 </div>
+                {props.withAmount &&
+                <div className="token-amount-block">
+                    <p>{prettyNumber(props.item?.amount)}</p>
+                    <span>{props.item.label}</span>
+                </div>}
             </div>
         </Card>
     )

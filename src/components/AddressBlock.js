@@ -1,6 +1,6 @@
 import { Icon20ChevronRightOutline } from '@vkontakte/icons';
 import { Card } from '@vkontakte/vkui';
-import '../styles/panels/address.css'
+import '../styles/components/addressBlock.css'
 import ROUTES from '../routes'
 import {connect} from 'react-redux';
 import {setActivePage} from '../store/actions/panelActions'

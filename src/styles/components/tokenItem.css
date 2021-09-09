@@ -23,3 +23,35 @@
     font-size: 16px;
     font-family: 'Panton Medium';
 }
+
+.token-amount-block{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 20px;
+}
+
+.token-amount-block p{
+    color: #792EC0;
+    font-family: 'Panton Bold';
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+.token-amount-block span{
+    color: #818C99;
+    font-family: 'Panton';
+    font-size: 16px;
+}
+
+.token-item:hover{
+    background-color: #792EC0;
+}
+
+.token-item:hover .token-name, .token-item:hover .token-amount-block p{
+    color: white;
+}
+
+.token-item:hover .token-amount-block span{
+    color: #A393F5;
+}

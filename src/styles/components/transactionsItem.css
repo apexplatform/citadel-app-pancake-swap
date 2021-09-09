@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    border-radius: 6px;
 }
 .transactions-row{
     display: flex;
@@ -58,4 +59,8 @@
 }
 .transaction-type-img{
     margin: 10px;
+}
+
+.transactions-item:hover{
+    background: #F5F5F5 !important;
 }

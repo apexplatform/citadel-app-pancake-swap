@@ -1,14 +1,13 @@
-import ROUTES from '../routes'
 import { Group } from '@vkontakte/vkui';
 import Header from '../components/Header'
 import {connect} from 'react-redux';
-import Tabbar from '../components/Tabbar'
+import '../styles/panels/settings.css'
 const Settings = (props) => {
     
     return(
-        <Group>
-            <Header title="Setting" />
-            <p>Setting page</p>
+        <Group className='settings-panel'>
+            <Header title="Settings" />
+            <p>Settings page</p>
         </Group>
     )
 }
