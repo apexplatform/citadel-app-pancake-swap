@@ -5,13 +5,14 @@ import ROUTES from '../routes'
 import {connect} from 'react-redux';
 import {setActivePage} from '../store/actions/panelActions'
 import {fotmatAddress} from '../helpers/addressFormatter'
+import fileRoutes from '../config/file-routes-config.json'
 const AddressBlock = (props) => {
     const {selectedAddress} = props.addressReducer
     return(
         <Card onClick={()=> props.setActivePage(ROUTES.SELECT_ADDRESS)} className="address-block-card">
             <div className='address-block'>
                 <div className="address-icon">
-                    <img src='/img/coins/cosmos.svg' alt='icon' />
+                    <img src={fileRoutes.COINS_FOLDER + selectedAddress?.network + '.svg'} alt='icon' />
                 </div>
                 <div className="address-content">
                     <div className='address-row'>

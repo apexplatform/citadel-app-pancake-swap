@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/components/transactionsItem.css';
 import moment from 'moment'
+import fileRoutes from '../config/file-routes-config.json'
 const TransactionItem = ({data}) =>{
     let statusClass = () => {
         if(data.status){
@@ -14,9 +15,9 @@ const TransactionItem = ({data}) =>{
     }
     let typeImg = () => {
         if(data.status){
-            return '/img/icons/'+data.type+'.svg'
+            return fileRoutes.ICONS_FOLDER + data.type + '.svg'
         }else{
-            return '/img/icons/'+data.type+'-error.svg'
+            return fileRoutes.ICONS_FOLDER + data.type + '-error.svg'
         }
     }
     return(
@@ -27,8 +28,8 @@ const TransactionItem = ({data}) =>{
                 <div className='transactions-row'>
                     <h5 className='transaction-type-text'>{data.type}</h5>
                     {data.status ?
-                    <img src='/img/icons/success.svg' alt='type'/>:
-                    <img src='/img/icons/error.svg' alt='type'/>}
+                    <img src={fileRoutes.SUCCESS_ICON} alt='type'/>:
+                    <img src={fileRoutes.ERROR_ICON} alt='type'/>}
                 </div>
                 <p className='gray-text'>{moment().from(data.date)}</p>
             </div>

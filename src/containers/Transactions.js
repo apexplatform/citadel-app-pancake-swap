@@ -6,7 +6,7 @@ import ROUTES from '../routes'
 import {setSelectedTransaction} from '../store/actions/transactionsActions'
 import {setActivePage} from '../store/actions/panelActions'
 import {connect} from 'react-redux';
-
+import Header from '../components/Header'
 const Transactions = (props) => {
 	const setTransaction = (item) => {
 		props.setActivePage(ROUTES.TRANSACTION_DETAILS)
@@ -14,6 +14,7 @@ const Transactions = (props) => {
 	}
 	return (
 		<Group className='transactions-block'>
+			<Header title="Transactions"/>
 			<CardGrid size="l">
 			{transactions.map(item => (
 				<Card size="l" mode="outline" key={item.id} onClick={()=>setTransaction(item)}>

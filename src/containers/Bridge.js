@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormItem,Div, Button, Select,NativeSelect, CustomSelectOption, Group } from '@vkontakte/vkui';
+import { FormItem,Div, Button, Group } from '@vkontakte/vkui';
 import ROUTES from '../routes'
 import '../styles/panels/send.css'
 import AddressInput from '../components/AddressInput'
@@ -8,6 +8,8 @@ import AmountInput from '../components/AmountInput'
 import AlarmBlock from '../components/AlarmBlock'
 import InfoView from '../components/InfoView'
 import text from '../text.json'
+import Header from '../components/Header'
+import CustomSelect from '../components/CustomSelect'
 let methods = [
 	{
 		label: 'ETH -> SCRT',
@@ -20,28 +22,13 @@ let methods = [
 ]
 const Bridge = (props) => (
 	<Group className='bridge-container'>
+		<Header title="Bridge"/>
 		<FormItem>
 			<div className='formItem-row'>
 				<span>Bridge</span>
 				<InfoView  text={text.INFO_TEXT}/>
 			</div>
-			<Select
-			className='select-custom'
-			options={methods}
-			renderOption={({ option, ...restProps }) => (
-				<CustomSelectOption {...restProps} selected={option.value === 'eth'}/>
-			)}
-			/>
-		</FormItem>
-		<FormItem>
-			<NativeSelect defaultValue='1'>
-				<option value='1'>
-				ETH -{'>'} SCRT
-				</option>
-				<option value='2'>
-				SCRT -{'>'} ETH
-				</option>
-			</NativeSelect>
+			<CustomSelect methods={methods}/>
 		</FormItem>
 		<FormItem top="Token">
 			<TokenSelect />

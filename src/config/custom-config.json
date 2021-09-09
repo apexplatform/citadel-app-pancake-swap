@@ -6,12 +6,11 @@
         "HOVER_ITEM_COLOR": "#979EFE",
         "DISABLE_ITEM_COLOR": "#979EFE",
         "TABBAR_ITEMS": [
-            {"TITLE": "Send", "ICON": "/img/tabbar/bridge.svg", "ROUTES": "pool"}
+            {"TITLE": "Bridge", "ICON": "bridge", "ROUTES": "pool"}
         ]
     },
     "HEADER": {
-        "TITLE": "Main Page",
-        "BACK_BUTTON": true,
+        "TITLE": "App header",
         "BACK_TITLE": "Back",
         "BACKGROUND_COLOR": "#FFF"
     },

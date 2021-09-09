@@ -71,19 +71,19 @@ export const addresses = [
 	{
 		address: "cosmos34564rthtgrfedw42434",
 		amount: 231,
-		network: 'atom',
+		network: 'cosmos',
 		name: 'Cosmos One Seed'
 	},
 	{
 		address: "cosmos34vbfdsfgbvfdfvgbfd",
 		amount: 443,
-		network: 'atom',
+		network: 'cosmos',
 		name: 'Cosmos One Seed'
 	},
 	{
 		address: "cosmos23456yhtgrfedfgfedsdf",
 		amount: 34,
-		network: 'atom',
+		network: 'cosmos',
 		name: 'Cosmos One Seed'
 	}
 ]

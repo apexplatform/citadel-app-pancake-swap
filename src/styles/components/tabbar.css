@@ -21,9 +21,6 @@
     margin: 0;
 }
 
-.tabbar-item:hover p, #active-bar p{
+#active-bar p{
     color: white !important;
-}
-.tabbar-item:hover .rrr path{
-    fill: white;
 }

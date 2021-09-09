@@ -1,8 +1,9 @@
 import text from '../text.json'
+import fileRoutes from '../config/file-routes-config.json'
 const AlarmBlock = () => {
     return(
         <div className='alarm-block'>
-            <img src='/img/icons/alarm.svg' alt='alarm' />
+            <img src={fileRoutes.ALARM_ICON} alt='alarm' />
             <p>{text.ALARM_TEXT}</p>
         </div>
     )

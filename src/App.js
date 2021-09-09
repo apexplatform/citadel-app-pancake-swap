@@ -12,6 +12,7 @@ import {initApp} from './store/actions/vkActions'
 import {setUser} from './store/actions/userActions'
 import SelectAddressPanel from './panels/SelectAddressPanel'
 import SelectTokenPanel from './panels/SelectTokenPanel'
+
 const App = (props) => {
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
     const {activePage} = props.panelReducer

@@ -5,6 +5,7 @@ import ROUTES from '../routes'
 import {setSelectedAddress} from '../store/actions/addressActions'
 import {setActivePage} from '../store/actions/panelActions'
 import '../styles/components/addressItem.css'
+import fileRoutes from '../config/file-routes-config.json'
 const AddressItem = (props) => {
     const {selectedAddress} = props.addressReducer
     const {item} = props
@@ -17,7 +18,7 @@ const AddressItem = (props) => {
         <Card className={active + " address-card"} onClick={() => selectAddress()}>
             <div className='address-item'>
                 <div className="address-icon">
-                    <img src='/img/coins/cosmos.svg' alt='icon' />
+                    <img src={fileRoutes.COINS_FOLDER + item?.network + '.svg'} alt='icon' />
                 </div>
                 <div className="address-content">
                     <div className='address-row'>

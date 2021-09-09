@@ -5,23 +5,28 @@ import { View,Group,Panel } from '@vkontakte/vkui';
 import {setActivePanel} from '../store/actions/panelActions'
 import {connect} from 'react-redux';
 import Tabbar from '../components/Tabbar'
-import Header from '../components/Header'
 import AddressBlock from '../components/AddressBlock'
+import { Config } from '../config/config'
+import Settings from '../containers/Settings'
 const MainPanel = (props) => {
     const {activePanel} = props.panelReducer
+    const config = new Config()
     return(
         <Panel id={ROUTES.HOME}>
-            <Header title='Bridge'></Header>
             <Group>
                 <View activePanel={activePanel}>
                     <Panel id={ROUTES.POOL}>
                         <Bridge/>
-                        <AddressBlock />
+                        {config.showAddressBlock && <AddressBlock />}
                         <Tabbar/>
                     </Panel>
                     <Panel id={ROUTES.TRANSACTIONS}>
                         <Transactions/>
-                        <AddressBlock />
+                        {config.showAddressBlock && <AddressBlock />}
+                        <Tabbar/>
+                    </Panel>
+                    <Panel id={ROUTES.SETTINGS}>
+                        <Settings/>
                         <Tabbar/>
                     </Panel>
                 </View>

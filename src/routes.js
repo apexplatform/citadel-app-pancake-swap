@@ -2,6 +2,7 @@ const ROUTES = {
 	POOL: "pool",
 	HOME: "home",
 	TRANSACTIONS: "transactions",
+	SETTINGS: "settings",
 	TRANSACTION_DETAILS: "transactions_details",
 	MODAL_OPEN: 'modal',
 	POOL_DETAILS: "pool_details",

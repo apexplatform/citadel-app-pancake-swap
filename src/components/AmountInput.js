@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import '../styles/components/amountInput.css'
 import text from '../text.json'
+import fileRoutes from '../config/file-routes-config.json'
 const AmountInput = (props) => {
     const [amount, setAmount] = useState(0)
     const [hasError, setError] = useState(false)
@@ -21,7 +22,7 @@ const AmountInput = (props) => {
     return(
         <div className='amount-container'>
             <div className='input-container' >
-                <input className={hasError && 'error-input'} type='number' value={amount} onChange={(e) => checkAmount(e.target.value)}/>
+                <input className={hasError ? 'error-input' : undefined} type='number' value={amount} onChange={(e) => checkAmount(e.target.value)}/>
                 <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>
             </div>
             <div className='fee-container'>
@@ -31,7 +32,7 @@ const AmountInput = (props) => {
 			</div>
             {hasError &&
             <div className='fee-container'>
-                <img src='/img/icons/error.svg' alt='error'/>
+                <img src={fileRoutes.ERROR_ICON} alt='error'/>
                 <span className='amount-error-text'>{text.ERRORS.INSUFFICIENT_FUNDS}</span>
             </div>}
         </div>
