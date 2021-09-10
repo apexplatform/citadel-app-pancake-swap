@@ -55,3 +55,37 @@ export let transactions = [
 		status: false
 	}
 ]
+
+export let tokens = [
+	{
+		label: 'ETH',
+		value: 'eth',
+		amount: 23423
+	},
+	{
+		label: 'USDT',
+		value: 'usdt',
+		amount: 230
+	}
+]
+
+export const addresses = [
+	{
+		address: "cosmos34564rthtgrfedw42434",
+		amount: 231,
+		network: 'cosmos',
+		name: 'Cosmos One Seed'
+	},
+	{
+		address: "cosmos34vbfdsfgbvfdfvgbfd",
+		amount: 443,
+		network: 'cosmos',
+		name: 'Cosmos One Seed'
+	},
+	{
+		address: "cosmos23456yhtgrfedfgfedsdf",
+		amount: 34,
+		network: 'cosmos',
+		name: 'Cosmos One Seed'
+	}
+]

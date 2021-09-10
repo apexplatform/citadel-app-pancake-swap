@@ -18,12 +18,13 @@
     "react-scripts": "^4.0.3"
   },
   "dependencies": {
-    "@vkontakte/icons": "^1.124.0",
-    "@vkontakte/vk-bridge": "^2.4.8",
+    "@vkontakte/icons": "^1.117.0",
+    "@vkontakte/vk-bridge": "^2.4.6",
     "@vkontakte/vk-miniapps-deploy": "0.0.25",
     "@vkontakte/vkjs": "^0.22.1",
-    "@vkontakte/vkui": "^4.13.0",
+    "@vkontakte/vkui": "^4.12.3",
     "babel-eslint": "^10.1.0",
+    "bignumber.js": "^9.0.1",
     "chalk": "^4.1.2",
     "eruda": "^2.4.1",
     "eruda-code": "^2.0.0",
@@ -31,7 +32,10 @@
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.1",
+    "redux-thunk": "^2.3.0"
   },
   "browserslist": {
     "production": [

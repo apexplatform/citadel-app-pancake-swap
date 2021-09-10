@@ -1,90 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import bridge from '@vkontakte/vk-bridge';
-import { View, ScreenSpinner,ModalRoot,ModalPage,Group,PanelHeaderBack,TabsItem,Tabs,Panel,PanelHeader, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
+import { View, ScreenSpinner,AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
-import Transactions from './containers/Transactions';
+import MainPanel from './panels/MainPanel';
 import ROUTES from './routes'
-import Swap from './containers/Swap';
-import TransactionDetails from './components/TransactionDetails'
-import { Icon24Back } from '@vkontakte/icons';
-import './styles/main.css'
-const App = () => {
-	const [activePanel, setActivePanel] = useState(ROUTES.SEND);
-	const [activePage, setActivePage] = useState(ROUTES.HOME);
-	const [openedTransaction, setOpenedTransaction] = useState({});
-	const [activeModal, setActiveModal] = useState(null);
-	const [fetchedUser, setUser] = useState(null);
-	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
+import TransactionDetailsPanel from './panels/TransactionDetailsPanel'
+import './styles/index.css'
+import store from './store/store'
+import {Provider} from 'react-redux';
+import {connect} from 'react-redux';
+import {initApp} from './store/actions/vkActions'
+import {setUser} from './store/actions/userActions'
+import SelectAddressPanel from './panels/SelectAddressPanel'
+import SelectTokenPanel from './panels/SelectTokenPanel'
 
+const App = (props) => {
+	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
+    const {activePage} = props.panelReducer
 	useEffect(() => {
-		bridge.subscribe(({ detail: { type, data }}) => {
-			if (type === 'VKWebAppUpdateConfig') {
-				const schemeAttribute = document.createAttribute('scheme');
-				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-				document.body.attributes.setNamedItem(schemeAttribute);
-			}
-		});
-		async function fetchData() {
-			const user = await bridge.send('VKWebAppGetUserInfo');
-			setUser(user);
-			setPopout(null);
-		}
-		fetchData();
+		props.initApp()
+		props.setUser(setPopout())
 	}, []);
-	const modal = (
-		<ModalRoot activeModal={activeModal}>
-			<ModalPage  
-			id={ROUTES.MODAL_OPEN}
-			onClose={()=> setActiveModal(null)}>
-				<Group>
-					<h1>Confirm transactions</h1>
-				</Group>
-			</ModalPage>
-		</ModalRoot>
-	  );
-	const setTransaction = (id,data) => {
-		setOpenedTransaction(data)
-		setActivePage(id)
-	}
 	return (
-		<AdaptivityProvider>
-			<AppRoot>
-				<View popout={popout} modal={modal} activePanel={activePage}>
-					<Panel id={ROUTES.HOME}>
-						<PanelHeader>Swap App</PanelHeader>
-						<Group>
-							<Tabs >
-								<TabsItem
-								onClick={() => setActivePanel(ROUTES.SEND)}
-								selected={activePanel === ROUTES.SEND}
-								>
-								Swap
-								</TabsItem>
-								<TabsItem
-								onClick={() => setActivePanel(ROUTES.TRANSACTIONS)}
-								selected={activePanel === ROUTES.TRANSACTIONS}
-								>
-								Transaction
-								</TabsItem>
-							</Tabs>
-							<View activePanel={activePanel}>
-								<Panel id={ROUTES.SEND}>
-									<Swap setActiveModal={setActiveModal}/>
-								</Panel>
-								<Panel id={ROUTES.TRANSACTIONS}>
-									<Transactions setTransaction={setTransaction}/>
-								</Panel>
-							</View>
-						</Group>
-					</Panel>
-					<Panel id={ROUTES.TRANSACTION_DETAILS}>
-						<PanelHeader left={<div className='back-row' onClick={()=>setActivePage(ROUTES.HOME)}><Icon24Back fill='#818C99' />Back</div>}><p className='transaction-details-header'>{openedTransaction ? openedTransaction.type : ''}</p></PanelHeader>
-						<TransactionDetails data={openedTransaction}/>
-					</Panel>
-				</View>
-			</AppRoot>
-		</AdaptivityProvider>
+		<Provider store={store}>
+			<AdaptivityProvider>
+				<AppRoot>
+					<View popout={popout} activePanel={activePage}>
+						<MainPanel id={ROUTES.HOME}/>
+						<TransactionDetailsPanel id={ROUTES.TRANSACTION_DETAILS}/>
+						<SelectAddressPanel id={ROUTES.SELECT_ADDRESS} />
+						<SelectTokenPanel id={ROUTES.SELECT_TOKEN} />
+					</View>
+				</AppRoot>
+			</AdaptivityProvider>
+		</Provider>
 	);
 }
 
-export default App;
+const mapStateToProps=(state)=>({
+	panelReducer: state.panelReducer
+})
+
+export default connect(mapStateToProps, {initApp,setUser}) (App);

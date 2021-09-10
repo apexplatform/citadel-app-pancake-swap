@@ -1,0 +1,31 @@
+.header{
+    text-align: center;
+}
+
+.header .header-line{
+    background: #3C356D;
+    border-radius: 12px 12px 0px 0px;
+    height: 10px;
+    width: 100%;
+}
+.header-back-row{
+    display: flex;
+    align-items: center;
+    color: #818C99;
+    cursor: pointer;
+    font-family: 'Panton Medium';
+    position: absolute;
+    left: 10px;
+}
+
+.header-row{
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+
+.header p{
+    font-size: 17px;
+    font-family: 'Panton Bold';
+    text-transform: capitalize;
+}

@@ -1,0 +1,9 @@
+{
+    "ERRORS": {
+        "INVALID_KEY": "Invalid key format",
+        "INSUFFICIENT_FUNDS": "Insufficient funds"
+    },
+    "FEE_TEXT": "Including the default network fee - ",
+    "ALARM_TEXT": "The bridge allows users to lock their ETH in a smart contract on Ethereum and mint secretETH. Below you can unwrap your secretETH and receive ETH tokens back link.",
+    "INFO_TEXT": "The bridge allows users to lock their ETH in a smart contract on Ethereum and mint secretETH. Below you can unwrap your secretETH and receive ETH tokens back link."
+}
