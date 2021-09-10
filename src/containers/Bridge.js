@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { FormItem,Div, Button, Group } from '@vkontakte/vkui';
 import ROUTES from '../routes'
-import '../styles/panels/send.css'
+import '../styles/panels/bridge.css'
 import AddressInput from '../components/AddressInput'
 import TokenSelect from '../components/TokenSelect'
 import AmountInput from '../components/AmountInput'
@@ -20,7 +20,9 @@ let methods = [
 		value: 'usdt'
 	}
 ]
-const Bridge = (props) => (
+const Bridge = (props) => {
+	const [disabled,setDisabled] = useState(true)
+	return (
 	<Group className='bridge-container'>
 		<Header title="Bridge"/>
 		<FormItem>
@@ -41,11 +43,11 @@ const Bridge = (props) => (
 		</FormItem>
 		<MinimumAmountBlock amount={0.1} network={'ETH(Etherium)'} />
 		<Div>
-			<Button stretched size="l" className='send-btn' onClick={()=> props.setActiveModal(ROUTES.MODAL_OPEN)}>
+			<Button stretched size="l" id={disabled ? "disabled-btn" : undefined} className='send-btn' onClick={()=> props.setActiveModal(ROUTES.MODAL_OPEN)}>
 				Send
 			</Button>
 		</Div>
 	</Group>
 );
-
+}
 export default Bridge;

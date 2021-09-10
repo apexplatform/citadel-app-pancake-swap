@@ -8,6 +8,7 @@
 .fee-container h5{
     margin: 0;
     color: #9099A3;
+    text-transform: uppercase;
 }
 .fee-amount{
     color: #67A5EB;

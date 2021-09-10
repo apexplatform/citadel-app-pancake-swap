@@ -21,32 +21,11 @@
     font-family: 'Panton Bold';
 }
 
-
-.vkuiInput__el{
-    outline-color: #792EC0 !important;
-}
-
-.vkuiFormField__border, .FormField__border{
-    outline-color: #792EC0 !important;
-}
-
-.alarm-block{
-    margin: 0 15px;
-    display: flex;
-    align-items: center;
-    background: #E9F6FF;
-    border-radius: 8px;
-}
-
-.alarm-block img{
-    margin: 15px;
-}
-
-.alarm-block p{
-    color: #00A3FF;
-    font-size: 14px;
-}
-
 .bridge-container{
     margin-bottom: 160px;
+}
+
+#disabled-btn{
+    background: #CCD3FF;
+    cursor: no-drop;
 }
