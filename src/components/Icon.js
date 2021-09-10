@@ -63,6 +63,13 @@ const Icon = (props) => {
                     </defs>
                 </svg>
             }
+            {
+                icon === 'swap' &&
+                <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.36112 17.9402L5.36112 7.28878H2.49346L2.49346 17.9402H0.327148L3.82569 24L7.32428 17.9402H5.36112Z" fill={fill}/>
+                    <path d="M11.5061 16.7109V6.05951H13.6724L10.1738 -0.000240326L6.67529 6.05951H8.6384V16.7109H11.5061Z" fill={fill}/>
+                </svg>
+        }
         </span>
     )
 }

@@ -1,5 +1,5 @@
 import ROUTES from '../routes'
-import Bridge from '../containers/Bridge'
+import Swap from '../containers/Swap'
 import Transactions from '../containers/Transactions'
 import { View,Group,Panel } from '@vkontakte/vkui';
 import {setActivePanel} from '../store/actions/panelActions'
@@ -15,8 +15,8 @@ const MainPanel = (props) => {
         <Panel id={ROUTES.HOME}>
             <Group>
                 <View activePanel={activePanel}>
-                    <Panel id={ROUTES.POOL}>
-                        <Bridge/>
+                    <Panel id={ROUTES.SWAP}>
+                        <Swap/>
                         {config.showAddressBlock && <AddressBlock />}
                         <Tabbar/>
                     </Panel>

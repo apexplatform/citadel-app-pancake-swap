@@ -62,5 +62,5 @@
 }
 
 .transactions-item:hover{
-    background: #F5F5F5 !important;
+    box-shadow: 0px 15px 50px rgba(80, 100, 124, 0.1), 0px 10px 15px rgba(80, 100, 124, 0.16);
 }

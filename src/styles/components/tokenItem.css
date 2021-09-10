@@ -13,6 +13,8 @@
 
 .token-icon{
     margin-right: 10px;
+    width: 30px;
+    height: 30px;
 }
 .token-icon img{
     width: 30px;
@@ -54,4 +56,9 @@
 
 .token-item:hover .token-amount-block span{
     color: #A393F5;
+}
+
+.token-item:hover .token-icon{
+    background-color: #fff;
+    border-radius: 50%;
 }

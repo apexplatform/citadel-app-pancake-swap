@@ -1,5 +1,5 @@
 const ROUTES = {
-	POOL: "pool",
+	SWAP: "swap",
 	HOME: "home",
 	TRANSACTIONS: "transactions",
 	SETTINGS: "settings",

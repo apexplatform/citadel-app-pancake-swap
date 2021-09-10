@@ -58,13 +58,13 @@ export let transactions = [
 
 export let tokens = [
 	{
-		label: 'ETH',
-		value: 'eth',
+		label: 'Secret',
+		value: 'secret',
 		amount: 23423
 	},
 	{
-		label: 'USDT',
-		value: 'usdt',
+		label: 'OSMO',
+		value: 'secret',
 		amount: 230
 	}
 ]
