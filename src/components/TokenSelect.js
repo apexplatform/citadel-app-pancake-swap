@@ -6,7 +6,7 @@ import ROUTES from '../routes'
 import fileRoutes from '../config/file-routes-config.json'
 
 const TokenSelect = (props) => {
-    const {selectedToken} = props.addressReducer
+    const {selectedToken} = props
     return(
         <div className='token-container' onClick={()=>props.setActivePage(ROUTES.SELECT_TOKEN)}>
             <div className='token-row'>

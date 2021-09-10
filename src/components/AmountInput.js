@@ -2,12 +2,15 @@ import { useState } from 'react'
 import '../styles/components/amountInput.css'
 import text from '../text.json'
 import fileRoutes from '../config/file-routes-config.json'
+import {connect} from 'react-redux'
 const AmountInput = (props) => {
     const [amount, setAmount] = useState(0)
     const [hasError, setError] = useState(false)
-    const balance = 12
+    const {selectedAddress} = props.addressReducer
+    const balance = selectedAddress.amount || 0
     const fee = 0.343
-    const coin = 'ETH'
+    const showMax = props.hideMax || false
+    const coin = selectedAddress.network.toUpperCase()
     const checkAmount = (val) => {
         setAmount(val)
         if(parseInt(val) > +balance - fee){
@@ -23,7 +26,7 @@ const AmountInput = (props) => {
         <div className='amount-container'>
             <div className='input-container' >
                 <input className={hasError ? 'error-input' : undefined} type='number' value={amount} onChange={(e) => checkAmount(e.target.value)}/>
-                <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>
+                {!showMax && <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>}
             </div>
             <div className='fee-container'>
 				<h5>{text.FEE_TEXT}</h5>
@@ -39,4 +42,8 @@ const AmountInput = (props) => {
     )
 }
 
-export default AmountInput
+const mapStateToProps=(state)=>({
+	addressReducer: state.addressReducer
+})
+
+export default connect(mapStateToProps, {}) (AmountInput);

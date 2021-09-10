@@ -1,14 +1,19 @@
 import { Card } from '@vkontakte/vkui';
 import {connect} from 'react-redux';
 import '../styles/components/tokenItem.css'
-import {setSelectedToken} from '../store/actions/addressActions'
+import {setFromToken,setToToken} from '../store/actions/addressActions'
 import {setActivePage} from '../store/actions/panelActions'
 import ROUTES from '../routes'
 import fileRoutes from '../config/file-routes-config.json'
 import {prettyNumber} from '../helpers/numberFormatter'
 const TokenItem = (props) => {
+    const {selectedToken} = props.addressReducer
     const selectToken = (item) =>{
-        props.setSelectedToken(item)
+        if(selectedToken === 'from'){
+            props.setFromToken(item)
+        } else {
+            props.setToToken(item)
+        }
         props.setActivePage(ROUTES.HOME)
     }
     return(
@@ -34,4 +39,4 @@ const mapStateToProps=(state)=>({
 	addressReducer: state.addressReducer
 })
 
-export default connect(mapStateToProps, {setActivePage,setSelectedToken}) (TokenItem);
+export default connect(mapStateToProps, {setActivePage,setFromToken,setToToken}) (TokenItem);

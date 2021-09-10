@@ -1,5 +1,6 @@
 import text from '../text.json'
 import fileRoutes from '../config/file-routes-config.json'
+import '../styles/components/alarmBlock.css'
 const AlarmBlock = () => {
     return(
         <div className='alarm-block'>
