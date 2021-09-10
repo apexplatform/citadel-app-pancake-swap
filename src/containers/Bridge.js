@@ -5,7 +5,7 @@ import '../styles/panels/send.css'
 import AddressInput from '../components/AddressInput'
 import TokenSelect from '../components/TokenSelect'
 import AmountInput from '../components/AmountInput'
-import AlarmBlock from '../components/AlarmBlock'
+import MinimumAmountBlock from '../components/MinAmountBlock'
 import InfoView from '../components/InfoView'
 import text from '../text.json'
 import Header from '../components/Header'
@@ -39,7 +39,7 @@ const Bridge = (props) => (
 		<FormItem top="Amount">
 			<AmountInput />
 		</FormItem>
-		<AlarmBlock />
+		<MinimumAmountBlock amount={0.1} network={'ETH(Etherium)'} />
 		<Div>
 			<Button stretched size="l" className='send-btn' onClick={()=> props.setActiveModal(ROUTES.MODAL_OPEN)}>
 				Send
