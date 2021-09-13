@@ -8,10 +8,29 @@ import {setSelectedToken} from '../store/actions/addressActions'
 import Header from '../components/Header'
 import {connect} from 'react-redux';
 import Icon from '../components/Icon'
+import {setFromToken,setToToken,setFromAmount,setToAmount} from '../store/actions/addressActions'
 import FeeInfoBlock from '../components/FeeInfoBlock'
 const Swap = (props) => {
 	const [disabled,setDisabled] = useState(true)
-	const {fromToken,toToken} = props.addressReducer
+	const [swaped,setSwaped] = useState(false)
+	const {fromToken,toToken,fromTokenAmount,toTokenAmount,selectedAddress} = props.addressReducer
+	const rate = 0.5
+    const feeProcent = 1
+	const balanceSwaped = toTokenAmount * rate * (100-feeProcent) / 100
+    const balance = fromTokenAmount * rate * (100+feeProcent) / 100
+	const isMainToken = fromToken.network === selectedAddress.network
+	const reverseTokens = () => {
+		props.setFromToken(toToken)
+		props.setToToken(fromToken)
+		if(swaped){
+			props.setFromAmount(toTokenAmount)
+			props.setToAmount(balanceSwaped)
+		}else{
+			props.setToAmount(fromTokenAmount)
+			props.setFromAmount(balance)
+		}
+		setSwaped(!swaped)
+	}
 	return (
 		<Group className='swap-container'>
 			<Header title="Swap"/>
@@ -20,11 +39,11 @@ const Swap = (props) => {
 					<TokenSelect selectedToken={fromToken}/>
 				</FormItem>
 				<FormItem top="Amount to swap" className='formAddressItem'>
-					<AmountInput/>
+					<AmountInput hideFee={isMainToken} isFirst={true} amount={fromTokenAmount}/>
 				</FormItem>
 			</div>
 			<Div className='center'>
-				<button className='swap-amount-btn'>
+				<button className='swap-amount-btn' onClick={() => reverseTokens()}>
 					<Icon icon='swap' fill={'#792EC0'}/>
 				</button>
 			</Div>
@@ -33,10 +52,10 @@ const Swap = (props) => {
 					<TokenSelect selectedToken={toToken}/>
 				</FormItem>
 				<FormItem top="Amount to receive" className='formAddressItem'>
-					<AmountInput hideMax={true} />
+					<AmountInput isSecond={true} hideMax={false} hideFee={true} amount={toTokenAmount}/>
 				</FormItem>
 			</div>
-			<FeeInfoBlock />
+			<FeeInfoBlock rate={rate} fee={feeProcent}/>
 			<Div>
 				<Button stretched size="l" className='swap-btn' id={disabled ? "disabled-btn" : undefined} onClick={()=> props.setActiveModal(ROUTES.MODAL_OPEN)}>
 					Swap
@@ -49,4 +68,4 @@ const mapStateToProps=(state)=>({
 	addressReducer: state.addressReducer
 })
 
-export default connect(mapStateToProps, {setSelectedToken}) (Swap);
+export default connect(mapStateToProps, {setFromAmount,setToAmount,setSelectedToken,setFromToken,setToToken}) (Swap);

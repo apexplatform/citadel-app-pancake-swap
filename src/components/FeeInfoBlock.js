@@ -1,5 +1,7 @@
+import {connect} from 'react-redux';
 import '../styles/components/feeInfoBlock.css'
 const FeeInfoBlock = (props) => {
+    const {fromToken,toToken} = props.addressReducer
     return(
         <div className='fee-info-block'>
            <div className='fee-row'>
@@ -8,9 +10,9 @@ const FeeInfoBlock = (props) => {
                 </span>
                 <span>
                     <span className='fee-text'>1 </span>
-                    SCRT =  
-                    <span className='fee-text'> 6.12 </span>
-                    SCRT
+                    {fromToken.network} =  
+                    <span className='fee-text'> {props.rate} </span>
+                    {toToken.network}
                 </span>
            </div>
            <div className='fee-row'>
@@ -18,7 +20,7 @@ const FeeInfoBlock = (props) => {
                     Swap fee
                 </span>
                 <span>
-                    <span className='fee-text'> 3 </span>
+                    <span className='fee-text'> {props.fee} </span>
                     %
                 </span>
            </div>
@@ -35,5 +37,8 @@ const FeeInfoBlock = (props) => {
         </div>
     )
 }
+const mapStateToProps=(state)=>({
+	addressReducer: state.addressReducer
+})
 
-export default FeeInfoBlock
+export default connect(mapStateToProps, {}) (FeeInfoBlock);

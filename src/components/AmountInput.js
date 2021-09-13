@@ -3,16 +3,26 @@ import '../styles/components/amountInput.css'
 import text from '../text.json'
 import fileRoutes from '../config/file-routes-config.json'
 import {connect} from 'react-redux'
+import {setFromAmount,setToAmount}  from '../store/actions/addressActions'
 const AmountInput = (props) => {
-    const [amount, setAmount] = useState(0)
     const [hasError, setError] = useState(false)
     const {selectedAddress} = props.addressReducer
     const balance = selectedAddress.amount || 0
     const fee = 0.343
     const showMax = props.hideMax || false
+    const showFee = props.hideFee || false
     const coin = selectedAddress.network.toUpperCase()
+    const rate = 0.5
+    const feeProcent = 1
     const checkAmount = (val) => {
-        setAmount(val)
+        if(props.isFirst){
+            props.setFromAmount(val)
+            props.setToAmount(val * rate * (100-feeProcent) / 100 )
+        }
+        if(props.isSecond){
+            props.setToAmount(val)
+            props.setFromAmount((val * 100) / (rate * (100-feeProcent)))
+        }
         if(parseInt(val) > +balance - fee){
             setError(true)
         }else{
@@ -20,19 +30,20 @@ const AmountInput = (props) => {
         }
     }
     const setMaxAmount = () => {
-        setAmount(balance-fee)
+        props.setAmount(balance-fee)
     }
     return(
         <div className='amount-container'>
             <div className='input-container' >
-                <input className={hasError ? 'error-input' : undefined} type='number' value={amount} onChange={(e) => checkAmount(e.target.value)}/>
-                {!showMax && <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>}
+                <input className={hasError ? 'error-input' : undefined} type='number' value={props.amount} onChange={(e) => checkAmount(e.target.value)}/>
+                {showMax && <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>}
             </div>
+            {!showFee &&
             <div className='fee-container'>
 				<h5>{text.FEE_TEXT}</h5>
 				<span className='fee-amount'>{fee} </span>
 				<h5>{coin}</h5>
-			</div>
+			</div>}
             {hasError &&
             <div className='fee-container'>
                 <img src={fileRoutes.ERROR_ICON} alt='error'/>
@@ -46,4 +57,4 @@ const mapStateToProps=(state)=>({
 	addressReducer: state.addressReducer
 })
 
-export default connect(mapStateToProps, {}) (AmountInput);
+export default connect(mapStateToProps, {setFromAmount,setToAmount}) (AmountInput);

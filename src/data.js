@@ -60,13 +60,21 @@ export let tokens = [
 	{
 		label: 'Secret',
 		value: 'secret',
+		network: 'SCRT',
 		amount: 23423
 	},
 	{
 		label: 'OSMO',
 		value: 'secret',
+		network: 'OSMO',
 		amount: 230
-	}
+	},
+	{
+		label: 'COSMOS',
+		value: 'cosmos',
+		amount: 231,
+		network: 'cosmos'
+	},
 ]
 
 export const addresses = [

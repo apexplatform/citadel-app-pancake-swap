@@ -1,10 +1,12 @@
-import {SET_ADDRESS,SET_TOKEN,SET_FROM_TOKEN,SET_TO_TOKEN} from '../actions/types'
+import {SET_ADDRESS,SET_TOKEN,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_AMOUNT,SET_TO_AMOUNT} from '../actions/types'
 import { addresses,tokens } from '../../data'
 const initialState = {
     selectedAddress: addresses[0],
     selectedToken: null,
     fromToken: tokens[0],
     toToken: tokens[1],
+    fromTokenAmount: 0,
+    toTokenAmount: 0
 }
 export default function(state=initialState,action){
     switch (action.type){
@@ -27,6 +29,16 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 toToken: action.payload
+            }
+        case SET_FROM_AMOUNT:
+            return {
+                ...state,
+                fromTokenAmount: action.payload
+            }
+        case SET_TO_AMOUNT:
+            return {
+                ...state,
+                toTokenAmount: action.payload
             }
         default:
             return state
