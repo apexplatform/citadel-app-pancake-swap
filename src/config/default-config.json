@@ -6,7 +6,7 @@
         "HOVER_ITEM_COLOR": "#979EFE",
         "DISABLE_ITEM_COLOR": "#979EFE",
         "TABBAR_ITEMS": [
-            {"TITLE": "Bridge", "ICON": "bridge", "ROUTES": "pool"}
+            {"TITLE": "Send", "ICON": "bridge", "ROUTES": "send"}
         ]
     },
     "HEADER": {

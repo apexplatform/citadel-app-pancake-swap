@@ -6,7 +6,7 @@
         "HOVER_ITEM_COLOR": "#FFFFFF",
         "DISABLE_ITEM_COLOR": "#f5f5f5",
         "TABBAR_ITEMS": [
-            {"TITLE": "Swap", "ICON": "bridge", "ROUTES": "swap"}
+            {"TITLE": "Send", "ICON": "bridge", "ROUTES": "send"}
         ]
     },
     "HEADER": {

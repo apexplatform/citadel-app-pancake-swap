@@ -2,7 +2,7 @@ import {SET_ACTIVE_PANEL,SET_ACTIVE_PAGE} from '../actions/types'
 import ROUTES from '../../routes'
 const initialState = {
     activePage: ROUTES.HOME,
-    activePanel: ROUTES.SWAP,
+    activePanel: ROUTES.SEND,
     activeModal: null
 }
 export default function(state=initialState,action){

@@ -1,15 +1,11 @@
-import {SET_CURRENT_USER} from '../actions/types'
-
+const qs = require('querystring');
+const params = window.location.search.slice(1);
+const paramsAsObject = qs.parse(params);
 const initialState = {
-    user: []
+    auth_token: paramsAsObject.token
 }
 export default function(state=initialState,action){
     switch (action.type){
-        case SET_CURRENT_USER:
-            return {
-                ...state,
-                user: action.payload
-            }
         default:
             return state
     }
