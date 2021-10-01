@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormItem,Div, Button, Group } from '@vkontakte/vkui';
-import ROUTES from '../../routes'
 import '../styles/panels/swap.css'
 import AmountInput from '../uikit/AmountInput'
 import TokenSelect from '../uikit/TokenSelect'
+import {prepareSwapTransfer,swapTokens} from '../../store/actions/swapActions'
 import {setSelectedToken} from '../../store/actions/walletActions'
 import Header from '../uikit/Header'
 import {connect} from 'react-redux';
+import {Dec,IntPretty} from '@keplr-wallet/unit'
 import Icon from '../uikit/Icon'
 import {setFromToken,setToToken,setFromAmount,setToAmount} from '../../store/actions/walletActions'
 import FeeInfoBlock from '../uikit/FeeInfoBlock'
 const Swap = (props) => {
 	const [disabled,setDisabled] = useState(true)
 	const [swaped,setSwaped] = useState(false)
+	const {poolInfo,initialRate,rate} = props.swapReducer
+	console.log(initialRate,'----rate')
 	const {fromToken,toToken,fromTokenAmount,toTokenAmount,currentWallet} = props.walletReducer
-	const rate = 0.5
-    const feeProcent = 1
-	const balanceSwaped = toTokenAmount * rate * (100-feeProcent) / 100
-    const balance = fromTokenAmount * rate * (100+feeProcent) / 100
+    const feeProcent = (+poolInfo?.poolParams?.swapFee * 100) || 1
+	const balanceSwaped = +toTokenAmount !== 0 ? new Dec((toTokenAmount * +initialRate * (100 - feeProcent) / 100).toString()) : toTokenAmount
+    const balance = +fromTokenAmount !== 0 ? new Dec((fromTokenAmount * +initialRate * (100 + feeProcent) / 100).toString()) : fromTokenAmount
 	const showFee = fromToken.network === currentWallet.network
 	const showFee2 = toToken.network === currentWallet.network
 	const reverseTokens = () => {
@@ -25,13 +27,17 @@ const Swap = (props) => {
 		props.setToToken(fromToken)
 		if(swaped){
 			props.setFromAmount(toTokenAmount)
-			props.setToAmount(balanceSwaped)
+			const intval = +balanceSwaped !== 0 ? new IntPretty(balanceSwaped).maxDecimals(3).toString() : balanceSwaped
+			props.setToAmount(intval.toString().replaceAll(',',''))
 		}else{
 			props.setToAmount(fromTokenAmount)
-			props.setFromAmount(balance)
+			const intval2 = +balance !== 0 ? new IntPretty(balance).maxDecimals(3).toString() : balance
+			props.setFromAmount(intval2.toString().replaceAll(',',''))
 		}
+		props.swapTokens(fromTokenAmount)
 		setSwaped(!swaped)
 	}
+
 	return (
 		<Group className='swap-container'>
 			<Header title="Swap"/>
@@ -58,7 +64,7 @@ const Swap = (props) => {
 			</div>
 			<FeeInfoBlock rate={rate} fee={feeProcent}/>
 			<Div>
-				<Button stretched size="l" className='swap-btn' id={disabled ? "disabled-btn" : undefined} onClick={()=> props.setActiveModal(ROUTES.MODAL_OPEN)}>
+				<Button stretched size="l" className='swap-btn' id={disabled ? "disabled-btn" : undefined} onClick={()=> props.prepareSwapTransfer()}>
 					Swap
 				</Button>
 			</Div>
@@ -66,7 +72,8 @@ const Swap = (props) => {
 	);
 }
 const mapStateToProps=(state)=>({
-	walletReducer: state.walletReducer
+	walletReducer: state.walletReducer,
+	swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {setFromAmount,setToAmount,setSelectedToken,setFromToken,setToToken}) (Swap);
+export default connect(mapStateToProps, {swapTokens,prepareSwapTransfer,setFromAmount,setToAmount,setSelectedToken,setFromToken,setToToken}) (Swap);

@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import '../styles/components/feeInfoBlock.css'
 const FeeInfoBlock = (props) => {
     const {fromToken,toToken} = props.walletReducer
+    const {slippage} = props.swapReducer
     return(
         <div className='fee-info-block'>
            <div className='fee-row'>
@@ -10,9 +11,9 @@ const FeeInfoBlock = (props) => {
                 </span>
                 <span>
                     <span className='fee-text'>1 </span>
-                    {fromToken.network} =  
+                    {fromToken.code} =  
                     <span className='fee-text'> {props.rate} </span>
-                    {toToken.network}
+                    {toToken.code}
                 </span>
            </div>
            <div className='fee-row'>
@@ -30,7 +31,7 @@ const FeeInfoBlock = (props) => {
                     Estimated slippage
                 </span>
                 <span>
-                    <span className='fee-amount-bold'>0.005 </span>
+                    <span className='fee-amount-bold'>{slippage} </span>
                     %
                 </span>
            </div>
@@ -38,7 +39,8 @@ const FeeInfoBlock = (props) => {
     )
 }
 const mapStateToProps=(state)=>({
-	walletReducer: state.walletReducer
+	walletReducer: state.walletReducer,
+    swapReducer: state.swapReducer
 })
 
 export default connect(mapStateToProps, {}) (FeeInfoBlock);

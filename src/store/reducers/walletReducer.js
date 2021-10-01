@@ -39,7 +39,7 @@ export default function(state=initialState,action){
                 ...state,
                 networks: action.payload
             }
-            case SET_FROM_TOKEN:
+        case SET_FROM_TOKEN:
             return {
                 ...state,
                 fromToken: action.payload

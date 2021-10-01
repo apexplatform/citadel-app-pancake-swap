@@ -1,36 +1,42 @@
 import { useState } from 'react'
 import '../styles/components/amountInput.css'
 import text from '../../text.json'
+import {Dec,IntPretty} from '@keplr-wallet/unit'
 import fileRoutes from '../../config/file-routes-config.json'
 import {connect} from 'react-redux'
+import {calculateSlippage} from '../../store/actions/swapActions'
 import {setFromAmount,setToAmount}  from '../../store/actions/walletActions'
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
     const {currentWallet} = props.walletReducer
     const balance = currentWallet.amount || 0
-    const fee = 0.343
+    const {poolInfo,initialRate,rate} = props.swapReducer
     const showMax = props.hideMax || false
     const showFee = props.hideFee || false
     const coin = currentWallet.network.toUpperCase()
-    const rate = 0.5
-    const feeProcent = 1
+    const feeProcent = (+poolInfo?.poolParams?.swapFee * 100) || 1
     const checkAmount = (val) => {
         if(props.isFirst){
             props.setFromAmount(val)
-            props.setToAmount(val * rate * (100-feeProcent) / 100 )
+            const decval = new Dec((val * +rate * (100-feeProcent) / 100).toString())
+            const intval = new IntPretty(decval).trim(true).maxDecimals(3).toString()
+            props.setToAmount(intval.replaceAll(',',''))
         }
         if(props.isSecond){
             props.setToAmount(val)
-            props.setFromAmount((val * 100) / (rate * (100-feeProcent)))
+            const decval2 = new Dec((val * +initialRate * (100+feeProcent) / 100).toString())
+            const intval2 = new IntPretty(decval2).trim(true).maxDecimals(3).toString()
+            props.setFromAmount(intval2.replaceAll(',',''))
         }
-        if(parseInt(val) > +balance - fee){
+        if(val.length) props.calculateSlippage(val)
+        if(parseInt(val) > +balance - feeProcent){
             setError(true)
         }else{
             setError(false)
         }
     }
     const setMaxAmount = () => {
-        props.setAmount(balance-fee)
+        props.setAmount(balance-feeProcent)
     }
     return(
         <div className='amount-container'>
@@ -54,7 +60,8 @@ const AmountInput = (props) => {
 }
 
 const mapStateToProps=(state)=>({
-	walletReducer: state.walletReducer
+	walletReducer: state.walletReducer,
+    swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {setFromAmount,setToAmount}) (AmountInput);
+export default connect(mapStateToProps, {calculateSlippage,setFromAmount,setToAmount}) (AmountInput);

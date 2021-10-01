@@ -8,21 +8,23 @@ import './components/styles/index.css'
 import store from './store/store'
 import {Provider} from 'react-redux';
 import {connect} from 'react-redux';
+import {loadPoolInfo,calculateSpotPriceWithoutSwapFee} from './store/actions/swapActions'
 import {initApp} from './store/actions/vkActions'
 import SelectAddressPanel from './components/panels/SelectAddressPanel'
 import SelectTokenPanel from './components/panels/SelectTokenPanel'
 import {loadNetworks} from './store/actions/walletActions'
 const App = (props) => {
-    const {activePage} = props.panelReducer
+    const {activePage,popout} = props.panelReducer
 	useEffect(() => {
 		props.initApp()
 		props.loadNetworks()
+		props.loadPoolInfo()
 	}, []);
 	return (
 		<Provider store={store}>
 			<AdaptivityProvider>
 				<AppRoot>
-					<View activePanel={activePage}>
+					<View popout={popout} activePanel={activePage}>
 						<MainPanel id={ROUTES.HOME}/>
 						<TransactionDetailsPanel id={ROUTES.TRANSACTION_DETAILS}/>
 						<SelectAddressPanel id={ROUTES.SELECT_ADDRESS} />
@@ -38,4 +40,4 @@ const mapStateToProps=(state)=>({
 	panelReducer: state.panelReducer
 })
 
-export default connect(mapStateToProps, {loadNetworks,initApp}) (App);
+export default connect(mapStateToProps, {loadPoolInfo,calculateSpotPriceWithoutSwapFee,loadNetworks,initApp}) (App);

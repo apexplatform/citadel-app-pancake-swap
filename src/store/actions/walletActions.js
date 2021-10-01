@@ -59,23 +59,6 @@ export const setToAmount= (amount) => dispatch =>{
         payload: amount
     })
 }
-export const generateTransaction = () => {
-    const {auth_token} = store.getState().userReducer
-    const {currentWallet,toAddress,amount} = store.getState().walletReducer;
-    const body =
-	{
-		"from": currentWallet.address,
-		"toAddress": toAddress,
-		"amount": amount,
-		"network": currentWallet.network,
-		"publicKey": currentWallet.publicKey,
-		"fee": "0.0001575",
-		"gasPrice": "5000000000",
-		"token": auth_token
-	}
-    return body
-}
-
 export const getCurrentWallet  = () => {
     const {currentWallet} = store.getState().walletReducer;
     return currentWallet
@@ -94,7 +77,7 @@ export const getWalletConstructor = () =>  {
 
 export const prepareTransfer  = () => dispatch => {
     const wallet = getWalletConstructor()
-    const transaction = generateTransaction()
+    const transaction = wallet.generateBaseTransaction()
     wallet.prepareTransfer(transaction).then((ok, data) => {
         if(ok){
             return dispatch ({
