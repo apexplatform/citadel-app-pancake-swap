@@ -1,0 +1,26 @@
+.send-btn{   
+    background: #792EC0;
+    border-radius: 4px;
+    color: white;
+}
+
+.send-fee{
+    font-size: 14px;
+    line-height: 18px;
+    color: #9099A3;
+}
+.formItem-row{
+    display: flex;
+    color: rgb(129, 141, 153);
+    font-size: 14px;
+}
+.send-amount{
+    color: #67A5EB;
+    font-size: 16px;
+    line-height: 18px;
+    font-family: 'Panton Bold';
+}
+
+.bridge-container{
+    margin-bottom: 160px;
+}

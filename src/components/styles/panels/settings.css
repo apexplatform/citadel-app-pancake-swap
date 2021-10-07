@@ -1,0 +1,55 @@
+.settings-panel p{
+    text-align: center;
+}
+
+.add-address-btn{
+    background: none;
+    border: 1px solid #2A5885;
+    color: #2A5885;
+    border-radius: 4px;
+    display: flex;
+    cursor: pointer;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 15px 0;
+}
+.add-address-btn p {
+    margin: auto 0!important;
+}
+.procent-btn{
+    background: #EBF4FF;
+    border-radius: 25px;
+    color: #2787F5;
+    font-size: 18px;
+    width: 23%;
+    height: 40px;
+    border: none;
+    font-family: 'Panton Medium';
+}
+
+.settings-panel h4{
+    color: #28436E;
+    font-family: 'Panton Medium';
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.procent-row{
+    display: flex;
+    justify-content: space-between;
+}
+.settings-panel p{
+    color: #000;
+    text-align: left;
+    line-height: 24px;
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+#active-procent{
+    background: #792EC0;
+    color: #fff;
+}
+#active-procent span{
+    color: #818C99;
+}
