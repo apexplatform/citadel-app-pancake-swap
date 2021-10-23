@@ -1,9 +1,12 @@
 import useApi from '../api/useApi';
 import {ImplementationError,NetworkError} from './Errors'
-import { DecUtils, Dec, Int } from '@keplr-wallet/unit';
-import {calcSpotPrice} from '../../store/utils/math'
+import {useTradeExact,tryParseAmount} from '../hooks/swapHooks'
+import {useCurrency} from '../hooks/tokenHooks'
+import { JSBI, Percent, Router } from '@pancakeswap/sdk'
 const api = useApi('wallet')
+import {basisPointsToPercent} from '../utils/price'
 import store from '../../store/store';
+import { ethers } from 'ethers'
 export default class Wallet {
   constructor(opts) {
       this.net = opts.network;
@@ -52,60 +55,63 @@ export default class Wallet {
         "token": auth_token
       }
         return body
-  }    
-  calculateSlippageTokenIn(spotPriceBefore, tokenIn, slippage) {
-		const effectivePrice = spotPriceBefore.mul(slippage.add(new Dec(1)));
-		return new Dec(tokenIn).quo(effectivePrice).truncate();
-	}
+  }   
+  getTradeExact(amount,currency,isExactIn){
+    return useTradeExact(amount,currency,isExactIn)
+  } 
+  getParseAmount(amount,currency){
+    return tryParseAmount(amount?.toString(),currency)
+  } 
+  getCurrency(address){
+    return useCurrency(address)
+  } 
+  getMinReceived(){
+    const {trade,slippageTolerance} = store.getState().swapReducer
+    const pct = basisPointsToPercent(slippageTolerance)
+    console.log(pct)
+    return trade?.minimumAmountOut(pct) || 0
+  }
   generateSwapTransaction(){
     const {auth_token} = store.getState().userReducer
-    const {fromTokenAmount,fromToken,toToken} = store.getState().walletReducer;
-    const {slippageTolerance,rate} = store.getState().swapReducer
-    const maxSlippageDec = new Dec(slippageTolerance).quo(DecUtils.getPrecisionDec(2));
-		const tokenOutMinAmount = maxSlippageDec.equals(new Dec(0))
-			? new Int(1)
-			: this.calculateSlippageTokenIn(
-          new Dec(rate),
-					new Dec(fromTokenAmount.toString()).mul(DecUtils.getPrecisionDec(6)).truncate(),
-					maxSlippageDec
-			  );
-    const dec_amount = new Dec(fromTokenAmount).mul(DecUtils.getPrecisionDec(6)).truncate();
+    const {amount,fromToken,toToken,currentWallet} = store.getState().walletReducer;
+    const {minReceived,trade,deadline,slippageTolerance} = store.getState().swapReducer;
+    const BIPS_BASE = JSBI.BigInt(10000)
+    const path = trade.route.path.map(token => token.address)
+    const call = Router.swapCallParameters(trade, {
+      feeOnTransfer: false,
+      allowedSlippage: new Percent(JSBI.BigInt(slippageTolerance), BIPS_BASE),
+      recipient: currentWallet.address,
+      deadline: deadline,
+    })
     const body =    
     {
-      "fee": {
-        "gas": "650000",
-        "amount": [
-          {
-            "denom": toToken.denom,
-            "amount": "0"
-          }
-        ]
-      },
-      "msgs": [
-        {
-          "type": "osmosis/gamm/swap-exact-amount-in",
-          "value": {
-            "sender": this.address,
-            "routes": [
-              {
-                "poolId": "1",
-                "tokenOutDenom": toToken.denom
-              }
-            ],
-            "tokenIn": {
-              "denom": fromToken?.denom,
-              "amount": dec_amount.toString()
-            },
-            "tokenOutMinAmount": tokenOutMinAmount.toString()
-          }
-        }
-      ],
-      "memo": "",
-      "token": auth_token
+      "gas": "150000",
+      "amount": +amount,
+      "from": fromToken.address,
+      "to": toToken.address,
+      "token": auth_token,
+      "call": {
+        "method": call.methodName,
+        "params": [ parseInt(call.args[0], 16), parseInt(call.args[1], 16), call.args[2], deadline]
+      }
     }
     return body
   }  
+  generateApproveTransaction(){
+    const {auth_token} = store.getState().userReducer
+    const {fromToken,toToken} = store.getState().walletReducer;
+    const body =    
+    {
+      "gas": "55000",
+      "amount": 0,
+      "from": fromToken.address,
+      "to": toToken.address,
+      "token": auth_token,
+      "call": {
+        "method": "approve",
+        "params": [fromToken?.address,ethers.constants.MaxUint256]
+      }
+    }
+    return body
+  } 
 }
-
-// {"INPUT":{"numerator":[623412160,24701035],"denominator":[660865024,931322574],"currency":{"decimals":18,"symbol":"BNB","name":"BNB"}},
-// "OUTPUT":{"numerator":[186275704,1033314786,9],"denominator":[660865024,931322574],"currency":{"decimals":18,"symbol":"BUSD","name":"BUSD Token","chainId":56,"address":"0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56","tokenInfo":{"name":"BUSD Token","symbol":"BUSD","address":"0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56","chainId":56,"decimals":18,"logoURI":"https://pancakeswap.finance/images/tokens/0xe9e7cea3dedca5984780bafc599bd69add087d56.png"},"tags":[]},"token":{"decimals":18,"symbol":"BUSD","name":"BUSD Token","chainId":56,"address":"0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56","tokenInfo":{"name":"BUSD Token","symbol":"BUSD","address":"0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56","chainId":56,"decimals":18,"logoURI":"https://pancakeswap.finance/images/tokens/0xe9e7cea3dedca5984780bafc599bd69add087d56.png"},"tags":[]}}}

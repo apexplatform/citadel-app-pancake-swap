@@ -3,59 +3,62 @@ import '../styles/components/amountInput.css'
 import text from '../../text.json'
 import fileRoutes from '../../config/file-routes-config.json'
 import {connect} from 'react-redux'
-import {formatNumber} from '../helpers/numberFormatter'
-import {setRateAmount,updatePoolInfo} from '../../store/actions/swapActions'
-import {setFromAmount,setToAmount}  from '../../store/actions/walletActions'
+import Updater from '../../networking/utils/updater'
+import {setRateAmount,updatePoolInfo, setSwapStatus} from '../../store/actions/swapActions'
+import {setToAmount,setAmount}  from '../../store/actions/walletActions'
+
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
-    const {currentWallet} = props.walletReducer
+    const {currentWallet,fromToken,fromTokenBalance} = props.walletReducer
     const balance = currentWallet.amount || 0
-    const {poolInfo,initialRate,rate,slippage,slippageTolerance} = props.swapReducer
+    const {allowanceAmount,slippageTolerance,trade} = props.swapReducer
     const showMax = props.hideMax || false
+    const outputAmount = trade?.outputAmount?.toExact() || 0
     const showFee = props.hideFee || false
     const coin = currentWallet.network.toUpperCase()
-    const feeProcent = (+poolInfo?.poolParams?.swapFee * 100) || 1
-    console.log(rate,'--rate')
+    const feeProcent = +props.fee || 0.003
     const checkAmount = (val) => {
-        if(props.isFirst){
-            props.setFromAmount(val)
-            const amount = val * +rate * (100-feeProcent) * (1-+slippage) / 100
-            const amount2 = val * +rate * (100-feeProcent) / 100
-            props.setRateAmount(amount2)
-            props.setToAmount(formatNumber(amount))
-        }
-        if(props.isSecond){
-            props.setToAmount(val)
-            const amount = val * +initialRate * (100+feeProcent) * (1+(+slippage)) / 100
-            const amount2 = val * +initialRate * (100+feeProcent) / 100
-            props.setFromAmount(formatNumber(amount))
-            props.setRateAmount(amount2)
-        }
-        if(val > 0 && slippage < slippageTolerance){
-            props.setDisabled(false)
-        }
-        if(parseInt(val) > +balance - feeProcent){
-            setError(true)
-        }else{
-            setError(false)
+        props.setAmount(val)
+        props.setField(props.name)
+        props.setExactIn(props.name === 'INPUT' ? true : false)
+        console.log(allowanceAmount/Math.pow(10,+fromToken.decimals),'--allowanceAmount/Math.pow(10,+fromToken.decimals)')
+        if(val > 0){
+            props.updatePoolInfo(val, props.isExactIn)
+            props.setToAmount(outputAmount)
+            if(parseInt(val) > fromTokenBalance){
+                props.setSwapStatus('insufficientBalance')
+            }
+            else if (+props.amount == 0){
+                props.setSwapStatus('loading')
+            }
+            else if(parseInt(val) < +balance - feeProcent){
+                if(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(val)){
+                    if(parseFloat(props.slippage?.toFixed(2)||0) < +slippageTolerance){
+                        props.setSwapStatus('swap')
+                    }else{
+                        props.setSwapStatus('swapAnyway')
+                    }
+                } else {
+                    props.setSwapStatus('approve')
+                }
+            } else {
+                props.setSwapStatus('feeError')
+            }
+        } else {
+            props.setSwapStatus('enterAmount')
         }
     }
-    const setMaxAmount = () => {
+    const setMaxAmount =() => {
         props.setAmount(balance-feeProcent)
-    }
-    const updatePoolInfo = (val) => {
-        if (val > 0) props.updatePoolInfo(val)
+        props.updatePoolInfo(balance-feeProcent,props.isExactIn)
     }
     return(
         <div className='amount-container'>
             <div className='input-container' >
-                <input className={hasError ? 'error-input' : undefined} type='number' value={props.amount} onChange={(e) => checkAmount(e.target.value)} onBlur={(e) => updatePoolInfo(e.target.value)}/>
+                <input className={hasError ? 'error-input' : undefined} type='number' value={props.amount} onChange={(e) => checkAmount(e.target.value)}/>
                 {showMax && <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>}
             </div>
-            <div className='usd-container'>
-                <span>$</span>
-                <b>0.05</b>
-            </div>
+         
             {!showFee &&
             <div className='fee-container'>
 				<h5>{text.FEE_TEXT}</h5>
@@ -67,6 +70,7 @@ const AmountInput = (props) => {
                 <img src={fileRoutes.ERROR_ICON} alt='error'/>
                 <span className='amount-error-text'>{text.ERRORS.INSUFFICIENT_FUNDS}</span>
             </div>}
+            <Updater/>
         </div>
     )
 }
@@ -76,4 +80,4 @@ const mapStateToProps=(state)=>({
     swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {updatePoolInfo,setRateAmount,setFromAmount,setToAmount}) (AmountInput);
+export default connect(mapStateToProps, {setSwapStatus,setAmount,updatePoolInfo,setRateAmount,setToAmount}) (AmountInput);

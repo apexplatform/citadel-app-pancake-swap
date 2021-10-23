@@ -8,7 +8,7 @@ const TransactionDetailsPanel = (props) => {
     const {openedTransaction} = props.transactionsReducer
     return(
         <Panel id={ROUTES.TRANSACTION_DETAILS}>
-            <Header title={openedTransaction && openedTransaction.type} back={true} />
+            <Header showTitle={true} title={openedTransaction && openedTransaction.type} back={true} />
             <TransactionDetails data={openedTransaction}/>
         </Panel>
     )

@@ -9,8 +9,8 @@ const TokenSelect = (props) => {
     return(
         <div className='token-container' onClick={()=>props.setActivePage(ROUTES.SELECT_TOKEN)}>
             <div className='token-row'>
-                <Icon icon={selectedToken.network} fill={'#792EC0'}/>
-                <span className='token-name'>{selectedToken.network}</span>
+                <img src={selectedToken.logoURI} alt ='icon' onError={(e) => {e.target.src='/img/coins/eth.svg'}}/>
+                <span className='token-name'>{selectedToken.name}</span>
                 <Icon20ChevronRightOutline className='right-arrow' fill='#C5D0DB' width={25} height={25}/>
             </div>
         </div>

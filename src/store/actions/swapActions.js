@@ -1,13 +1,9 @@
 import {getWalletConstructor} from './walletActions'
 import {checkErrors} from './errorsActions'
-import axios from 'axios';
-import {DecUtils, Dec, IntPretty } from '@keplr-wallet/unit';
 import store from '../store';
-import { SET_POOL_INFO, SET_SWAP_RATE, SET_TOKEN_IN, SET_TOKEN_OUT,SET_SLIPPAGE, SET_POOL_ID, SET_INITIAL_RATE, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE } from './types'
-import {calcOutGivenIn, calcSpotPrice} from '../utils/math'
-import {setPopout} from './panelActions'
-import {ScreenSpinner} from '@vkontakte/vkui';
-
+import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE,  SET_PARSED_AMOUNT } from './types'
+import {getTokenAllowance} from '../../networking/hooks/allowanceHooks'
+import {loadTokenBalance,loadBlockNumber} from '../../networking/hooks/swapHooks'
 export const setRateAmount = (amount) => dispatch =>{
     dispatch({
         type: SET_RATE_AMOUT,
@@ -15,6 +11,41 @@ export const setRateAmount = (amount) => dispatch =>{
     })
 }
 
+export const setTrade = (bestTrade) => dispatch =>{
+    dispatch({
+        type: SET_TRADE,
+        payload: bestTrade
+    })
+}
+
+export const setParsedAmount = (amount) => dispatch =>{
+    dispatch({
+        type: SET_PARSED_AMOUNT,
+        payload: amount
+    })
+}
+
+
+export const setDeadline = (min) => dispatch =>{
+    dispatch({
+        type: SET_DEADLINE,
+        payload: min
+    })
+}
+
+export const setSwapStatus = (status) => dispatch =>{
+    dispatch({
+        type: SET_SWAP_STATUS,
+        payload: status
+    })
+}
+
+export const setMinReceive = (amount) => dispatch =>{
+    dispatch({
+        type: SET_MIN_RECEIVED,
+        payload: amount
+    })
+}
 
 export const setSlippageTolerance = (procent) => dispatch =>{
     dispatch({
@@ -23,11 +54,17 @@ export const setSlippageTolerance = (procent) => dispatch =>{
     })
 }
 
+export const getTokenBalance = () => dispatch =>{
+    const {fromToken} = store.getState().walletReducer
+    dispatch(loadTokenBalance(fromToken.address))
+    dispatch(loadBlockNumber())
+}
 
 export const prepareSwapTransfer  = () => dispatch => {
+    dispatch(loadBlockNumber())
     const wallet = getWalletConstructor()
     const transaction = wallet.generateSwapTransaction()
-    console.log(transaction)
+    console.log(JSON.stringify(transaction,null,2))
     wallet.prepareTransfer(transaction).then((ok, data) => {
         if(ok){
             return dispatch ({
@@ -38,12 +75,31 @@ export const prepareSwapTransfer  = () => dispatch => {
             dispatch(checkErrors(data))
         }
     }).catch(err => {
+             console.log(err)
         dispatch(checkErrors(err))
     })
 }
 
-export const swapTokens = (fromTokenAmount) => dispatch =>{
-    dispatch(setPopout(<ScreenSpinner size='large' />))
+export const prepareApprove  = () => dispatch => {
+    const wallet = getWalletConstructor()
+    const transaction = wallet.generateApproveTransaction()
+    console.log(JSON.stringify(transaction,null,2))
+    wallet.prepareTransfer(transaction).then((ok, data) => {
+        if(ok){
+            return dispatch ({
+                type:SET_PREPARE_TRANSFER_RESPONSE,
+                payload: data
+            })
+        }else{
+            dispatch(checkErrors(data))
+        }
+    }).catch(err => {
+        console.log(err)
+        dispatch(checkErrors(err))
+    })
+}
+
+export const swapTokens = () => dispatch =>{
     const tokenIn = store.getState().swapReducer.tokenIn
     const tokenOut = store.getState().swapReducer.tokenOut
     dispatch({
@@ -54,204 +110,25 @@ export const swapTokens = (fromTokenAmount) => dispatch =>{
         type: SET_TOKEN_OUT,
         payload: tokenIn
     })
-    dispatch(calculateSpotPriceWithoutSwapFee(false))
-    dispatch(calculateSlippage(fromTokenAmount))
 }
 
-export const loadPoolInfo = () => dispatch =>{
+export const updatePoolInfo  = (amount = '0',isExactIn=true) => dispatch => {
     try{
-        const {poolId} = store.getState().swapReducer
-        const {fromToken} = store.getState().walletReducer
-        axios.get('https://lcd-osmosis.keplr.app/osmosis/gamm/v1beta1/pools/' + poolId).then(res => {
-            dispatch({
-                type: SET_POOL_INFO,
-                payload: res.data?.pool
-            })
-            res.data?.pool?.poolAssets?.map(pool => {
-                if(pool.token?.denom === fromToken?.denom){
-                    dispatch({
-                        type: SET_TOKEN_IN,
-                        payload: pool || null
-                    })
-                } else {
-                    dispatch({
-                        type: SET_TOKEN_OUT,
-                        payload: pool || null
-                    })
-                }       
-            })  
-            dispatch(calculateSpotPriceWithoutSwapFee())
-        })
-    } catch (e) {
-        console.log(e)
-    }
-}
-
-
-export const calculateSlippage = (tokenInAmount) => dispatch => {
-    try{
-        const tokenWeightIn = new Dec(store.getState().swapReducer.tokenIn?.weight)
-        const tokenWeightOut = new Dec(store.getState().swapReducer.tokenOut?.weight)
-        const tokenBalanceIn = new Dec(store.getState().swapReducer.tokenIn?.token.amount)
-        const tokenBalanceOut = new Dec(store.getState().swapReducer.tokenOut?.token.amount)
-        const amount = new Dec(tokenInAmount).mul(DecUtils.getPrecisionDec(6)).truncate();
-        const tokenOutAmount = calcOutGivenIn(tokenBalanceIn,tokenWeightIn,tokenBalanceOut,tokenWeightOut,amount,new Dec('0'))
-        const effectivePrice = new Dec(amount).quo(tokenOutAmount);
-        const spotPriceBefore = calcSpotPrice(tokenBalanceIn,tokenWeightIn,tokenBalanceOut,tokenWeightOut,new Dec(0))
-		const slippage = effectivePrice.quo(spotPriceBefore).sub(new Dec('1'));
-        dispatch({
-            type: SET_SLIPPAGE,
-            payload: new IntPretty(slippage).decreasePrecision(2).maxDecimals(3).trim(true).toString()
-        })
-    }catch{
-        return 0
-    }
-}
-
-
-export const calculateSpotPriceWithoutSwapFee = (initial=true) => dispatch => {
-    try{
-        const tokenWeightIn = new Dec(store.getState().swapReducer.tokenIn?.weight)
-        const tokenWeightOut = new Dec(store.getState().swapReducer.tokenOut?.weight)
-        const tokenBalanceIn = new Dec(store.getState().swapReducer.tokenIn?.token?.amount)
-        const tokenBalanceOut = new Dec(store.getState().swapReducer.tokenOut?.token?.amount)
-        const outSpotPrice = calcSpotPrice(tokenBalanceIn,tokenWeightIn,tokenBalanceOut,tokenWeightOut,new Dec(0))
-        const inSpotPrice = outSpotPrice.equals(new Dec(0)) ? outSpotPrice
-        : new IntPretty(new Dec(1).quo(outSpotPrice))
-        dispatch(setPopout(null))
-        initial && dispatch({
-            type: SET_INITIAL_RATE,
-            payload: inSpotPrice.maxDecimals(3).trim(true).toString()
-        })
-        return dispatch({
-            type: SET_SWAP_RATE,
-            payload: inSpotPrice.maxDecimals(3).trim(true).toString()
-        })
-    }catch {
-        return 1
-    }
-   
-}
-
-
-
-export const setInPool = (token) => dispatch => {
-    try{
-        dispatch(setPopout(<ScreenSpinner size='large' />))
-        const {pools} = store.getState().swapReducer
-        const {toToken} = store.getState().walletReducer
-        const inPools = []
-        const outPools = []
-        pools.map(pool => {
-            pool.currencies.map(item => {
-                if(item.coinMinimalDenom === token.denom){
-                    inPools.push(pool)
-                }
-            })
-        })
-        if(inPools.length){
-            inPools.map(pool =>{
-                pool.currencies.map(item => {
-                    if(item.coinMinimalDenom === toToken.denom){
-                        outPools.push(pool)
-                    }
-                })
-            })
-        } else {
-            console.warn('Token is not supported!')
-        }
-        if(outPools.length === 1){
-            dispatch({
-                type: SET_POOL_ID,
-                payload: outPools[0].poolId
-            })
-        } else if(outPools.length > 1){
-            dispatch({
-                type: SET_POOL_ID,
-                payload: outPools[0].poolId
-            })
-        }
-        dispatch(loadPoolInfo())
-    }catch {
-        return 1
-    }
-}
-
-
-export const setOutPool = (token) => dispatch => {
-    try{
-        dispatch(setPopout(<ScreenSpinner size='large' />))
-        const {pools} = store.getState().swapReducer
-        const {fromToken} = store.getState().walletReducer
-        const inPools = []
-        const outPools = []
-        pools.map(pool => {
-            pool.currencies.map(item => {
-                if(item.coinMinimalDenom === token.denom){
-                    outPools.push(pool)
-                }
-            })
-        })
-        if(outPools.length){
-            outPools.map(pool =>{
-                pool.currencies.map(item => {
-                    if(item.coinMinimalDenom === fromToken.denom){
-                        inPools.push(pool)
-                    }
-                })
-            })
-        } else {
-            console.warn('Token is not supported!')
-        }
-        if(inPools.length === 1){
-            dispatch({
-                type: SET_POOL_ID,
-                payload: inPools[0].poolId
-            })
-        } else if(inPools.length > 1){
-            dispatch({
-                type: SET_POOL_ID,
-                payload: inPools[0].poolId
-            })
-        }
-        dispatch(loadPoolInfo())
-    }catch {
-        return 1
-    }
-}
-
-
-export const updatePoolInfo  = (amount = 0) => dispatch => {
-    dispatch(setPopout(<ScreenSpinner size='large' />))
-    const {fromToken,toToken} = store.getState().walletReducer
-    axios.get(process.env.REACT_APP_OSMOSIS_URL+`Route?denomIn=${fromToken.denom}&denomOut=${toToken.denom}&amount=${amount}`).then(res => {
-        dispatch({
-            type: SET_POOL_INFO,
-            payload: res.data.poolRoute[0]
-        })
-        dispatch({
-            type: SET_SWAP_RATE,
-            payload: res.data.poolRoute[0].estimateRate
-        })
-        dispatch({
-            type: SET_SLIPPAGE,
-            payload: res.data.estimateSlipage
-        })
-        if(res.data.poolRoute.length){
-            if(res.data.poolRoute[0].from.denom === fromToken?.denom){
-                dispatch({
-                    type: SET_TOKEN_IN,
-                    payload: res.data.poolRoute[0]?.from
-                })
-            } else {
-                dispatch({
-                    type: SET_TOKEN_OUT,
-                    payload: res.data.poolRoute[0]?.to
-                })
-            }
-        }
-    dispatch(setPopout(null))
-    }).catch(err => {
+        console.log(amount,'--amount')
+        const wallet = getWalletConstructor()
+        const {fromToken,toToken} = store.getState().walletReducer
+        const inputCurrency = wallet.getCurrency(fromToken.address)
+        const outputCurrency = wallet.getCurrency(toToken.address)
+        let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
+        dispatch(setParsedAmount(parsedAmount))
+        const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn))
+        if(!bestTradeExact?.outputAmount) updatePoolInfo(amount)
+        dispatch(setTrade(bestTradeExact))
+        dispatch(setMinReceive(wallet.getMinReceived()))
+        console.log(bestTradeExact,'--bestTradeExactIn')
+        dispatch(getTokenAllowance())
+    } catch(err) {
         dispatch(checkErrors(err))
-    })
+        console.log(err)
+    }
 }

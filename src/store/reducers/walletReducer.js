@@ -1,15 +1,17 @@
-import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_AMOUNT,SET_TO_AMOUNT} from '../actions/types'
-import { addresses,tokens } from '../../data'
+import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_BALANCE,SET_TO_AMOUNT} from '../actions/types'
+import { addresses } from '../../data'
+import tokenList from '../../config/tokenLists/pancake-default.tokenlist.json'
+
 const initialState = {
     currentWallet: addresses[0],
-    currentToken: tokens[0],
+    currentToken: tokenList['tokens'][0],
     wallets: addresses,
     toAddress: null,
     amount: 0,
     networks: [],
-    fromToken: tokens[0],
-    toToken: tokens[1],
-    fromTokenAmount: 0,
+    fromToken: tokenList['tokens'][0],
+    toToken: tokenList['tokens'][1],
+    fromTokenBalance: 0,
     toTokenAmount: 0
 }
 export default function(state=initialState,action){
@@ -49,10 +51,10 @@ export default function(state=initialState,action){
                 ...state,
                 toToken: action.payload
             }
-        case SET_FROM_AMOUNT:
+        case SET_FROM_TOKEN_BALANCE:
             return {
                 ...state,
-                fromTokenAmount: action.payload
+                fromTokenBalance: action.payload
             }
         case SET_TO_AMOUNT:
             return {

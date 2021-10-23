@@ -18,6 +18,10 @@
     border-radius: 6px;
     background-color: #792EC0 !important;
 }
+.token-icon img {
+    width: 28px;
+    height: 28px;
+}
 
 .token-name{
     font-size: 16px;

@@ -1,5 +1,4 @@
-import {SET_POOL_INFO, SET_TOKEN_IN, SET_TOKEN_OUT,SET_SWAP_RATE, SET_SLIPPAGE, SET_POOL_ID, SET_INITIAL_RATE, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE} from '../actions/types'
-import {swapPools} from '../../config/pools-config'
+import {SET_POOL_INFO, SET_TOKEN_IN, SET_TOKEN_OUT,SET_SWAP_RATE, SET_SLIPPAGE, SET_INITIAL_RATE, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_ALLOWANCE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE, SET_PARSED_AMOUNT} from '../actions/types'
 const initialState = {
     poolInfo: {},
     tokenIn: {},
@@ -7,10 +6,14 @@ const initialState = {
     rate: 1,
     initialRate: 1,
     slippage: 0,
-    pools: swapPools,
-    poolId: 1,
     rateAmount: 0,
-    slippageTolerance: 1
+    slippageTolerance: 1,
+    trade: null,
+    allowanceAmount: 0,
+    minReceived: 0,
+    swapStatus: 'enterAmount',
+    deadline: 20,
+    parsedAmount: 0
 }
 export default function(state=initialState,action){
     switch (action.type){
@@ -18,6 +21,36 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 poolInfo: action.payload
+            }
+        case SET_PARSED_AMOUNT:
+            return {
+                ...state,
+                parsedAmount: action.payload
+            }
+        case SET_DEADLINE:
+            return {
+                ...state,
+                deadline: action.payload
+            }
+        case SET_SWAP_STATUS:
+            return {
+                ...state,
+                swapStatus: action.payload
+            }
+        case SET_MIN_RECEIVED:
+            return {
+                ...state,
+                minReceived: action.payload
+            }
+        case SET_ALLOWANCE:
+            return {
+                ...state,
+                allowanceAmount: action.payload
+            }
+        case SET_TRADE:
+            return {
+                ...state,
+                trade: action.payload
             }
         case SET_RATE_AMOUT:
             return {
@@ -33,11 +66,6 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 initialRate: action.payload
-            }
-        case SET_POOL_ID:
-            return {
-                ...state,
-                poolId: action.payload
             }
         case SET_TOKEN_IN:
             return {

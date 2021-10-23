@@ -1,4 +1,3 @@
-import {makeIBCMinimalDenom} from './store/utils/ibc'
 export let transactions = [
 	{
 		id:0,
@@ -57,43 +56,10 @@ export let transactions = [
 	}
 ]
 
-export let tokens = [
-	{
-		network: 'COSMOS',
-		code: 'ATOM',
-		denom: makeIBCMinimalDenom('channel-0','uatom'),
-		coinDecimals: 6,
-	},
-	{
-		network: 'OSMO',
-		code: 'OSMO',
-		denom: 'uosmo',
-		coinDecimals: 6,
-	},
-	{
-		denom: 'uion',
-		network: 'ION',
-		code: 'ION',
-		coinDecimals: 6,
-	},
-	{
-		denom: makeIBCMinimalDenom('channel-1','uakt'),
-		network: 'AKT',
-		code: 'AKT',
-		coinDecimals: 6,
-	},
-	{
-		denom: makeIBCMinimalDenom('channel-2','udvpn'),
-		network: 'DVPN',
-		code: 'DVPN',
-		coinDecimals: 6,
-	},
-]
-
 export const addresses = [
 	{
-		address: "0x4dd28bee5135fc5dbb358a68ba941a5bf8e7aab2",
-		amount: 231,
+		address: "0x4Dd28bEe5135FC5DBB358A68ba941a5bf8e7Aab2",
+		amount: 2311,
 		network: 'eth',
 		name: 'Etherium',
 		code: 'ETH',

@@ -7,5 +7,15 @@
     "ALARM_TEXT": "The bridge allows users to lock their ETH in a smart contract on Ethereum and mint secretETH. Below you can unwrap your secretETH and receive ETH tokens back link.",
     "INFO_TEXT": "The bridge allows users to lock their ETH in a smart contract on Ethereum and mint secretETH. Below you can unwrap your secretETH and receive ETH tokens back link.",
     "ADD_ADDRESS": "Add address",
-    "SLIPPAGE_TOLERANCE": "Slippage tolerance"
+    "SLIPPAGE_TOLERANCE": "Slippage tolerance",
+    "PROVIDER_FEE_TEXT": "Liquidity Provider Fee",
+    "PRICE_IMPACT": "Price impact",
+    "ESTIMATED_SLIPPAGE": "Estimated slippage",
+    "SETTING_TITLE": "Manage access to your addresses",
+    "SETTING_DESCRIPTION": "You can provide this app with access to the chosen addresses associated with your account.",
+    "FEE_ERROR_TEXT": "Insufficient balance for swap fee",
+    "LOADING": "Loading",
+    "MINIMUM_RECEIVED": "Minimum received",
+    "ENTER_AMOUNT": "Enter an amount",
+    "DEADLINE_TEXT": "Tx deadline (mins)"
 }
