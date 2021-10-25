@@ -10,11 +10,13 @@
     display: flex;
     cursor: pointer;
     height: 36px;
+    cursor: no-drop;
     align-items: center;
     justify-content: center;
     margin: 0 15px 10px;
 }
 .add-address-btn p {
+    color: #2A5885 !important;
     margin: auto 0!important;
 }
 .procent-btn{

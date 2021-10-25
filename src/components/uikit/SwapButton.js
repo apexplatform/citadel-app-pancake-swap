@@ -28,7 +28,7 @@ const SwapButton = (props) => {
                 <span>{text.FEE_ERROR_TEXT}</span>
             </Div>}
             {swapStatus == 'insufficientBalance' &&
-            <Div className='swap-btn' id="disabled-btn" onClick={() => props.prepareApprove()}>
+            <Div className='swap-btn' id="disabled-btn">
                 <span>Insufficient {fromToken.symbol} balance</span>
             </Div>}
             {swapStatus == 'enterAmount' &&

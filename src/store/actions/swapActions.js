@@ -85,9 +85,9 @@ export const prepareSwapTransfer  = () => dispatch => {
     })
 }
 
-export const prepareApprove  = () => async(dispatch) => {
+export const prepareApprove  = () => dispatch => {
     const wallet = getWalletConstructor()
-    await dispatch(wallet.getGasPrice())
+   // await dispatch(wallet.getGasPrice())
     const transaction = wallet.generateApproveTransaction()
     console.log(JSON.stringify(transaction,null,2))
     wallet.prepareTransfer(transaction).then((ok, data) => {

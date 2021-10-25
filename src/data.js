@@ -58,11 +58,11 @@ export let transactions = [
 
 export const addresses = [
 	{
-		address: "0x4Dd28bEe5135FC5DBB358A68ba941a5bf8e7Aab2",
+		address: "0x4dd28bee5135fc5dbb358a68ba941a5bf8e7aab2",
 		amount: 2311,
-		network: 'eth',
+		network: 'bsc',
 		name: 'Etherium',
-		code: 'ETH',
+		code: 'BSC',
 		publicKey: "0229cf4f3c561133c6d0213b02cbe920238bb06e75a3c46a8b124bc6f2f50f3673"
 	},
 	{

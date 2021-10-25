@@ -3,11 +3,12 @@ import {ImplementationError,NetworkError} from './Errors'
 import {useTradeExact,tryParseAmount,loadTokenBalance,loadBlockNumber} from '../hooks/swapHooks'
 import {useCurrency} from '../hooks/tokenHooks'
 import { JSBI, Percent, Router } from '@pancakeswap/sdk'
-const api = useApi('wallet')
 import {basisPointsToPercent} from '../utils/price'
 import store from '../../store/store';
 import { ethers } from 'ethers'
-import {loadTokenAllowance,loadGasPrice} from '../hooks/allowanceHooks'
+import {SPENDER} from '../../config/constants'
+import {loadTokenAllowance} from '../hooks/allowanceHooks'
+const api = useApi('wallet')
 export default class Wallet {
   constructor(opts) {
       this.net = opts.network;
@@ -52,11 +53,7 @@ export default class Wallet {
   getMinReceived(){
     const {trade,slippageTolerance} = store.getState().swapReducer
     const pct = basisPointsToPercent(slippageTolerance)
-    console.log(pct)
     return trade?.minimumAmountOut(pct) || 0
-  }
-  getGasPrice(){
-    return loadGasPrice()
   }
   generateSwapTransaction(){
     const {auth_token} = store.getState().userReducer
@@ -71,31 +68,29 @@ export default class Wallet {
     })
     const body =    
     {
-      "gas": "160000",
       "amount": +amount,
       "from": fromToken.address,
-      "to": toToken.address,
-      "token": auth_token,
+      "to": SPENDER,
+      "token": auth_token || "4adc8c27-971d-4bb3-95a9-38d393c6271c",
       "call": {
         "method": call.methodName,
-        "params": [ parseInt(call.args[0], 16), parseInt(call.args[1], 16), call.args[2], deadline]
+        "params": [ parseInt(call.args[0], 16), parseInt(call.args[1], 16), call.args[2], currentWallet.address, deadline]
       }
     }
     return body
   }  
   generateApproveTransaction(){
     const {auth_token} = store.getState().userReducer
-    const {fromToken,toToken,gasPrice} = store.getState().walletReducer;
+    const {fromToken,toToken} = store.getState().walletReducer;
     let body =    
     {
-      "gas": gasPrice,
-      "amount": 0,
+      "amount": 1,
       "from": fromToken.address,
       "to": toToken.address,
-      "token": auth_token,
+      "token": auth_token || "4adc8c27-971d-4bb3-95a9-38d393c6271c",
       "call": {
         "method": "approve",
-        "params": [fromToken?.address,ethers.constants.MaxUint256._hex]
+        "params": [SPENDER,parseInt(ethers.constants.MaxUint256._hex, 16)]
       }
     }
     

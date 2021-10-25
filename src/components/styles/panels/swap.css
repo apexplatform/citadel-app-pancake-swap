@@ -26,9 +26,11 @@
     align-items: baseline;
     flex-direction: column;
     justify-content: space-between;
+    padding: 15px 15px 0 15px;
 }
 .formTokenItem{
-    width: 95%;
+    width: 100%;
+    padding: 0;
 }
 .delimeter{
     border-top: 1px dashed #D3D9DE;

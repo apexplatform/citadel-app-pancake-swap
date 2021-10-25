@@ -30,11 +30,7 @@ const Swap = (props) => {
 		[independentField]: amount,
 		[dependentField]: parsedAmounts[dependentField]?.toSignificant(6) ?? '0',
 	}
-	if(swapStatus === 'approve'){
-		setInterval(() => {
-			props.checkTokenAllowance()
-		},10000)
-	}
+
 	const reverseTokens = () => {
 		setIndependentField(dependentField)
 		setExactIn(!isExactIn)
@@ -44,6 +40,11 @@ const Swap = (props) => {
 	}
 	useEffect(() => {
 		props.updateTradeInfo(1,isExactIn)
+		if(swapStatus === 'approve'){
+			setInterval(() => {
+				props.checkTokenAllowance()
+			},10000)
+		}
 	},[])
 	return (
 		<Group className='swap-container'>
@@ -56,10 +57,6 @@ const Swap = (props) => {
 						<AmountInput setExactIn={setExactIn}  name='INPUT' setField={setIndependentField} slippage={priceImpactWithoutFee} hideFee={!showFee} hideMax={true} amount={formattedAmounts['INPUT']} fee={realizedLPFee} isExactIn={isExactIn}/>
 					</div>
 				</FormItem>
-				<div className='usd-container'>
-					<span>$</span>
-					<b>0.5</b>
-				</div>
 			</div>
 			<Div className='center swap-block'>
 				<div className="delimeter"></div>
@@ -75,10 +72,6 @@ const Swap = (props) => {
 						<AmountInput setExactIn={setExactIn} setField={setIndependentField} name='OUTPUT' slippage={priceImpactWithoutFee} isExactIn={isExactIn} isSecond={true} hideMax={false} hideFee={!showFee2}  fee={realizedLPFee} amount={formattedAmounts['OUTPUT']}/>
 					</div>
 				</FormItem>
-				<div className='usd-container'>
-					<span>$</span>
-					<b>0.05</b>
-				</div>
 			</div>
 			<FeeInfoBlock rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
 			<SwapButton />

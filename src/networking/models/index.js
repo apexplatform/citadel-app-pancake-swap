@@ -1,4 +1,4 @@
-import EtheriumWallet from './walletCoins/EtheriumWallet'
+import Wallet from './Wallet'
 export default {
-  ETH: EtheriumWallet,
+  BSC: Wallet,
 }
