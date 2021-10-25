@@ -3,7 +3,7 @@ import { FormItem,Div,Group } from '@vkontakte/vkui';
 import '../styles/panels/swap.css'
 import AmountInput from '../uikit/AmountInput'
 import TokenSelect from '../uikit/TokenSelect'
-import {swapTokens,updatePoolInfo} from '../../store/actions/swapActions'
+import {swapTokens,updateTradeInfo,checkTokenAllowance} from '../../store/actions/swapActions'
 import {setSelectedToken} from '../../store/actions/walletActions'
 import Header from '../uikit/Header'
 import {computeTradePriceBreakdown} from '../../networking/utils/price'
@@ -15,7 +15,7 @@ import SwapButton from '../uikit/SwapButton'
 const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
 	const [independentField, setIndependentField] = useState('INPUT')
-	const {trade,parsedAmount} = props.swapReducer
+	const {trade,parsedAmount,swapStatus} = props.swapReducer
 	const {fromToken,toToken,currentWallet, amount} = props.walletReducer
 	const showFee = fromToken.symbol.toLowerCase() === currentWallet.symbol
 	const showFee2 = toToken.symbol.toLowerCase() === currentWallet.symbol
@@ -30,17 +30,21 @@ const Swap = (props) => {
 		[independentField]: amount,
 		[dependentField]: parsedAmounts[dependentField]?.toSignificant(6) ?? '0',
 	}
-	// console.log(parsedAmount,'---parsedAmount')
-	// console.log(isExactIn,'---isExactIn',parsedAmounts)
-	// console.log(formattedAmounts ,'---formattedAmounts',independentField,dependentField)
-	
+	if(swapStatus === 'approve'){
+		setInterval(() => {
+			props.checkTokenAllowance()
+		},10000)
+	}
 	const reverseTokens = () => {
 		setIndependentField(dependentField)
 		setExactIn(!isExactIn)
 		props.setFromToken(toToken)
 		props.setToToken(fromToken)
-		props.updatePoolInfo(formattedAmounts[independentField], !isExactIn)
+		props.updateTradeInfo(formattedAmounts[independentField], !isExactIn)
 	}
+	useEffect(() => {
+		props.updateTradeInfo(1,isExactIn)
+	},[])
 	return (
 		<Group className='swap-container'>
 			<Header title="Swap"/>
@@ -86,4 +90,4 @@ const mapStateToProps=(state)=>({
 	swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {setAmount,updatePoolInfo,swapTokens,setToAmount,setSelectedToken,setFromToken,setToToken}) (Swap);
+export default connect(mapStateToProps, {checkTokenAllowance,setAmount,updateTradeInfo,swapTokens,setToAmount,setSelectedToken,setFromToken,setToToken}) (Swap);

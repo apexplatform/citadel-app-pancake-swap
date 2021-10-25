@@ -1,9 +1,8 @@
 import {getWalletConstructor} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
+import {useTokenContract} from '../../networking/hooks/contractHooks'
 import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE,  SET_PARSED_AMOUNT } from './types'
-import {getTokenAllowance} from '../../networking/hooks/allowanceHooks'
-import {loadTokenBalance,loadBlockNumber} from '../../networking/hooks/swapHooks'
 export const setRateAmount = (amount) => dispatch =>{
     dispatch({
         type: SET_RATE_AMOUT,
@@ -56,13 +55,19 @@ export const setSlippageTolerance = (procent) => dispatch =>{
 
 export const getTokenBalance = () => dispatch =>{
     const {fromToken} = store.getState().walletReducer
-    dispatch(loadTokenBalance(fromToken.address))
-    dispatch(loadBlockNumber())
+    const wallet = getWalletConstructor()
+    dispatch(wallet.getTokenBalance(fromToken.address))
+    dispatch(wallet.getBlockNumber())
+}
+
+export const checkTokenAllowance = () => dispatch =>{
+    const wallet = getWalletConstructor()
+    dispatch(wallet.getTokenAllowance())
 }
 
 export const prepareSwapTransfer  = () => dispatch => {
-    dispatch(loadBlockNumber())
     const wallet = getWalletConstructor()
+    dispatch(wallet.getBlockNumber())
     const transaction = wallet.generateSwapTransaction()
     console.log(JSON.stringify(transaction,null,2))
     wallet.prepareTransfer(transaction).then((ok, data) => {
@@ -80,8 +85,9 @@ export const prepareSwapTransfer  = () => dispatch => {
     })
 }
 
-export const prepareApprove  = () => dispatch => {
+export const prepareApprove  = () => async(dispatch) => {
     const wallet = getWalletConstructor()
+    await dispatch(wallet.getGasPrice())
     const transaction = wallet.generateApproveTransaction()
     console.log(JSON.stringify(transaction,null,2))
     wallet.prepareTransfer(transaction).then((ok, data) => {
@@ -112,7 +118,7 @@ export const swapTokens = () => dispatch =>{
     })
 }
 
-export const updatePoolInfo  = (amount = '0',isExactIn=true) => dispatch => {
+export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
     try{
         console.log(amount,'--amount')
         const wallet = getWalletConstructor()
@@ -122,11 +128,11 @@ export const updatePoolInfo  = (amount = '0',isExactIn=true) => dispatch => {
         let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
         dispatch(setParsedAmount(parsedAmount))
         const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn))
-        if(!bestTradeExact?.outputAmount) updatePoolInfo(amount)
+        if(!bestTradeExact?.outputAmount) updateTradeInfo(amount)
         dispatch(setTrade(bestTradeExact))
         dispatch(setMinReceive(wallet.getMinReceived()))
         console.log(bestTradeExact,'--bestTradeExactIn')
-        dispatch(getTokenAllowance())
+        dispatch(wallet.getTokenAllowance())
     } catch(err) {
         dispatch(checkErrors(err))
         console.log(err)

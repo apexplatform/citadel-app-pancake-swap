@@ -1,4 +1,4 @@
-import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_BALANCE,SET_TO_AMOUNT} from '../actions/types'
+import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_BALANCE,SET_TO_AMOUNT, SET_GAS_PRICE} from '../actions/types'
 import { addresses } from '../../data'
 import tokenList from '../../config/tokenLists/pancake-default.tokenlist.json'
 
@@ -12,7 +12,8 @@ const initialState = {
     fromToken: tokenList['tokens'][0],
     toToken: tokenList['tokens'][1],
     fromTokenBalance: 0,
-    toTokenAmount: 0
+    toTokenAmount: 0,
+    gasPrice: '45000'
 }
 export default function(state=initialState,action){
     switch (action.type){
@@ -20,6 +21,11 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 currentWallet: action.payload
+            }
+        case SET_GAS_PRICE:
+            return {
+                ...state,
+                gasPrice: action.payload
             }
         case SET_TOKEN:
             return {

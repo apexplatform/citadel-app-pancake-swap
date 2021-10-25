@@ -16,6 +16,7 @@ export const SET_CURRENT_WALLET = "SET_CURRENT_WALLET"
 export const SET_AMOUNT = "SET_AMOUNT"
 export const SET_MIN_RECEIVED = "SET_MIN_RECEIVED"
 export const SET_NETWORKS = "SET_NETWORKS"
+export const SET_GAS_PRICE = 'SET_GAS_PRICE'
 // token types
 export const SET_TO_TOKEN = 'SET_TO_TOKEN'
 export const SET_SWAP_STATUS = 'SET_SWAP_STATUS'

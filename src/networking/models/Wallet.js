@@ -1,12 +1,13 @@
 import useApi from '../api/useApi';
 import {ImplementationError,NetworkError} from './Errors'
-import {useTradeExact,tryParseAmount} from '../hooks/swapHooks'
+import {useTradeExact,tryParseAmount,loadTokenBalance,loadBlockNumber} from '../hooks/swapHooks'
 import {useCurrency} from '../hooks/tokenHooks'
 import { JSBI, Percent, Router } from '@pancakeswap/sdk'
 const api = useApi('wallet')
 import {basisPointsToPercent} from '../utils/price'
 import store from '../../store/store';
 import { ethers } from 'ethers'
+import {loadTokenAllowance,loadGasPrice} from '../hooks/allowanceHooks'
 export default class Wallet {
   constructor(opts) {
       this.net = opts.network;
@@ -14,16 +15,6 @@ export default class Wallet {
       this.code = opts.code;
       this.address = opts.address;
       this.publicKey = opts.publicKey || null; 
-  }
-  async getDelegationBalance() {
-      const data = await api.getDelegationBalance({
-        network: this.net,
-        address: this.address,
-      });
-      if (!data.ok) {
-        return new NetworkError(data.error.message);
-      }
-      return data;
   }
   async prepareTransfer(params) {
       const data = await api.prepareBaseTransfer({
@@ -39,29 +30,22 @@ export default class Wallet {
     } 
   prepareClaimRewards() {
     return new ImplementationError('Method not implemented!')
+  }  
+  getTokenBalance(address){
+    return loadTokenBalance(address)
   }
-  generateBaseTransaction(){
-    const {auth_token} = store.getState().userReducer
-    const {toAddress,amount} = store.getState().walletReducer;
-    const body =
-      {
-        "from": this.address,
-        "toAddress": toAddress,
-        "amount": amount,
-        "network": this.network,
-        "publicKey": this.publicKey,
-        "fee": "0.0001575",
-        "gasPrice": "5000000000",
-        "token": auth_token
-      }
-        return body
-  }   
+  getBlockNumber(){
+    return loadBlockNumber()
+  }
   getTradeExact(amount,currency,isExactIn){
     return useTradeExact(amount,currency,isExactIn)
   } 
   getParseAmount(amount,currency){
     return tryParseAmount(amount?.toString(),currency)
   } 
+  getTokenAllowance(){
+    return loadTokenAllowance()
+  }
   getCurrency(address){
     return useCurrency(address)
   } 
@@ -71,12 +55,14 @@ export default class Wallet {
     console.log(pct)
     return trade?.minimumAmountOut(pct) || 0
   }
+  getGasPrice(){
+    return loadGasPrice()
+  }
   generateSwapTransaction(){
     const {auth_token} = store.getState().userReducer
     const {amount,fromToken,toToken,currentWallet} = store.getState().walletReducer;
-    const {minReceived,trade,deadline,slippageTolerance} = store.getState().swapReducer;
+    const {trade,deadline,slippageTolerance} = store.getState().swapReducer;
     const BIPS_BASE = JSBI.BigInt(10000)
-    const path = trade.route.path.map(token => token.address)
     const call = Router.swapCallParameters(trade, {
       feeOnTransfer: false,
       allowedSlippage: new Percent(JSBI.BigInt(slippageTolerance), BIPS_BASE),
@@ -85,7 +71,7 @@ export default class Wallet {
     })
     const body =    
     {
-      "gas": "150000",
+      "gas": "160000",
       "amount": +amount,
       "from": fromToken.address,
       "to": toToken.address,
@@ -99,19 +85,20 @@ export default class Wallet {
   }  
   generateApproveTransaction(){
     const {auth_token} = store.getState().userReducer
-    const {fromToken,toToken} = store.getState().walletReducer;
-    const body =    
+    const {fromToken,toToken,gasPrice} = store.getState().walletReducer;
+    let body =    
     {
-      "gas": "55000",
+      "gas": gasPrice,
       "amount": 0,
       "from": fromToken.address,
       "to": toToken.address,
       "token": auth_token,
       "call": {
         "method": "approve",
-        "params": [fromToken?.address,ethers.constants.MaxUint256]
+        "params": [fromToken?.address,ethers.constants.MaxUint256._hex]
       }
     }
+    
     return body
   } 
 }

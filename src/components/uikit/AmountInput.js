@@ -4,7 +4,7 @@ import text from '../../text.json'
 import fileRoutes from '../../config/file-routes-config.json'
 import {connect} from 'react-redux'
 import Updater from '../../networking/utils/updater'
-import {setRateAmount,updatePoolInfo, setSwapStatus} from '../../store/actions/swapActions'
+import {setRateAmount,updateTradeInfo, setSwapStatus} from '../../store/actions/swapActions'
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 
 const AmountInput = (props) => {
@@ -21,9 +21,8 @@ const AmountInput = (props) => {
         props.setAmount(val)
         props.setField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
-        console.log(allowanceAmount/Math.pow(10,+fromToken.decimals),'--allowanceAmount/Math.pow(10,+fromToken.decimals)')
         if(val > 0){
-            props.updatePoolInfo(val, props.isExactIn)
+            props.updateTradeInfo(val, props.isExactIn)
             props.setToAmount(outputAmount)
             if(parseInt(val) > fromTokenBalance){
                 props.setSwapStatus('insufficientBalance')
@@ -80,4 +79,4 @@ const mapStateToProps=(state)=>({
     swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {setSwapStatus,setAmount,updatePoolInfo,setRateAmount,setToAmount}) (AmountInput);
+export default connect(mapStateToProps, {setSwapStatus,setAmount,updateTradeInfo,setRateAmount,setToAmount}) (AmountInput);
