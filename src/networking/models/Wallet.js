@@ -66,7 +66,6 @@ export default class Wallet {
       recipient: currentWallet.address,
       deadline: deadline,
     })
-    console.log(call,'---call')
     const body =    
     {
       "amount": +amount,
@@ -76,7 +75,7 @@ export default class Wallet {
       "token": auth_token || "5aecc8e9-61a8-47fc-9726-de8e97b6f07d",
       "call": {
         "method": call.methodName,
-        "params": [ call.args[0], call.args[1], call.args[2], currentWallet.address, deadline]
+        "params": [ parseInt(call.args[0], 16), parseInt(call.args[1], 16), call.args[2], currentWallet.address, deadline]
       }
     }
     return body
