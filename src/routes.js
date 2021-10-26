@@ -1,5 +1,5 @@
 const ROUTES = {
-	SEND: "send",
+	SWAP: "swap",
 	HOME: "home",
 	TRANSACTIONS: "transactions",
 	SETTINGS: "settings",

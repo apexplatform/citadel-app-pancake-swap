@@ -3,7 +3,7 @@ import {ScreenSpinner} from '@vkontakte/vkui';
 import ROUTES from '../../routes'
 const initialState = {
     activePage: ROUTES.HOME,
-    activePanel: ROUTES.SEND,
+    activePanel: ROUTES.SWAP,
     activeModal: null,
     popout: <ScreenSpinner size='large' />
 }

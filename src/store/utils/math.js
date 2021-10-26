@@ -50,7 +50,12 @@ export function calcOutGivenIn(tokenBalanceIn,tokenWeightIn,tokenBalanceOut,toke
 
 export function calcSpotPrice(tokenBalanceIn, tokenWeightIn, tokenBalanceOut, tokenWeightOut, swapFee){
 	const number = tokenBalanceIn.quo(tokenWeightIn);
+	console.log(number,'---number')
 	const denom = tokenBalanceOut.quo(tokenWeightOut);
+	console.log(denom,'---denom')
 	const scale = oneDec.quo(oneDec.sub(swapFee));
+	console.log(scale,'---scale')
+	console.log(number.quo(denom).mul(scale),'---number.quo(denom).mul(scale)')
 	return number.quo(denom).mul(scale);
 }
+

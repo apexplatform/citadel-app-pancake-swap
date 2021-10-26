@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import {Dec,IntPretty} from '@keplr-wallet/unit'
 
 const cutNumber = (number, digits = 0) => Math.floor(
   BigNumber(number)
@@ -48,3 +49,9 @@ export const prettyNumber = (value) => {
     return `${prefix}${cutNumber(absoluteValue, maxDecimals)}`;
 };
   
+
+export const formatNumber = (amount) => {
+  const decval = +amount !== 0 ? new Dec((amount).toString()) : amount
+  const intval = +decval !== 0 ? new IntPretty(decval).trim(true).maxDecimals(3).toString() : decval
+  return intval.toString().replaceAll(',','')
+}

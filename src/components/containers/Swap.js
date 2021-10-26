@@ -6,65 +6,67 @@ import TokenSelect from '../uikit/TokenSelect'
 import {prepareSwapTransfer,swapTokens} from '../../store/actions/swapActions'
 import {setSelectedToken} from '../../store/actions/walletActions'
 import Header from '../uikit/Header'
+import {formatNumber} from '../helpers/numberFormatter'
 import {connect} from 'react-redux';
-import {Dec,IntPretty} from '@keplr-wallet/unit'
 import Icon from '../uikit/Icon'
 import {setFromToken,setToToken,setFromAmount,setToAmount} from '../../store/actions/walletActions'
 import FeeInfoBlock from '../uikit/FeeInfoBlock'
 const Swap = (props) => {
 	const [disabled,setDisabled] = useState(true)
 	const [swaped,setSwaped] = useState(false)
-	const {poolInfo,initialRate,rate} = props.swapReducer
-	console.log(initialRate,'----rate')
+	const {poolInfo,initialRate,rate,slippage,slippageTolerance} = props.swapReducer
 	const {fromToken,toToken,fromTokenAmount,toTokenAmount,currentWallet} = props.walletReducer
-    const feeProcent = (+poolInfo?.poolParams?.swapFee * 100) || 1
-	const balanceSwaped = +toTokenAmount !== 0 ? new Dec((toTokenAmount * +initialRate * (100 - feeProcent) / 100).toString()) : toTokenAmount
-    const balance = +fromTokenAmount !== 0 ? new Dec((fromTokenAmount * +initialRate * (100 + feeProcent) / 100).toString()) : fromTokenAmount
-	const showFee = fromToken.network === currentWallet.network
-	const showFee2 = toToken.network === currentWallet.network
+    const feeProcent = poolInfo?.fee || 1
+	const balanceSwaped = toTokenAmount * +initialRate * (100 - feeProcent) / 100
+    const balance = fromTokenAmount * +initialRate * (100 + feeProcent) / 100
+	const showFee = fromToken.network.toLowerCase() === currentWallet.network
+	const showFee2 = toToken.network.toLowerCase() === currentWallet.network
 	const reverseTokens = () => {
 		props.setFromToken(toToken)
 		props.setToToken(fromToken)
 		if(swaped){
 			props.setFromAmount(toTokenAmount)
-			const intval = +balanceSwaped !== 0 ? new IntPretty(balanceSwaped).maxDecimals(3).toString() : balanceSwaped
-			props.setToAmount(intval.toString().replaceAll(',',''))
+			props.setToAmount(formatNumber(balanceSwaped))
 		}else{
 			props.setToAmount(fromTokenAmount)
-			const intval2 = +balance !== 0 ? new IntPretty(balance).maxDecimals(3).toString() : balance
-			props.setFromAmount(intval2.toString().replaceAll(',',''))
+			props.setFromAmount(formatNumber(balance))
 		}
-		props.swapTokens(fromTokenAmount)
+		// props.swapTokens(fromTokenAmount)
 		setSwaped(!swaped)
 	}
-
 	return (
 		<Group className='swap-container'>
-			<Header title="Swap"/>
-			<div className='swap-row'>
+			<Header title="Osmosis swap"/>
+			<div className='swap-column'>
 				<FormItem top="From token" className='formTokenItem' onClick={() => props.setSelectedToken('from')}>
-					<TokenSelect selectedToken={fromToken}/>
-				</FormItem>
-				<FormItem top="Amount to swap" className='formAddressItem'>
-					<AmountInput hideFee={!showFee} isFirst={true} amount={fromTokenAmount}/>
+					<div className='swap-row'>
+						<TokenSelect selectedToken={fromToken}/>
+						<AmountInput setDisabled={setDisabled} hideFee={!showFee} hideMax={true} isFirst={true} amount={fromTokenAmount}/>
+					</div>
+					<div className='usd-container'>
+						<span>$</span>
+						<b>0.05</b>
+					</div>
 				</FormItem>
 			</div>
-			<Div className='center'>
+			<Div className='center swap-block'>
+				<div className="delimeter"></div>
 				<button className='swap-amount-btn' onClick={() => reverseTokens()}>
 					<Icon icon='swap' fill={'#792EC0'}/>
 				</button>
+				<div className="delimeter"></div>
 			</Div>
-			<div className='swap-row'>
+			<div className='swap-column'>
 				<FormItem top="To token" className='formTokenItem' onClick={() => props.setSelectedToken('to')}>
-					<TokenSelect selectedToken={toToken}/>
-				</FormItem>
-				<FormItem top="Amount to receive" className='formAddressItem'>
-					<AmountInput isSecond={true} hideMax={false} hideFee={!showFee2} amount={toTokenAmount}/>
+					<div className='swap-row'>
+						<TokenSelect selectedToken={toToken}/>
+						<AmountInput setDisabled={setDisabled} isSecond={true} hideMax={false} hideFee={!showFee2} amount={toTokenAmount}/>
+					</div>
 				</FormItem>
 			</div>
 			<FeeInfoBlock rate={rate} fee={feeProcent}/>
 			<Div>
-				<Button stretched size="l" className='swap-btn' id={disabled ? "disabled-btn" : undefined} onClick={()=> props.prepareSwapTransfer()}>
+				<Button stretched size="l" className='swap-btn' onClick={() => props.prepareSwapTransfer()} id={disabled ? "disabled-btn" : undefined}>
 					Swap
 				</Button>
 			</Div>

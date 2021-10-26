@@ -27,6 +27,7 @@
 
 .header p{
     font-size: 17px;
+    margin-top: 10px !important;
     font-family: 'Panton Bold';
     text-transform: capitalize;
 }

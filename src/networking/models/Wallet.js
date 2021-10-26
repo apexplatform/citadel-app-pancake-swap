@@ -26,7 +26,7 @@ export default class Wallet {
       const data = await api.prepareBaseTransfer({
         network: this.net,
         from: this.address,
-        ...params,
+        transaction: params,
       });
       if (data.ok) {
         return data;
@@ -59,23 +59,17 @@ export default class Wallet {
 	}
   generateSwapTransaction(){
     const {auth_token} = store.getState().userReducer
-    const {fromTokenAmount,toToken} = store.getState().walletReducer;
-    const {tokenIn,poolInfo} = store.getState().swapReducer
-    const maxSlippage = '1'
-    const maxSlippageDec = new Dec(maxSlippage).quo(DecUtils.getPrecisionDec(2));
-    const dec_amount = new Dec(fromTokenAmount).mul(DecUtils.getPrecisionDec(6)).truncate();
-    const tokenWeightIn = new Dec(store.getState().swapReducer.tokenIn?.weight)
-    const tokenWeightOut = new Dec(store.getState().swapReducer.tokenOut?.weight)
-    const tokenBalanceIn = new Dec(store.getState().swapReducer.tokenIn?.token?.amount)
-    const tokenBalanceOut = new Dec(store.getState().swapReducer.tokenOut?.token?.amount)
-    const outSpotPrice = calcSpotPrice(tokenBalanceIn,tokenWeightIn,tokenBalanceOut,tokenWeightOut,new Dec(poolInfo?.poolParams?.swapFee))
+    const {fromTokenAmount,fromToken,toToken} = store.getState().walletReducer;
+    const {slippageTolerance,rate} = store.getState().swapReducer
+    const maxSlippageDec = new Dec(slippageTolerance).quo(DecUtils.getPrecisionDec(2));
 		const tokenOutMinAmount = maxSlippageDec.equals(new Dec(0))
 			? new Int(1)
 			: this.calculateSlippageTokenIn(
-          outSpotPrice,
+          new Dec(rate),
 					new Dec(fromTokenAmount.toString()).mul(DecUtils.getPrecisionDec(6)).truncate(),
 					maxSlippageDec
 			  );
+    const dec_amount = new Dec(fromTokenAmount).mul(DecUtils.getPrecisionDec(6)).truncate();
     const body =    
     {
       "fee": {
@@ -99,7 +93,7 @@ export default class Wallet {
               }
             ],
             "tokenIn": {
-              "denom": tokenIn?.token?.denom,
+              "denom": fromToken?.denom,
               "amount": dec_amount.toString()
             },
             "tokenOutMinAmount": tokenOutMinAmount.toString()
@@ -112,3 +106,6 @@ export default class Wallet {
     return body
   }  
 }
+
+// {"INPUT":{"numerator":[623412160,24701035],"denominator":[660865024,931322574],"currency":{"decimals":18,"symbol":"BNB","name":"BNB"}},
+// "OUTPUT":{"numerator":[186275704,1033314786,9],"denominator":[660865024,931322574],"currency":{"decimals":18,"symbol":"BUSD","name":"BUSD Token","chainId":56,"address":"0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56","tokenInfo":{"name":"BUSD Token","symbol":"BUSD","address":"0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56","chainId":56,"decimals":18,"logoURI":"https://pancakeswap.finance/images/tokens/0xe9e7cea3dedca5984780bafc599bd69add087d56.png"},"tags":[]},"token":{"decimals":18,"symbol":"BUSD","name":"BUSD Token","chainId":56,"address":"0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56","tokenInfo":{"name":"BUSD Token","symbol":"BUSD","address":"0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56","chainId":56,"decimals":18,"logoURI":"https://pancakeswap.finance/images/tokens/0xe9e7cea3dedca5984780bafc599bd69add087d56.png"},"tags":[]}}}

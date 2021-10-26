@@ -24,8 +24,3 @@
 .bridge-container{
     margin-bottom: 160px;
 }
-
-#disabled-btn{
-    background: #CCD3FF;
-    cursor: no-drop;
-}

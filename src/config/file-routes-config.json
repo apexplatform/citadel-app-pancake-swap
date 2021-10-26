@@ -4,5 +4,6 @@
     "ERROR_ICON": "/img/icons/error.svg",
     "ALARM_ICON": "/img/icons/alarm.svg",
     "INFO_ICON": "/img/icons/info.svg",
-    "SUCCESS_ICON": "/img/icons/success.svg"
+    "SUCCESS_ICON": "/img/icons/success.svg",
+    "ADD_ICON": "/img/icons/add.svg"
 }

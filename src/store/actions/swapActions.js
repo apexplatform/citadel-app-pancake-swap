@@ -3,14 +3,31 @@ import {checkErrors} from './errorsActions'
 import axios from 'axios';
 import {DecUtils, Dec, IntPretty } from '@keplr-wallet/unit';
 import store from '../store';
-import { SET_POOL_INFO, SET_SWAP_RATE, SET_TOKEN_IN, SET_TOKEN_OUT,SET_SLIPPAGE, SET_POOL_ID, SET_INITIAL_RATE } from './types'
+import { SET_POOL_INFO, SET_SWAP_RATE, SET_TOKEN_IN, SET_TOKEN_OUT,SET_SLIPPAGE, SET_POOL_ID, SET_INITIAL_RATE, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE } from './types'
 import {calcOutGivenIn, calcSpotPrice} from '../utils/math'
 import {setPopout} from './panelActions'
 import {ScreenSpinner} from '@vkontakte/vkui';
-import {makeIBCMinimalDenom} from '../utils/ibc'
+
+export const setRateAmount = (amount) => dispatch =>{
+    dispatch({
+        type: SET_RATE_AMOUT,
+        payload: amount
+    })
+}
+
+
+export const setSlippageTolerance = (procent) => dispatch =>{
+    dispatch({
+        type: SET_SLIPPAGE_TOLERANCE,
+        payload: procent
+    })
+}
+
+
 export const prepareSwapTransfer  = () => dispatch => {
     const wallet = getWalletConstructor()
     const transaction = wallet.generateSwapTransaction()
+    console.log(transaction)
     wallet.prepareTransfer(transaction).then((ok, data) => {
         if(ok){
             return dispatch ({
@@ -89,7 +106,6 @@ export const calculateSlippage = (tokenInAmount) => dispatch => {
     }catch{
         return 0
     }
-   
 }
 
 
@@ -202,4 +218,40 @@ export const setOutPool = (token) => dispatch => {
     }catch {
         return 1
     }
+}
+
+
+export const updatePoolInfo  = (amount = 0) => dispatch => {
+    dispatch(setPopout(<ScreenSpinner size='large' />))
+    const {fromToken,toToken} = store.getState().walletReducer
+    axios.get(process.env.REACT_APP_OSMOSIS_URL+`Route?denomIn=${fromToken.denom}&denomOut=${toToken.denom}&amount=${amount}`).then(res => {
+        dispatch({
+            type: SET_POOL_INFO,
+            payload: res.data.poolRoute[0]
+        })
+        dispatch({
+            type: SET_SWAP_RATE,
+            payload: res.data.poolRoute[0].estimateRate
+        })
+        dispatch({
+            type: SET_SLIPPAGE,
+            payload: res.data.estimateSlipage
+        })
+        if(res.data.poolRoute.length){
+            if(res.data.poolRoute[0].from.denom === fromToken?.denom){
+                dispatch({
+                    type: SET_TOKEN_IN,
+                    payload: res.data.poolRoute[0]?.from
+                })
+            } else {
+                dispatch({
+                    type: SET_TOKEN_OUT,
+                    payload: res.data.poolRoute[0]?.to
+                })
+            }
+        }
+    dispatch(setPopout(null))
+    }).catch(err => {
+        dispatch(checkErrors(err))
+    })
 }

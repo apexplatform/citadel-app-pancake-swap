@@ -6,11 +6,12 @@
     display: flex;
     align-items: center;
 }
-
+.token-row img{
+    width: 28px;
+    height: 28px;
+    margin-right: 5px;
+}
 .token-container{
-    background: #F7F8FA;
-    border: 1px solid #D3D9DE;
-    border-radius: 6px;
     padding-left: 10px;
     height: 40px;
     display: flex;
@@ -24,5 +25,6 @@
 
 .right-arrow{
     position: absolute;
-    right: 10px;
+    right: 0;
+    left: 160px;
 }

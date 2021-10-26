@@ -8,7 +8,7 @@ import './components/styles/index.css'
 import store from './store/store'
 import {Provider} from 'react-redux';
 import {connect} from 'react-redux';
-import {loadPoolInfo,calculateSpotPriceWithoutSwapFee} from './store/actions/swapActions'
+import {updatePoolInfo,calculateSpotPriceWithoutSwapFee} from './store/actions/swapActions'
 import {initApp} from './store/actions/vkActions'
 import SelectAddressPanel from './components/panels/SelectAddressPanel'
 import SelectTokenPanel from './components/panels/SelectTokenPanel'
@@ -18,7 +18,7 @@ const App = (props) => {
 	useEffect(() => {
 		props.initApp()
 		props.loadNetworks()
-		props.loadPoolInfo()
+		props.updatePoolInfo()
 	}, []);
 	return (
 		<Provider store={store}>
@@ -40,4 +40,4 @@ const mapStateToProps=(state)=>({
 	panelReducer: state.panelReducer
 })
 
-export default connect(mapStateToProps, {loadPoolInfo,calculateSpotPriceWithoutSwapFee,loadNetworks,initApp}) (App);
+export default connect(mapStateToProps, {updatePoolInfo,calculateSpotPriceWithoutSwapFee,loadNetworks,initApp}) (App);
