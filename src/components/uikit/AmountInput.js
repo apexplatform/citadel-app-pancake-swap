@@ -49,7 +49,7 @@ const AmountInput = (props) => {
     }
     const setMaxAmount =() => {
         props.setAmount(balance-feeProcent)
-        props.updatePoolInfo(balance-feeProcent,props.isExactIn)
+        props.updateTradeInfo(balance-feeProcent,props.isExactIn)
     }
     return(
         <div className='amount-container'>

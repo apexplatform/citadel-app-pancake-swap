@@ -1,8 +1,7 @@
 import {getWalletConstructor} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
-import {useTokenContract} from '../../networking/hooks/contractHooks'
-import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE,  SET_PARSED_AMOUNT } from './types'
+import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE } from './types'
 export const setRateAmount = (amount) => dispatch =>{
     dispatch({
         type: SET_RATE_AMOUT,
@@ -97,7 +96,7 @@ export const prepareApprove  = () => dispatch => {
                 payload: data
             })
         }else{
-            dispatch(checkErrors(data))
+            dispatch(checkErrors(data.error))
         }
     }).catch(err => {
         console.log(err)
