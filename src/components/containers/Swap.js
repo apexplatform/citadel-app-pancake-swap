@@ -36,7 +36,7 @@ const Swap = (props) => {
 	}
 	return (
 		<Group className='swap-container'>
-			<Header title="Osmosis swap"/>
+			<Header title="Swap"/>
 			<div className='swap-column'>
 				<FormItem top="From token" className='formTokenItem' onClick={() => props.setSelectedToken('from')}>
 					<div className='swap-row'>

@@ -20,6 +20,10 @@
   "dependencies": {
     "@keplr-wallet/crypto": "^0.9.0-alpha.14",
     "@keplr-wallet/unit": "^0.9.0-alpha.14",
+    "@pancakeswap/sdk": "^2.4.0",
+    "@types/lodash": "^4.14.176",
+    "@uniswap/token-lists": "^1.0.0-beta.27",
+    "@uniswap/v2-core": "^1.0.1",
     "@vkontakte/icons": "^1.117.0",
     "@vkontakte/vk-bridge": "^2.4.6",
     "@vkontakte/vk-miniapps-deploy": "0.0.25",
@@ -40,7 +44,8 @@
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
     "redux": "^4.1.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "typescript": "^4.4.4"
   },
   "browserslist": {
     "production": [
