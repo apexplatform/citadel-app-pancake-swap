@@ -27,9 +27,9 @@ const AmountInput = (props) => {
             if(parseInt(val) > fromTokenBalance){
                 props.setSwapStatus('insufficientBalance')
             }
-            else if (+props.amount == 0){
-                props.setSwapStatus('loading')
-            }
+            // else if (+props.amount == 0){
+            //     props.setSwapStatus('loading')
+            // }
             else if(parseInt(val) < +balance - feeProcent){
                 if(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(val)){
                     if(parseFloat(props.slippage?.toFixed(2)||0) < +slippageTolerance){

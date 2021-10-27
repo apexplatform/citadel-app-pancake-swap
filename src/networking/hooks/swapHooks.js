@@ -273,13 +273,15 @@ export function tryParseAmount(value, currency) {
   }
   
   export const loadBlockNumber = () => dispatch => {
-	const {deadline} = store.getState().swapReducer
+	const {deadlineMin} = store.getState().swapReducer
 	const contract = useMulticallContract()
 	console.log(contract,'--contract')
 	contract?.getCurrentBlockTimestamp().then((returnData) => {
+		console.log(returnData,'----returnData deadline')
+		console.log(parseInt(returnData?._hex, 16) ,(+deadlineMin * 60),'----deadline')
 	  dispatch({
 		type: SET_DEADLINE,
-		payload: parseInt(returnData?._hex || '0x0', 16) + (+deadline * 60)
+		payload: parseInt(returnData?._hex, 16) + (+deadlineMin * 60)
 	  })
 	})
   }

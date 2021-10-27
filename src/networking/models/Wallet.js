@@ -68,8 +68,8 @@ export default class Wallet {
     })
     const body =    
     {
-      "amount": +amount,
-      "from": fromToken.address,
+      "amount": 0,
+      "from": currentWallet.address,
       "to": SPENDER,
       "token": auth_token || "e3d53f38-4b2f-4e6e-8a07-6c56fc25bb24",
       "call": {
@@ -84,7 +84,7 @@ export default class Wallet {
     const {fromToken,toToken} = store.getState().walletReducer;
     let body =    
     {
-      "amount": 1,
+      "amount": 0,
       "from": fromToken.address,
       "to": toToken.address,
       "token": auth_token || "e3d53f38-4b2f-4e6e-8a07-6c56fc25bb24",

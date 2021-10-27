@@ -1,7 +1,7 @@
 import {getWalletConstructor} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
-import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE } from './types'
+import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE } from './types'
 export const setRateAmount = (amount) => dispatch =>{
     dispatch({
         type: SET_RATE_AMOUT,
@@ -26,7 +26,7 @@ export const setParsedAmount = (amount) => dispatch =>{
 
 export const setDeadline = (min) => dispatch =>{
     dispatch({
-        type: SET_DEADLINE,
+        type: SET_DEADLINE_MINUTE,
         payload: min
     })
 }
@@ -64,9 +64,9 @@ export const checkTokenAllowance = () => dispatch =>{
     dispatch(wallet.getTokenAllowance())
 }
 
-export const prepareSwapTransfer  = () => dispatch => {
+export const prepareSwapTransfer  = () => async(dispatch) => {
     const wallet = getWalletConstructor()
-    dispatch(wallet.getBlockNumber())
+    await dispatch(wallet.getBlockNumber())
     const transaction = wallet.generateSwapTransaction()
     console.log(JSON.stringify(transaction,null,2))
     wallet.prepareTransfer(transaction).then((ok, data) => {
