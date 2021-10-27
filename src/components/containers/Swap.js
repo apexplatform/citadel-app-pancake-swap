@@ -52,7 +52,6 @@ const Swap = (props) => {
 			<div className='swap-column'>
 				<FormItem top={"From" + (independentField === 'OUTPUT' ? ' (estimated)' : '') } className='formTokenItem' onClick={() => props.setSelectedToken('from')}>
 					<div className='swap-row'>
-						
 						<TokenSelect selectedToken={fromToken}/>
 						<AmountInput setExactIn={setExactIn}  name='INPUT' setField={setIndependentField} slippage={priceImpactWithoutFee} hideFee={!showFee} hideMax={true} amount={formattedAmounts['INPUT']} fee={realizedLPFee} isExactIn={isExactIn}/>
 					</div>

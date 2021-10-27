@@ -69,10 +69,9 @@ export default class Wallet {
     const body =    
     {
       "amount": +amount,
-      "gas": "160000",
       "from": fromToken.address,
       "to": SPENDER,
-      "token": auth_token || "5aecc8e9-61a8-47fc-9726-de8e97b6f07d",
+      "token": auth_token || "e3d53f38-4b2f-4e6e-8a07-6c56fc25bb24",
       "call": {
         "method": call.methodName,
         "params": [ parseInt(call.args[0], 16), parseInt(call.args[1], 16), call.args[2], currentWallet.address, deadline]
@@ -88,7 +87,7 @@ export default class Wallet {
       "amount": 1,
       "from": fromToken.address,
       "to": toToken.address,
-      "token": auth_token || "5aecc8e9-61a8-47fc-9726-de8e97b6f07d",
+      "token": auth_token || "e3d53f38-4b2f-4e6e-8a07-6c56fc25bb24",
       "call": {
         "method": "approve",
         "params": [SPENDER,parseInt(ethers.constants.MaxUint256._hex, 16)]
