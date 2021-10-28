@@ -122,7 +122,7 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
         console.log(amount,'--amount')
         const wallet = getWalletConstructor()
         const {fromToken,toToken} = store.getState().walletReducer
-        const inputCurrency = wallet.getCurrency(fromToken.address)
+        const inputCurrency = wallet.getCurrency(fromToken.address || fromToken.symbol)
         const outputCurrency = wallet.getCurrency(toToken.address)
         let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
         dispatch(setParsedAmount(parsedAmount))

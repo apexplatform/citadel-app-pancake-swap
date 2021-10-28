@@ -1,16 +1,19 @@
 import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_BALANCE,SET_TO_AMOUNT, SET_GAS_PRICE} from '../actions/types'
 import { addresses } from '../../data'
 import tokenList from '../../config/tokenLists/pancake-default.tokenlist.json'
+import {Currency} from '@pancakeswap/sdk'
+const tokens = [{...Currency.ETHER, logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokenList['tokens']]
 
 const initialState = {
     currentWallet: addresses[0],
-    currentToken: tokenList['tokens'][0],
+    currentToken: 'from',
     wallets: addresses,
     toAddress: null,
     amount: 0,
+    tokenList: tokens, 
     networks: [],
-    fromToken: tokenList['tokens'][0],
-    toToken: tokenList['tokens'][1],
+    fromToken: tokens[0],
+    toToken: tokens[1],
     fromTokenBalance: 0,
     toTokenAmount: 0,
     gasPrice: '45000'

@@ -17,6 +17,7 @@ const AmountInput = (props) => {
     const showFee = props.hideFee || false
     const coin = currentWallet.network.toUpperCase()
     const feeProcent = +props.fee || 0.003
+    console.log(fromTokenBalance,'--fromTokenBalance')
     const checkAmount = (val) => {
         props.setAmount(val)
         props.setField(props.name)

@@ -52,7 +52,7 @@ const FeeInfoBlock = (props) => {
                 <div className='route-row'>
                     { path.map((token,i) => (
                         <span className='route-row' key={i}>
-                            <img src={token.tokenInfo?.logoURI} alt='token'/>
+                           {token.tokenInfo?.logoURI && <img src={token.tokenInfo?.logoURI} alt='t'/>}
                             {token.symbol}
                             { i < path.length-1 && <Icon20ChevronRightOutline fill='#C5D0DB' width={25} height={25}/>}
                         </span>

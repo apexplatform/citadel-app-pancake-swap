@@ -57,7 +57,7 @@ export default class Wallet {
   }
   generateSwapTransaction(){
     const {auth_token} = store.getState().userReducer
-    const {amount,fromToken,toToken,currentWallet} = store.getState().walletReducer;
+    const {currentWallet} = store.getState().walletReducer;
     const {trade,deadline,slippageTolerance} = store.getState().swapReducer;
     const BIPS_BASE = JSBI.BigInt(10000)
     const call = Router.swapCallParameters(trade, {
@@ -66,17 +66,33 @@ export default class Wallet {
       recipient: currentWallet.address,
       deadline: deadline,
     })
-    const body =    
-    {
-      "amount": 0,
-      "from": currentWallet.address,
-      "to": SPENDER,
-      "token": auth_token || "e3d53f38-4b2f-4e6e-8a07-6c56fc25bb24",
-      "call": {
-        "method": call.methodName,
-        "params": [ parseInt(call.args[0], 16), parseInt(call.args[1], 16), call.args[2], currentWallet.address, deadline]
+    let body = null
+    if(['swapETHForExactTokens','swapExactETHForTokens','swapExactETHForTokensSupportingFeeOnTransferTokens'].includes(call.methodName)){
+      body =    
+      {
+        "amount": parseInt(call.args[0], 16),
+        "from": currentWallet.address,
+        "to": SPENDER,
+        "token": auth_token || "2149d3a7-b53a-4748-bb58-3dd1234b0dd2",
+        "call": {
+          "method": call.methodName,
+          "params": [ parseInt(call.args[1], 16), call.args[2], currentWallet.address, deadline]
+        }
+      }
+    } else {
+      body =    
+      {
+        "amount": 0,
+        "from": currentWallet.address,
+        "to": SPENDER,
+        "token": auth_token || "2149d3a7-b53a-4748-bb58-3dd1234b0dd2",
+        "call": {
+          "method": call.methodName,
+          "params": [ parseInt(call.args[0], 16), parseInt(call.args[1], 16), call.args[2], currentWallet.address, deadline]
+        }
       }
     }
+    
     return body
   }  
   generateApproveTransaction(){

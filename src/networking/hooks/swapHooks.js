@@ -261,13 +261,12 @@ export function tryParseAmount(value, currency) {
   }
 
   export const loadTokenBalance = (address) => dispatch => {
-	const {currentWallet} = store.getState().walletReducer
+	const {currentWallet,fromToken} = store.getState().walletReducer
 	const contract = useTokenContract(address)
 	contract?.balanceOf(currentWallet.address).then((returnData) => {
-	console.log(parseInt(returnData?._hex || '0x0', 16),'---token balance ')
 	  dispatch({
 		type: SET_FROM_TOKEN_BALANCE,
-		payload: parseInt(returnData?._hex || '0x0', 16)
+		payload: parseInt(returnData?._hex, 16)/Math.pow(10,+fromToken.decimals)
 	  })
 	})
   }

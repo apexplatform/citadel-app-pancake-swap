@@ -9,6 +9,7 @@ export const setCurrentWallet = (wallet) => dispatch =>{
         type: SET_CURRENT_WALLET,
         payload: wallet
     })
+    dispatch(getTokenBalance())
 }
 
 export const setToAddress = (address) => dispatch =>{
