@@ -35,11 +35,11 @@ export const setSelectedToken = (token) => dispatch =>{
 }
 
 export const setFromToken = (token) => dispatch =>{
-    dispatch(getTokenBalance())
     dispatch({
         type: SET_FROM_TOKEN,
         payload: token
     })
+    dispatch(getTokenBalance())
 }
 
 export const setToToken = (token) => dispatch =>{
