@@ -13,8 +13,9 @@ import {
 	BETTER_TRADE_LESS_HOPS_THRESHOLD,
 	ADDITIONAL_BASES,
   } from '../../config/constants.js'
-  import { ADD_MULTICAL_LISTENERS,SET_FROM_TOKEN_BALANCE,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS } from "../../store/actions/types"
-
+  import { ADD_MULTICAL_LISTENERS,SET_FROM_TOKEN_BALANCE,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST} from "../../store/actions/types"
+import BigNumber from 'bignumber.js';
+import tokens from '../../config/tokenLists/pancake-default.tokenlist.json'
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const LOWER_HEX_REGEX = /^0x[a-f0-9]*$/
 
@@ -100,7 +101,6 @@ export function tryParseAmount(value, currency) {
 			})
 		  : []
 	dispatch({type:SET_CALLS,payload: {chainId: 56,calls}})
-	localStorage.setItem('calls', JSON.stringify(calls))
 	const results = dispatch(useCallsData(calls, options))
 	const { currentBlock } = useBlock()
 	return results.map((result) => toCallState(result, contractInterface, fragment, currentBlock))
@@ -285,3 +285,17 @@ export function tryParseAmount(value, currency) {
 	})
   }
   
+  export const loadTokenBalances = () => async(dispatch) => {
+	const {tokenList,currentWallet} = store.getState().walletReducer
+	let list = tokens['tokens']
+	list.forEach(async(token) =>{
+		const contract = useTokenContract(token.address)
+		let balance = await contract?.balanceOf(currentWallet.address)
+		console.log(balance,'---',token.symbol)
+		dispatch({
+			type: SET_TOKEN_LIST,
+			payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
+		  })
+		console.log({...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)})
+	})
+  }

@@ -14,7 +14,7 @@ const SelectAddressPanel = (props) => {
     }
     return(
         <Panel id={ROUTES.SELECT_ADDRESS}>
-            <Header title="Select address" back={true} />
+            <Header title="Select address" showTitle={true} back={true} />
             <Search after={null} placeholder='Search' onChange={(e) => searchWallet(e.target.value)}/>  
             {list.map(item => (
                 <AddressItem item={item} key={item.address}/>

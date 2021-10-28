@@ -38,6 +38,7 @@ const Swap = (props) => {
 		props.setToToken(fromToken)
 		props.updateTradeInfo(formattedAmounts[independentField], !isExactIn)
 	}
+	
 	useEffect(() => {
 		props.updateTradeInfo(1,isExactIn)
 		if(swapStatus === 'approve'){

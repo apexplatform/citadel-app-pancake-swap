@@ -59,7 +59,7 @@ export let transactions = [
 export const addresses = [
 	{
 		address: "0x4dd28bee5135fc5dbb358a68ba941a5bf8e7aab2",
-		amount: 2.3,
+		amount: 0.03,
 		network: 'bsc',
 		name: 'Binance Smart Chain',
 		code: 'BSC',
@@ -67,7 +67,7 @@ export const addresses = [
 	},
 	{
 		address: "0xa6209c8c2ddf4cd8d8bbb9df11cd0a7a19e75bdd",
-		amount: 4.4,
+		amount: 0.19,
 		network: 'bsc',
 		name: 'Binance Smart Chain',
 		code: 'BSC',

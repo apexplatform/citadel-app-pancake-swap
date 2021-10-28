@@ -10,7 +10,7 @@ import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
     const {currentWallet,fromToken,fromTokenBalance} = props.walletReducer
-    const balance = currentWallet.amount || 0
+    const balance = fromToken.symbol === 'BNB' ? currentWallet.amount : fromTokenBalance
     const {allowanceAmount,slippageTolerance,trade} = props.swapReducer
     const showMax = props.hideMax || false
     const outputAmount = trade?.outputAmount?.toExact() || 0
@@ -22,17 +22,17 @@ const AmountInput = (props) => {
         props.setAmount(val)
         props.setField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
-        if(val > 0){
+        if(+val > 0){
             props.updateTradeInfo(val, props.isExactIn)
             props.setToAmount(outputAmount)
-            if(parseInt(val) > fromTokenBalance){
+            if(parseInt(val) > balance){
                 props.setSwapStatus('insufficientBalance')
             }
             // else if (+props.amount == 0){
             //     props.setSwapStatus('loading')
             // }
             else if(parseInt(val) < +balance - feeProcent){
-                if(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(val)){
+                if(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(val) || fromToken.symbol === 'BNB'){
                     if(parseFloat(props.slippage?.toFixed(2)||0) < +slippageTolerance){
                         props.setSwapStatus('swap')
                     }else{
@@ -48,9 +48,14 @@ const AmountInput = (props) => {
             props.setSwapStatus('enterAmount')
         }
     }
-    const setMaxAmount =() => {
-        props.setAmount(balance-feeProcent)
-        props.updateTradeInfo(balance-feeProcent,props.isExactIn)
+    const setMaxAmount = () => {
+        if(balance-feeProcent < 0){
+            props.setAmount(0)
+            props.setSwapStatus('insufficientBalance')
+        }else{
+            checkAmount(balance-feeProcent)
+        }
+    
     }
     return(
         <div className='amount-container'>

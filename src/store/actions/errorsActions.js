@@ -1,4 +1,5 @@
 import {GET_ERRORS, GET_NETWORK_ERRORS,GET_ARGUMENTS_ERRORS,GET_VALIDATION_ERRORS,GET_IMPLEMENTATION_ERRORS} from './types'
+import {setActiveModal} from './panelActions'
 import {ValidationError,NetworkError,ImplementationError,ArgumentsError} from '../../networking/models/Errors'
 export const clearErrors = () => dispatch =>{
     dispatch({
@@ -14,29 +15,30 @@ export const clearErrors = () => dispatch =>{
 
 export const checkErrors = (error) => dispatch => {
     if (error instanceof ValidationError) {
-        return dispatch({
+        dispatch({
             type: GET_VALIDATION_ERRORS,
             payload: error
         })
     } else if (error instanceof ArgumentsError){
-        return dispatch({
+        dispatch({
             type: GET_ARGUMENTS_ERRORS,
             payload: error
         })
     } else if (error instanceof NetworkError){
-        return dispatch({
+        dispatch({
             type: GET_NETWORK_ERRORS,
             payload: error
         })
     } else if (error instanceof ImplementationError){
-        return dispatch({
+        dispatch({
             type: GET_IMPLEMENTATION_ERRORS,
             payload: error
         })
     } else {
-        return dispatch({
+        dispatch({
             type: GET_ERRORS,
             payload: error
         })
     }
+    dispatch(setActiveModal('errors'))
 }

@@ -1,20 +1,29 @@
 import ROUTES from './routes'
 import Swap from './components/containers/Swap'
 import Transactions from './components/containers/Transactions'
-import { View,Group,Panel } from '@vkontakte/vkui';
-import {setActivePanel} from './store/actions/panelActions'
+import { View,Group,Panel,ModalRoot,ModalPage } from '@vkontakte/vkui';
+import {setActivePanel,setActiveModal} from './store/actions/panelActions'
 import {connect} from 'react-redux';
 import Tabbar from './components/uikit/Tabbar'
 import AddressBlock from './components/uikit/AddressBlock'
 import { Config } from './config/config'
 import Settings from './components/containers/Settings'
+
 const MainPanel = (props) => {
-    const {activePanel} = props.panelReducer
+    const {activePanel,activeModal} = props.panelReducer
     const config = new Config()
+    const {errors,networkErrors} = props.errorsReducer
+    const modal = (
+		<ModalRoot activeModal={activeModal}>
+		  <ModalPage id="errors" onClose={() => props.setActiveModal(null)}>
+			<p>{errors?.message || networkErrors?.message}</p>
+		  </ModalPage>
+		</ModalRoot>
+	  );
     return(
         <Panel id={ROUTES.HOME}>
             <Group>
-                <View activePanel={activePanel}>
+                <View activePanel={activePanel} modal={modal}>
                     <Panel id={ROUTES.SEND}>
                         <Swap/>
                         {config.showAddressBlock && <AddressBlock />}
@@ -36,7 +45,8 @@ const MainPanel = (props) => {
 }
 
 const mapStateToProps=(state)=>({
-	panelReducer: state.panelReducer
+	panelReducer: state.panelReducer,
+    errorsReducer: state.errorsReducer
 })
 
-export default connect(mapStateToProps, {setActivePanel}) (MainPanel);
+export default connect(mapStateToProps, {setActiveModal,setActivePanel}) (MainPanel);

@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 const SelectTokenPanel = (props) => {
     const {tokenList,fromToken} = props.walletReducer
+    console.log(tokenList,'--tokenList')
     console.log(fromToken,'---fromToken')
     const [list,setList] = useState(tokenList)
     const searchToken = (token) => {
@@ -16,7 +17,7 @@ const SelectTokenPanel = (props) => {
     }
     return(
         <Panel id={ROUTES.SELECT_ADDRESS}>
-            <Header title="Select token to send" back={true} />
+            <Header title="Select token" showTitle={true}  back={true} />
             <Search after={null} placeholder='Search' onChange={(e) => searchToken(e.target.value)}/>  
             {list.map(item => (
                 <TokenItem item={item} withAmount={true} key={item.symbol}/>

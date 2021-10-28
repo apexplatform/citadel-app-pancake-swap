@@ -26,6 +26,7 @@ const TokenItem = (props) => {
                 </div>
                 {props.withAmount &&
                 <div className="token-amount-block">
+                    <p className="token-name">{props.item.balance || 0}</p>
                     <span>{props.item.symbol}</span>
                 </div>}
             </div>

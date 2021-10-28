@@ -1,12 +1,13 @@
 import useApi from '../api/useApi';
 import {ImplementationError,NetworkError} from './Errors'
-import {useTradeExact,tryParseAmount,loadTokenBalance,loadBlockNumber} from '../hooks/swapHooks'
+import {useTradeExact,tryParseAmount,loadTokenBalance,loadBlockNumber,loadTokenBalances} from '../hooks/swapHooks'
 import {useCurrency} from '../hooks/tokenHooks'
 import { JSBI, Percent, Router } from '@pancakeswap/sdk'
 import {basisPointsToPercent} from '../utils/price'
 import store from '../../store/store';
 import { ethers } from 'ethers'
 import {SPENDER} from '../../config/constants'
+import BigNumber from 'bignumber.js';
 import {loadTokenAllowance} from '../hooks/allowanceHooks'
 const api = useApi('wallet')
 export default class Wallet {
@@ -26,7 +27,8 @@ export default class Wallet {
       if (data.ok) {
         return data;
       } else {
-        return new NetworkError(data.error.message);
+        console.log('-errr',data.error)
+        return new NetworkError(data.error.stack);
       }
     } 
   prepareClaimRewards() {
@@ -55,9 +57,13 @@ export default class Wallet {
     const pct = basisPointsToPercent(slippageTolerance)
     return trade?.minimumAmountOut(pct) || 0
   }
+  getTokenBalances(){
+    return loadTokenBalances()
+  }
   generateSwapTransaction(){
     const {auth_token} = store.getState().userReducer
-    const {currentWallet} = store.getState().walletReducer;
+    const {currentWallet,fromToken} = store.getState().walletReducer;
+    console.log(fromToken,'===fromToken')
     const {trade,deadline,slippageTolerance} = store.getState().swapReducer;
     const BIPS_BASE = JSBI.BigInt(10000)
     const call = Router.swapCallParameters(trade, {
@@ -66,17 +72,19 @@ export default class Wallet {
       recipient: currentWallet.address,
       deadline: deadline,
     })
+    console.log(call,'--call')
     let body = null
+   
     if(['swapETHForExactTokens','swapExactETHForTokens','swapExactETHForTokensSupportingFeeOnTransferTokens'].includes(call.methodName)){
       body =    
       {
-        "amount": parseInt(call.args[0], 16),
+        "amount":  BigNumber(call.value),
         "from": currentWallet.address,
         "to": SPENDER,
         "token": auth_token || "2149d3a7-b53a-4748-bb58-3dd1234b0dd2",
         "call": {
           "method": call.methodName,
-          "params": [ parseInt(call.args[1], 16), call.args[2], currentWallet.address, deadline]
+          "params": [  BigNumber(call.args[0]), call.args[1], currentWallet.address, deadline]
         }
       }
     } else {
@@ -88,7 +96,7 @@ export default class Wallet {
         "token": auth_token || "2149d3a7-b53a-4748-bb58-3dd1234b0dd2",
         "call": {
           "method": call.methodName,
-          "params": [ parseInt(call.args[0], 16), parseInt(call.args[1], 16), call.args[2], currentWallet.address, deadline]
+          "params": [ +BigNumber(call.args[0]).toFixed(),  +BigNumber(call.args[1]).toFixed(), call.args[2], currentWallet.address, deadline]
         }
       }
     }
@@ -103,10 +111,10 @@ export default class Wallet {
       "amount": 0,
       "from": fromToken.address,
       "to": toToken.address,
-      "token": auth_token || "e3d53f38-4b2f-4e6e-8a07-6c56fc25bb24",
+      "token": auth_token || "2149d3a7-b53a-4748-bb58-3dd1234b0dd2",
       "call": {
         "method": "approve",
-        "params": [SPENDER,parseInt(ethers.constants.MaxUint256._hex, 16)]
+        "params": [SPENDER,BigNumber(ethers.constants.MaxUint256._hex).toFixed()]
       }
     }
     

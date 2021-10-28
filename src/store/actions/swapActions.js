@@ -1,7 +1,7 @@
 import {getWalletConstructor} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
-import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE } from './types'
+import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE } from './types'
 export const setRateAmount = (amount) => dispatch =>{
     dispatch({
         type: SET_RATE_AMOUT,
@@ -52,11 +52,16 @@ export const setSlippageTolerance = (procent) => dispatch =>{
     })
 }
 
-export const getTokenBalance = () => dispatch =>{
+export const getTokenBalance = () => async(dispatch) =>{
     const {fromToken} = store.getState().walletReducer
     const wallet = getWalletConstructor()
     dispatch(wallet.getTokenBalance(fromToken.address))
     dispatch(wallet.getBlockNumber())
+    dispatch({
+        type: SET_EMPTY_TOKEN_LIST,
+        payload: []
+    })
+    await dispatch(wallet.getTokenBalances())
 }
 
 export const checkTokenAllowance = () => dispatch =>{
@@ -69,17 +74,16 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
     await dispatch(wallet.getBlockNumber())
     const transaction = wallet.generateSwapTransaction()
     console.log(JSON.stringify(transaction,null,2))
-    wallet.prepareTransfer(transaction).then((ok, data) => {
-        if(ok){
+    wallet.prepareTransfer(transaction).then((response) => {
+        if(response?.ok){
             return dispatch ({
                 type:SET_PREPARE_TRANSFER_RESPONSE,
                 payload: data
             })
         }else{
-            dispatch(checkErrors(data))
+            dispatch(checkErrors(response))
         }
     }).catch(err => {
-             console.log(err)
         dispatch(checkErrors(err))
     })
 }
@@ -96,7 +100,7 @@ export const prepareApprove  = () => dispatch => {
                 payload: data
             })
         }else{
-            dispatch(checkErrors(data.error))
+            dispatch(checkErrors(data))
         }
     }).catch(err => {
         console.log(err)
