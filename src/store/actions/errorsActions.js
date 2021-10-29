@@ -25,10 +25,13 @@ export const checkErrors = (error) => dispatch => {
             payload: error
         })
     } else if (error instanceof NetworkError){
+        let index = error?.message.indexOf('(')
+        console.log(index,'--i')
         dispatch({
             type: GET_NETWORK_ERRORS,
-            payload: error
+            payload: error?.message.substr(0,index)
         })
+        dispatch(setActiveModal('errors'))
     } else if (error instanceof ImplementationError){
         dispatch({
             type: GET_IMPLEMENTATION_ERRORS,
@@ -40,5 +43,4 @@ export const checkErrors = (error) => dispatch => {
             payload: error
         })
     }
-    dispatch(setActiveModal('errors'))
 }

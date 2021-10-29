@@ -1,7 +1,7 @@
 import ROUTES from './routes'
 import Swap from './components/containers/Swap'
 import Transactions from './components/containers/Transactions'
-import { View,Group,Panel,ModalRoot,ModalPage } from '@vkontakte/vkui';
+import { View,Group,Panel,ModalRoot,ModalPage,ModalPageHeader } from '@vkontakte/vkui';
 import {setActivePanel,setActiveModal} from './store/actions/panelActions'
 import {connect} from 'react-redux';
 import Tabbar from './components/uikit/Tabbar'
@@ -12,11 +12,15 @@ import Settings from './components/containers/Settings'
 const MainPanel = (props) => {
     const {activePanel,activeModal} = props.panelReducer
     const config = new Config()
-    const {errors,networkErrors} = props.errorsReducer
+    const {networkErrors} = props.errorsReducer
     const modal = (
 		<ModalRoot activeModal={activeModal}>
-		  <ModalPage id="errors" onClose={() => props.setActiveModal(null)}>
-			<p>{errors?.message || networkErrors?.message}</p>
+		  <ModalPage id="errors"   dynamicContentHeight onClose={() => props.setActiveModal(null)}    header={
+            <ModalPageHeader>
+              Error!
+            </ModalPageHeader>
+          }>
+			<p className='error-text'>{networkErrors}</p>
 		  </ModalPage>
 		</ModalRoot>
 	  );

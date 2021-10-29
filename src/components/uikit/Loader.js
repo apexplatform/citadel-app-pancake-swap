@@ -1,6 +1,7 @@
-const Loader = () => {
+import '../styles/components/loader.css'
+const Loader = ({id}) => {
     return (
-        <span id="loader">
+        <span id={id ?? "loader"}>
             <svg width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" fill="#7A8BF6">
             <circle cx="3" cy="3" r="3">
                 <animate attributeName="fill-opacity"

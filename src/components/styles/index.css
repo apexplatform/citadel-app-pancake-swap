@@ -32,3 +32,16 @@ body, * {
     align-items: center;
     text-align: center;
 }
+
+.error-text{
+    margin: 0 20px 15px;
+}
+
+.vkuiModalPage__in-wrap{
+    height: auto !important;
+    bottom: auto !important;
+}
+
+.vkuiModalPage__in{
+    border-radius: 12px;
+}

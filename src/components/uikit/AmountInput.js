@@ -17,7 +17,6 @@ const AmountInput = (props) => {
     const showFee = props.hideFee || false
     const coin = currentWallet.network.toUpperCase()
     const feeProcent = +props.fee || 0.003
-    console.log(fromTokenBalance,'--fromTokenBalance')
     const checkAmount = (val) => {
         props.setAmount(val)
         props.setField(props.name)
@@ -28,9 +27,6 @@ const AmountInput = (props) => {
             if(parseInt(val) > balance){
                 props.setSwapStatus('insufficientBalance')
             }
-            // else if (+props.amount == 0){
-            //     props.setSwapStatus('loading')
-            // }
             else if(parseInt(val) < +balance - feeProcent){
                 if(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(val) || fromToken.symbol === 'BNB'){
                     if(parseFloat(props.slippage?.toFixed(2)||0) < +slippageTolerance){

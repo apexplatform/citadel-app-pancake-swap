@@ -274,10 +274,7 @@ export function tryParseAmount(value, currency) {
   export const loadBlockNumber = () => dispatch => {
 	const {deadlineMin} = store.getState().swapReducer
 	const contract = useMulticallContract()
-	console.log(contract,'--contract')
 	contract?.getCurrentBlockTimestamp().then((returnData) => {
-		console.log(returnData,'----returnData deadline')
-		console.log(parseInt(returnData?._hex, 16) ,(+deadlineMin * 60),'----deadline')
 	  dispatch({
 		type: SET_DEADLINE,
 		payload: parseInt(returnData?._hex, 16) + (+deadlineMin * 60)
@@ -286,16 +283,14 @@ export function tryParseAmount(value, currency) {
   }
   
   export const loadTokenBalances = () => async(dispatch) => {
-	const {tokenList,currentWallet} = store.getState().walletReducer
+	const {currentWallet} = store.getState().walletReducer
 	let list = tokens['tokens']
 	list.forEach(async(token) =>{
 		const contract = useTokenContract(token.address)
 		let balance = await contract?.balanceOf(currentWallet.address)
-		console.log(balance,'---',token.symbol)
 		dispatch({
 			type: SET_TOKEN_LIST,
 			payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
 		  })
-		console.log({...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)})
 	})
   }

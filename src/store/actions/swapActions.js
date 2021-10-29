@@ -127,7 +127,7 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
         const wallet = getWalletConstructor()
         const {fromToken,toToken} = store.getState().walletReducer
         const inputCurrency = wallet.getCurrency(fromToken.address || fromToken.symbol)
-        const outputCurrency = wallet.getCurrency(toToken.address)
+        const outputCurrency = wallet.getCurrency(toToken.address || toToken.symbol)
         let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
         dispatch(setParsedAmount(parsedAmount))
         const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn))

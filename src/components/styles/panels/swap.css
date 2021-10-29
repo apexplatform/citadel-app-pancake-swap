@@ -2,11 +2,6 @@
 .swap-container{
     margin-bottom: 160px;
 }
-#loader{
-    margin-bottom: -5px !important;
-    margin-right: 10px;
-    display: inline-block;
-}
 
 .swap-row{
     display: flex;
