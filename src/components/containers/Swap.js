@@ -41,11 +41,6 @@ const Swap = (props) => {
 	
 	useEffect(() => {
 		props.updateTradeInfo(1,isExactIn)
-		if(swapStatus === 'approve'){
-			setInterval(() => {
-				props.checkTokenAllowance()
-			},10000)
-		}
 	},[])
 	return (
 		<Group className='swap-container'>

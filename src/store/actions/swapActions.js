@@ -66,6 +66,7 @@ export const getTokenBalance = () => async(dispatch) =>{
 
 export const checkTokenAllowance = () => dispatch =>{
     const wallet = getWalletConstructor()
+    console.log('--load allowance')
     dispatch(wallet.getTokenAllowance())
 }
 
@@ -123,9 +124,9 @@ export const swapTokens = () => dispatch =>{
 
 export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
     try{
-        console.log(amount,'--amount')
         const wallet = getWalletConstructor()
         const {fromToken,toToken} = store.getState().walletReducer
+        const {swapStatus} = store.getState().swapReducer
         const inputCurrency = wallet.getCurrency(fromToken.address || fromToken.symbol)
         const outputCurrency = wallet.getCurrency(toToken.address || toToken.symbol)
         let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
@@ -136,6 +137,12 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
         dispatch(setMinReceive(wallet.getMinReceived()))
         console.log(bestTradeExact,'--bestTradeExactIn')
         dispatch(wallet.getTokenAllowance())
+        if(swapStatus === 'approve'){
+            console.log(swapStatus,'--swapStatus')
+			setInterval(() => {
+				wallet.getTokenAllowance()
+			},10000)
+		}
     } catch(err) {
         dispatch(checkErrors(err))
         console.log(err)
