@@ -2,12 +2,24 @@ import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET
 import { addresses } from '../../data'
 import tokenList from '../../config/tokenLists/pancake-default.tokenlist.json'
 import {Currency} from '@pancakeswap/sdk'
+const qs = require('querystring');
+const params = window.location.search.slice(1);
+const paramsAsObject = qs.parse(params);
 const tokens = [{...Currency.ETHER, logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokenList['tokens']]
 console.log(tokens,'--tokens')
+let wallets = paramsAsObject.wallets.map(item => {
+    return {
+		address: item,
+		amount: 0.01,
+		network: 'bsc',
+		name: 'Binance Smart Chain',
+		code: 'BSC'
+	}
+})
 const initialState = {
-    currentWallet: addresses[0],
+    currentWallet: wallets[0],
     currentToken: 'from',
-    wallets: addresses,
+    wallets: wallets,
     toAddress: null,
     amount: 0,
     tokenList: [], 
