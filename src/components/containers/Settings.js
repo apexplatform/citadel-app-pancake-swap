@@ -32,7 +32,7 @@ import text from '../../text.json'
                 <h4>{text.SLIPPAGE_TOLERANCE}</h4>
                 <div className='procent-row'>
                     {procent.map((item) => (
-                        <button key={item}id={currentProcent === item ? IDname : undefined} className='procent-btn' onClick={() => { setCurrentProcent(item);setIDname('active-procent')}}>{item} <span>%</span></button>
+                        <button key={item} id={+currentProcent === +item ? IDname : undefined} className='procent-btn' onClick={() => { setCurrentProcent(item);setIDname('active-procent')}}>{item} <span>%</span></button>
                     ))}
                 </div>
             </Div>

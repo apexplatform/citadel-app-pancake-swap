@@ -69,7 +69,7 @@ export default class Wallet {
     const call = Router.swapCallParameters(trade, {
       feeOnTransfer: false,
       allowedSlippage: new Percent(JSBI.BigInt(slippageTolerance), BIPS_BASE),
-      recipient: currentWallet.address,
+      recipient: currentWallet?.address,
       deadline: deadline,
     })
     console.log(call,'--call')
@@ -110,7 +110,7 @@ export default class Wallet {
     {
       "amount": 0,
       "from": fromToken.address,
-      "to": toToken.address,
+      "to": fromToken.address,
       "token": auth_token,
       "call": {
         "method": "approve",

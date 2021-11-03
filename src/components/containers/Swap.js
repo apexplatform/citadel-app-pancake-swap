@@ -15,10 +15,10 @@ import SwapButton from '../uikit/SwapButton'
 const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
 	const [independentField, setIndependentField] = useState('INPUT')
-	const {trade,parsedAmount,swapStatus} = props.swapReducer
+	const {trade,parsedAmount} = props.swapReducer
 	const {fromToken,toToken,currentWallet, amount} = props.walletReducer
-	const showFee = fromToken.symbol.toLowerCase() === currentWallet.symbol
-	const showFee2 = toToken.symbol.toLowerCase() === currentWallet.symbol
+	const showFee = fromToken.symbol.toLowerCase() === currentWallet?.symbol
+	const showFee2 = toToken.symbol.toLowerCase() === currentWallet?.symbol
 	const dependentField = independentField === 'INPUT' ? 'OUTPUT' : 'INPUT'
 	const formattedPrice = isExactIn ? trade?.executionPrice?.toSignificant(6) : trade?.executionPrice?.invert()?.toSignificant(6)
 	const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)

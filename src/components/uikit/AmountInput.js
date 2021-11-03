@@ -1,22 +1,23 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import '../styles/components/amountInput.css'
 import text from '../../text.json'
 import fileRoutes from '../../config/file-routes-config.json'
 import {connect} from 'react-redux'
 import Updater from '../../networking/utils/updater'
-import {setRateAmount,updateTradeInfo, setSwapStatus} from '../../store/actions/swapActions'
+import {setRateAmount,updateTradeInfo, setSwapStatus,checkTokenAllowance} from '../../store/actions/swapActions'
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
-    const {currentWallet,fromToken,fromTokenBalance} = props.walletReducer
-    const balance = fromToken.symbol === 'BNB' ? currentWallet.amount : fromTokenBalance
-    const {allowanceAmount,slippageTolerance,trade} = props.swapReducer
+    const {currentWallet,fromToken,fromTokenBalance,amount} = props.walletReducer
+    const balance = fromToken.symbol === 'BNB' ? currentWallet?.amount : fromTokenBalance
+    const {allowanceAmount,slippageTolerance,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
     const outputAmount = trade?.outputAmount?.toExact() || 0
     const showFee = props.hideFee || false
-    const coin = currentWallet.network.toUpperCase()
+    const coin = currentWallet?.network.toUpperCase()
     const feeProcent = +props.fee || 0.003
+    const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const checkAmount = (val) => {
         props.setAmount(val)
         props.setField(props.name)
@@ -35,6 +36,7 @@ const AmountInput = (props) => {
                         props.setSwapStatus('swapAnyway')
                     }
                 } else {
+                    setIsactive(true)
                     props.setSwapStatus('approve')
                 }
             } else {
@@ -53,6 +55,22 @@ const AmountInput = (props) => {
         }
     
     }
+    useEffect(() => {
+        let interval = null;
+        if (isActive) {
+          interval = setInterval(() => {
+            props.checkTokenAllowance()
+            if(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(amount)){
+                props.setSwapStatus('swap')
+                setIsactive(false)
+            }
+          }, 5000);
+        } else if (!isActive) {
+          clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+      }, [isActive,allowanceAmount]);
+    
     return(
         <div className='amount-container'>
             <div className='input-container' >
@@ -81,4 +99,4 @@ const mapStateToProps=(state)=>({
     swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {setSwapStatus,setAmount,updateTradeInfo,setRateAmount,setToAmount}) (AmountInput);
+export default connect(mapStateToProps, {checkTokenAllowance,setSwapStatus,setAmount,updateTradeInfo,setRateAmount,setToAmount}) (AmountInput);

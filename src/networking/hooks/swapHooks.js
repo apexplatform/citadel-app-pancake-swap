@@ -263,7 +263,7 @@ export function tryParseAmount(value, currency) {
   export const loadTokenBalance = (address) => dispatch => {
 	const {currentWallet,fromToken} = store.getState().walletReducer
 	const contract = useTokenContract(address)
-	contract?.balanceOf(currentWallet.address).then((returnData) => {
+	contract?.balanceOf(currentWallet?.address).then((returnData) => {
 	  dispatch({
 		type: SET_FROM_TOKEN_BALANCE,
 		payload: parseInt(returnData?._hex, 16)/Math.pow(10,+fromToken.decimals)
@@ -287,7 +287,7 @@ export function tryParseAmount(value, currency) {
 	let list = tokens['tokens']
 	list.forEach(async(token) =>{
 		const contract = useTokenContract(token.address)
-		let balance = await contract?.balanceOf(currentWallet.address)
+		let balance = await contract?.balanceOf(currentWallet?.address)
 		dispatch({
 			type: SET_TOKEN_LIST,
 			payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}

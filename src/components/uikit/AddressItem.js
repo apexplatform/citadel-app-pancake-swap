@@ -9,7 +9,7 @@ import Icon from './Icon'
 const AddressItem = (props) => {
     const {currentWallet} = props.walletReducer
     const {item} = props
-    let active = currentWallet.address === item.address && 'active-address'
+    let active = currentWallet?.address === item.address && 'active-address'
     const selectAddress = () => {
         props.setCurrentWallet(item)
         props.setActivePage(ROUTES.HOME)

@@ -7,7 +7,7 @@ const params = window.location.search.slice(1);
 const paramsAsObject = qs.parse(params);
 const tokens = [{...Currency.ETHER, logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokenList['tokens']]
 console.log(tokens,'--tokens')
-let wallets = JSON.parse(paramsAsObject.wallets)?.map(item => {
+let wallets = paramsAsObject.wallets ? JSON.parse(paramsAsObject.wallets)?.map(item => {
     return {
 		address: item,
 		amount: 0.01,
@@ -15,7 +15,7 @@ let wallets = JSON.parse(paramsAsObject.wallets)?.map(item => {
 		name: 'Binance Smart Chain',
 		code: 'BSC'
 	}
-}) || []
+}) : []
 const initialState = {
     currentWallet: wallets[0] || null,
     currentToken: 'from',

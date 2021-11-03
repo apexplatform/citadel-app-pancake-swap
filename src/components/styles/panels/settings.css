@@ -70,3 +70,16 @@
     padding-left: 20px;
     font-size: 15px;
 }
+
+
+#active-procent{
+    background: #792EC0;
+    color: #fff;
+}
+#initial-procent{
+    background: #2787F5;
+    color: #fff;
+}
+#active-procent span{
+    color: #818C99;
+}
