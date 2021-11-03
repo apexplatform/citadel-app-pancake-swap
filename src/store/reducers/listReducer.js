@@ -22,62 +22,6 @@ const initialState = {
 
 export default createReducer(initialState, (builder) =>
   builder
-    // .addCase(FETCH_TOKEN_LIST, (state, { payload: { requestId, url } }) => {
-    //   state.byUrl[url] = {
-    //     current: null,
-    //     pendingUpdate: null,
-    //     ...state.byUrl[url],
-    //     loadingRequestId: requestId,
-    //     error: null,
-    //   }
-    // })
-    // .addCase(fetchTokenList.fulfilled, (state, { payload: { requestId, tokenList, url } }) => {
-    //   const current = state.byUrl[url]?.current
-    //   const loadingRequestId = state.byUrl[url]?.loadingRequestId
-
-    //   // no-op if update does nothing
-    //   if (current) {
-    //     const upgradeType = getVersionUpgrade(current.version, tokenList.version)
-
-    //     if (upgradeType === VersionUpgrade.NONE) return
-    //     if (loadingRequestId === null || loadingRequestId === requestId) {
-    //       state.byUrl[url] = {
-    //         ...state.byUrl[url],
-    //         loadingRequestId: null,
-    //         error: null,
-    //         current,
-    //         pendingUpdate: tokenList,
-    //       }
-    //     }
-    //   } else {
-    //     // activate if on default active
-    //     if (DEFAULT_ACTIVE_LIST_URLS.includes(url)) {
-    //       state.activeListUrls?.push(url)
-    //     }
-
-    //     state.byUrl[url] = {
-    //       ...state.byUrl[url],
-    //       loadingRequestId: null,
-    //       error: null,
-    //       current: tokenList,
-    //       pendingUpdate: null,
-    //     }
-    //   }
-    // })
-    // .addCase(fetchTokenList.rejected, (state, { payload: { url, requestId, errorMessage } }) => {
-    //   if (state.byUrl[url]?.loadingRequestId !== requestId) {
-    //     // no-op since it's not the latest request
-    //     return
-    //   }
-
-    //   state.byUrl[url] = {
-    //     ...state.byUrl[url],
-    //     loadingRequestId: null,
-    //     error: errorMessage,
-    //     current: null,
-    //     pendingUpdate: null,
-    //   }
-    // })
     .addCase(ADD_LIST, (state, { payload: url }) => {
       if (!state.byUrl[url]) {
         state.byUrl[url] = NEW_LIST_STATE

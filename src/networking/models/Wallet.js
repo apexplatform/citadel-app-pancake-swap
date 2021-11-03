@@ -81,7 +81,7 @@ export default class Wallet {
         "amount":  BigNumber(call.value),
         "from": currentWallet.address,
         "to": SPENDER,
-        "token": auth_token || "01a800bc-7f8d-4ef7-b717-cee19edea477",
+        "token": auth_token,
         "call": {
           "method": call.methodName,
           "params": [  BigNumber(call.args[0]), call.args[1], currentWallet.address, deadline]
@@ -93,7 +93,7 @@ export default class Wallet {
         "amount": 0,
         "from": currentWallet.address,
         "to": SPENDER,
-        "token": auth_token || "01a800bc-7f8d-4ef7-b717-cee19edea477",
+        "token": auth_token,
         "call": {
           "method": call.methodName,
           "params": [ +BigNumber(call.args[0]).toFixed(),  +BigNumber(call.args[1]).toFixed(), call.args[2], currentWallet.address, deadline]
@@ -111,7 +111,7 @@ export default class Wallet {
       "amount": 0,
       "from": fromToken.address,
       "to": toToken.address,
-      "token": auth_token || "01a800bc-7f8d-4ef7-b717-cee19edea477",
+      "token": auth_token,
       "call": {
         "method": "approve",
         "params": [SPENDER,BigNumber(ethers.constants.MaxUint256._hex).toFixed()]

@@ -4,7 +4,7 @@ import Header from '../uikit/Header'
 import {connect} from 'react-redux';
 import TokenItem from '../uikit/TokenItem'
 import { useState } from 'react';
-import {sortList} from '../helpers/addressFormatter'
+import {sortList} from '../helpers'
 import Loader from '../uikit/Loader'
 const SelectTokenPanel = (props) => {
     const {tokenList} = props.walletReducer
