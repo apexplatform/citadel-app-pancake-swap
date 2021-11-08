@@ -62,7 +62,7 @@ export const addresses = [
 		amount: 0.03,
 		network: 'bsc',
 		name: 'Binance Smart Chain',
-		code: 'BSC',
+		code: 'BNB',
 		publicKey: "0229cf4f3c561133c6d0213b02cbe920238bb06e75a3c46a8b124bc6f2f50f3673"
 	},
 	{

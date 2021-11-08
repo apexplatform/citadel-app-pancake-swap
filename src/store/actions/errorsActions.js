@@ -14,7 +14,6 @@ export const clearErrors = () => dispatch =>{
 
 
 export const checkErrors = (error) => dispatch => {
-    console.log(error,'---error')
     if (error instanceof ValidationError) {
         dispatch({
             type: GET_VALIDATION_ERRORS,

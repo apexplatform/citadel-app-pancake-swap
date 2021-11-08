@@ -49,7 +49,7 @@ export const useCallsData = (calls, options) => dispatch =>{
 	dispatch({type:ADD_MULTICAL_LISTENERS,payload: {chainId,call,options}})
 	const callResults = store.getState().multicalReducer.callResults
 	dispatch({type:REMOVE_MULTICAL_LISTENERS,payload: {chainId,calls,options}})
-	return calls.map((call) => {
+	return calls?.map((call) => {
 		  if (!chainId || !call) return INVALID_RESULT
 		  const result = callResults[chainId]?.[toCallKey(call)]
 		  let data
@@ -101,7 +101,7 @@ export function tryParseAmount(value, currency) {
 	dispatch({type:SET_CALLS,payload: {chainId: 56,calls}})
 	const results = dispatch(useCallsData(calls, options))
 	const { currentBlock } = useBlock()
-	return results?.map((result) => toCallState(result, contractInterface, fragment, currentBlock))
+	return results.map((result) => toCallState(result, contractInterface, fragment, currentBlock))
   }
   
   export const usePairs = (currencies) => dispatch => {

@@ -4,6 +4,7 @@ import store from '../store';
 import {checkErrors} from './errorsActions'
 import {getTokenBalance, updateTradeInfo} from './swapActions'
 import axios from 'axios';
+import { addresses } from '../../data';
 export const setCurrentWallet = (wallet) => dispatch =>{
     dispatch({
         type: SET_CURRENT_WALLET,
@@ -71,7 +72,7 @@ export const getCurrentWallet  = () => {
 
 export const getWalletConstructor = (address) =>  {
     try{
-        const currentWallet = address || getCurrentWallet()
+        const currentWallet = address || getCurrentWallet() || addresses[0]
         const WalletConstructor = models[currentWallet.network.toUpperCase()];
         const wallet = new WalletConstructor(currentWallet)
         return wallet
