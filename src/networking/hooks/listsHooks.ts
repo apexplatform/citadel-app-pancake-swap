@@ -1,8 +1,8 @@
 import { ChainId, Token } from '@pancakeswap/sdk'
 import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
-import { DEFAULT_LIST_OF_LISTS, UNSUPPORTED_LIST_URLS } from '../../config/constants'
-import DEFAULT_TOKEN_LIST from '../../config/tokenLists/pancake-default.tokenlist.json'
-import UNSUPPORTED_TOKEN_LIST from '../../config/tokenLists/pancake-unsupported.tokenlist.json'
+import { DEFAULT_LIST_OF_LISTS, UNSUPPORTED_LIST_URLS } from '../constants/constants'
+import DEFAULT_TOKEN_LIST from '../constants/tokenLists/pancake-default.tokenlist.json'
+import UNSUPPORTED_TOKEN_LIST from '../constants/tokenLists/pancake-unsupported.tokenlist.json'
 import store from '../../store/store'
 type TagDetails = Tags[]
 export interface TagInfo extends TagDetails {

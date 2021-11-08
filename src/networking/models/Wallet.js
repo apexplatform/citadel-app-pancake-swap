@@ -6,7 +6,7 @@ import { JSBI, Percent, Router } from '@pancakeswap/sdk'
 import {basisPointsToPercent} from '../utils/price'
 import store from '../../store/store';
 import { ethers } from 'ethers'
-import {SPENDER} from '../../config/constants'
+import {SPENDER} from '../constants/constants'
 import BigNumber from 'bignumber.js';
 import {loadTokenAllowance} from '../hooks/allowanceHooks'
 const api = useApi('wallet')
@@ -27,12 +27,25 @@ export default class Wallet {
       if (data.ok) {
         return data;
       } else {
-        console.log('-errr',data.error)
-        return new NetworkError(data.error.stack);
+        if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
+        return new Error(data.error?.message?.stack);
       }
     } 
   prepareClaimRewards() {
     return new ImplementationError('Method not implemented!')
+  }  
+  async getWalletBalance() {
+    const {auth_token} = store.getState().userReducer
+    const data = await api.getWalletBalance({
+      network: this.net,
+      address: this.address,
+      token: auth_token
+    });
+    if (data.ok) {
+      return data;
+    } else {
+      return new NetworkError(data.error);
+    }
   }  
   getTokenBalance(address){
     return loadTokenBalance(address)
@@ -63,7 +76,6 @@ export default class Wallet {
   generateSwapTransaction(){
     const {auth_token} = store.getState().userReducer
     const {currentWallet,fromToken} = store.getState().walletReducer;
-    console.log(fromToken,'===fromToken')
     const {trade,deadline,slippageTolerance} = store.getState().swapReducer;
     const BIPS_BASE = JSBI.BigInt(10000)
     const call = Router.swapCallParameters(trade, {
@@ -72,7 +84,6 @@ export default class Wallet {
       recipient: currentWallet?.address,
       deadline: deadline,
     })
-    console.log(call,'--call')
     let body = null
    
     if(['swapETHForExactTokens','swapExactETHForTokens','swapExactETHForTokensSupportingFeeOnTransferTokens'].includes(call.methodName)){

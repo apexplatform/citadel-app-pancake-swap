@@ -1,6 +1,7 @@
 import { useState,useEffect } from 'react'
 import '../styles/components/amountInput.css'
 import text from '../../text.json'
+import BigNumber from 'bignumber.js';
 import fileRoutes from '../../config/file-routes-config.json'
 import {connect} from 'react-redux'
 import Updater from '../../networking/utils/updater'
@@ -9,14 +10,15 @@ import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
-    const {currentWallet,fromToken,fromTokenBalance,amount} = props.walletReducer
-    const balance = fromToken.symbol === 'BNB' ? currentWallet?.amount : fromTokenBalance
+    const [currencyOffset,setCurrencyOffset] = [props.amount?.toString().length * 9 + 5 || 30]
+    const {currentWallet,fromToken,toToken,amount} = props.walletReducer
+    const balance = fromToken.symbol === 'BNB' ? currentWallet?.balance?.mainBalance : fromToken.balance
     const {allowanceAmount,slippageTolerance,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
     const outputAmount = trade?.outputAmount?.toExact() || 0
     const showFee = props.hideFee || false
     const coin = currentWallet?.network.toUpperCase()
-    const feeProcent = +props.fee || 0.003
+    const feeProcent = +props.fee || 0.001
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const checkAmount = (val) => {
         props.setAmount(val)
@@ -29,7 +31,7 @@ const AmountInput = (props) => {
                 props.setSwapStatus('insufficientBalance')
             }
             else if(parseInt(val) < +balance - feeProcent){
-                if(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(val) || fromToken.symbol === 'BNB'){
+                if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))) > parseInt(val) || fromToken.symbol === 'BNB'){
                     if(parseFloat(props.slippage?.toFixed(2)||0) < +slippageTolerance){
                         props.setSwapStatus('swap')
                     }else{
@@ -47,11 +49,12 @@ const AmountInput = (props) => {
         }
     }
     const setMaxAmount = () => {
-        if(balance-feeProcent < 0){
+        console.log(balance,feeProcent,'--balance-feeProcent')
+        if(+balance-feeProcent < 0){
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-            checkAmount(balance-feeProcent)
+            checkAmount(+balance-feeProcent)
         }
     
     }
@@ -75,6 +78,7 @@ const AmountInput = (props) => {
         <div className='amount-container'>
             <div className='input-container' >
                 <input className={hasError ? 'error-input' : undefined} type='number' value={props.amount} onChange={(e) => checkAmount(e.target.value)}/>
+                <span className='input-currency' style={{ left: `${currencyOffset}px` }}>{props.name === 'INPUT' ? fromToken.symbol : toToken.symbol}</span>
                 {showMax && <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>}
             </div>
          

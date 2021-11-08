@@ -14,6 +14,7 @@ export const clearErrors = () => dispatch =>{
 
 
 export const checkErrors = (error) => dispatch => {
+    console.log(error,'---error')
     if (error instanceof ValidationError) {
         dispatch({
             type: GET_VALIDATION_ERRORS,
@@ -26,7 +27,6 @@ export const checkErrors = (error) => dispatch => {
         })
     } else if (error instanceof NetworkError){
         let index = error?.message.indexOf('(')
-        console.log(index,'--i')
         dispatch({
             type: GET_NETWORK_ERRORS,
             payload: error?.message.substr(0,index)

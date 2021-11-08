@@ -10,15 +10,16 @@ const SelectTokenPanel = (props) => {
     const {tokenList} = props.walletReducer
     const [list,setList] = useState(sortList(tokenList))
     const [loader, setLoader] = useState(tokenList.length > 10)
-    const searchToken = (token) => {
-        let arr = tokenList.filter(item => item.symbol.substr(0,token.length).toLowerCase() === token.toLowerCase() || item.name.substr(0,token.length).toLowerCase() === token.toLowerCase())
-        setList(sortList(arr))
-        if(token.length < 1) setList(sortList(tokenList))
-    }
+    const [token,searchToken] = useState('')
     useEffect(()=>{
         setLoader(tokenList.length > 10)
-        setList(sortList(tokenList))
-    },[loader,tokenList,list])
+        if(token.length > 0) {
+            let arr = tokenList.filter(item => item.symbol.substr(0,token.length).toLowerCase() === token.toLowerCase() || item.name.substr(0,token.length).toLowerCase() === token.toLowerCase())
+            setList(sortList(arr))
+        } else {
+            setList(sortList(tokenList))
+        }
+    },[loader,tokenList,token])
     return(
         <Panel id={ROUTES.SELECT_ADDRESS}>
             <Header title="Select token" showTitle={true}  back={true} />

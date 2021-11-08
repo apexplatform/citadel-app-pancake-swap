@@ -12,13 +12,14 @@ import {getTokenBalance} from './store/actions/swapActions'
 import {initApp} from './store/actions/vkActions'
 import SelectAddressPanel from './components/panels/SelectAddressPanel'
 import SelectTokenPanel from './components/panels/SelectTokenPanel'
-import {loadNetworks} from './store/actions/walletActions'
+import {loadNetworks,loadWalletWithBalances} from './store/actions/walletActions'
 const App = (props) => {
     const {activePage} = props.panelReducer
 
 	useEffect(() => {
 		props.initApp()
 		props.loadNetworks()
+		props.loadWalletWithBalances()
 		props.getTokenBalance()
 	}, []);
 
@@ -42,4 +43,4 @@ const mapStateToProps=(state)=>({
 	panelReducer: state.panelReducer,
 })
 
-export default connect(mapStateToProps, {getTokenBalance,loadNetworks,initApp}) (App);
+export default connect(mapStateToProps, {loadWalletWithBalances,getTokenBalance,loadNetworks,initApp}) (App);

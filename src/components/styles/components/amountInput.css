@@ -33,9 +33,10 @@
 }
 
 .input-container input{
-    width: 85%;
+    width: 60%;
     background: transparent;
     border: none;
+    position: absolute;
     font-size: 15px;
     padding-left: 10px;
     height: 40px;
@@ -81,4 +82,14 @@ input[type=number] {
     font-size: 14px;
     font-family: 'Panton Medium';
     margin-left: 3px;
+}
+.input-currency{
+    position: relative;
+    z-index: 10;
+    font-family: "Panton Medium";
+    font-size: 14px;
+    margin-left: 10px;
+    line-height: 17px;
+    color: #6A4BFF;
+    transition: left 0.1ms;
 }

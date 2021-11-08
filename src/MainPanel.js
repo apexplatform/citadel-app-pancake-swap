@@ -28,7 +28,7 @@ const MainPanel = (props) => {
         <Panel id={ROUTES.HOME}>
             <Group>
                 <View activePanel={activePanel} modal={modal}>
-                    <Panel id={ROUTES.SEND}>
+                    <Panel id={ROUTES.SWAP}>
                         <Swap/>
                         {config.showAddressBlock && <AddressBlock />}
                         <Tabbar/>

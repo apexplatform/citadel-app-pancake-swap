@@ -1,11 +1,11 @@
 import {connect} from 'react-redux';
 import '../styles/components/feeInfoBlock.css'
-import {ONE_BIPS} from '../../config/constants'
+import {ONE_BIPS} from '../../networking/constants/constants'
 import text from '../../text.json'
 import { Icon20ChevronRightOutline } from '@vkontakte/icons';
 const FeeInfoBlock = (props) => {
     const {fromToken,toToken} = props.walletReducer
-    const {slippageTolerance, minReceived,trade} = props.swapReducer
+    const {minReceived,trade} = props.swapReducer
     const {rate,priceImpact,fee} = props
     const path = trade?.route?.path || []
     return(

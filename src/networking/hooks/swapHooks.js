@@ -12,9 +12,8 @@ import {
 	CUSTOM_BASES,
 	BETTER_TRADE_LESS_HOPS_THRESHOLD,
 	ADDITIONAL_BASES,
-  } from '../../config/constants.js'
-  import { ADD_MULTICAL_LISTENERS,SET_FROM_TOKEN_BALANCE,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST} from "../../store/actions/types"
-import BigNumber from 'bignumber.js';
+  } from '../constants/constants.js'
+  import { ADD_MULTICAL_LISTENERS,SET_FROM_TOKEN_AMOUNT,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST} from "../../store/actions/types"
 import tokens from '../../config/tokenLists/pancake-default.tokenlist.json'
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const LOWER_HEX_REGEX = /^0x[a-f0-9]*$/
@@ -49,7 +48,6 @@ export const useCallsData = (calls, options) => dispatch =>{
 	const call = callKeys.map((key) => parseCallKey(key))
 	dispatch({type:ADD_MULTICAL_LISTENERS,payload: {chainId,call,options}})
 	const callResults = store.getState().multicalReducer.callResults
-	//console.log(callResults,'---callResults new')
 	dispatch({type:REMOVE_MULTICAL_LISTENERS,payload: {chainId,calls,options}})
 	return calls.map((call) => {
 		  if (!chainId || !call) return INVALID_RESULT
@@ -103,7 +101,7 @@ export function tryParseAmount(value, currency) {
 	dispatch({type:SET_CALLS,payload: {chainId: 56,calls}})
 	const results = dispatch(useCallsData(calls, options))
 	const { currentBlock } = useBlock()
-	return results.map((result) => toCallState(result, contractInterface, fragment, currentBlock))
+	return results?.map((result) => toCallState(result, contractInterface, fragment, currentBlock))
   }
   
   export const usePairs = (currencies) => dispatch => {
@@ -136,7 +134,6 @@ export function tryParseAmount(value, currency) {
   
   const useAllCommonPairs = (currencyA, currencyB) => dispatch => {
 	const chainId = 56
-	console.log(currencyA, currencyB,'--currencyA, currencyB')
 	const [tokenA, tokenB] = chainId
 	  ? [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]
 	  : [undefined, undefined]
@@ -217,7 +214,6 @@ export function tryParseAmount(value, currency) {
 	if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
 		if(isExactIn){
 			if (singleHopOnly) {
-				console.log(isExactIn,'---input')
 			return (
 				Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, { maxHops: 1, maxNumResults: 1 })[0] ??
 				null
@@ -225,7 +221,6 @@ export function tryParseAmount(value, currency) {
 			}
 			// search through trades with varying hops, find best trade out of them
 			let bestTradeSoFar = null
-			console.log(isExactIn,'---input')
 			for (let i = 1; i <= MAX_HOPS; i++) {
 			const currentTrade = Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, { maxHops: i, maxNumResults: 1 })[0] ??
 				null
@@ -237,7 +232,6 @@ export function tryParseAmount(value, currency) {
 			return bestTradeSoFar
 		}else{
 			if (singleHopOnly) {
-				console.log(isExactIn,'---output')
 				return (
 					Trade.bestTradeExactOut(allowedPairs, currencyOut,  currencyAmountIn, { maxHops: 1, maxNumResults: 1 })[0] ??
 					null
@@ -245,7 +239,6 @@ export function tryParseAmount(value, currency) {
 				}
 				// search through trades with varying hops, find best trade out of them
 				let bestTradeSoFar = null
-				console.log(isExactIn,'---output')
 				for (let i = 1; i <= MAX_HOPS; i++) {
 				const currentTrade =
 					Trade.bestTradeExactOut(allowedPairs, currencyOut,  currencyAmountIn, { maxHops: i, maxNumResults: 1 })[0] ??
@@ -265,7 +258,7 @@ export function tryParseAmount(value, currency) {
 	const contract = useTokenContract(address)
 	contract?.balanceOf(currentWallet?.address).then((returnData) => {
 	  dispatch({
-		type: SET_FROM_TOKEN_BALANCE,
+		type: SET_FROM_TOKEN_AMOUNT,
 		payload: parseInt(returnData?._hex, 16)/Math.pow(10,+fromToken.decimals)
 	  })
 	})

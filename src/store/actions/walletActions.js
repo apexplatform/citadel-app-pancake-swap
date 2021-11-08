@@ -1,4 +1,4 @@
-import {SET_PREPARE_TRANSFER_RESPONSE,SET_AMOUNT,SET_FROM_TOKEN,SET_TO_TOKEN, SET_FROM_TOKEN_BALANCE, SET_TO_AMOUNT, SET_TO_ADDRESS,SET_CURRENT_WALLET, SET_TOKEN, SET_NETWORKS, SET_TOKEN_LIST} from './types'
+import {SET_PREPARE_TRANSFER_RESPONSE,SET_AMOUNT,SET_FROM_TOKEN,SET_TO_TOKEN, SET_FROM_TOKEN_AMOUNT, SET_TO_AMOUNT, SET_TO_ADDRESS,SET_CURRENT_WALLET, SET_TOKEN, SET_NETWORKS, SET_WALLETS} from './types'
 import models from '../../networking/models';
 import store from '../store';
 import {checkErrors} from './errorsActions'
@@ -40,7 +40,6 @@ export const setFromToken = (token) => dispatch =>{
         payload: token
     })
     dispatch(getTokenBalance())
-    dispatch(setAmount(0))
     dispatch(updateTradeInfo(0,true))
 }
 
@@ -49,13 +48,12 @@ export const setToToken = (token) => dispatch =>{
         type: SET_TO_TOKEN,
         payload: token
     })
-    dispatch(setAmount(0))
     dispatch(updateTradeInfo(0,false))
 }
 
-export const setFromBalance= (balance) => dispatch =>{
+export const setFromAmount = (balance) => dispatch =>{
     dispatch({
-        type: SET_FROM_TOKEN_BALANCE,
+        type: SET_FROM_TOKEN_AMOUNT,
         payload: balance
     })
 }
@@ -71,9 +69,9 @@ export const getCurrentWallet  = () => {
     return currentWallet
 }
 
-export const getWalletConstructor = () =>  {
+export const getWalletConstructor = (address) =>  {
     try{
-        const currentWallet = getCurrentWallet()
+        const currentWallet = address || getCurrentWallet()
         const WalletConstructor = models[currentWallet.network.toUpperCase()];
         const wallet = new WalletConstructor(currentWallet)
         return wallet
@@ -97,6 +95,40 @@ export const prepareTransfer  = () => dispatch => {
     }).catch(err => {
         dispatch(checkErrors(err))
     })
+}
+
+export const loadWalletWithBalances  = () => dispatch => {
+    const qs = require('querystring');
+    const params = window.location.search.slice(1);
+    const paramsAsObject = qs.parse(params);
+    let wallets = paramsAsObject?.wallets ? JSON.parse(paramsAsObject?.wallets)?.map(item => {
+        return {
+            address: item,
+            network: 'bsc',
+            name: 'Binance Smart Chain',
+            code: 'BNB'
+        }
+    }) : []
+    if(wallets.length){
+        wallets.forEach(async item => {
+            const wallet = getWalletConstructor(item)
+            let response = await wallet.getWalletBalance()
+            if(response.ok){
+                item.balance = response.data
+            }else{
+                dispatch(checkErrors(data))
+            }
+        })
+        console.log(wallets,'---newWallets')
+        dispatch ({
+            type:SET_WALLETS,
+            payload: wallets
+        })
+        dispatch ({
+            type:SET_CURRENT_WALLET,
+            payload: wallets[0]
+        })
+    }
 }
 
 export const loadNetworks = () => dispatch =>{

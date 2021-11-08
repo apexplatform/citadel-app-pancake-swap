@@ -1,34 +1,20 @@
-import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_BALANCE,SET_TO_AMOUNT,SET_EMPTY_TOKEN_LIST, SET_GAS_PRICE, SET_TOKEN_LIST} from '../actions/types'
-import { addresses } from '../../data'
+import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_AMOUNT,SET_WALLETS,SET_TO_AMOUNT,SET_EMPTY_TOKEN_LIST, SET_GAS_PRICE, SET_TOKEN_LIST} from '../actions/types'
 import tokenList from '../../config/tokenLists/pancake-default.tokenlist.json'
 import {Currency} from '@pancakeswap/sdk'
-const qs = require('querystring');
-const params = window.location.search.slice(1);
-const paramsAsObject = qs.parse(params);
 const tokens = [{...Currency.ETHER, logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokenList['tokens']]
-console.log(tokens,'--tokens')
-let wallets = paramsAsObject.wallets ? JSON.parse(paramsAsObject.wallets)?.map(item => {
-    return {
-		address: item,
-		amount: 0.01,
-		network: 'bsc',
-		name: 'Binance Smart Chain',
-		code: 'BSC'
-	}
-}) : []
+
 const initialState = {
-    currentWallet: wallets[0] || null,
+    currentWallet: null,
     currentToken: 'from',
-    wallets: wallets,
+    wallets: null,
     toAddress: null,
     amount: 0,
-    tokenList: [], 
+    tokenList: {...Currency.ETHER, logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, 
     networks: [],
     fromToken: tokens[0],
     toToken: tokens[1],
-    fromTokenBalance: 0,
-    toTokenAmount: 0,
-    gasPrice: '45000'
+    fromTokenAmount: 0,
+    toTokenAmount: 0
 }
 export default function(state=initialState,action){
     switch (action.type){
@@ -36,6 +22,11 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 currentWallet: action.payload
+            }
+        case SET_WALLETS:
+            return {
+                ...state,
+                wallets: action.payload
             }
         case SET_TOKEN_LIST:
             return {
@@ -45,12 +36,7 @@ export default function(state=initialState,action){
         case SET_EMPTY_TOKEN_LIST:
             return {
                 ...state,
-                tokenList: action.payload
-            }
-        case SET_GAS_PRICE:
-            return {
-                ...state,
-                gasPrice: action.payload
+                tokenList: [{...Currency.ETHER, logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}]
             }
         case SET_TOKEN:
             return {
@@ -82,10 +68,10 @@ export default function(state=initialState,action){
                 ...state,
                 toToken: action.payload
             }
-        case SET_FROM_TOKEN_BALANCE:
+        case SET_FROM_TOKEN_AMOUNT:
             return {
                 ...state,
-                fromTokenBalance: action.payload
+                fromTokenAmount: action.payload
             }
         case SET_TO_AMOUNT:
             return {

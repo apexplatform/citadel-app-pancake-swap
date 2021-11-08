@@ -2,9 +2,9 @@ import { Contract } from '@ethersproject/contracts'
 import { ChainId } from '@pancakeswap/sdk'
 import { ethers } from 'ethers'
 import { simpleRpcProvider } from '../utils/providers'
-import ERC20_ABI from '../../config/abi/erc20.json'
-import multiCallAbi from '../../config/abi/Multicall.json'
-import addresses from '../../config/contracts'
+import ERC20_ABI from '../constants/abi/erc20.json'
+import multiCallAbi from '../constants/abi/Multicall.json'
+import addresses from '../constants/contracts'
 
 export interface Address {
   97?: any,

@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { DEFAULT_ACTIVE_LIST_URLS, UNSUPPORTED_LIST_URLS, DEFAULT_LIST_OF_LISTS } from '../../config/constants'
+import { DEFAULT_ACTIVE_LIST_URLS, UNSUPPORTED_LIST_URLS, DEFAULT_LIST_OF_LISTS } from '../../networking/constants/constants'
 
 import { UPDATE_VERSION, ADD_LIST, REMOVE_LIST, ENABLE_LIST, DISABLE_LIST, ACCEPT_LIST_UPDATE } from '../actions/types'
 

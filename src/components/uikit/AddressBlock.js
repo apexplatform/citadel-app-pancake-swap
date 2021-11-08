@@ -21,8 +21,8 @@ const AddressBlock = (props) => {
                         <span className="address-text">({fotmatAddress(currentWallet?.address)})</span>
                     </div>
                     <div className='address-row'>
-                        <p className="address-block-amount">{currentWallet?.amount}</p>
-                        <span className="address-network">{currentWallet?.network}</span>
+                        <p className="address-block-amount">{currentWallet?.balance?.mainBalance}</p>
+                        <span className="address-network">{currentWallet?.code}</span>
                     </div>
                 </div>
                 <Icon20ChevronRightOutline fill="#818C99" width={30} height={30}/> 

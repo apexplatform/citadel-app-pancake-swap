@@ -1,6 +1,6 @@
-import { getDelegationBalance } from './getDelegationBalance';
+import { getWalletBalance } from './getWalletBalance';
 import { prepareBaseTransfer } from './prepareBaseTransfer';
 export const wallet = {
-    getDelegationBalance,
+    getWalletBalance,
     prepareBaseTransfer
 }
