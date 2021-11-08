@@ -6,7 +6,7 @@
         "HOVER_ITEM_COLOR": "#000",
         "DISABLE_ITEM_COLOR": "#f5f5f5",
         "TABBAR_ITEMS": [
-            {"TITLE": "Pancake", "ICON": "pancake", "ROUTES": "send"}
+            {"TITLE": "Pancake", "ICON": "pancake", "ROUTES": "swap"}
         ]
     },
     "HEADER": {

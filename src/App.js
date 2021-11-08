@@ -8,7 +8,7 @@ import './components/styles/index.css'
 import store from './store/store'
 import {Provider} from 'react-redux';
 import {connect} from 'react-redux';
-import {getTokenBalance} from './store/actions/swapActions'
+import {getTokenBalance,updateTradeInfo} from './store/actions/swapActions'
 import {initApp} from './store/actions/vkActions'
 import SelectAddressPanel from './components/panels/SelectAddressPanel'
 import SelectTokenPanel from './components/panels/SelectTokenPanel'
@@ -21,6 +21,7 @@ const App = (props) => {
 		props.loadNetworks()
 		props.loadWalletWithBalances()
 		props.getTokenBalance()
+		props.updateTradeInfo(1,true)
 	}, []);
 
 	return (
@@ -43,4 +44,4 @@ const mapStateToProps=(state)=>({
 	panelReducer: state.panelReducer,
 })
 
-export default connect(mapStateToProps, {loadWalletWithBalances,getTokenBalance,loadNetworks,initApp}) (App);
+export default connect(mapStateToProps, {updateTradeInfo,loadWalletWithBalances,getTokenBalance,loadNetworks,initApp}) (App);

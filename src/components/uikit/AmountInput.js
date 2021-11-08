@@ -12,7 +12,6 @@ const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
     const [currencyOffset,setCurrencyOffset] = [props.amount?.toString().length * 9 + 5 || 30]
     const {currentWallet,fromToken,toToken,amount} = props.walletReducer
-    const balance = fromToken.symbol === 'BNB' ? currentWallet?.balance?.mainBalance : fromToken.balance
     const {allowanceAmount,slippageTolerance,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
     const outputAmount = trade?.outputAmount?.toExact() || 0
@@ -20,6 +19,14 @@ const AmountInput = (props) => {
     const coin = currentWallet?.network.toUpperCase()
     const feeProcent = +props.fee || 0.001
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
+    const getBalance = () => {
+        if(fromToken.symbol === 'BNB') return currentWallet?.balance?.mainBalance
+        if(props.name === 'INPUT' && fromToken.balance) return fromToken.balance
+       // else if (props.name === 'INPUT') return fromTokenAmount
+        if(props.name === 'OUTPUT' && toToken.balance) return toToken.balance
+       // else if(props.name === 'OUTPUT') return toTokenAmount
+    }
+    const balance = getBalance()
     const checkAmount = (val) => {
         props.setAmount(val)
         props.setField(props.name)
@@ -49,14 +56,15 @@ const AmountInput = (props) => {
         }
     }
     const setMaxAmount = () => {
-        console.log(balance,feeProcent,'--balance-feeProcent')
         if(+balance-feeProcent < 0){
             props.setAmount(0)
+            console.log(balance,feeProcent,fromToken,'--balance-feeProcent')
             props.setSwapStatus('insufficientBalance')
         }else{
+            console.log(+balance-feeProcent,'----')
+            props.updateTradeInfo(+balance-feeProcent, props.isExactIn)
             checkAmount(+balance-feeProcent)
         }
-    
     }
     useEffect(() => {
         let interval = null;

@@ -40,7 +40,6 @@ export const setFromToken = (token) => dispatch =>{
         type: SET_FROM_TOKEN,
         payload: token
     })
-    dispatch(getTokenBalance())
     dispatch(updateTradeInfo(0,true))
 }
 
@@ -102,14 +101,15 @@ export const loadWalletWithBalances  = () => dispatch => {
     const qs = require('querystring');
     const params = window.location.search.slice(1);
     const paramsAsObject = qs.parse(params);
-    let wallets = paramsAsObject?.wallets ? JSON.parse(paramsAsObject?.wallets)?.map(item => {
+    console.log(paramsAsObject,'--paramsAsObject')
+    let wallets = JSON.parse(paramsAsObject.wallets || {})?.map(item => {
         return {
             address: item,
             network: 'bsc',
             name: 'Binance Smart Chain',
             code: 'BNB'
         }
-    }) : []
+    })
     if(wallets.length){
         wallets.forEach(async item => {
             const wallet = getWalletConstructor(item)

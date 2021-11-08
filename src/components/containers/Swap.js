@@ -9,16 +9,18 @@ import Header from '../uikit/Header'
 import {computeTradePriceBreakdown} from '../../networking/utils/price'
 import {connect} from 'react-redux';
 import Icon from '../uikit/Icon'
+import Loader from '../uikit/Loader'
 import {setFromToken,setToToken,setAmount,setFromAmount,setToAmount} from '../../store/actions/walletActions'
 import FeeInfoBlock from '../uikit/FeeInfoBlock'
 import SwapButton from '../uikit/SwapButton'
 const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
+	const [loader, setLoader] = useState(false)
 	const [independentField, setIndependentField] = useState('INPUT')
 	const {trade,parsedAmount} = props.swapReducer
 	const {fromToken,toToken,currentWallet, amount} = props.walletReducer
-	const showFee = fromToken.symbol.toLowerCase() === currentWallet?.symbol
-	const showFee2 = toToken.symbol.toLowerCase() === currentWallet?.symbol
+	const showFee = fromToken?.symbol?.toLowerCase() === currentWallet?.symbol
+	const showFee2 = toToken?.symbol?.toLowerCase() === currentWallet?.symbol
 	const dependentField = independentField === 'INPUT' ? 'OUTPUT' : 'INPUT'
 	const formattedPrice = isExactIn ? trade?.executionPrice?.toSignificant(6) : trade?.executionPrice?.invert()?.toSignificant(6)
 	const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
@@ -30,7 +32,7 @@ const Swap = (props) => {
 		[independentField]: amount,
 		[dependentField]: +amount != 0 ? parsedAmounts[dependentField]?.toSignificant(6) : '0',
 	}
-
+	console.log(formattedAmounts,'---formattedAmounts')
 	const reverseTokens = () => {
 		setIndependentField(dependentField)
 		setExactIn(!isExactIn)
@@ -40,13 +42,17 @@ const Swap = (props) => {
 	}
 	
 	useEffect(() => {
-		props.updateTradeInfo(1,isExactIn)
+		// props.updateTradeInfo(1,isExactIn)
 		props.setFromAmount(formattedAmounts['INPUT'])
 		props.setToAmount(formattedAmounts['OUTPUT'])
-	},[])
+		console.log(fromToken.balance,toToken.balance ,'--fromToken.balance && toToken.balance ')
+		setLoader(fromToken.balance || toToken.balance ? true : false)
+	},[fromToken,toToken,loader])
 	return (
 		<Group className='swap-container'>
 			<Header title="Swap"/>
+		{ loader ? 
+				<>
 			<div className='swap-column'>
 				<FormItem top={"From" + (independentField === 'OUTPUT' ? ' (estimated)' : '') } className='formTokenItem' onClick={() => props.setSelectedToken('from')}>
 					<div className='swap-row'>
@@ -72,6 +78,8 @@ const Swap = (props) => {
 			</div>
 			<FeeInfoBlock rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
 			<SwapButton />
+			</>
+			: <Loader id='centered-loader'/> }
 		</Group>
 	); 
 }

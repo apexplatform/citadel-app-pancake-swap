@@ -19,6 +19,7 @@ export default class Wallet {
       this.publicKey = opts.publicKey || null; 
   }
   async prepareTransfer(params) {
+    console.log(JSON.stringify(params,null,2))
       const data = await api.prepareBaseTransfer({
         network: this.net,
         from: this.address,
@@ -47,9 +48,6 @@ export default class Wallet {
       return new NetworkError(data.error);
     }
   }  
-  getTokenBalance(address){
-    return loadTokenBalance(address)
-  }
   getBlockNumber(){
     return loadBlockNumber()
   }

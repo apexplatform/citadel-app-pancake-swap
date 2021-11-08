@@ -1,4 +1,4 @@
-import {getWalletConstructor} from './walletActions'
+import {getWalletConstructor, setToToken} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
 import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE } from './types'
@@ -53,9 +53,7 @@ export const setSlippageTolerance = (procent) => dispatch =>{
 }
 
 export const getTokenBalance = () => async(dispatch) =>{
-    const {fromToken} = store.getState().walletReducer
     const wallet = getWalletConstructor()
-    dispatch(wallet.getTokenBalance(fromToken.address))
     dispatch(wallet.getBlockNumber())
     dispatch({
         type: SET_EMPTY_TOKEN_LIST,

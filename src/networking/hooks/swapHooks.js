@@ -1,4 +1,5 @@
 import { Currency, CurrencyAmount,currencyEquals, ETHER, JSBI, Percent,Token,Pair, TokenAmount, Trade } from '@pancakeswap/sdk'
+import BigNumber from 'bignumber.js';
 import { parseUnits } from '@ethersproject/units'
 import { wrappedCurrency } from './wrappedCurrency'
 import store from '../../store/store';
@@ -13,7 +14,7 @@ import {
 	BETTER_TRADE_LESS_HOPS_THRESHOLD,
 	ADDITIONAL_BASES,
   } from '../constants/constants.js'
-  import { ADD_MULTICAL_LISTENERS,SET_FROM_TOKEN_AMOUNT,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST} from "../../store/actions/types"
+  import { ADD_MULTICAL_LISTENERS,SET_FROM_TOKEN_AMOUNT,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST, SET_TO_AMOUNT, SET_TO_TOKEN, SET_FROM_TOKEN} from "../../store/actions/types"
 import tokens from '../constants/tokenLists/pancake-default.tokenlist.json'
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const LOWER_HEX_REGEX = /^0x[a-f0-9]*$/
@@ -253,16 +254,23 @@ export function tryParseAmount(value, currency) {
 	return null
   }
 
-  export const loadTokenBalance = (address) => dispatch => {
-	const {currentWallet,fromToken} = store.getState().walletReducer
-	const contract = useTokenContract(address)
-	contract?.balanceOf(currentWallet?.address).then((returnData) => {
-	  dispatch({
-		type: SET_FROM_TOKEN_AMOUNT,
-		payload: parseInt(returnData?._hex, 16)/Math.pow(10,+fromToken.decimals)
-	  })
-	})
-  }
+//   export const loadTokenBalance = () => dispatch => {
+// 	const {currentWallet,fromToken,toToken} = store.getState().walletReducer
+// 	const contract = useTokenContract(fromToken.address)
+// 	contract?.balanceOf(currentWallet?.address).then((returnData) => {
+// 	  dispatch({
+// 		type: SET_FROM_TOKEN_AMOUNT,
+// 		payload: BigNumber(parseInt(returnData?._hex, 16)/Math.pow(10,+fromToken.decimals)).toNumber()
+// 	  })
+// 	})
+// 	const contract2 = useTokenContract(toToken.address)
+// 	contract2?.balanceOf(currentWallet?.address).then((returnData) => {
+// 		dispatch({
+// 		  type: SET_TO_AMOUNT,
+// 		  payload: BigNumber(parseInt(returnData?._hex, 16)/Math.pow(10,+toToken.decimals)).toNumber()
+// 		})
+// 	  })
+//   }
   
   export const loadBlockNumber = () => dispatch => {
 	const {deadlineMin} = store.getState().swapReducer
@@ -285,5 +293,17 @@ export function tryParseAmount(value, currency) {
 			type: SET_TOKEN_LIST,
 			payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
 		  })
+		if(token.symbol === 'XCT'){
+			dispatch({
+				type: SET_TO_TOKEN,
+				payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
+			})  
+		}
+		if(token.symbol === 'USDT'){
+			dispatch({
+				type: SET_FROM_TOKEN,
+				payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
+			})  
+		}
 	})
   }
