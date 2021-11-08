@@ -14,7 +14,7 @@ import {
 	ADDITIONAL_BASES,
   } from '../constants/constants.js'
   import { ADD_MULTICAL_LISTENERS,SET_FROM_TOKEN_AMOUNT,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST} from "../../store/actions/types"
-import tokens from '../../config/tokenLists/pancake-default.tokenlist.json'
+import tokens from '../constants/tokenLists/pancake-default.tokenlist.json'
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const LOWER_HEX_REGEX = /^0x[a-f0-9]*$/
 

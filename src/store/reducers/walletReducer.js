@@ -1,5 +1,5 @@
-import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_AMOUNT,SET_WALLETS,SET_TO_AMOUNT,SET_EMPTY_TOKEN_LIST, SET_GAS_PRICE, SET_TOKEN_LIST} from '../actions/types'
-import tokenList from '../../config/tokenLists/pancake-default.tokenlist.json'
+import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_AMOUNT,SET_WALLETS,SET_TO_AMOUNT,SET_EMPTY_TOKEN_LIST, SET_TOKEN_LIST} from '../actions/types'
+import tokenList from '../../networking/constants/tokenLists/pancake-default.tokenlist.json'
 import {Currency} from '@pancakeswap/sdk'
 const tokens = [{...Currency.ETHER, logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokenList['tokens']]
 
