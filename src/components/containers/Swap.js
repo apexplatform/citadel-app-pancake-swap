@@ -32,7 +32,7 @@ const Swap = (props) => {
 		[independentField]: amount,
 		[dependentField]: +amount != 0 ? parsedAmounts[dependentField]?.toSignificant(6) : '0',
 	}
-	console.log(formattedAmounts,'---formattedAmounts')
+	//console.log(formattedAmounts,'---formattedAmounts')
 	const reverseTokens = () => {
 		setIndependentField(dependentField)
 		setExactIn(!isExactIn)

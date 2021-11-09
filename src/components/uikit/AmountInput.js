@@ -32,7 +32,7 @@ const AmountInput = (props) => {
         props.setField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
         if(+val > 0){
-            props.updateTradeInfo(val, props.isExactIn)
+            props.updateTradeInfo(val,props.name === 'INPUT' ? true : false)
             props.setToAmount(outputAmount)
             if(parseInt(val) > balance){
                 props.setSwapStatus('insufficientBalance')
@@ -62,8 +62,9 @@ const AmountInput = (props) => {
             props.setSwapStatus('insufficientBalance')
         }else{
             console.log(+balance-feeProcent,'----')
-            props.updateTradeInfo(+balance-feeProcent, props.isExactIn)
             checkAmount(+balance-feeProcent)
+            props.updateTradeInfo(+balance-feeProcent, props.name === 'INPUT' ? true : false)
+         
         }
     }
     useEffect(() => {
