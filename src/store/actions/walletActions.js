@@ -1,4 +1,4 @@
-import {SET_PREPARE_TRANSFER_RESPONSE,SET_AMOUNT,SET_FROM_TOKEN,SET_TO_TOKEN, SET_FROM_TOKEN_AMOUNT, SET_TO_AMOUNT, SET_TO_ADDRESS,SET_CURRENT_WALLET, SET_TOKEN, SET_NETWORKS, SET_WALLETS} from './types'
+import {SET_PREPARE_TRANSFER_RESPONSE,SET_AMOUNT,SET_FROM_TOKEN,SET_TO_TOKEN, SET_FROM_TOKEN_AMOUNT, SET_TO_AMOUNT, SET_TO_ADDRESS,SET_CURRENT_WALLET, SET_TOKEN, SET_NETWORKS, SET_WALLETS, SET_INITIAL_LOAD} from './types'
 import models from '../../networking/models';
 import store from '../store';
 import {checkErrors} from './errorsActions'
@@ -25,6 +25,10 @@ export const setAmount = (amount) => dispatch =>{
     dispatch({
         type: SET_AMOUNT,
         payload: amount
+    })
+    dispatch({
+        type: SET_INITIAL_LOAD,
+        payload: false
     })
 }
 

@@ -284,7 +284,7 @@ export function tryParseAmount(value, currency) {
   }
   
   export const loadTokenBalances = () => async(dispatch) => {
-	const {currentWallet} = store.getState().walletReducer
+	const {currentWallet,initialLoader} = store.getState().walletReducer
 	let list = tokens['tokens']
 	list.forEach(async(token) =>{
 		const contract = useTokenContract(token.address)
@@ -292,18 +292,20 @@ export function tryParseAmount(value, currency) {
 		dispatch({
 			type: SET_TOKEN_LIST,
 			payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
-		  })
-		if(token.symbol === 'XCT'){
-			dispatch({
-				type: SET_TO_TOKEN,
-				payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
-			})  
-		}
-		if(token.symbol === 'USDT'){
-			dispatch({
-				type: SET_FROM_TOKEN,
-				payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
-			})  
+		})
+		if(initialLoader){
+			if(token.symbol === 'XCT'){
+				dispatch({
+					type: SET_TO_TOKEN,
+					payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
+				})  
+			}
+			if(token.symbol === 'USDT'){
+				dispatch({
+					type: SET_FROM_TOKEN,
+					payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
+				})  
+			}
 		}
 	})
   }

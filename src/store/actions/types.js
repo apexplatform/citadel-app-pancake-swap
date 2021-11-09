@@ -39,6 +39,7 @@ export const SET_BLOCK = 'SET_BLOCK'
 export const SET_TRADE = 'SET_TRADE'
 export const SET_DEADLINE = 'SET_DEADLINE'
 export const SET_PARSED_AMOUNT = 'SET_PARSED_AMOUNT'
+export const SET_INITIAL_LOAD = 'SET_INITIAL_LOAD'
 // list types
 export const UPDATE_VERSION = 'UPDATE_VERSION'
 export const ACCEPT_LIST_UPDATE = 'ACCEPT_LIST_UPDATE'

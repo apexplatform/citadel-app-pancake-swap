@@ -24,7 +24,7 @@ import text from '../../text.json'
                 <h4>{text.SETTING_TITLE}</h4>
                 <p>{text.SETTING_DESCRIPTION} </p>
             </Div>
-            <Div className='add-address-btn' onClick={() => changePanel()}>
+            <Div className='add-address-btn'>
                 <img src={fileRoutes.ADD_ICON} alt='add' /> 
                 <p>{text.ADD_ADDRESS}</p>
             </Div>
