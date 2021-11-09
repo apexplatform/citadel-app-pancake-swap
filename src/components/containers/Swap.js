@@ -15,7 +15,7 @@ import FeeInfoBlock from '../uikit/FeeInfoBlock'
 import SwapButton from '../uikit/SwapButton'
 const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
-	const [loader, setLoader] = useState(false)
+	const [loader, setLoader] = useState(true)
 	const [independentField, setIndependentField] = useState('INPUT')
 	const {trade,parsedAmount} = props.swapReducer
 	const {fromToken,toToken,currentWallet, amount} = props.walletReducer
@@ -46,8 +46,8 @@ const Swap = (props) => {
 		props.setFromAmount(formattedAmounts['INPUT'])
 		props.setToAmount(formattedAmounts['OUTPUT'])
 		console.log(fromToken.balance,toToken.balance ,'--fromToken.balance && toToken.balance ')
-		setLoader(fromToken.balance || toToken.balance ? true : false)
-	},[fromToken,toToken,loader])
+		//setLoader(fromToken.balance || toToken.balance ? true : false)
+	},[fromToken,toToken])
 	return (
 		<Group className='swap-container'>
 			<Header title="Swap"/>

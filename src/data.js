@@ -74,3 +74,43 @@ export const addresses = [
 		publicKey: "af9ade0dc914dad55e3d98b08aa4dd3c386fdc50f7c8c81773137ddfa8386486ddda5e6cfeff5aac4dbbd91df9a52b19710a726f37af84f30f25f182e9937d14"
 	}
 ]
+
+
+
+// export const checkAmount = (val,name) => dispatch => {
+//     const {currentWallet,fromToken,toToken} = store.getState().walletReducer
+//     const {allowanceAmount,slippageTolerance,trade} = store.getState().swapReducer
+//     dispatch(setAmount(val))
+//     dispatch(setIndependentField(name))
+//     let { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
+//     const feeProcent = realizedLPFee?.toSignificant(4) || 0.001
+//     const outputAmount = trade?.outputAmount?.toExact() || 0
+//     let balance = 0
+//     if(fromToken.symbol === 'BNB') balance = currentWallet?.balance?.mainBalance
+//     if(name === 'INPUT' && fromToken.balance) balance = fromToken.balance
+//     if(name === 'OUTPUT' && toToken.balance) balance = toToken.balance
+//    // props.setExactIn(props.name === 'INPUT' ? true : false)
+//     if(+val > 0){
+//         dispatch(updateTradeInfo(val, name === 'INPUT' ? true : false))
+//         dispatch(setToAmount(outputAmount))
+//         if(parseInt(val) > balance){
+//             dispatch(setSwapStatus('insufficientBalance'))
+//         }
+//         else if(parseInt(val) < +balance - feeProcent){
+//             if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))).toNumber() > parseInt(val) || fromToken.symbol === 'BNB'){
+//                 if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
+//                     dispatch(setSwapStatus('swap'))
+//                 }else{
+//                     dispatch(setSwapStatus('swapAnyway'))
+//                 }
+//             } else {
+//                 dispatch(setTimerApprove(true))
+//                 dispatch(setSwapStatus('approve'))
+//             }
+//         } else {
+//             dispatch(setSwapStatus('feeError'))
+//         }
+//     } else {
+//         dispatch(setSwapStatus('enterAmount'))
+//     }
+// }
