@@ -32,13 +32,15 @@ const AmountInput = (props) => {
         props.setField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
         if(+val > 0){
+           // console.log(+val , +balance - feeProcent,'--+val < +balance - feeProcent')
             props.updateTradeInfo(val,props.name === 'INPUT' ? true : false)
             props.setToAmount(outputAmount)
-            if(parseInt(val) > balance){
+            if(+val > balance){
                 props.setSwapStatus('insufficientBalance')
             }
-            else if(parseInt(val) < +balance - feeProcent){
-                if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))) > parseInt(val) || fromToken.symbol === 'BNB'){
+           
+            else if(+val <= +balance - feeProcent){
+                if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))) > +val || fromToken.symbol === 'BNB'){
                     if(parseFloat(props.slippage?.toFixed(2)||0) < +slippageTolerance){
                         props.setSwapStatus('swap')
                     }else{
@@ -58,10 +60,8 @@ const AmountInput = (props) => {
     const setMaxAmount = () => {
         if(+balance-feeProcent < 0){
             props.setAmount(0)
-            console.log(balance,feeProcent,fromToken,'--balance-feeProcent')
             props.setSwapStatus('insufficientBalance')
         }else{
-            console.log(+balance-feeProcent,'----')
             checkAmount(+balance-feeProcent)
             props.updateTradeInfo(+balance-feeProcent, props.name === 'INPUT' ? true : false)
          

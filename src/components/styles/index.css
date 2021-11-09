@@ -35,11 +35,27 @@ body, * {
 
 .error-text{
     margin: 0 20px 15px;
+    color: #656565;
+    font-weight: 400;
+    padding-bottom: 40px;
 }
-
+.error-title{
+    color: #E64646 !important;
+}
+.error-btn{
+    background: #E64646;
+    border-radius: 4px;
+    color: white;
+    border: none;
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    width: 50px;
+    height: 30px;
+}
 .vkuiModalPage__in-wrap{
     height: auto !important;
-    bottom: auto !important;
+    bottom: 60% !important;
 }
 
 .vkuiModalPage__in{

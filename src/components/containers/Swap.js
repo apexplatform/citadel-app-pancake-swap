@@ -42,10 +42,10 @@ const Swap = (props) => {
 	}
 	
 	useEffect(() => {
-		// props.updateTradeInfo(1,isExactIn)
+		//props.updateTradeInfo(1,isExactIn)
 		props.setFromAmount(formattedAmounts['INPUT'])
 		props.setToAmount(formattedAmounts['OUTPUT'])
-		console.log(fromToken.balance,toToken.balance ,'--fromToken.balance && toToken.balance ')
+		//console.log(fromToken.balance,toToken.balance ,'--fromToken.balance && toToken.balance ')
 		//setLoader(fromToken.balance || toToken.balance ? true : false)
 	},[fromToken,toToken])
 	return (

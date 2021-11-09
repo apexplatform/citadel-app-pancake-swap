@@ -17,10 +17,11 @@ const MainPanel = (props) => {
 		<ModalRoot activeModal={activeModal}>
 		  <ModalPage id="errors"   dynamicContentHeight onClose={() => props.setActiveModal(null)}    header={
             <ModalPageHeader>
-              Error!
+              <span className='error-title'>Error!</span>
             </ModalPageHeader>
           }>
 			<p className='error-text'>{networkErrors}</p>
+            <button className='error-btn' onClick={() => props.setActiveModal(null)}>Ok</button>
 		  </ModalPage>
 		</ModalRoot>
 	  );
