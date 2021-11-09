@@ -114,3 +114,11 @@ export const addresses = [
 //         dispatch(setSwapStatus('enterAmount'))
 //     }
 // }
+
+// 1 - Error: Returned error: insufficient funds for transfer
+
+// 2 - Error: Returned error: operation is not available
+
+// 3 - PancakeLibrary: INSUFFICIENT_INPUT_AMOUNT
+
+// 4 - PancakeLibrary: INSUFFICIENT_OUTPUT_AMOUNT

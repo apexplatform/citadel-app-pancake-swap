@@ -7,13 +7,13 @@ import {setSlippageTolerance,setDeadline} from '../../store/actions/swapActions'
 import fileRoutes from '../../config/file-routes-config.json'
 import text from '../../text.json'
  const Settings = (props) => {
-    const [minute,setMinute] = useState(0)
-    const {slippageTolerance} = props.swapReducer
+    const [minute,setMinute] = useState('')
+    const {slippageTolerance,deadlineMin} = props.swapReducer
     const [currentProcent,setCurrentProcent] = useState(slippageTolerance)
     const procent = [1,3,5,20]
     const [IDname,setIDname] = useState('initial-procent')
     const save = () => {
-        setDeadline(minute)
+        props.setDeadline(minute)
         props.setSlippageTolerance(currentProcent);
         setIDname('initial-procent')
     }
@@ -39,8 +39,8 @@ import text from '../../text.json'
             <Div>
                 <h4>{text.DEADLINE_TEXT}</h4>
                 <div className='procent-row'>
-                    <button className='procent-btn' onClick={() => setMinute(20)}>20 min</button>
-                    <input className='deadline-input' type='number' value={minute} onChange={(e) => setMinute(e.target.value)}/>
+                    <button className='procent-btn' onClick={() => setMinute(deadlineMin)}>{deadlineMin} min</button>
+                    <input className='deadline-input' type='number' value={minute} onChange={(e) => setMinute(+e.target.value)}/>
                 </div>
             </Div>
             <Button stretched size="l" onClick={() => save()} className='save-btn'>

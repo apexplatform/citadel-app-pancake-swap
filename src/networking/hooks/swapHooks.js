@@ -289,11 +289,13 @@ export function tryParseAmount(value, currency) {
 	list.forEach(async(token) =>{
 		const contract = useTokenContract(token.address)
 		let balance = await contract?.balanceOf(currentWallet?.address)
+		console.log('----load token balances-----')
 		dispatch({
 			type: SET_TOKEN_LIST,
 			payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
 		})
 		if(initialLoader){
+			console.log('----initialLoader----')
 			if(token.symbol === 'XCT'){
 				dispatch({
 					type: SET_TO_TOKEN,
