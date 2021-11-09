@@ -100,9 +100,7 @@ export function tryParseAmount(value, currency) {
 			})
 		  : []
 	dispatch({type:SET_CALLS,payload: {chainId: 56,calls}})
-	console.log(calls,'---calls')
 	const results = dispatch(useCallsData(calls, options))
-	console.log(results,'---results')
 	const { currentBlock } = useBlock()
 	return results.map((result) => toCallState(result, contractInterface, fragment, currentBlock))
   }

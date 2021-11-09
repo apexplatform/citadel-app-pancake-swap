@@ -2,7 +2,7 @@ import {SET_PREPARE_TRANSFER_RESPONSE,SET_AMOUNT,SET_FROM_TOKEN,SET_TO_TOKEN, SE
 import models from '../../networking/models';
 import store from '../store';
 import {checkErrors} from './errorsActions'
-import {checkAmount, getTokenBalance, updateTradeInfo} from './swapActions'
+import {getTokenBalance, updateTradeInfo} from './swapActions'
 import axios from 'axios';
 import { addresses } from '../../data';
 export const setCurrentWallet = (wallet) => dispatch =>{
@@ -40,18 +40,15 @@ export const setFromToken = (token) => dispatch =>{
         type: SET_FROM_TOKEN,
         payload: token
     })
-    const {amount} = store.getState().walletReducer;
-    dispatch(checkAmount(amount,'INPUT'))
+    dispatch(updateTradeInfo(0,true))
 }
 
 export const setToToken = (token) => dispatch =>{
-    const {trade} = store.getState().swapReducer;
-    const outputAmount = trade?.outputAmount?.toExact() || 0
     dispatch({
         type: SET_TO_TOKEN,
         payload: token
     })
-    dispatch(checkAmount(outputAmount,'OUTPUT'))
+    dispatch(updateTradeInfo(0,false))
 }
 
 export const setFromAmount = (balance) => dispatch =>{
