@@ -1,4 +1,4 @@
-import {SET_POOL_INFO, SET_TOKEN_IN, SET_TOKEN_OUT,SET_SWAP_RATE, SET_SLIPPAGE, SET_INITIAL_RATE, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_ALLOWANCE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE, SET_PARSED_AMOUNT,SET_DEADLINE_MINUTE} from '../actions/types'
+import {SET_POOL_INFO, SET_TOKEN_IN, SET_TOKEN_OUT,SET_SWAP_RATE, SET_SLIPPAGE, SET_INITIAL_RATE, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_ALLOWANCE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE, SET_PARSED_AMOUNT,SET_DEADLINE_MINUTE, SET_FROM_TOKEN, SET_FIELD, SET_TIMER_APPROVE} from '../actions/types'
 const initialState = {
     poolInfo: {},
     tokenIn: {},
@@ -14,7 +14,9 @@ const initialState = {
     swapStatus: 'enterAmount',
     deadline: 0,
     deadlineMin: 20,
-    parsedAmount: 0
+    parsedAmount: 0,
+    independentField: 'INPUT',
+    timerApprove: false
 }
 export default function(state=initialState,action){
     switch (action.type){
@@ -22,6 +24,16 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 poolInfo: action.payload
+            }
+        case SET_TIMER_APPROVE:
+            return {
+                ...state,
+                timerApprove: action.payload
+            }
+        case SET_FIELD:
+            return {
+                ...state,
+                independentField: action.payload
             }
         case SET_DEADLINE_MINUTE:
             return {

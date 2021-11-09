@@ -21,6 +21,8 @@ export const SET_WALLETS = "SET_WALLETS"
 export const SET_GAS_PRICE = 'SET_GAS_PRICE'
 export const SET_TOKEN_LIST = 'SET_TOKEN_LIST'
 export const SET_EMPTY_TOKEN_LIST = "SET_EMPTY_TOKEN_LIST"
+export const SET_FIELD = 'SET_FIELD'
+export const SET_TIMER_APPROVE = 'SET_TIMER_APPROVE'
 // token types
 export const SET_TO_TOKEN = 'SET_TO_TOKEN'
 export const SET_SWAP_STATUS = 'SET_SWAP_STATUS'
