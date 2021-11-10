@@ -83,3 +83,13 @@
 #active-procent span{
     color: #818C99;
 }
+
+.procent-input{
+    background: #F7F8FA;
+    border: 1px solid #D3D9DE;
+    color: black;
+    border-radius: 25px;
+    font-size: 15px;
+    padding-left: 20px;
+    width: 23%;
+}

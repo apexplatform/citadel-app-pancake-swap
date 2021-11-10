@@ -73,7 +73,8 @@ export default class Wallet {
   getTokenBalances(){
     return loadTokenBalances()
   }
-  generateSwapTransaction(){
+  generateSwapTransaction(isExactIn){
+    console.log(isExactIn,'---isExactIn')
     const {auth_token} = store.getState().userReducer
     const {currentWallet,fromToken,amount,toToken} = store.getState().walletReducer;
     const {trade,deadline,slippageTolerance} = store.getState().swapReducer;
@@ -88,18 +89,18 @@ export default class Wallet {
     let body = null
     let meta_info = [
       {
-        title : "Swap from",
+        title : `Swap from ${!isExactIn ? '(estimated)' : ''}`,
         value : `${amount} ${fromToken.symbol}`,
         type : "text"
       },
       {
-        title : "Swap to (estimated)",
+        title : `Swap to ${isExactIn ? '(estimated)' : ''}`,
         value : `${BigNumber(call.args[1]).div(BigNumber(Math.pow(10,toToken.decimals)).toNumber())} ${toToken.symbol}`,
         type : "text"
       },
       {
         title : "Slipadge tolerance",
-        value : `${priceImpactWithoutFee.lessThan(ONE_BIPS) ? '<0.01%' : priceImpactWithoutFee.toFixed(2)}%`,
+        value : `${priceImpactWithoutFee.lessThan(ONE_BIPS) ? '0.01%' : priceImpactWithoutFee.toFixed(2)}%`,
         type : "text"
       }     
     ]
@@ -147,12 +148,12 @@ export default class Wallet {
         value : {
           text: "PancakeSwap: Router v2",
           url: "https://bscscan.com/address/0x10ed43c718714eb63d5aa57b78b54704e256024e",
-          type : "textWithURL"
-        }
+        },
+        type : "textWithURL"
       },
       {
         title : "Approve amount",
-        value : BigNumber(ethers.constants.MaxUint256._hex).toFixed(),
+        value : 'Max',
         type : "text"
       } 
     ]

@@ -10,7 +10,7 @@ import text from '../../text.json'
     const [minute,setMinute] = useState('')
     const {slippageTolerance,deadlineMin} = props.swapReducer
     const [currentProcent,setCurrentProcent] = useState(slippageTolerance)
-    const procent = [1,3,5,20]
+    const procent = [1,3,5]
     const [IDname,setIDname] = useState('initial-procent')
     const save = () => {
         props.setDeadline(minute)
@@ -34,6 +34,7 @@ import text from '../../text.json'
                     {procent.map((item) => (
                         <button key={item} id={+currentProcent === +item ? IDname : undefined} className='procent-btn' onClick={() => { setCurrentProcent(item);setIDname('active-procent')}}>{item} <span>%</span></button>
                     ))}
+                    <input value={currentProcent} className='procent-input' onChange={(e) => { setCurrentProcent(+e.target.value)}}></input>
                 </div>
             </Div>
             <Div>

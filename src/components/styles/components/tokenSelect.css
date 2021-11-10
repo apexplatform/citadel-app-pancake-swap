@@ -21,10 +21,11 @@
 }
 .token-name{
     font-family: Panton;
+    position: absolute;
+    left: 45px;
 }
 
 .right-arrow{
     position: absolute;
     right: 0;
-    left: 94%;
 }

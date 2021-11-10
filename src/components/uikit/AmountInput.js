@@ -10,7 +10,7 @@ import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
-    const [currencyOffset,setCurrencyOffset] = [props.amount?.toString().length * 9 + 5 || 30]
+    const [currencyOffset,setCurrencyOffset] = [props.amount?.toString().length * 9 || 30]
     const {currentWallet,fromToken,toToken,amount} = props.walletReducer
     const {allowanceAmount,slippageTolerance,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
@@ -32,7 +32,7 @@ const AmountInput = (props) => {
         props.setField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
         if(+val > 0){
-           // console.log(+val , +balance - feeProcent,'--+val < +balance - feeProcent')
+            console.log(+val , +balance - feeProcent,'--+val < +balance - feeProcent')
             props.updateTradeInfo(val,props.name === 'INPUT' ? true : false)
             props.setToAmount(outputAmount)
             if(+val > balance){

@@ -67,10 +67,10 @@ export const checkTokenAllowance = () => dispatch =>{
     dispatch(wallet.getTokenAllowance())
 }
 
-export const prepareSwapTransfer  = () => async(dispatch) => {
+export const prepareSwapTransfer  = (isExactIn) => async(dispatch) => {
     const wallet = getWalletConstructor()
     await dispatch(wallet.getBlockNumber())
-    const transaction = wallet.generateSwapTransaction()
+    const transaction = wallet.generateSwapTransaction(isExactIn)
     wallet.prepareTransfer(transaction).then((response) => {
         if(response?.ok){
             return dispatch ({

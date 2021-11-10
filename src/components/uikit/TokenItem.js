@@ -26,11 +26,11 @@ const TokenItem = (props) => {
                     <img src={props.item?.logoURI} alt ='icon' onError={(e) => {e.target.src='/img/coins/eth.svg'}}/>
                 </div>
                 <div className="token-content">
-                    <p className="token-name">{props.item.name}</p>
+                    <p className="token-symbol">{props.item.name}</p>
                 </div>
                 {props.withAmount &&
                 <div className="token-amount-block">
-                    <p className="token-name">{balance || 0}</p>
+                    <p className="token-symbol">{balance || 0}</p>
                     <span>{props.item.symbol}</span>
                 </div>}
             </div>

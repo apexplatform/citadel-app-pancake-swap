@@ -12,11 +12,11 @@ const SwapButton = (props) => {
 	return (
         <Group>
             {swapStatus == 'swap' &&
-            <Div className='swap-btn' onClick={() => props.prepareSwapTransfer()}>
+            <Div className='swap-btn' onClick={() => props.prepareSwapTransfer(props.isExactIn)}>
                 <span>Swap</span>
             </Div>}
             {swapStatus == 'swapAnyway' &&
-            <Div className='swap-btn swap-anyway-btn' onClick={() => props.prepareSwapTransfer()}>
+            <Div className='swap-btn swap-anyway-btn' onClick={() => props.prepareSwapTransfer(props.isExactIn)}>
                 <span>Swap Anyway</span>
             </Div>}
             {swapStatus == 'loading' &&
@@ -47,7 +47,7 @@ const SwapButton = (props) => {
                     <Div className='swap-btn' onClick={() => props.prepareApprove()} id={!approve ? "disabled-btn" : undefined}>
                         <span>Approve {fromToken.symbol}</span>
                     </Div>
-                    <Div className='swap-btn' onClick={() => !approve ? props.prepareSwapTransfer() : null }  id={approve ? "disabled-btn" : undefined}>
+                    <Div className='swap-btn' onClick={() => !approve ? props.prepareSwapTransfer(props.isExactIn) : null }  id={approve ? "disabled-btn" : undefined}>
                         <span>Swap</span>
                     </Div>
                 </div>

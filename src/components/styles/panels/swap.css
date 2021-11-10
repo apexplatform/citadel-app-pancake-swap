@@ -11,10 +11,10 @@
     border-radius: 6px;
 }
 .swap-row .token-container{
-    width: 32%;
+    width: 42%;
 }
 .swap-row .amount-container{
-    width: 60%;
+    width: 50%;
 }
 .swap-column{
     display: flex;

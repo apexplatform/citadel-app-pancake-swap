@@ -32,7 +32,6 @@ const Swap = (props) => {
 		[independentField]: amount,
 		[dependentField]: +amount != 0 ? parsedAmounts[dependentField]?.toSignificant(6) || 0 : '0',
 	}
-	//console.log(formattedAmounts,'---formattedAmounts')
 	const reverseTokens = () => {
 		setIndependentField(dependentField)
 		setExactIn(!isExactIn)
@@ -77,7 +76,7 @@ const Swap = (props) => {
 				</FormItem>
 			</div>
 			<FeeInfoBlock rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
-			<SwapButton />
+			<SwapButton isExactIn={isExactIn}/>
 			</>
 			: <Loader id='centered-loader'/> }
 		</Group>
