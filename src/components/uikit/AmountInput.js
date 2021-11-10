@@ -5,41 +5,36 @@ import BigNumber from 'bignumber.js';
 import fileRoutes from '../../config/file-routes-config.json'
 import {connect} from 'react-redux'
 import Updater from '../../networking/utils/updater'
-import {setRateAmount,updateTradeInfo, setSwapStatus,checkTokenAllowance} from '../../store/actions/swapActions'
+import {setRateAmount,updateTradeInfo, setSwapStatus,checkTokenAllowance,setIndependentField} from '../../store/actions/swapActions'
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
-    const [currencyOffset,setCurrencyOffset] = [props.amount?.toString().length * 9 || 30]
+    const [currencyOffset,setCurrencyOffset] = [props.amount?.toString().length * 9 + 5 || 30]
     const {currentWallet,fromToken,toToken,amount} = props.walletReducer
     const {allowanceAmount,slippageTolerance,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
-    const outputAmount = trade?.outputAmount?.toExact() || 0
     const showFee = props.hideFee || false
     const coin = currentWallet?.network.toUpperCase()
     const feeProcent = +props.fee || 0.001
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const getBalance = () => {
         if(fromToken.symbol === 'BNB') return currentWallet?.balance?.mainBalance
-        if(props.name === 'INPUT' && fromToken.balance) return fromToken.balance
-       // else if (props.name === 'INPUT') return fromTokenAmount
-        if(props.name === 'OUTPUT' && toToken.balance) return toToken.balance
-       // else if(props.name === 'OUTPUT') return toTokenAmount
+        if(fromToken.balance) return fromToken.balance
+        return 0
+       // if(props.name === 'OUTPUT' && toToken.balance) return toToken.balance
     }
     const balance = getBalance()
     const checkAmount = (val) => {
         props.setAmount(val)
-        props.setField(props.name)
+        props.setIndependentField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
         if(+val > 0){
-            console.log(+val , +balance - feeProcent,'--+val < +balance - feeProcent')
             props.updateTradeInfo(val,props.name === 'INPUT' ? true : false)
-            props.setToAmount(outputAmount)
-            if(+val > balance){
+            console.log(+props.inputAmount,'--inputAmount',props.amount)
+            if((props.name === 'INPUT' && +val > balance) || (props.name === 'OUTPUT' && +props.inputAmount > balance) ){
                 props.setSwapStatus('insufficientBalance')
-            }
-           
-            else if(+val <= +balance - feeProcent){
+            } else if((props.name === 'INPUT' && +val <= +balance - feeProcent) || (props.name === 'OUTPUT' && +props.inputAmount <= +balance - feeProcent)){
                 if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))) > +val || fromToken.symbol === 'BNB'){
                     if(parseFloat(props.slippage?.toFixed(2)||0) < +slippageTolerance){
                         props.setSwapStatus('swap')
@@ -81,7 +76,7 @@ const AmountInput = (props) => {
           clearInterval(interval);
         }
         return () => clearInterval(interval);
-      }, [isActive,allowanceAmount]);
+      }, [isActive,allowanceAmount,trade]);
     
     return(
         <div className='amount-container'>
@@ -112,4 +107,4 @@ const mapStateToProps=(state)=>({
     swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {checkTokenAllowance,setSwapStatus,setAmount,updateTradeInfo,setRateAmount,setToAmount}) (AmountInput);
+export default connect(mapStateToProps, {setIndependentField,checkTokenAllowance,setSwapStatus,setAmount,updateTradeInfo,setRateAmount,setToAmount}) (AmountInput);

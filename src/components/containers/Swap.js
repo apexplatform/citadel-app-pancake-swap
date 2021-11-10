@@ -3,7 +3,7 @@ import { FormItem,Div,Group } from '@vkontakte/vkui';
 import '../styles/panels/swap.css'
 import AmountInput from '../uikit/AmountInput'
 import TokenSelect from '../uikit/TokenSelect'
-import {swapTokens,updateTradeInfo,checkTokenAllowance} from '../../store/actions/swapActions'
+import {swapTokens,updateTradeInfo,checkTokenAllowance,setIndependentField} from '../../store/actions/swapActions'
 import {setSelectedToken} from '../../store/actions/walletActions'
 import Header from '../uikit/Header'
 import {computeTradePriceBreakdown} from '../../networking/utils/price'
@@ -16,8 +16,8 @@ import SwapButton from '../uikit/SwapButton'
 const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
 	const [loader, setLoader] = useState(true)
-	const [independentField, setIndependentField] = useState('INPUT')
-	const {trade,parsedAmount} = props.swapReducer
+//	const [independentField, setIndependentField] = useState('INPUT')
+	const {trade,parsedAmount,independentField} = props.swapReducer
 	const {fromToken,toToken,currentWallet, amount} = props.walletReducer
 	const showFee = fromToken?.symbol?.toLowerCase() === currentWallet?.symbol
 	const showFee2 = toToken?.symbol?.toLowerCase() === currentWallet?.symbol
@@ -32,8 +32,10 @@ const Swap = (props) => {
 		[independentField]: amount,
 		[dependentField]: +amount != 0 ? parsedAmounts[dependentField]?.toSignificant(6) || 0 : '0',
 	}
+	console.log(formattedAmounts,'---formattedAmounts')
+	console.log(independentField,'---independentField',dependentField)
 	const reverseTokens = () => {
-		setIndependentField(dependentField)
+		props.setIndependentField(dependentField)
 		setExactIn(!isExactIn)
 		props.setFromToken(toToken)
 		props.setToToken(fromToken)
@@ -56,7 +58,7 @@ const Swap = (props) => {
 				<FormItem top={"From" + (independentField === 'OUTPUT' ? ' (estimated)' : '') } className='formTokenItem' onClick={() => props.setSelectedToken('from')}>
 					<div className='swap-row'>
 						<TokenSelect selectedToken={fromToken}/>
-						<AmountInput setExactIn={setExactIn}  name='INPUT' setField={setIndependentField} slippage={priceImpactWithoutFee} hideFee={!showFee} hideMax={true} amount={formattedAmounts['INPUT']} fee={realizedLPFee?.toSignificant(4)} isExactIn={isExactIn}/>
+						<AmountInput inputAmount={formattedAmounts['OUTPUT']} setExactIn={setExactIn}  name='INPUT' setField={setIndependentField} slippage={priceImpactWithoutFee} hideFee={!showFee} hideMax={true} amount={formattedAmounts['INPUT']} fee={realizedLPFee?.toSignificant(4)} isExactIn={isExactIn}/>
 					</div>
 				</FormItem>
 			</div>
@@ -71,7 +73,7 @@ const Swap = (props) => {
 				<FormItem top={"To" + (independentField === 'INPUT' ? ' (estimated)' : '')} className='formTokenItem' onClick={() => props.setSelectedToken('to')}>
 					<div className='swap-row'>
 						<TokenSelect selectedToken={toToken}/>
-						<AmountInput setExactIn={setExactIn} setField={setIndependentField} name='OUTPUT' slippage={priceImpactWithoutFee} isExactIn={isExactIn} isSecond={true} hideMax={false} hideFee={!showFee2}  fee={realizedLPFee?.toSignificant(4)} amount={formattedAmounts['OUTPUT']}/>
+						<AmountInput setExactIn={setExactIn} inputAmount={formattedAmounts['INPUT']} setField={setIndependentField} name='OUTPUT' slippage={priceImpactWithoutFee} isExactIn={isExactIn} isSecond={true} hideMax={false} hideFee={!showFee2}  fee={realizedLPFee?.toSignificant(4)} amount={formattedAmounts['OUTPUT']}/>
 					</div>
 				</FormItem>
 			</div>
@@ -87,4 +89,4 @@ const mapStateToProps=(state)=>({
 	swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {checkTokenAllowance,setAmount,updateTradeInfo,swapTokens,setToAmount,setSelectedToken,setFromToken,setToToken,setFromAmount}) (Swap);
+export default connect(mapStateToProps, {setIndependentField,checkTokenAllowance,setAmount,updateTradeInfo,swapTokens,setToAmount,setSelectedToken,setFromToken,setToToken,setFromAmount}) (Swap);
