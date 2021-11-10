@@ -30,7 +30,7 @@ const Swap = (props) => {
       }
 	const formattedAmounts = {
 		[independentField]: amount,
-		[dependentField]: +amount != 0 ? parsedAmounts[dependentField]?.toSignificant(6) : '0',
+		[dependentField]: +amount != 0 ? parsedAmounts[dependentField]?.toSignificant(6) || 0 : '0',
 	}
 	//console.log(formattedAmounts,'---formattedAmounts')
 	const reverseTokens = () => {

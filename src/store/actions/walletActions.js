@@ -33,7 +33,7 @@ export const setAmount = (amount) => dispatch =>{
 }
 
 export const setSelectedToken = (token) => dispatch =>{
-    dispatch(getTokenBalance())
+   // dispatch(getTokenBalance())
     dispatch({
         type: SET_TOKEN,
         payload: token
@@ -42,19 +42,21 @@ export const setSelectedToken = (token) => dispatch =>{
 }
 
 export const setFromToken = (token) => dispatch =>{
+    const {amount} = store.getState().walletReducer
     dispatch({
         type: SET_FROM_TOKEN,
         payload: token
     })
-    dispatch(updateTradeInfo(0,true))
+    dispatch(updateTradeInfo(amount,true))
 }
 
 export const setToToken = (token) => dispatch =>{
+    const {toTokenAmount} = store.getState().walletReducer
     dispatch({
         type: SET_TO_TOKEN,
         payload: token
     })
-    dispatch(updateTradeInfo(0,false))
+    dispatch(updateTradeInfo(toTokenAmount,false))
 }
 
 export const setFromAmount = (balance) => dispatch =>{
