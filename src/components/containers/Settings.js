@@ -7,7 +7,9 @@ import {setSlippageTolerance,setDeadline} from '../../store/actions/swapActions'
 import fileRoutes from '../../config/file-routes-config.json'
 import text from '../../text.json'
  const Settings = (props) => {
-    const [minute,setMinute] = useState('')
+    const [minute,setMinute] = useState(0)
+    const [procentWidth,setProcentWidth] = useState(-100)
+    const [minuteWidth,setMinuteWidth] = useState(-330)
     const {slippageTolerance,deadlineMin} = props.swapReducer
     const [currentProcent,setCurrentProcent] = useState(slippageTolerance)
     const procent = [1,3,5]
@@ -34,14 +36,16 @@ import text from '../../text.json'
                     {procent.map((item) => (
                         <button key={item} id={+currentProcent === +item ? IDname : undefined} className='procent-btn' onClick={() => { setCurrentProcent(item);setIDname('active-procent')}}>{item} <span>%</span></button>
                     ))}
-                    <input value={currentProcent} className='procent-input' onChange={(e) => { setCurrentProcent(+e.target.value)}}></input>
+                    <input value={currentProcent} className='procent-input' onChange={(e) => { setCurrentProcent(+e.target.value);setProcentWidth(-95 + (e.target.value.length * 7))}}></input>
+                    <span className='procent-span' style={{left: `${procentWidth}px`}}>%</span>
                 </div>
             </Div>
             <Div>
                 <h4>{text.DEADLINE_TEXT}</h4>
                 <div className='procent-row'>
                     <button className='procent-btn' onClick={() => setMinute(deadlineMin)}>{deadlineMin} min</button>
-                    <input className='deadline-input' type='number' value={minute} onChange={(e) => setMinute(+e.target.value)}/>
+                    <input className='deadline-input' type='number' value={minute} onChange={(e) => { setMinute(+e.target.value); setMinuteWidth(-340 + (e.target.value.length * 7))}}/>
+                    <span className='minute-span' style={{left: `${minuteWidth}px`}}>min</span>
                 </div>
             </Div>
             <Button stretched size="l" onClick={() => save()} className='save-btn'>

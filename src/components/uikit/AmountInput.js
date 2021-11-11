@@ -14,7 +14,7 @@ const AmountInput = (props) => {
     const {currentWallet,fromToken,toToken,amount} = props.walletReducer
     const {allowanceAmount,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
-    const showFee = props.hideFee || false
+    const showFee = false
     const coin = currentWallet?.network.toUpperCase()
 
     const { realizedLPFee } = computeTradePriceBreakdown(trade)
@@ -38,8 +38,8 @@ const AmountInput = (props) => {
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-            console.log(+balance,feeProcent,'---+balance-----feeProcent')
             props.updateTradeInfo(+balance-feeProcent, props.name === 'INPUT' ? true : false)
+            console.log(+balance,feeProcent,'---+balance-----feeProcent')
             checkAmount(+balance-feeProcent)
         }
     }
@@ -67,7 +67,7 @@ const AmountInput = (props) => {
                 {showMax && <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>}
             </div>
          
-            {!showFee &&
+            {showFee &&
             <div className='fee-container'>
 				<h5>{text.FEE_TEXT}</h5>
 				<span className='fee-amount'>{feeProcent} </span>

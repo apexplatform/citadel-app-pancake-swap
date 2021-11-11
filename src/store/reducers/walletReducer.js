@@ -9,7 +9,7 @@ const initialState = {
     wallets: null,
     toAddress: null,
     amount: 0,
-    tokenList: {...Currency.ETHER, logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, 
+    tokenList: {...Currency.ETHER,symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, 
     networks: [],
     fromToken: tokens[2],
     toToken: tokens[1],

@@ -74,9 +74,8 @@ export default class Wallet {
     return loadTokenBalances()
   }
   generateSwapTransaction(isExactIn){
-    console.log(isExactIn,'---isExactIn')
     const {auth_token} = store.getState().userReducer
-    const {currentWallet,fromToken,amount,toToken} = store.getState().walletReducer;
+    const {currentWallet,fromToken,amount,toToken,toTokenAmount} = store.getState().walletReducer;
     const {trade,deadline,slippageTolerance} = store.getState().swapReducer;
     const BIPS_BASE = JSBI.BigInt(10000)
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
@@ -95,12 +94,12 @@ export default class Wallet {
       },
       {
         title : `Swap to ${isExactIn ? '(estimated)' : ''}`,
-        value : `${BigNumber(call.args[1]).div(BigNumber(Math.pow(10,toToken.decimals)).toNumber())} ${toToken.symbol}`,
+        value : `${toTokenAmount} ${toToken.symbol}`,
         type : "text"
       },
       {
         title : "Slipadge tolerance",
-        value : `${priceImpactWithoutFee.lessThan(ONE_BIPS) ? '0.01%' : priceImpactWithoutFee.toFixed(2)}%`,
+        value : `${priceImpactWithoutFee.lessThan(ONE_BIPS) ? '0.01' : priceImpactWithoutFee.toFixed(2)}%`,
         type : "text"
       }     
     ]

@@ -62,12 +62,12 @@ export const setSlippageTolerance = (procent) => dispatch =>{
 
 export const getTokenBalance = () => async(dispatch) =>{
     const wallet = getWalletConstructor()
-    dispatch(wallet.getBlockNumber())
     dispatch({
         type: SET_EMPTY_TOKEN_LIST,
         payload: []
     })
     await dispatch(wallet.getTokenBalances())
+    dispatch(wallet.getBlockNumber())
 }
 
 export const checkTokenAllowance = () => dispatch =>{

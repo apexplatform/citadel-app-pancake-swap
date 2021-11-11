@@ -18,8 +18,8 @@ const Swap = (props) => {
 	const [loader, setLoader] = useState(true)
 	const {trade,parsedAmount,independentField,allowanceAmount} = props.swapReducer
 	const {fromToken,toToken,currentWallet, amount} = props.walletReducer
-	const showFee = fromToken?.symbol?.toLowerCase() === currentWallet?.symbol
-	const showFee2 = toToken?.symbol?.toLowerCase() === currentWallet?.symbol
+	const showFee = fromToken?.symbol?.toLowerCase() === currentWallet?.code
+	const showFee2 = toToken?.symbol?.toLowerCase() === currentWallet?.code
 	const dependentField = independentField === 'INPUT' ? 'OUTPUT' : 'INPUT'
 	const formattedPrice = isExactIn ? trade?.executionPrice?.toSignificant(6) : trade?.executionPrice?.invert()?.toSignificant(6)
 	const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
