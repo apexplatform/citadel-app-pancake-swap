@@ -25,7 +25,7 @@
 
 .token-symbol{
     font-size: 16px;
-    font-family: 'Panton Medium';
+    font-weight: 400;
 }
 
 .token-amount-block{
@@ -37,14 +37,14 @@
 
 .token-amount-block p{
     color: #792EC0;
-    font-family: 'Panton Bold';
+    font-weight: 500;
     font-size: 16px;
     margin-right: 5px;
 }
 
 .token-amount-block span{
     color: #818C99;
-    font-family: 'Panton';
+    font-family: 'Roboto';
     font-size: 16px;
 }
 

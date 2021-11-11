@@ -38,7 +38,7 @@
 
 .transactions-amount{
     font-size: 17px;
-    font-family: 'Panton Bold';
+    font-weight: 500;
 }
 .transactions-amount-send{
     color: #4BB34B;

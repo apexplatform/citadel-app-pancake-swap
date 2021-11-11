@@ -33,13 +33,13 @@
 .address-name{
     margin: 0 5px 0 0;
     font-size: 16px;
-    font-family: 'Panton Medium';
+    font-weight: 400;
     line-height: 22px;
 }
 
 .address-item .address{
     color: #818C99;
-    font-family: 'Panton Medium';
+    font-weight: 400;
     line-height: 22px;
 }
 

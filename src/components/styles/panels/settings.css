@@ -27,12 +27,12 @@
     height: 40px;
     margin-right: 15px;
     border: none;
-    font-family: 'Panton Medium';
+    font-weight: 500;
 }
 
 .settings-panel h4{
     color: #28436E;
-    font-family: 'Panton Medium';
+    font-weight: 500;
     font-size: 18px;
     margin-top: 0;
     margin-bottom: 10px;

@@ -2,7 +2,7 @@
     font-weight: 700;
     font-size: 16px;
     line-height: 20px;
-    font-family: 'Panton Bold';
+    font-weight: 500;
 }
 
 .transaction-details{
@@ -15,27 +15,28 @@
 }
 .description-text{
     color: #818C99;
+    font-weight: 300;
 }
 
 .transactions-status{
     font-size: 18px;
-    font-family: 'Panton Bold';
+    font-weight: 500;
     color: #4BB34B;
 }
 .transactions-status-failed{
     font-size: 18px;
-    font-family: 'Panton Bold';
+    font-weight: 500;
     color: #E64646;
 }
 .transactions-details-fee{
     font-size: 18px;
-    font-family: 'Panton Bold';
+    font-weight: 500;
 }
 
 .transaction-details-header{
     text-transform: capitalize;
     text-align: center;
-    font-family: 'Panton Medium';
+    font-weight: 400;
 }
 
 .transactions-block{

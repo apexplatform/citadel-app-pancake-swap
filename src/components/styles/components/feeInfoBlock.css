@@ -25,12 +25,12 @@
 }
 
 .fee-text-bold{
-    font-family: 'Panton Bold';
+    font-weight: 500;
     color: #000 !important;
 }
 
 .fee-amount-bold{
-    font-family: 'Panton Bold';
+    font-weight: 500;
     color: #792EC0 !important;
 }
 

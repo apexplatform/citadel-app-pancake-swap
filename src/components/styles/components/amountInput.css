@@ -15,7 +15,7 @@
     color: #67A5EB;
     font-size: 15px;
     margin-right: 4px;
-    font-family: 'Panton Bold';
+    font-weight: 500;
 }
 .max-btn{
     padding: 0px 16px;
@@ -47,7 +47,7 @@
     font-size: 14px;
     line-height: 17px;
     color: #E64646;
-    font-family: 'Panton Medium';
+    font-weight: 400;
 }
 
 .fee-container img {
@@ -80,13 +80,13 @@ input[type=number] {
 .usd-container b{
     color: rgb(112, 170, 233);
     font-size: 14px;
-    font-family: 'Panton Medium';
+    font-weight: 400;
     margin-left: 3px;
 }
 .input-currency{
     position: relative;
     z-index: 10;
-    font-family: "Panton Medium";
+    font-weight: 400;
     font-size: 14px;
     margin-left: 10px;
     line-height: 17px;
