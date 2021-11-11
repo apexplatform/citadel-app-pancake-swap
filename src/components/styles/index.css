@@ -1,15 +1,3 @@
-@font-face {
-    font-family: Panton;
-    src: url(./panton/Panton.otf);
-}
-@font-face {
-    font-family: 'Panton Bold';
-    src: url(./panton/Panton\ Bold.otf);
-}
-@font-face {
-    font-family: 'Panton Medium';
-    src: url(./panton/Panton\ SemiBold.otf);
-}
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 body, * {
     font-family: Roboto;
