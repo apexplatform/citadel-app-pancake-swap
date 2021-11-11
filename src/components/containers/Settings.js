@@ -8,7 +8,7 @@ import fileRoutes from '../../config/file-routes-config.json'
 import text from '../../text.json'
  const Settings = (props) => {
     const [minute,setMinute] = useState(0)
-    const [procentWidth,setProcentWidth] = useState(-100)
+    const [procentWidth,setProcentWidth] = useState(-55)
     const [minuteWidth,setMinuteWidth] = useState(-330)
     const {slippageTolerance,deadlineMin} = props.swapReducer
     const [currentProcent,setCurrentProcent] = useState(slippageTolerance)
@@ -36,7 +36,7 @@ import text from '../../text.json'
                     {procent.map((item) => (
                         <button key={item} id={+currentProcent === +item ? IDname : undefined} className='procent-btn' onClick={() => { setCurrentProcent(item);setIDname('active-procent')}}>{item} <span>%</span></button>
                     ))}
-                    <input value={currentProcent} className='procent-input' onChange={(e) => { setCurrentProcent(+e.target.value);setProcentWidth(-95 + (e.target.value.length * 7))}}></input>
+                    <input value={currentProcent} className='procent-input' onChange={(e) => { setCurrentProcent(+e.target.value);setProcentWidth(-55 + (e.target.value.length * 7))}}></input>
                     <span className='procent-span' style={{left: `${procentWidth}px`}}>%</span>
                 </div>
             </Div>

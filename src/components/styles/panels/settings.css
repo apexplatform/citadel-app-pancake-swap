@@ -93,9 +93,9 @@
     color: black;
     border-radius: 25px;
     font-size: 15px;
-    padding-left: 20px;
     width: 23%;
     position: relative;
+    text-align: center;
 }
 
 .procent-span{
