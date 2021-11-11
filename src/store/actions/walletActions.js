@@ -1,4 +1,4 @@
-import {SET_PREPARE_TRANSFER_RESPONSE,SET_AMOUNT,SET_FROM_TOKEN,SET_TO_TOKEN, SET_FROM_TOKEN_AMOUNT, SET_TO_AMOUNT, SET_TO_ADDRESS,SET_CURRENT_WALLET, SET_TOKEN, SET_NETWORKS, SET_WALLETS, SET_INITIAL_LOAD} from './types'
+import {SET_PREPARE_TRANSFER_RESPONSE,SET_AMOUNT,SET_FROM_TOKEN,SET_TO_TOKEN, SET_FROM_TOKEN_AMOUNT, SET_TO_AMOUNT, SET_TO_ADDRESS,SET_CURRENT_WALLET,SET_EMPTY_TOKEN_LIST, SET_TOKEN, SET_NETWORKS, SET_WALLETS, SET_INITIAL_LOAD} from './types'
 import models from '../../networking/models';
 import store from '../store';
 import {checkErrors} from './errorsActions'
@@ -33,7 +33,11 @@ export const setAmount = (amount) => dispatch =>{
 }
 
 export const setSelectedToken = (token) => dispatch =>{
-   // dispatch(getTokenBalance())
+    dispatch({
+        type: SET_EMPTY_TOKEN_LIST,
+        payload: []
+    })
+    dispatch(getTokenBalance())
     dispatch({
         type: SET_TOKEN,
         payload: token

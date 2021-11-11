@@ -1,8 +1,9 @@
 import {getWalletConstructor, setToToken} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
+import BigNumber from 'bignumber.js';
 import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD } from './types'
-
+import {computeTradePriceBreakdown} from '../../networking/utils/price'
 export const setRateAmount = (amount) => dispatch =>{
     dispatch({
         type: SET_RATE_AMOUT,
@@ -127,7 +128,6 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
     try{
         const wallet = getWalletConstructor()
         if(wallet){
-            console.log(isExactIn,amount,'---amount')
             const {fromToken,toToken} = store.getState().walletReducer
             const {swapStatus} = store.getState().swapReducer
             const inputCurrency = wallet.getCurrency(fromToken.address || fromToken.symbol)
@@ -150,4 +150,36 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
         dispatch(checkErrors(err))
        // console.log(err)
     }
+}
+
+export const checkSwapStatus = (amount,setIsactive = () => {}) => dispatch => {
+    const balance = dispatch(getFromBalance())
+    const {trade,allowanceAmount,slippageTolerance} = store.getState().swapReducer
+    const {fromToken} = store.getState().walletReducer
+    const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
+    const feeProcent = +realizedLPFee?.toSignificant(4) || 0.001
+    console.log(+amount , +balance ,feeProcent,'---+amount --+balance -- feeProcent')
+    if(+amount > +balance){
+        dispatch(setSwapStatus('insufficientBalance'))
+    } else if(+amount <= +balance - feeProcent){
+                if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))).toNumber() > +amount || fromToken.symbol === 'BNB'){
+                    if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
+                        dispatch(setSwapStatus('swap'))
+                    }else{
+                        dispatch(setSwapStatus('swapAnyway'))
+                    }
+                } else {
+                    setIsactive()
+                    dispatch(setSwapStatus('approve'))
+                }
+            } else {
+                dispatch(setSwapStatus('feeError'))
+            }
+}
+
+export const getFromBalance = () => dispatch =>  {
+    const {fromToken,currentWallet} = store.getState().walletReducer
+    if(fromToken.symbol === 'BNB') return currentWallet?.balance?.mainBalance
+    if(fromToken.balance) return fromToken.balance
+    return 0
 }

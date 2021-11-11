@@ -1,65 +1,46 @@
 import { useState,useEffect } from 'react'
 import '../styles/components/amountInput.css'
 import text from '../../text.json'
-import BigNumber from 'bignumber.js';
 import fileRoutes from '../../config/file-routes-config.json'
 import {connect} from 'react-redux'
 import Updater from '../../networking/utils/updater'
-import {setRateAmount,updateTradeInfo, setSwapStatus,checkTokenAllowance,setIndependentField} from '../../store/actions/swapActions'
+import {computeTradePriceBreakdown} from '../../networking/utils/price'
+import {setRateAmount,updateTradeInfo,checkSwapStatus, setSwapStatus,checkTokenAllowance,setIndependentField,getFromBalance} from '../../store/actions/swapActions'
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
     const [currencyOffset,setCurrencyOffset] = [props.amount?.toString().length * 9 + 5 || 30]
     const {currentWallet,fromToken,toToken,amount} = props.walletReducer
-    const {allowanceAmount,slippageTolerance,trade,swapStatus} = props.swapReducer
+    const {allowanceAmount,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
     const showFee = props.hideFee || false
     const coin = currentWallet?.network.toUpperCase()
-    const feeProcent = +props.fee || 0.001
+
+    const { realizedLPFee } = computeTradePriceBreakdown(trade)
+    const feeProcent = +props.fee || 0.02
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
-    const getBalance = () => {
-        if(fromToken.symbol === 'BNB') return currentWallet?.balance?.mainBalance
-        if(fromToken.balance) return fromToken.balance
-        return 0
-       // if(props.name === 'OUTPUT' && toToken.balance) return toToken.balance
-    }
-    const balance = getBalance()
+    const balance = props.getFromBalance()
     const checkAmount = (val) => {
         props.setAmount(val)
         props.setIndependentField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
         if(+val > 0){
             props.updateTradeInfo(val,props.name === 'INPUT' ? true : false)
-            console.log(+props.inputAmount,'--inputAmount',props.amount)
-            if((props.name === 'INPUT' && +val > balance) || (props.name === 'OUTPUT' && +props.inputAmount > balance) ){
-                props.setSwapStatus('insufficientBalance')
-            } else if((props.name === 'INPUT' && +val <= +balance - feeProcent) || (props.name === 'OUTPUT' && +props.inputAmount <= +balance - feeProcent)){
-                if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))) > +val || fromToken.symbol === 'BNB'){
-                    if(parseFloat(props.slippage?.toFixed(2)||0) < +slippageTolerance){
-                        props.setSwapStatus('swap')
-                    }else{
-                        props.setSwapStatus('swapAnyway')
-                    }
-                } else {
-                    setIsactive(true)
-                    props.setSwapStatus('approve')
-                }
-            } else {
-                props.setSwapStatus('feeError')
-            }
+            props.checkSwapStatus(val,setIsactive)
         } else {
             props.setSwapStatus('enterAmount')
         }
     }
     const setMaxAmount = () => {
+        console.log(balance,'---balance')
         if(+balance-feeProcent < 0){
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-            checkAmount(+balance-feeProcent)
+            console.log(+balance,feeProcent,'---+balance-----feeProcent')
             props.updateTradeInfo(+balance-feeProcent, props.name === 'INPUT' ? true : false)
-         
+            checkAmount(+balance-feeProcent)
         }
     }
     useEffect(() => {
@@ -107,4 +88,4 @@ const mapStateToProps=(state)=>({
     swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {setIndependentField,checkTokenAllowance,setSwapStatus,setAmount,updateTradeInfo,setRateAmount,setToAmount}) (AmountInput);
+export default connect(mapStateToProps, {checkSwapStatus,setIndependentField,getFromBalance,checkTokenAllowance,setSwapStatus,setAmount,updateTradeInfo,setRateAmount,setToAmount}) (AmountInput);
