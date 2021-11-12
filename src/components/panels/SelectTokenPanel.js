@@ -12,7 +12,6 @@ const SelectTokenPanel = (props) => {
     const [loader, setLoader] = useState(tokenList.length > 10)
     const [token,searchToken] = useState('')
     useEffect(()=>{
-        setLoader(tokenList.length > 10)
         if(token.length > 0) {
             let arr = tokenList.filter(item => item.symbol.substr(0,token.length).toLowerCase() === token.toLowerCase() || item.name.substr(0,token.length).toLowerCase() === token.toLowerCase())
             setList(sortList(arr))
@@ -21,6 +20,7 @@ const SelectTokenPanel = (props) => {
         } else {
             setList(sortList(tokenList.filter(token => token.symbol !== fromToken.symbol)))
         }
+        setLoader(tokenList.length > 15)
     },[loader,tokenList,token])
     return(
         <Panel id={ROUTES.SELECT_ADDRESS}>

@@ -9,7 +9,7 @@ const initialState = {
     wallets: null,
     toAddress: null,
     amount: 0,
-    tokenList: {...Currency.ETHER,symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, 
+    tokenList: null, 
     networks: [],
     fromToken: tokens[2],
     toToken: tokens[1],
@@ -17,6 +17,7 @@ const initialState = {
     toTokenAmount: 0,
     initialLoader: true
 }
+
 export default function(state=initialState,action){
     switch (action.type){
         case SET_CURRENT_WALLET:
@@ -42,7 +43,7 @@ export default function(state=initialState,action){
         case SET_EMPTY_TOKEN_LIST:
             return {
                 ...state,
-                tokenList: [{...Currency.ETHER, logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}]
+                tokenList: []
             }
         case SET_TOKEN:
             return {

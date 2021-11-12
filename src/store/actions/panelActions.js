@@ -1,4 +1,4 @@
-import { SET_ACTIVE_PANEL, SET_ACTIVE_PAGE, SET_ACTIVE_MODAL } from "./types";
+import { SET_ACTIVE_PANEL, SET_ACTIVE_PAGE, SET_ACTIVE_MODAL, SET_LOADER } from "./types";
 
 export const setActivePanel = (panel) => dispatch =>{
     dispatch({
@@ -14,6 +14,12 @@ export const setActivePage = (page) => dispatch =>{
     })
 }
 
+export const setLoader = (status) => dispatch =>{
+    dispatch({
+        type: SET_LOADER,
+        payload: status
+    })
+}
 
 export const setActiveModal = (modal) => dispatch =>{
     dispatch({

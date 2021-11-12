@@ -4,10 +4,9 @@ import text from '../../text.json'
 import fileRoutes from '../../config/file-routes-config.json'
 import {connect} from 'react-redux'
 import Updater from '../../networking/utils/updater'
-import {computeTradePriceBreakdown} from '../../networking/utils/price'
 import {setRateAmount,updateTradeInfo,checkSwapStatus, setSwapStatus,checkTokenAllowance,setIndependentField,getFromBalance} from '../../store/actions/swapActions'
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
-
+import BigNumber from 'bignumber.js';
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
     const [currencyOffset,setCurrencyOffset] = [props.amount?.toString().length * 9 + 5 || 30]
@@ -16,8 +15,6 @@ const AmountInput = (props) => {
     const showMax = props.hideMax || false
     const showFee = false
     const coin = currentWallet?.network.toUpperCase()
-
-    const { realizedLPFee } = computeTradePriceBreakdown(trade)
     const feeProcent = +props.fee || 0.02
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const balance = props.getFromBalance()
@@ -40,7 +37,7 @@ const AmountInput = (props) => {
         }else{
             props.updateTradeInfo(+balance-feeProcent, props.name === 'INPUT' ? true : false)
             console.log(+balance,feeProcent,'---+balance-----feeProcent')
-            checkAmount(+balance-feeProcent)
+            checkAmount(BigNumber(+balance-feeProcent).toNumber())
         }
     }
     useEffect(() => {
@@ -57,7 +54,7 @@ const AmountInput = (props) => {
           clearInterval(interval);
         }
         return () => clearInterval(interval);
-      }, [isActive,allowanceAmount,trade]);
+      }, [isActive,allowanceAmount,trade,feeProcent]);
     
     return(
         <div className='amount-container'>

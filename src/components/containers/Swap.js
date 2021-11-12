@@ -4,18 +4,20 @@ import '../styles/panels/swap.css'
 import AmountInput from '../uikit/AmountInput'
 import TokenSelect from '../uikit/TokenSelect'
 import {swapTokens,updateTradeInfo,checkTokenAllowance,checkSwapStatus,setIndependentField,setSwapStatus} from '../../store/actions/swapActions'
+import BigNumber from 'bignumber.js';
 import {setSelectedToken} from '../../store/actions/walletActions'
 import Header from '../uikit/Header'
 import {computeTradePriceBreakdown} from '../../networking/utils/price'
 import {connect} from 'react-redux';
 import Icon from '../uikit/Icon'
 import Loader from '../uikit/Loader'
+import {setLoader} from '../../store/actions/panelActions'
 import {setFromToken,setToToken,setAmount,setFromAmount,setToAmount} from '../../store/actions/walletActions'
 import FeeInfoBlock from '../uikit/FeeInfoBlock'
 import SwapButton from '../uikit/SwapButton'
 const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
-	const [loader, setLoader] = useState(true)
+	const {loader} = props.panelReducer
 	const {trade,parsedAmount,independentField,allowanceAmount} = props.swapReducer
 	const {fromToken,toToken,currentWallet, amount} = props.walletReducer
 	const showFee = fromToken?.symbol?.toLowerCase() === currentWallet?.code
@@ -28,7 +30,7 @@ const Swap = (props) => {
         'OUTPUT': independentField === 'OUTPUT' ? parsedAmount : trade?.outputAmount,
       }
 	const formattedAmounts = {
-		[independentField]: amount,
+		[independentField]: BigNumber(amount).toNumber(),
 		[dependentField]: +amount != 0 ? parsedAmounts[dependentField]?.toSignificant(6) || 0 : '0',
 	}
 	const reverseTokens = () => {
@@ -43,7 +45,7 @@ const Swap = (props) => {
 		props.setToAmount(formattedAmounts['OUTPUT'])
 		//setLoader(fromToken.balance || toToken.balance ? true : false)
     	props.checkSwapStatus(formattedAmounts['INPUT'])
-	},[fromToken,toToken,trade,allowanceAmount])
+	},[fromToken,toToken,trade,allowanceAmount,loader])
 	return (
 		<Group className='swap-container'>
 			<Header title="Swap"/>
@@ -81,7 +83,8 @@ const Swap = (props) => {
 }
 const mapStateToProps=(state)=>({
 	walletReducer: state.walletReducer,
-	swapReducer: state.swapReducer
+	swapReducer: state.swapReducer,
+	panelReducer: state.panelReducer
 })
 
-export default connect(mapStateToProps, {checkSwapStatus,setSwapStatus,setIndependentField,checkTokenAllowance,setAmount,updateTradeInfo,swapTokens,setToAmount,setSelectedToken,setFromToken,setToToken,setFromAmount}) (Swap);
+export default connect(mapStateToProps, {setLoader,checkSwapStatus,setSwapStatus,setIndependentField,checkTokenAllowance,setAmount,updateTradeInfo,swapTokens,setToAmount,setSelectedToken,setFromToken,setToToken,setFromAmount}) (Swap);

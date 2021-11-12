@@ -75,7 +75,7 @@ export default class Wallet {
   }
   generateSwapTransaction(isExactIn){
     const {auth_token} = store.getState().userReducer
-    const {currentWallet,fromToken,amount,toToken,toTokenAmount} = store.getState().walletReducer;
+    const {currentWallet,fromToken,toToken,fromTokenAmount,toTokenAmount} = store.getState().walletReducer;
     const {trade,deadline,slippageTolerance} = store.getState().swapReducer;
     const BIPS_BASE = JSBI.BigInt(10000)
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
@@ -89,12 +89,12 @@ export default class Wallet {
     let meta_info = [
       {
         title : `Swap from ${!isExactIn ? '(estimated)' : ''}`,
-        value : `${amount} ${fromToken.symbol}`,
+        value : `${BigNumber(fromTokenAmount).toNumber()} ${fromToken.symbol}`,
         type : "text"
       },
       {
         title : `Swap to ${isExactIn ? '(estimated)' : ''}`,
-        value : `${toTokenAmount} ${toToken.symbol}`,
+        value : `${BigNumber(toTokenAmount).toNumber()} ${toToken.symbol}`,
         type : "text"
       },
       {
