@@ -14,6 +14,7 @@ import text from '../../text.json'
     const [currentProcent,setCurrentProcent] = useState(slippageTolerance)
     const procent = [1,3,5]
     const [IDname,setIDname] = useState('initial-procent')
+    const [activeOption,setActiveOption] = useState(false)
     const save = () => {
         props.setDeadline(minute)
         props.setSlippageTolerance(currentProcent);
@@ -43,8 +44,8 @@ import text from '../../text.json'
             <Div>
                 <h4>{text.DEADLINE_TEXT}</h4>
                 <div className='procent-row'>
-                    <button className='procent-btn' onClick={() => setMinute(deadlineMin)}>{deadlineMin} min</button>
-                    <input className='deadline-input' type='number' value={minute} onChange={(e) => { setMinute(+e.target.value); setMinuteWidth(-340 + (e.target.value.length * 7))}}/>
+                    <button id={activeOption ? 'active-procent' : undefined} className='procent-btn' onClick={() => {setMinute(deadlineMin);setActiveOption(true)}}>{deadlineMin} min</button>
+                    <input className='deadline-input' value={minute} onChange={(e) => { setMinute(+e.target.value); setMinuteWidth(-335 + (minute.toString().length * 7));setActiveOption(false)}}/>
                     <span className='minute-span' style={{left: `${minuteWidth}px`}}>min</span>
                 </div>
             </Div>
