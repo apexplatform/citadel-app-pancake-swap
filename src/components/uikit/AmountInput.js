@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react'
+import { useState,useEffect,useRef } from 'react'
 import '../styles/components/amountInput.css'
 import text from '../../text.json'
 import fileRoutes from '../../config/file-routes-config.json'
@@ -8,8 +8,9 @@ import {setRateAmount,updateTradeInfo,checkSwapStatus, setSwapStatus,checkTokenA
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 import BigNumber from 'bignumber.js';
 const AmountInput = (props) => {
+    const inputEl = useRef(null);
     const [hasError, setError] = useState(false)
-    const [currencyOffset,setCurrencyOffset] = [props.amount?.toString().length * 9 + 5 || 30]
+    const [currencyOffset,setCurrencyOffset] = [(props.amount?.toString().length + 1) * 9 || 30]
     const {currentWallet,fromToken,toToken,amount} = props.walletReducer
     const {allowanceAmount,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
@@ -19,6 +20,7 @@ const AmountInput = (props) => {
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const balance = props.getFromBalance()
     const checkAmount = (val) => {
+        //setCurrencyOffset(inputEl.clientWidth)
         props.setAmount(val)
         props.setIndependentField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
@@ -59,7 +61,7 @@ const AmountInput = (props) => {
     return(
         <div className='amount-container'>
             <div className='input-container' >
-                <input className={hasError ? 'error-input' : undefined} type='number' value={props.amount} onChange={(e) => checkAmount(e.target.value)}/>
+                <input ref={inputEl} className={hasError ? 'error-input' : undefined} type='number' value={props.amount} onChange={(e) => checkAmount(e.target.value)}/>
                 <span className='input-currency' style={{ left: `${currencyOffset}px` }}>{props.name === 'INPUT' ? fromToken.symbol : toToken.symbol}</span>
                 {showMax && <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>}
             </div>

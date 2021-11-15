@@ -37,7 +37,7 @@ import text from '../../text.json'
                     {procent.map((item) => (
                         <button key={item} id={+currentProcent === +item ? IDname : undefined} className='procent-btn' onClick={() => { setCurrentProcent(item);setIDname('active-procent')}}>{item} <span>%</span></button>
                     ))}
-                    <input value={currentProcent} className='procent-input' onChange={(e) => { setCurrentProcent(+e.target.value);setProcentWidth(-55 + (e.target.value.length * 7))}}></input>
+                    <input value={currentProcent} className='procent-input' onChange={(e) => { setCurrentProcent(+e.target.value);setProcentWidth(-60 + ((e.target.value.length +1) * 7))}}></input>
                     <span className='procent-span' style={{left: `${procentWidth}px`}}>%</span>
                 </div>
             </Div>
@@ -45,7 +45,7 @@ import text from '../../text.json'
                 <h4>{text.DEADLINE_TEXT}</h4>
                 <div className='procent-row'>
                     <button id={activeOption ? 'active-procent' : undefined} className='procent-btn' onClick={() => {setMinute(deadlineMin);setActiveOption(true)}}>{deadlineMin} min</button>
-                    <input className='deadline-input' value={minute} onChange={(e) => { setMinute(+e.target.value); setMinuteWidth(-335 + (minute.toString().length * 7));setActiveOption(false)}}/>
+                    <input className='deadline-input' value={minute} onChange={(e) => { setMinute(+e.target.value); setMinuteWidth(-350 + ((e.target.value.length + 1) * 7));setActiveOption(false)}}/>
                     <span className='minute-span' style={{left: `${minuteWidth}px`}}>min</span>
                 </div>
             </Div>
