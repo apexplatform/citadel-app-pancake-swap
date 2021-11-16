@@ -17,5 +17,9 @@
     "LOADING": "Loading",
     "MINIMUM_RECEIVED": "Minimum received",
     "ENTER_AMOUNT": "Enter an amount",
-    "DEADLINE_TEXT": "Tx deadline (mins)"
+    "DEADLINE_TEXT": "Tx deadline (mins)",
+    "ERROR_HEADER": "Transaction error",
+    "ERROR_DESCRIPTION_1": "You're trying to swap tokens, but your slippage tolerance or liquidity is too low.",
+    "ERROR_TIP_1": "Try trading a smaller amount or increase your slippage tolerance.",
+    "TIP": "Tip"
 }

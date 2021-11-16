@@ -130,10 +130,9 @@ export const loadWalletWithBalances  = () => dispatch => {
             if(response.ok){
                 item.balance = response.data
             }else{
-                dispatch(checkErrors(data))
+                dispatch(checkErrors(response))
             }
         })
-        console.log(wallets,'---newWallets')
         dispatch ({
             type:SET_WALLETS,
             payload: wallets

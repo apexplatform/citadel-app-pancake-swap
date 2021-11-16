@@ -26,6 +26,7 @@ export const checkErrors = (error) => dispatch => {
         })
     } else if (error instanceof NetworkError){
         let index = error?.message.indexOf('(')
+        console.log(error?.message.substr(0,index),'--error?.message.substr(0,index)')
         dispatch({
             type: GET_NETWORK_ERRORS,
             payload: error?.message.substr(0,index)

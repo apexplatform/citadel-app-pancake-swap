@@ -31,7 +31,7 @@ export default class Wallet {
         return data;
       } else {
         if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
-        return new Error(data.error?.message?.stack);
+        return new Error(data.error?.message);
       }
     } 
   prepareClaimRewards() {
@@ -47,7 +47,8 @@ export default class Wallet {
     if (data.ok) {
       return data;
     } else {
-      return new NetworkError(data.error);
+      if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
+      return new Error(data.error?.message);
     }
   }  
   getBlockNumber(){
