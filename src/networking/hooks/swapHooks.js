@@ -14,7 +14,7 @@ import {
 	BETTER_TRADE_LESS_HOPS_THRESHOLD,
 	ADDITIONAL_BASES,
   } from '../constants/constants.js'
-  import { ADD_MULTICAL_LISTENERS,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST, SET_LOADER, SET_TO_TOKEN, SET_FROM_TOKEN} from "../../store/actions/types"
+  import { ADD_MULTICAL_LISTENERS,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST, SET_LOADER, SET_TO_TOKEN, SET_FROM_TOKEN, SET_EMPTY_TOKEN_LIST} from "../../store/actions/types"
 import tokens from '../constants/tokenLists/pancake-default.tokenlist.json'
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const LOWER_HEX_REGEX = /^0x[a-f0-9]*$/
@@ -268,7 +268,10 @@ export function tryParseAmount(value, currency) {
   export const loadTokenBalances = () => async(dispatch) => {
 	const {currentWallet,fromToken,toToken} = store.getState().walletReducer
 	let list = [{...Currency.ETHER,symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokens['tokens']]
-
+	dispatch({
+		type: SET_EMPTY_TOKEN_LIST,
+		payload: []
+	})
 	list.forEach(async(token) =>{
 		if(token.address){
 			const contract = useTokenContract(token.address)

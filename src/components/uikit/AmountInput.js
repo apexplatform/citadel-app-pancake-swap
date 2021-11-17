@@ -10,7 +10,7 @@ import BigNumber from 'bignumber.js';
 const AmountInput = (props) => {
     const inputEl = useRef(null);
     const [hasError, setError] = useState(false)
-    const [currencyOffset,setCurrencyOffset] = [(props.amount?.toString().length + 1) * 9 || 30]
+    const [currencyOffset,setCurrencyOffset] = [(props.amount?.toString().length + 1) * 8 || 30]
     const {currentWallet,fromToken,toToken,amount} = props.walletReducer
     const {allowanceAmount,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
@@ -19,27 +19,24 @@ const AmountInput = (props) => {
     const feeProcent = +props.fee || 0.02
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const balance = props.getFromBalance()
-    const checkAmount = (val) => {
-        //setCurrencyOffset(inputEl.clientWidth)
+    const checkAmount = (val,isMax = false) => {
         props.setAmount(val)
         props.setIndependentField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
         if(+val > 0){
             props.updateTradeInfo(val,props.name === 'INPUT' ? true : false)
-            props.checkSwapStatus(val,setIsactive)
+            props.checkSwapStatus(val,setIsactive,isMax,props.name === 'INPUT' ? true : false)
         } else {
             props.setSwapStatus('enterAmount')
         }
     }
     const setMaxAmount = () => {
-        console.log(balance,'---balance')
-        if(+balance-feeProcent < 0){
+        if(BigNumber(+balance-feeProcent).toNumber() < 0){
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-            props.updateTradeInfo(+balance-feeProcent, props.name === 'INPUT' ? true : false)
-            console.log(+balance,feeProcent,'---+balance-----feeProcent')
-            checkAmount(BigNumber(+balance-feeProcent).toNumber())
+            props.updateTradeInfo(BigNumber(+balance-feeProcent).toNumber(), props.name === 'INPUT' ? true : false)
+            checkAmount(BigNumber(+balance-feeProcent).toNumber(),true)
         }
     }
     useEffect(() => {

@@ -8,7 +8,7 @@ const ErrorModal = (props) => {
     const {networkErrors} = props.errorsReducer
     return(
 		<ModalRoot activeModal={activeModal}>
-		  <ModalPage id="errors"  onClose={() => props.setActiveModal(null)}>
+		  <ModalPage id="errors" dynamicContentHeight onClose={() => props.setActiveModal(null)}>
         <div id='modal-header'>
             <img src='/img/icons/errorModal.svg' alt='error' />
             <p className='error-title'>{text.ERROR_HEADER}</p>
