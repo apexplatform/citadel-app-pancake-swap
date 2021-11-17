@@ -13,13 +13,13 @@ const ErrorModal = (props) => {
             <img src='/img/icons/errorModal.svg' alt='error' />
             <p className='error-title'>{text.ERROR_HEADER}</p>
         </div>
-			  <p className='error-text'>{networkErrors}</p>
-        <p className='error-description'>{text.ERROR_DESCRIPTION_1}</p>
+			  <p className='error-text'>{networkErrors?.text}</p>
+        <p className='error-description'>{networkErrors?.description}</p>
         <div className='error-tips'>
             <img src='/img/icons/tips.svg' alt='error' />
             <div>
                 <h4>{text.TIP}</h4>
-                <span className='tips-description'>{text.ERROR_TIP_1}</span>
+                <span className='tips-description'>{networkErrors?.tip}</span>
             </div>
         </div>
         <button className='error-btn' onClick={() => props.setActiveModal(null)}>Ok</button>

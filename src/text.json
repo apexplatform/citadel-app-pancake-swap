@@ -19,7 +19,17 @@
     "ENTER_AMOUNT": "Enter an amount",
     "DEADLINE_TEXT": "Tx deadline (mins)",
     "ERROR_HEADER": "Transaction error",
-    "ERROR_DESCRIPTION_1": "You're trying to swap tokens, but your slippage tolerance or liquidity is too low.",
-    "ERROR_TIP_1": "Try trading a smaller amount or increase your slippage tolerance.",
-    "TIP": "Tip"
+    "TIP": "Tip",
+    "ERROR_TEXT_1": "Error: Returned error: insufficient funds for transfer",
+    "ERROR_DESCRIPTION_1": "This error happens when you are trying to swap tokens with insufficient allowance, or when your address has insufficient funds.",
+    "ERROR_TIP_1": "Check your available balance and make sure it’s sufficient. Also, ensure you’ve given the contract allowance to spend the amount of funds you're attempting to swap with.",
+    "ERROR_TEXT_2": "Error: Returned error: operation is not available",
+    "ERROR_DESCRIPTION_2": "This operation is unavailable",
+    "ERROR_TIP_2": "If the error persists, try again later",
+    "ERROR_TEXT_3": "PancakeLibrary: INSUFFICIENT_INPUT_AMOUNT",
+    "ERROR_DESCRIPTION_3": "Your input amount is insufficient. It might be the case that prices are updating too fast when and your slippage tolerance is too low",
+    "ERROR_TIP_3": "Increase your slippage tolerance a bit and try again.",
+    "ERROR_TEXT_DEFAULT": "Pancake: TRANSFER_FAILED",
+    "ERROR_DESCRIPTION_DEFAULT": "The transaction failed.",
+    "ERROR_TIP_DEFAULT": "Make sure you have more tokens in your wallet than you intend to swap, or try to swap a lower amount."
 }
