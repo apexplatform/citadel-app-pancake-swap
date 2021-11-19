@@ -43,7 +43,6 @@ const Swap = (props) => {
 	useEffect(() => {
 		props.setFromAmount(formattedAmounts['INPUT'])
 		props.setToAmount(formattedAmounts['OUTPUT'])
-		//setLoader(fromToken.balance || toToken.balance ? true : false)
     	props.checkSwapStatus(formattedAmounts['INPUT'])
 	},[fromToken,toToken,trade,allowanceAmount,loader])
 	return (

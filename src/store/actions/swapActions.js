@@ -159,10 +159,11 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     const {fromToken} = store.getState().walletReducer
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const feeProcent = +realizedLPFee?.toSignificant(4) || 0.001
+    console.log(isMax,'--isMax')
     if(isMax){
         dispatch(setAmount(+balance - feeProcent))
         dispatch(updateTradeInfo(+balance - feeProcent,isExactIn))
-        dispatch(checkSwapStatus(+balance - feeProcent))
+        dispatch(checkSwapStatus(+balance - feeProcent,setIsactive))
         return
     }
     if(+amount > 0) {
@@ -176,7 +177,7 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
                             dispatch(setSwapStatus('swapAnyway'))
                         }
                     } else {
-                        setIsactive()
+                        setIsactive(true)
                         dispatch(setSwapStatus('approve'))
                     }
                 } else {
