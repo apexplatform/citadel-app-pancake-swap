@@ -24,6 +24,8 @@
     "@keplr-wallet/unit": "^0.9.0-alpha.14",
     "@pancakeswap/sdk": "^2.4.0",
     "@reduxjs/toolkit": "^1.6.2",
+    "@sentry/react": "^6.15.0",
+    "@sentry/tracing": "^6.15.0",
     "@uniswap/token-lists": "^1.0.0-beta.26",
     "@uniswap/v2-core": "^1.0.1",
     "@vkontakte/icons": "^1.117.0",
