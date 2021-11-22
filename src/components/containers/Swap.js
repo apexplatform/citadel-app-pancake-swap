@@ -23,7 +23,7 @@ const Swap = (props) => {
 	const showFee = fromToken?.symbol?.toLowerCase() === currentWallet?.code
 	const showFee2 = toToken?.symbol?.toLowerCase() === currentWallet?.code
 	const dependentField = independentField === 'INPUT' ? 'OUTPUT' : 'INPUT'
-	const formattedPrice = isExactIn ? trade?.executionPrice?.toSignificant(6) : trade?.executionPrice?.invert()?.toSignificant(6)
+	const formattedPrice = trade?.executionPrice?.toSignificant(6)
 	const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
 	const parsedAmounts =  {
         'INPUT': independentField === 'INPUT' ? parsedAmount : trade?.inputAmount,
@@ -48,7 +48,7 @@ const Swap = (props) => {
 	return (
 		<Group className='swap-container'>
 			<Header title="Swap"/>
-		{ loader ? 
+		{/* { loader ?  */}
 				<>
 			<div className='swap-column'>
 				<FormItem top={"From" + (independentField === 'OUTPUT' ? ' (estimated)' : '') } className='formTokenItem' onClick={() => props.setSelectedToken('from')}>
@@ -76,7 +76,6 @@ const Swap = (props) => {
 			<FeeInfoBlock rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
 			<SwapButton isExactIn={isExactIn}/>
 			</>
-			: <Loader id='centered-loader'/> }
 		</Group>
 	); 
 }

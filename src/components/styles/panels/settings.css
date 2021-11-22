@@ -25,7 +25,7 @@
     border-radius: 25px;
     color: #2787F5;
     font-size: 18px;
-    width: 23%;
+    width: 25%;
     height: 40px;
     margin-right: 15px;
     border: none;
@@ -42,6 +42,12 @@
 .procent-row{
     display: flex;
     justify-content: space-between;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.settings-panel .vkuiDiv--android{
+    padding-right: 0;
 }
 .settings-panel p{
     color: #000;
@@ -61,8 +67,7 @@
 
 .save-btn{
     background: #792EC0;
-    margin: 10px 15px;
-    width: 95%;
+    width: 98%;
 }
 
 .deadline-input{

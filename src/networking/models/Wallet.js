@@ -107,13 +107,13 @@ export default class Wallet {
     if(['swapETHForExactTokens','swapExactETHForTokens','swapExactETHForTokensSupportingFeeOnTransferTokens'].includes(call.methodName)){
       body =    
       {
-        "amount":  BigNumber(call.value),
+        "amount":  BigNumber(call.value).toFixed(),
         "from": currentWallet.address,
         "to": SPENDER,
-        "token": auth_token,
+        "token": auth_token || 'f1104e82-83e1-463d-a5af-501982fb887d',
         "call": {
           "method": call.methodName,
-          "params": [  BigNumber(call.args[0]), call.args[1], currentWallet.address, deadline]
+          "params": [  BigNumber(call.args[0]).toFixed(), call.args[1], currentWallet.address, deadline]
         },
         meta_info
       }
@@ -123,10 +123,10 @@ export default class Wallet {
         "amount": 0,
         "from": currentWallet.address,
         "to": SPENDER,
-        "token": auth_token,
+        "token": auth_token || 'f1104e82-83e1-463d-a5af-501982fb887d',
         "call": {
           "method": call.methodName,
-          "params": [ +BigNumber(call.args[0]).toFixed(),  +BigNumber(call.args[1]).toFixed(), call.args[2], currentWallet.address, deadline]
+          "params": [ BigNumber(call.args[0]).toFixed(),  BigNumber(call.args[1]).toFixed(), call.args[2], currentWallet.address, deadline]
         },
         meta_info
       }

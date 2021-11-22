@@ -14,10 +14,11 @@ const FeeInfoBlock = (props) => {
                 <span className='fee-text'>
                     Price
                 </span>
+                {rate ?
                 <span>
-                    <span className='fee-text'>{rate || 1}  </span>
+                    <span className='fee-text'>{rate}  </span>
                     {toToken.symbol} per { fromToken.symbol}
-                </span>
+                </span>: <span className='fee-text'>-</span>}
            </div>
            <div className='fee-row'>
                 <span className='fee-text'>
