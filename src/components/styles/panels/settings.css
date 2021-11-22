@@ -1,7 +1,9 @@
 .settings-panel p{
     text-align: center;
 }
-
+.settings-panel .vkuiGroup__inner{
+    box-shadow: none;
+}
 .add-address-btn{
     background: none;
     border: 1px solid #2A5885;
