@@ -18,10 +18,10 @@ const App = (props) => {
 
 	useEffect(() => {
 		props.initApp()
-		// props.loadNetworks()
-		// props.loadWalletWithBalances()
-		// props.getTokenBalance()
-		// props.updateTradeInfo(1,true)
+		props.loadNetworks()
+		props.loadWalletWithBalances()
+		props.getTokenBalance()
+		props.updateTradeInfo(1,true)
 	}, []);
 
 	return (
