@@ -107,7 +107,6 @@ export const prepareApprove  = () => dispatch => {
             dispatch(checkErrors(data))
         }
     }).catch(err => {
-        console.log(err)
         dispatch(checkErrors(err))
     })
 }
@@ -136,10 +135,8 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
             let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
             dispatch(setParsedAmount(parsedAmount))
             const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn))
-            // if(!bestTradeExact?.outputAmount) updateTradeInfo(amount)
             dispatch(setTrade(bestTradeExact))
             dispatch(setMinReceive(wallet.getMinReceived()))
-            console.log(bestTradeExact,'--bestTradeExactIn')
             dispatch(wallet.getTokenAllowance())
             if(swapStatus === 'approve'){
                 setInterval(() => {
@@ -149,7 +146,6 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
         }
     } catch(err) {
         dispatch(checkErrors(err))
-       // console.log(err)
     }
 }
 
@@ -159,7 +155,6 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     const {fromToken} = store.getState().walletReducer
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const feeProcent = +realizedLPFee?.toSignificant(4) || 0.001
-    console.log(isMax,'--isMax')
     if(isMax){
         dispatch(setAmount(+balance - feeProcent))
         dispatch(updateTradeInfo(+balance - feeProcent,isExactIn))

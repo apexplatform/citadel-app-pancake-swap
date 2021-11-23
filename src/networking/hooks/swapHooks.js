@@ -1,5 +1,4 @@
 import { CurrencyAmount,currencyEquals, Currency, JSBI, Percent,Token,Pair, TokenAmount, Trade } from '@pancakeswap/sdk'
-import BigNumber from 'bignumber.js';
 import { parseUnits } from '@ethersproject/units'
 import { wrappedCurrency } from './wrappedCurrency'
 import store from '../../store/store';

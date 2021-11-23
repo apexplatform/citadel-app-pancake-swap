@@ -123,6 +123,12 @@ export const loadWalletWithBalances  = () => dispatch => {
             code: 'BNB'
         }
     }) : []
+    // let wallets = [{
+    //             address: '0xa6209c8c2ddf4cd8d8bbb9df11cd0a7a19e75bdd',
+    //             network: 'bsc',
+    //             name: 'Binance Smart Chain',
+    //             code: 'BNB'
+    //         }]
     if(wallets.length){
         wallets.forEach(async item => {
             const wallet = getWalletConstructor(item)

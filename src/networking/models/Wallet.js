@@ -11,6 +11,8 @@ import {computeTradePriceBreakdown} from '../utils/price'
 import {SPENDER} from '../constants/constants'
 import BigNumber from 'bignumber.js';
 import {loadTokenAllowance} from '../hooks/allowanceHooks'
+import * as Sentry from "@sentry/react";
+
 const api = useApi('wallet')
 export default class Wallet {
   constructor(opts) {
@@ -21,7 +23,6 @@ export default class Wallet {
       this.publicKey = opts.publicKey || null; 
   }
   async prepareTransfer(params) {
-    console.log(JSON.stringify(params,null,2))
       const data = await api.prepareBaseTransfer({
         network: this.net,
         from: this.address,
@@ -30,8 +31,10 @@ export default class Wallet {
       if (data.ok) {
         return data;
       } else {
+        Sentry.captureException(data.error?.message || data.error?.message?.stack);
         if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
         return new Error(data.error?.message);
+        
       }
     } 
   prepareClaimRewards() {
@@ -47,6 +50,7 @@ export default class Wallet {
     if (data.ok) {
       return data;
     } else {
+      Sentry.captureException(data.error?.message || data.error?.message?.stack);
       if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
       return new Error(data.error?.message);
     }
