@@ -2,10 +2,11 @@ import { Group, Div,Button } from '@vkontakte/vkui';
 import Header from '../uikit/Header'
 import {connect} from 'react-redux';
 import '../styles/panels/settings.css'
-import {  useState } from 'react';
+import { useState,useEffect } from 'react';
 import {setSlippageTolerance,setDeadline} from '../../store/actions/swapActions'
 import fileRoutes from '../../config/file-routes-config.json'
 import text from '../../text.json'
+import BigNumber from 'bignumber.js';
  const Settings = (props) => {
     const {slippageTolerance,deadlineMin} = props.swapReducer
     const [minute,setMinute] = useState(deadlineMin)
@@ -23,7 +24,7 @@ import text from '../../text.json'
         setIDname('initial-procent')
     }
     const setSlippageProcent = (val) => {
-        setCurrentProcent(+val < 0 ? (+val * -1).toString() : val);
+        setCurrentProcent(BigNumber(val).toNumber());
         setProcentWidth(-60 + ((val.length +1) * 7))
     }
     const setDeadline = (val) => {
@@ -49,6 +50,22 @@ import text from '../../text.json'
         setDeadlineInputId('default-input');
         setActiveOption(true)
     }
+    useEffect(() => {
+        let flag = false
+        procent.map(el => {
+            if(el == slippageTolerance){
+                flag = true
+            }
+        })
+        if(!flag){
+            setInputId('active-input-2')
+        } else {
+            setInputId('default-input');
+        }
+        if(deadlineMin != 20){
+            setDeadlineInputId('active-input-2')
+        }
+    }, [])
     return(
         <Group className='settings-panel'>
             <Header title="Settings" showTitle={true}/>
@@ -69,7 +86,7 @@ import text from '../../text.json'
                     {procent.map((item) => (
                         <button key={item} id={currentProcent === item ? IDname : undefined} className='procent-btn' onClick={() => activeProcent(item) }>{item} <span>%</span></button>
                     ))}
-                    <input value={currentProcent} type='number' min='0' onBlur={() => setInputId('active-input-2')} id={inputId} onClick={() => setProcentActive()} className='procent-input' onChange={(e) => setSlippageProcent(e.target.value)}></input>
+                    <input value={currentProcent} pattern="\d+" type='number' min='0' onBlur={() => setInputId('active-input-2')} id={inputId} onClick={() => setProcentActive()} className='procent-input' onChange={(e) => setSlippageProcent(e.target.value)}></input>
                     <span className='procent-span' style={{left: `${procentWidth}px`}}>%</span>
                 </div>
             </Div>
@@ -77,7 +94,7 @@ import text from '../../text.json'
                 <h4>{text.DEADLINE_TEXT}</h4>
                 <div className='procent-row'>
                     <button id={activeOption ? 'active-procent' : +deadlineMin == 20 ? 'initial-procent' : undefined} className='procent-btn' onClick={() => setDeadlineButtonActive()}>20 min</button>
-                    <input className='deadline-input' min='0' type='number' onBlur={() => setDeadlineInputId('active-input-2')} onClick={() => setDeadlineActive()} id={deadlineInputId} value={minute} onChange={(e) => setDeadline(e.target.value)}/>
+                    <input className='deadline-input' pattern="\d+" min='0' type='number' onBlur={() => setDeadlineInputId('active-input-2')} onClick={() => setDeadlineActive()} id={deadlineInputId} value={minute} onChange={(e) => setDeadline(e.target.value)}/>
                     <span className='minute-span' style={{left: `${minuteWidth}px`}}>min</span>
                 </div>
             </Div>
