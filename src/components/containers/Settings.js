@@ -9,8 +9,8 @@ import text from '../../text.json'
  const Settings = (props) => {
     const {slippageTolerance,deadlineMin} = props.swapReducer
     const [minute,setMinute] = useState(deadlineMin)
-    const [procentWidth,setProcentWidth] = useState(-55)
-    const [minuteWidth,setMinuteWidth] = useState(-330)
+    const [procentWidth,setProcentWidth] = useState(-60 + ((slippageTolerance.toString().length +1) * 7))
+    const [minuteWidth,setMinuteWidth] = useState(-355 + ((deadlineMin.toString().length + 1) * 7))
     const [deadlineInputId,setDeadlineInputId] = useState('default-input')
     const [inputId,setInputId] = useState('default-input')
     const [currentProcent,setCurrentProcent] = useState(slippageTolerance)
@@ -23,11 +23,11 @@ import text from '../../text.json'
         setIDname('initial-procent')
     }
     const setSlippageProcent = (val) => {
-        setCurrentProcent(val);
+        setCurrentProcent(+val < 0 ? (+val * -1).toString() : val);
         setProcentWidth(-60 + ((val.length +1) * 7))
     }
     const setDeadline = (val) => {
-        setMinute(val);
+        setMinute(+val < 0 ? +val * -1 : val);
         setMinuteWidth(-350 + ((val.length + 1) * 7));
         setActiveOption(false)
     }
@@ -35,16 +35,13 @@ import text from '../../text.json'
         setCurrentProcent(item)
         setIDname('active-procent')
         setInputId('default-input')
-        setDeadlineInputId('default-input');
     }
     const setProcentActive = () => {
-        setInputId('active-procent');
-        setDeadlineInputId('default-input');
+        setInputId('active-input');
         setCurrentProcent(0)
     }
     const setDeadlineActive = () => {
-        setDeadlineInputId('active-procent');
-        setInputId('default-procent');
+        setDeadlineInputId('active-input');
         setActiveOption(false)
     }
     const setDeadlineButtonActive = () => {
@@ -55,7 +52,7 @@ import text from '../../text.json'
     return(
         <Group className='settings-panel'>
             <Header title="Settings" showTitle={true}/>
-            <Div>
+            <Div className='manage-address-text'>
                 <h4>{text.SETTING_TITLE}</h4>
                 <p>{text.SETTING_DESCRIPTION} </p>
             </Div>
@@ -63,21 +60,24 @@ import text from '../../text.json'
                 <img src={fileRoutes.ADD_ICON} alt='add' /> 
                 <p>{text.ADD_ADDRESS}</p>
             </Div>
+            <Div className='coming-soon'>
+                <h2>{text.COMING_SOON}</h2>
+            </Div>
             <Div>
                 <h4>{text.SLIPPAGE_TOLERANCE}</h4>
                 <div className='procent-row'>
                     {procent.map((item) => (
                         <button key={item} id={currentProcent === item ? IDname : undefined} className='procent-btn' onClick={() => activeProcent(item) }>{item} <span>%</span></button>
                     ))}
-                    <input value={currentProcent} type='number' id={inputId} onClick={() => setProcentActive()} className='procent-input' onChange={(e) => setSlippageProcent(e.target.value)}></input>
+                    <input value={currentProcent} type='number' min='0' onBlur={() => setInputId('active-input-2')} id={inputId} onClick={() => setProcentActive()} className='procent-input' onChange={(e) => setSlippageProcent(e.target.value)}></input>
                     <span className='procent-span' style={{left: `${procentWidth}px`}}>%</span>
                 </div>
             </Div>
             <Div>
                 <h4>{text.DEADLINE_TEXT}</h4>
                 <div className='procent-row'>
-                    <button id={activeOption ? 'active-procent' : undefined} className='procent-btn' onClick={() => setDeadlineButtonActive()}>20 min</button>
-                    <input className='deadline-input' type='number' onClick={() => setDeadlineActive()} id={deadlineInputId} value={minute} onChange={(e) => setDeadline(e.target.value)}/>
+                    <button id={activeOption ? 'active-procent' : +deadlineMin == 20 ? 'initial-procent' : undefined} className='procent-btn' onClick={() => setDeadlineButtonActive()}>20 min</button>
+                    <input className='deadline-input' min='0' type='number' onBlur={() => setDeadlineInputId('active-input-2')} onClick={() => setDeadlineActive()} id={deadlineInputId} value={minute} onChange={(e) => setDeadline(e.target.value)}/>
                     <span className='minute-span' style={{left: `${minuteWidth}px`}}>min</span>
                 </div>
             </Div>

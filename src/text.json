@@ -31,5 +31,6 @@
     "ERROR_TIP_3": "Increase your slippage tolerance a bit and try again.",
     "ERROR_TEXT_DEFAULT": "Pancake: TRANSFER_FAILED",
     "ERROR_DESCRIPTION_DEFAULT": "The transaction failed.",
-    "ERROR_TIP_DEFAULT": "Make sure you have more tokens in your wallet than you intend to swap, or try to swap a lower amount."
+    "ERROR_TIP_DEFAULT": "Make sure you have more tokens in your wallet than you intend to swap, or try to swap a lower amount.",
+    "COMING_SOON": "Coming soon"
 }
