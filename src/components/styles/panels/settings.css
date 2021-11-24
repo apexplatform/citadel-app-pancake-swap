@@ -11,7 +11,7 @@
     border-radius: 4px;
     display: flex;
     height: 36px;
-    cursor: no-drop;
+    cursor: not-allowed;
     align-items: center;
     justify-content: center;
     margin: 0 15px 10px;
@@ -20,6 +20,7 @@
 .manage-address-text{
     opacity: 0.3;
     position: relative;
+    cursor: not-allowed;
 }
 .coming-soon{
     top: 90px;
@@ -27,6 +28,7 @@
     position: absolute;
     text-align: center;
     text-transform: uppercase;
+    cursor: not-allowed;
 }
 .coming-soon h2{
     color: #6B93C0;

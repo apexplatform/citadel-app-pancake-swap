@@ -19,8 +19,18 @@ import BigNumber from 'bignumber.js';
     const [IDname,setIDname] = useState('initial-procent')
     const [activeOption,setActiveOption] = useState(false)
     const save = () => {
-        props.setDeadline(+minute)
-        props.setSlippageTolerance(+currentProcent);
+        if(minute) {
+            props.setDeadline(+minute)
+        } else {
+            setMinute(0)
+            props.setDeadline(0)
+        }
+        if(currentProcent) {
+            props.setSlippageTolerance(+currentProcent)
+        }else{
+            setCurrentProcent(0)
+            props.setSlippageTolerance(0)
+        }
         setIDname('initial-procent')
     }
     const setSlippageProcent = (val) => {
