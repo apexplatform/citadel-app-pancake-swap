@@ -34,13 +34,22 @@ import BigNumber from 'bignumber.js';
         setIDname('initial-procent')
     }
     const setSlippageProcent = (val) => {
-        val = val.replace(/[^\d]/g, '')
-        setCurrentProcent(val ? BigNumber(val).toFixed() : '');
+        val = val.replace(/[^0-9\.]/g, '')
+        if(val[val.length-1] == '.'){
+            setCurrentProcent(val);
+        } else {
+            setCurrentProcent(BigNumber(+val).toFixed());
+        }
         setProcentWidth(-65 + ((val.length +1) * 7))
     }
     const setDeadline = (val) => {
-        val = val.replace(/[^\d]/g, '')
-        setMinute(val ? BigNumber(val).toFixed() : '');
+        val = val.replace(/[^0-9\.]/g, '')
+        if(val[val.length-1] == '.'){
+            setMinute(val);
+        } else {
+            setMinute(BigNumber(+val).toFixed());
+        }
+        
         setMinuteWidth(-345 + ((val.length + 1) * 7));
         setActiveOption(false)
     }
@@ -99,7 +108,7 @@ import BigNumber from 'bignumber.js';
                     {procent.map((item) => (
                         <button key={item} id={currentProcent === item ? IDname : undefined} className='procent-btn' onClick={() => activeProcent(item) }>{item} <span>%</span></button>
                     ))}
-                    <input pattern="[0-9.]+" value={currentProcent} type='text' onBlur={() => setInputId('active-input-2')} id={inputId} onClick={() => setProcentActive()} className='procent-input' onChange={(e) => setSlippageProcent(e.target.value)}></input>
+                    <input value={currentProcent} type='text' onBlur={() => setInputId('active-input-2')} id={inputId} onClick={() => setProcentActive()} className='procent-input' onChange={(e) => setSlippageProcent(e.target.value)}></input>
                     <span className='procent-span' style={{left: `${procentWidth}px`}}>%</span>
                 </div>
             </Div>
@@ -107,7 +116,7 @@ import BigNumber from 'bignumber.js';
                 <h4>{text.DEADLINE_TEXT}</h4>
                 <div className='procent-row'>
                     <button id={activeOption ? 'active-procent' : +deadlineMin == 20 ? 'initial-procent' : undefined} className='procent-btn' onClick={() => setDeadlineButtonActive()}>20 min</button>
-                    <input className='deadline-input' pattern="[0-9.]+" onBlur={() => setDeadlineInputId('active-input-2')} onClick={() => setDeadlineActive()} id={deadlineInputId} value={minute} onChange={(e) => setDeadline(e.target.value)}/>
+                    <input className='deadline-input' onBlur={() => setDeadlineInputId('active-input-2')} onClick={() => setDeadlineActive()} id={deadlineInputId} value={minute} onChange={(e) => setDeadline(e.target.value)}/>
                     <span className='minute-span' style={{left: `${minuteWidth}px`}}>min</span>
                 </div>
             </Div>

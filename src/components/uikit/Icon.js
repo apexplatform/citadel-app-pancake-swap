@@ -102,7 +102,7 @@ const Icon = (props) => {
             }
             {
                 icon === 'eth' &&
-                <svg width="13" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="13" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fillRule="evenodd" clipRule="evenodd" d="M6.30607 13.8145H6.30527L0.166992 10.1856L6.30527 0H6.30607L12.4443 10.1856L6.30607 13.8145ZM12.4483 11.35L6.30606 20H6.30526L0.166992 11.35L6.30606 14.9764L12.4483 11.35Z" fill={fill}/>
                 </svg>
             }
