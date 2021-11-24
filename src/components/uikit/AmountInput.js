@@ -8,7 +8,6 @@ import {setRateAmount,updateTradeInfo,checkSwapStatus, setSwapStatus,checkTokenA
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 import BigNumber from 'bignumber.js';
 const AmountInput = (props) => {
-    const inputEl = useRef(null);
     const [hasError, setError] = useState(false)
     const [currencyOffset,setCurrencyOffset] = [(props.amount?.toString().length + 1) * 8 || 30]
     const {currentWallet,fromToken,toToken,amount} = props.walletReducer
