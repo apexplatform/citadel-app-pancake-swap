@@ -9,8 +9,7 @@ export default function useAxios() {
   };
 
   const errorHandler = (error) => {
-    console.error(error);
-    return error.response.data;
+    return error?.response?.data;
   };
 
   axiosInstance.interceptors.response.use(responseHandler, errorHandler);

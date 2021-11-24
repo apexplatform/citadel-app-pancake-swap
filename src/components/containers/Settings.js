@@ -24,12 +24,14 @@ import BigNumber from 'bignumber.js';
         setIDname('initial-procent')
     }
     const setSlippageProcent = (val) => {
-        setCurrentProcent(BigNumber(val).toNumber());
-        setProcentWidth(-60 + ((val.length +1) * 7))
+        val = val.replace(/[^\d]/g, '')
+        setCurrentProcent(val ? BigNumber(val).toFixed() : '');
+        setProcentWidth(-65 + ((val.length +1) * 7))
     }
     const setDeadline = (val) => {
-        setMinute(+val < 0 ? +val * -1 : val);
-        setMinuteWidth(-350 + ((val.length + 1) * 7));
+        val = val.replace(/[^\d]/g, '')
+        setMinute(val ? BigNumber(val).toFixed() : '');
+        setMinuteWidth(-345 + ((val.length + 1) * 7));
         setActiveOption(false)
     }
     const activeProcent = (item) => {
@@ -66,6 +68,7 @@ import BigNumber from 'bignumber.js';
             setDeadlineInputId('active-input-2')
         }
     }, [])
+    
     return(
         <Group className='settings-panel'>
             <Header title="Settings" showTitle={true}/>
@@ -86,7 +89,7 @@ import BigNumber from 'bignumber.js';
                     {procent.map((item) => (
                         <button key={item} id={currentProcent === item ? IDname : undefined} className='procent-btn' onClick={() => activeProcent(item) }>{item} <span>%</span></button>
                     ))}
-                    <input value={currentProcent} pattern="\d+" type='number' min='0' onBlur={() => setInputId('active-input-2')} id={inputId} onClick={() => setProcentActive()} className='procent-input' onChange={(e) => setSlippageProcent(e.target.value)}></input>
+                    <input pattern="[0-9.]+" value={currentProcent} type='text' onBlur={() => setInputId('active-input-2')} id={inputId} onClick={() => setProcentActive()} className='procent-input' onChange={(e) => setSlippageProcent(e.target.value)}></input>
                     <span className='procent-span' style={{left: `${procentWidth}px`}}>%</span>
                 </div>
             </Div>
@@ -94,7 +97,7 @@ import BigNumber from 'bignumber.js';
                 <h4>{text.DEADLINE_TEXT}</h4>
                 <div className='procent-row'>
                     <button id={activeOption ? 'active-procent' : +deadlineMin == 20 ? 'initial-procent' : undefined} className='procent-btn' onClick={() => setDeadlineButtonActive()}>20 min</button>
-                    <input className='deadline-input' pattern="\d+" min='0' type='number' onBlur={() => setDeadlineInputId('active-input-2')} onClick={() => setDeadlineActive()} id={deadlineInputId} value={minute} onChange={(e) => setDeadline(e.target.value)}/>
+                    <input className='deadline-input' pattern="[0-9.]+" onBlur={() => setDeadlineInputId('active-input-2')} onClick={() => setDeadlineActive()} id={deadlineInputId} value={minute} onChange={(e) => setDeadline(e.target.value)}/>
                     <span className='minute-span' style={{left: `${minuteWidth}px`}}>min</span>
                 </div>
             </Div>

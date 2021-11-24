@@ -20,7 +20,7 @@ const AmountInput = (props) => {
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const balance = props.getFromBalance()
     const checkAmount = (val,isMax = false) => {
-        console.log(props.amount,'---props.amount')
+        val = val.replace(/[^\d]/g, '')
         props.setAmount(val)
         props.setIndependentField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
@@ -59,7 +59,7 @@ const AmountInput = (props) => {
     return(
         <div className='amount-container'>
             <div className='input-container' >
-                <input pattern="\d+" className={hasError ? 'error-input' : undefined} type='number' value={props.amount} onChange={(e) => checkAmount(e.target.value)}/>
+                <input pattern="\d+" className={hasError ? 'error-input' : undefined} value={props.amount} onChange={(e) => checkAmount(e.target.value)}/>
                 <span className='input-currency' style={{ left: `${currencyOffset}px` }}>{props.name === 'INPUT' ? fromToken.symbol : toToken.symbol}</span>
                 {showMax && <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>}
             </div>
