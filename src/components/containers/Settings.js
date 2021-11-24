@@ -10,27 +10,32 @@ import BigNumber from 'bignumber.js';
  const Settings = (props) => {
     const {slippageTolerance,deadlineMin} = props.swapReducer
     const [minute,setMinute] = useState(deadlineMin)
+    const [minute2,setMinute2] = useState(deadlineMin)
     const [procentWidth,setProcentWidth] = useState(-60 + ((slippageTolerance.toString().length +1) * 7))
     const [minuteWidth,setMinuteWidth] = useState(-355 + ((deadlineMin.toString().length + 1) * 7))
     const [deadlineInputId,setDeadlineInputId] = useState('default-input')
     const [inputId,setInputId] = useState('default-input')
     const [currentProcent,setCurrentProcent] = useState(slippageTolerance)
+    const [isButtonOption, setButtonOption] = useState(true)
+    const [isButtonOption2, setButtonOption2] = useState(true)
+    const [currentProcent2,setCurrentProcent2] = useState(slippageTolerance)
     const procent = [1,3,5]
     const [IDname,setIDname] = useState('initial-procent')
     const [activeOption,setActiveOption] = useState(false)
     const save = () => {
         if(minute) {
-            props.setDeadline(+minute)
+            isButtonOption2 ? props.setDeadline(+minute2) : props.setDeadline(+minute)
         } else {
             setMinute(0)
             props.setDeadline(0)
         }
         if(currentProcent) {
-            props.setSlippageTolerance(+currentProcent)
+            isButtonOption ? props.setSlippageTolerance(+currentProcent2) : props.setSlippageTolerance(+currentProcent)
         }else{
             setCurrentProcent(0)
             props.setSlippageTolerance(0)
         }
+        setActiveOption(false)
         setIDname('initial-procent')
     }
     const setSlippageProcent = (val) => {
@@ -40,7 +45,8 @@ import BigNumber from 'bignumber.js';
         } else {
             setCurrentProcent(BigNumber(+val).toFixed());
         }
-        setProcentWidth(-65 + ((val.length +1) * 7))
+        setButtonOption(false)
+        setProcentWidth(-65 + ((currentProcent.length) * 7))
     }
     const setDeadline = (val) => {
         val = val.replace(/[^0-9\.]/g, '')
@@ -49,27 +55,29 @@ import BigNumber from 'bignumber.js';
         } else {
             setMinute(BigNumber(+val).toFixed());
         }
-        
-        setMinuteWidth(-345 + ((val.length + 1) * 7));
+        setButtonOption2(false)
+        setMinuteWidth(-345 + ((minute.length) * 7));
         setActiveOption(false)
     }
     const activeProcent = (item) => {
-        setCurrentProcent(item)
+        setCurrentProcent2(item)
+        setButtonOption(true)
         setIDname('active-procent')
         setInputId('default-input')
     }
     const setProcentActive = () => {
         setInputId('active-input');
-        setCurrentProcent(0)
+        setCurrentProcent2(0)
     }
     const setDeadlineActive = () => {
         setDeadlineInputId('active-input');
         setActiveOption(false)
     }
     const setDeadlineButtonActive = () => {
-        setMinute(20);
+        setMinute2(20);
         setDeadlineInputId('default-input');
         setActiveOption(true)
+        setButtonOption2(true)
     }
     useEffect(() => {
         let flag = false
@@ -106,7 +114,7 @@ import BigNumber from 'bignumber.js';
                 <h4>{text.SLIPPAGE_TOLERANCE}</h4>
                 <div className='procent-row'>
                     {procent.map((item) => (
-                        <button key={item} id={currentProcent === item ? IDname : undefined} className='procent-btn' onClick={() => activeProcent(item) }>{item} <span>%</span></button>
+                        <button key={item} id={currentProcent2 === item ? IDname : undefined} className='procent-btn' onClick={() => activeProcent(item) }>{item} <span>%</span></button>
                     ))}
                     <input value={currentProcent} type='text' onBlur={() => setInputId('active-input-2')} id={inputId} onClick={() => setProcentActive()} className='procent-input' onChange={(e) => setSlippageProcent(e.target.value)}></input>
                     <span className='procent-span' style={{left: `${procentWidth}px`}}>%</span>
