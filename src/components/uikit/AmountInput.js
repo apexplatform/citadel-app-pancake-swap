@@ -20,10 +20,10 @@ const AmountInput = (props) => {
     const balance = props.getFromBalance()
     const checkAmount = (val,isMax = false) => {
         val = val.replace(/[^0-9\.]/g, '')
-        if(val[val.length-1] == '.'){
-            props.setAmount(val)
+        if(val[0] == '0' && val[1] != '.' ){
+            props.setAmount(BigNumber(val).toFixed())
         } else {
-            props.setAmount(BigNumber(+val).toFixed());
+            props.setAmount(val);
         }
         props.setIndependentField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
@@ -40,7 +40,7 @@ const AmountInput = (props) => {
             props.setSwapStatus('insufficientBalance')
         }else{
             props.updateTradeInfo(BigNumber(+balance-feeProcent).toNumber(), props.name === 'INPUT' ? true : false)
-            checkAmount(BigNumber(+balance-feeProcent).toNumber(),true)
+            checkAmount(BigNumber(+balance-feeProcent).toFixed(),true)
         }
     }
     useEffect(() => {

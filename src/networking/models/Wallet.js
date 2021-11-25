@@ -20,7 +20,6 @@ export default class Wallet {
       this.name = opts.name;
       this.code = opts.code;
       this.address = opts.address;
-      this.publicKey = opts.publicKey || null; 
   }
   async prepareTransfer(params) {
       const data = await api.prepareBaseTransfer({
@@ -114,7 +113,7 @@ export default class Wallet {
         "amount":  BigNumber(call.value).toFixed(),
         "from": currentWallet.address,
         "to": SPENDER,
-        "token": auth_token || 'f1104e82-83e1-463d-a5af-501982fb887d',
+        "token": auth_token || "6ee707ef-2948-42f0-a020-4a3cc6d334aa",
         "call": {
           "method": call.methodName,
           "params": [  BigNumber(call.args[0]).toFixed(), call.args[1], currentWallet.address, deadline]
@@ -127,7 +126,7 @@ export default class Wallet {
         "amount": 0,
         "from": currentWallet.address,
         "to": SPENDER,
-        "token": auth_token || 'f1104e82-83e1-463d-a5af-501982fb887d',
+        "token": auth_token || "6ee707ef-2948-42f0-a020-4a3cc6d334aa",
         "call": {
           "method": call.methodName,
           "params": [ BigNumber(call.args[0]).toFixed(),  BigNumber(call.args[1]).toFixed(), call.args[2], currentWallet.address, deadline]
