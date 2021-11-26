@@ -120,7 +120,7 @@ import InputNumber from '../uikit/InputNumber'
                 <h4>{text.DEADLINE_TEXT}</h4>
                 <div className='procent-row-2'>
                     <button id={activeOption ? 'active-procent' : +deadlineMin == 20 ? 'initial-procent' : undefined} className='procent-btn' onClick={() => setDeadlineButtonActive()}>20 min</button>
-                    <InputNumber symbol='min' width='25%' value={minute} idValue={deadlineInputId} setActive={setDeadlineActive} setInputId={setDeadlineInputId} setValue={setDeadline}/>
+                    <InputNumber symbol='min' width='29%' value={minute} idValue={deadlineInputId} setActive={setDeadlineActive} setInputId={setDeadlineInputId} setValue={setDeadline}/>
                 </div>
             </Div>
             <Div>
