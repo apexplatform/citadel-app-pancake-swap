@@ -113,14 +113,14 @@ import InputNumber from '../uikit/InputNumber'
                     {procent.map((item) => (
                         <button key={item} id={currentProcent2 === item ? IDname : undefined} className='procent-btn' onClick={() => activeProcent(item) }>{item} <span>%</span></button>
                     ))}
-                    <InputNumber symbol='%' width='20%' value={currentProcent} idValue={inputId} setActive={setProcentActive} setInputId={setInputId} setValue={setSlippageProcent}/>
+                    <InputNumber symbol='%' width='23%' value={currentProcent} idValue={inputId} setActive={setProcentActive} setInputId={setInputId} setValue={setSlippageProcent}/>
                 </div>
             </Div>
             <Div>
                 <h4>{text.DEADLINE_TEXT}</h4>
-                <div className='procent-row'>
+                <div className='procent-row-2'>
                     <button id={activeOption ? 'active-procent' : +deadlineMin == 20 ? 'initial-procent' : undefined} className='procent-btn' onClick={() => setDeadlineButtonActive()}>20 min</button>
-                    <InputNumber symbol='min' width='80%' value={minute} idValue={deadlineInputId} setActive={setDeadlineActive} setInputId={setDeadlineInputId} setValue={setDeadline}/>
+                    <InputNumber symbol='min' width='25%' value={minute} idValue={deadlineInputId} setActive={setDeadlineActive} setInputId={setDeadlineInputId} setValue={setDeadline}/>
                 </div>
             </Div>
             <Div>

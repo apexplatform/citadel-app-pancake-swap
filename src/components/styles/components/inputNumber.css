@@ -5,23 +5,27 @@
     border-radius: 25px;
     font-size: 15px;
     width: 100%;
-    padding-left: 20px;
-    padding-right: 30px;
+    padding-left: 25px;
+    padding-right: 40px;
     position: relative;
     text-align: center;
-    height: 34px;
+    height: 35px;
 }
 
-.symbol-span{
-    position: absolute;
-    right: 35px;
+.input-number-container span{
+    position: relative;
+    right: 38px;
+    top: -1px;
     color: #818C99;
+}
+.procent-symbol{
+    right: 29px !important;
 }
 
 .input-number-container{
     display: flex;
     align-items: center;
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 #active-input{

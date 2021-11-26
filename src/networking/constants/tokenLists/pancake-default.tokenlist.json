@@ -11,7 +11,7 @@
   "keywords": ["pancake", "default"],
   "tokens": [
     {
-      "name": "Citadel.one(XCT) Token",
+      "name": "Citadel.one (XCT)",
       "symbol": "XCT",
       "address": "0xe8670901e86818745b28c8b30b17986958fce8cc",
       "chainId": 56,
