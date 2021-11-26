@@ -28,7 +28,7 @@ const AmountInput = (props) => {
         props.setIndependentField(props.name)
         props.setExactIn(props.name === 'INPUT' ? true : false)
         if(+val > 0){
-            props.updateTradeInfo(val,props.name === 'INPUT' ? true : false)
+            props.updateTradeInfo(val,props.name === 'INPUT' ? true : false,val.length > 2 ? true : false)
             props.checkSwapStatus(val,setIsactive,isMax,props.name === 'INPUT' ? true : false)
         } else {
             props.setSwapStatus('enterAmount')

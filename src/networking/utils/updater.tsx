@@ -138,6 +138,7 @@ export default function Updater(): null {
   }, [debouncedListeners, chainId])
   const outdatedCallKeys = Object.keys(listeningKeys)
     if (!state.calls) return null
+    useEffect(() => {
     const calls = outdatedCallKeys.map((key) => parseCallKey(key))
     const chunkedCalls = chunkArray(calls, CALL_CHUNK_SIZE)
     if (cancellations.current?.blockNumber !== currentBlock) {
@@ -191,7 +192,7 @@ export default function Updater(): null {
         return cancel
       }),
     }
- // }, [chainId, multicallContract, dispatch, serializedOutdatedCallKeys, currentBlock])
+  }, [chainId, multicallContract, currentBlock])
 
   return null
 }

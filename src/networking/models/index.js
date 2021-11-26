@@ -1,4 +1,4 @@
-import Wallet from './Wallet'
+import BSCWallet from './walletCoins/BSCWallet'
 export default {
-  BSC: Wallet,
+  BSC: BSCWallet,
 }

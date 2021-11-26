@@ -77,43 +77,6 @@ export const addresses = [
 
 
 
-// export const checkAmount = (val,name) => dispatch => {
-//     const {currentWallet,fromToken,toToken} = store.getState().walletReducer
-//     const {allowanceAmount,slippageTolerance,trade} = store.getState().swapReducer
-//     dispatch(setAmount(val))
-//     dispatch(setIndependentField(name))
-//     let { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
-//     const feeProcent = realizedLPFee?.toSignificant(4) || 0.001
-//     const outputAmount = trade?.outputAmount?.toExact() || 0
-//     let balance = 0
-//     if(fromToken.symbol === 'BNB') balance = currentWallet?.balance?.mainBalance
-//     if(name === 'INPUT' && fromToken.balance) balance = fromToken.balance
-//     if(name === 'OUTPUT' && toToken.balance) balance = toToken.balance
-//    // props.setExactIn(props.name === 'INPUT' ? true : false)
-//     if(+val > 0){
-//         dispatch(updateTradeInfo(val, name === 'INPUT' ? true : false))
-//         dispatch(setToAmount(outputAmount))
-//         if(parseInt(val) > balance){
-//             dispatch(setSwapStatus('insufficientBalance'))
-//         }
-//         else if(parseInt(val) < +balance - feeProcent){
-//             if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))).toNumber() > parseInt(val) || fromToken.symbol === 'BNB'){
-//                 if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
-//                     dispatch(setSwapStatus('swap'))
-//                 }else{
-//                     dispatch(setSwapStatus('swapAnyway'))
-//                 }
-//             } else {
-//                 dispatch(setTimerApprove(true))
-//                 dispatch(setSwapStatus('approve'))
-//             }
-//         } else {
-//             dispatch(setSwapStatus('feeError'))
-//         }
-//     } else {
-//         dispatch(setSwapStatus('enterAmount'))
-//     }
-// }
 
 // 1 - Error: Returned error: insufficient funds for transfer
 

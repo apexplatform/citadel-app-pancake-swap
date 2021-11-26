@@ -7,12 +7,11 @@ import {setSlippageTolerance,setDeadline} from '../../store/actions/swapActions'
 import fileRoutes from '../../config/file-routes-config.json'
 import text from '../../text.json'
 import BigNumber from 'bignumber.js';
+import InputNumber from '../uikit/InputNumber'
  const Settings = (props) => {
     const {slippageTolerance,deadlineMin} = props.swapReducer
     const [minute,setMinute] = useState(deadlineMin)
     const [minute2,setMinute2] = useState(deadlineMin)
-    const [procentWidth,setProcentWidth] = useState(-60 + ((slippageTolerance.toString().length +1) * 7))
-    const [minuteWidth,setMinuteWidth] = useState(-355 + ((deadlineMin.toString().length + 1) * 7))
     const [deadlineInputId,setDeadlineInputId] = useState('default-input')
     const [inputId,setInputId] = useState('default-input')
     const [currentProcent,setCurrentProcent] = useState(slippageTolerance)
@@ -46,7 +45,6 @@ import BigNumber from 'bignumber.js';
             setCurrentProcent(BigNumber(+val).toFixed());
         }
         setButtonOption(false)
-        setProcentWidth(-65 + ((currentProcent.length) * 7))
     }
     const setDeadline = (val) => {
         val = val.replace(/[^0-9\.]/g, '')
@@ -56,7 +54,6 @@ import BigNumber from 'bignumber.js';
             setMinute(BigNumber(+val).toFixed());
         }
         setButtonOption2(false)
-        setMinuteWidth(-345 + ((minute.length) * 7));
         setActiveOption(false)
     }
     const activeProcent = (item) => {
@@ -116,16 +113,14 @@ import BigNumber from 'bignumber.js';
                     {procent.map((item) => (
                         <button key={item} id={currentProcent2 === item ? IDname : undefined} className='procent-btn' onClick={() => activeProcent(item) }>{item} <span>%</span></button>
                     ))}
-                    <input value={currentProcent} type='text' onBlur={() => setInputId('active-input-2')} id={inputId} onClick={() => setProcentActive()} className='procent-input' onChange={(e) => setSlippageProcent(e.target.value)}></input>
-                    <span className='procent-span' style={{left: `${procentWidth}px`}}>%</span>
+                    <InputNumber symbol='%' width='20%' value={currentProcent} idValue={inputId} setActive={setProcentActive} setInputId={setInputId} setValue={setSlippageProcent}/>
                 </div>
             </Div>
             <Div>
                 <h4>{text.DEADLINE_TEXT}</h4>
                 <div className='procent-row'>
                     <button id={activeOption ? 'active-procent' : +deadlineMin == 20 ? 'initial-procent' : undefined} className='procent-btn' onClick={() => setDeadlineButtonActive()}>20 min</button>
-                    <input className='deadline-input' onBlur={() => setDeadlineInputId('active-input-2')} onClick={() => setDeadlineActive()} id={deadlineInputId} value={minute} onChange={(e) => setDeadline(e.target.value)}/>
-                    <span className='minute-span' style={{left: `${minuteWidth}px`}}>min</span>
+                    <InputNumber symbol='min' width='80%' value={minute} idValue={deadlineInputId} setActive={setDeadlineActive} setInputId={setDeadlineInputId} setValue={setDeadline}/>
                 </div>
             </Div>
             <Div>

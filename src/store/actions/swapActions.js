@@ -124,7 +124,7 @@ export const swapTokens = () => dispatch =>{
     })
 }
 
-export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
+export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false) => dispatch => {
     try{
         const wallet = getWalletConstructor()
         if(wallet){
@@ -134,8 +134,10 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true) => dispatch => {
             const outputCurrency = wallet.getCurrency(toToken.address || toToken.symbol)
             let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
             dispatch(setParsedAmount(parsedAmount))
-            const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn))
+            const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn,updateCall))
+            if(bestTradeExact?.outputAmount) updateTradeInfo(amount)
             dispatch(setTrade(bestTradeExact))
+            //console.log(bestTradeExact,'--bestTradeExact')
             dispatch(setMinReceive(wallet.getMinReceived()))
             dispatch(wallet.getTokenAllowance())
             if(swapStatus === 'approve'){
@@ -154,7 +156,8 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     const {trade,allowanceAmount,slippageTolerance} = store.getState().swapReducer
     const {fromToken} = store.getState().walletReducer
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
-    const feeProcent = +realizedLPFee?.toSignificant(4) || 0.001
+    const feeProcent = +realizedLPFee?.toSignificant(4) || 0.02
+    console.log(isMax,'--')
     if(isMax){
         dispatch(setAmount(+balance - feeProcent))
         dispatch(updateTradeInfo(+balance - feeProcent,isExactIn))

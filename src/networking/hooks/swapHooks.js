@@ -13,7 +13,7 @@ import {
 	BETTER_TRADE_LESS_HOPS_THRESHOLD,
 	ADDITIONAL_BASES,
   } from '../constants/constants.js'
-  import { ADD_MULTICAL_LISTENERS,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST, SET_LOADER, SET_TO_TOKEN, SET_FROM_TOKEN, SET_EMPTY_TOKEN_LIST} from "../../store/actions/types"
+  import { ADD_MULTICAL_LISTENERS,SET_ALLOWED_PAIRS,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST, SET_LOADER, SET_TO_TOKEN, SET_FROM_TOKEN, SET_EMPTY_TOKEN_LIST} from "../../store/actions/types"
 import tokens from '../constants/tokenLists/pancake-default.tokenlist.json'
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const LOWER_HEX_REGEX = /^0x[a-f0-9]*$/
@@ -207,8 +207,17 @@ export function tryParseAmount(value, currency) {
 	return tradeA.executionPrice.raw.multiply(minimumDelta.add(ONE_HUNDRED_PERCENT)).lessThan(tradeB.executionPrice)
   }
 
-  export const useTradeExact = (currencyAmountIn, currencyOut,isExactIn) => dispatch =>{
-	const allowedPairs = dispatch(useAllCommonPairs(currencyAmountIn?.currency, currencyOut))
+  export const useTradeExact = (currencyAmountIn, currencyOut,isExactIn,updateCall) => dispatch =>{
+	let allowedPairs = []
+	if(!updateCall){
+		allowedPairs = dispatch(useAllCommonPairs(currencyAmountIn?.currency, currencyOut))
+		dispatch({
+			type: SET_ALLOWED_PAIRS,
+			payload: allowedPairs
+		})
+	} else {
+		allowedPairs = store.getState().swapReducer.allowedPairs
+	}
 	const singleHopOnly = false
 	const MAX_HOPS = 3
 	if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
