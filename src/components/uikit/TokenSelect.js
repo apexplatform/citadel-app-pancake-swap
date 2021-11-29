@@ -3,11 +3,11 @@ import { Icon20ChevronRightOutline } from '@vkontakte/icons';
 import {setActivePage} from '../../store/actions/panelActions'
 import {connect} from 'react-redux';
 import ROUTES from '../../routes'
-import Icon from './Icon'
+import {setSelectedToken} from '../../store/actions/walletActions'
 const TokenSelect = (props) => {
     const {selectedToken} = props
     return(
-        <div className='token-container' onClick={()=>props.setActivePage(ROUTES.SELECT_TOKEN)}>
+        <div className='token-container' onClick={()=> {props.setSelectedToken(props.name);props.setActivePage(ROUTES.SELECT_TOKEN)}}>
             <div className='token-row'>
                 <img src={selectedToken.logoURI} alt ='icon' onError={(e) => {e.target.src='/img/coins/eth.svg'}}/>
                 <span className='token-name'>{selectedToken.name}</span>
@@ -20,4 +20,4 @@ const mapStateToProps=(state)=>({
 	walletReducer: state.walletReducer
 })
 
-export default connect(mapStateToProps, {setActivePage}) (TokenSelect);
+export default connect(mapStateToProps, {setSelectedToken,setActivePage}) (TokenSelect);

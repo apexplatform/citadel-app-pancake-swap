@@ -262,10 +262,10 @@ export function tryParseAmount(value, currency) {
 	return null
   }
   
-  export const loadBlockNumber = () => dispatch => {
+  export const loadBlockNumber = () => async(dispatch) => {
 	const {deadlineMin} = store.getState().swapReducer
 	const contract = useMulticallContract()
-	contract?.getCurrentBlockTimestamp().then((returnData) => {
+	await contract?.getCurrentBlockTimestamp().then((returnData) => {
 	  dispatch({
 		type: SET_DEADLINE,
 		payload: parseInt(returnData?._hex, 16) + (+deadlineMin * 60)
@@ -273,7 +273,7 @@ export function tryParseAmount(value, currency) {
 	})
   }
   
-  export const loadTokenBalances = () => async(dispatch) => {
+  export const loadTokenBalances = () => dispatch => {
 	const {currentWallet,fromToken,toToken} = store.getState().walletReducer
 	let list = [{...Currency.ETHER,symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokens['tokens']]
 	dispatch({
@@ -281,7 +281,7 @@ export function tryParseAmount(value, currency) {
 		payload: []
 	})
 	list.forEach(async(token) =>{
-		if(token.address){
+		if(token?.address){
 			const contract = useTokenContract(token.address)
 			let balance = await contract?.balanceOf(currentWallet?.address)
 				if(token.symbol === toToken.symbol){

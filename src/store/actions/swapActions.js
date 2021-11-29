@@ -63,12 +63,14 @@ export const setSlippageTolerance = (procent) => dispatch =>{
 
 export const getTokenBalance = () => async(dispatch) =>{
     const wallet = getWalletConstructor()
-    dispatch({
-        type: SET_EMPTY_TOKEN_LIST,
-        payload: []
-    })
-    await dispatch(wallet.getTokenBalances())
-    dispatch(wallet.getBlockNumber())
+    if(wallet){
+        dispatch({
+            type: SET_EMPTY_TOKEN_LIST,
+            payload: []
+        })
+        await dispatch(wallet.getTokenBalances())
+        await dispatch(wallet.getBlockNumber())
+    }
 }
 
 export const checkTokenAllowance = () => dispatch =>{
@@ -158,6 +160,7 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     const {fromToken} = store.getState().walletReducer
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const feeProcent = +realizedLPFee?.toSignificant(4) || 0.02
+    console.log('--checkSwapStatus--')
     if(isMax){
         dispatch(updateTradeInfo(BigNumber(+balance).minus(feeProcent).toFixed(),isExactIn))
         dispatch(setAmount(BigNumber(+balance).minus(feeProcent).toFixed()))
@@ -167,7 +170,7 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     if(+amount > 0) {
         if(+amount > +balance){
             dispatch(setSwapStatus('insufficientBalance'))
-        } else if(+amount <= +balance - feeProcent){
+        } else if(+amount <= BigNumber(+balance).minus(feeProcent).toNumber()){
                     if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))).toNumber() > +amount || fromToken.symbol === 'BNB'){
                         if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
                             dispatch(setSwapStatus('swap'))

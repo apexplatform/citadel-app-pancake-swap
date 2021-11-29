@@ -4,8 +4,6 @@ import '../styles/panels/swap.css'
 import AmountInput from '../uikit/AmountInput'
 import TokenSelect from '../uikit/TokenSelect'
 import {swapTokens,updateTradeInfo,checkTokenAllowance,checkSwapStatus,setIndependentField,setSwapStatus} from '../../store/actions/swapActions'
-import BigNumber from 'bignumber.js';
-import {setSelectedToken} from '../../store/actions/walletActions'
 import Header from '../uikit/Header'
 import {computeTradePriceBreakdown} from '../../networking/utils/price'
 import {connect} from 'react-redux';
@@ -50,9 +48,9 @@ const Swap = (props) => {
 		{/* { loader ?  */}
 				<>
 			<div className='swap-column'>
-				<FormItem top={"From" + (independentField === 'OUTPUT' ? ' (estimated)' : '') } className='formTokenItem' onClick={() => props.setSelectedToken('from')}>
+				<FormItem top={"From" + (independentField === 'OUTPUT' ? ' (estimated)' : '') } className='formTokenItem'>
 					<div className='swap-row'>
-						<TokenSelect selectedToken={fromToken}/>
+						<TokenSelect selectedToken={fromToken} name='from'/>
 						<AmountInput inputAmount={formattedAmounts['OUTPUT']} setExactIn={setExactIn}  name='INPUT' setField={setIndependentField} slippage={priceImpactWithoutFee} hideFee={!showFee} hideMax={true} amount={formattedAmounts['INPUT']} fee={realizedLPFee?.toSignificant(4) || 0.02} isExactIn={isExactIn}/>
 					</div>
 				</FormItem>
@@ -65,9 +63,9 @@ const Swap = (props) => {
 				<div className="delimeter"></div>
 			</Div>
 			<div className='swap-column'>
-				<FormItem top={"To" + (independentField === 'INPUT' ? ' (estimated)' : '')} className='formTokenItem' onClick={() => props.setSelectedToken('to')}>
+				<FormItem top={"To" + (independentField === 'INPUT' ? ' (estimated)' : '')} className='formTokenItem' >
 					<div className='swap-row'>
-						<TokenSelect selectedToken={toToken}/>
+						<TokenSelect selectedToken={toToken} name='to'/>
 						<AmountInput setExactIn={setExactIn} inputAmount={formattedAmounts['INPUT']} setField={setIndependentField} name='OUTPUT' slippage={priceImpactWithoutFee} isExactIn={isExactIn} isSecond={true} hideMax={false} hideFee={!showFee2}  fee={realizedLPFee?.toSignificant(4) || 0.02} amount={formattedAmounts['OUTPUT']}/>
 					</div>
 				</FormItem>
@@ -84,4 +82,4 @@ const mapStateToProps=(state)=>({
 	panelReducer: state.panelReducer
 })
 
-export default connect(mapStateToProps, {setLoader,checkSwapStatus,setSwapStatus,setIndependentField,checkTokenAllowance,setAmount,updateTradeInfo,swapTokens,setToAmount,setSelectedToken,setFromToken,setToToken,setFromAmount}) (Swap);
+export default connect(mapStateToProps, {setLoader,checkSwapStatus,setSwapStatus,setIndependentField,checkTokenAllowance,setAmount,updateTradeInfo,swapTokens,setToAmount,setFromToken,setToToken,setFromAmount}) (Swap);

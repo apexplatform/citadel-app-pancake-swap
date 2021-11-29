@@ -16,10 +16,17 @@ export const clearErrors = () => dispatch =>{
 
 export const checkErrors = (error) => dispatch => {
     if (error instanceof ValidationError) {
+        let errorText = {}
+        errorText = {
+            text: 'Can not find address',
+            description: 'In your wallets does not have BSC addresses with private keys',
+            tip: 'You should add addresses to your wallets'
+        }
         dispatch({
             type: GET_VALIDATION_ERRORS,
-            payload: error
+            payload: errorText
         })
+        dispatch(setActiveModal('errors'))
     } else if (error instanceof ArgumentsError){
         dispatch({
             type: GET_ARGUMENTS_ERRORS,

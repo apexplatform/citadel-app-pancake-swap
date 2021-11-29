@@ -5,7 +5,7 @@ import '../styles/components/errorModal.css'
 import text from '../../text.json'
 const ErrorModal = (props) => {
     const {activeModal} = props.panelReducer
-    const {networkErrors} = props.errorsReducer
+    const {networkErrors,validationErrors} = props.errorsReducer
     return(
 		<ModalRoot activeModal={activeModal}>
 		  <ModalPage id="errors" dynamicContentHeight onClose={() => props.setActiveModal(null)}>
@@ -13,13 +13,13 @@ const ErrorModal = (props) => {
             <img src='/img/icons/errorModal.svg' alt='error' />
             <p className='error-title'>{text.ERROR_HEADER}</p>
         </div>
-			  <p className='error-text'>{networkErrors?.text}</p>
-        <p className='error-description'>{networkErrors?.description}</p>
+			<p className='error-text'>{networkErrors?.text || validationErrors?.text}</p>
+            <p className='error-description'>{networkErrors?.description || validationErrors?.description}</p>
         <div className='error-tips'>
             <img src='/img/icons/tips.svg' alt='error' />
             <div>
                 <h4>{text.TIP}</h4>
-                <span className='tips-description'>{networkErrors?.tip}</span>
+                <span className='tips-description'>{networkErrors?.tip || validationErrors?.tip}</span>
             </div>
         </div>
         <button className='error-btn' onClick={() => props.setActiveModal(null)}>Ok</button>

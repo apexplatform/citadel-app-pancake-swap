@@ -39,7 +39,7 @@ const AmountInput = (props) => {
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-            props.updateTradeInfo(BigNumber(+balance).minus(props.fee).toNumber(), props.name === 'INPUT' ? true : false)
+          //  props.updateTradeInfo(BigNumber(+balance).minus(props.fee).toNumber(), props.name === 'INPUT' ? true : false)
             checkAmount(BigNumber(+balance).minus(props.fee).toFixed(),true)
         }
     }
