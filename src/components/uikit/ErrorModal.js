@@ -11,7 +11,7 @@ const ErrorModal = (props) => {
 		  <ModalPage id="errors" dynamicContentHeight onClose={() => props.setActiveModal(null)}>
         <div id='modal-header'>
             <img src='/img/icons/errorModal.svg' alt='error' />
-            <p className='error-title'>{text.ERROR_HEADER}</p>
+            <p className='error-title'>{networkErrors?.text ? text.ERROR_HEADER : 'Error!'}</p>
         </div>
 			<p className='error-text'>{networkErrors?.text || validationErrors?.text}</p>
             <p className='error-description'>{networkErrors?.description || validationErrors?.description}</p>

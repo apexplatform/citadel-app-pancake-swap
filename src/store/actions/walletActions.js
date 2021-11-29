@@ -111,7 +111,6 @@ export const prepareTransfer  = () => dispatch => {
 export const loadWalletWithBalances  = () => dispatch => {
     const walletList = new BSCWalletList()
     const wallets = walletList.getWallets()
-    console.log(wallets,'--wallets')
     if(wallets instanceof ValidationError){
         dispatch(checkErrors(wallets)) 
         return
