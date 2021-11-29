@@ -12,7 +12,7 @@ const FeeInfoBlock = (props) => {
         <div className='fee-info-block'>
            <div className='fee-row'>
                 <span className='fee-text'>
-                    Price
+                    {text.PRICE}
                 </span>
                 {rate ?
                 <span>
@@ -47,7 +47,7 @@ const FeeInfoBlock = (props) => {
            </div>
            <div className='fee-row'>
                 <span className='fee-text'>
-                    Route
+                    {text.ROUTE}
                 </span>
                 {path.length ? 
                 <div className='route-row'>

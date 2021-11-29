@@ -15,7 +15,7 @@ const Transactions = (props) => {
 	return (
 		<Group className='transactions-block'>
 			<Header title="Transactions"/>
-			<CardGrid size="l" style={{marginTop: '10px'}}>
+			<CardGrid size="l" style={{marginTop: 10}}>
 			{transactions.map(item => (
 				<Card size="l" mode="outline" key={item.id} onClick={()=>setTransaction(item)}>
 					<TransactionItem data={item}/>

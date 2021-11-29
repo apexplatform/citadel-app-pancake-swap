@@ -6,6 +6,7 @@ import TokenItem from '../uikit/TokenItem'
 import { useEffect, useState } from 'react';
 import {sortList} from '../helpers'
 import Loader from '../uikit/Loader'
+import text from '../../text.json'
 const SelectTokenPanel = (props) => {
     const {tokenList,currentToken,fromToken,toToken} = props.walletReducer
     const [list,setList] = useState(sortList(tokenList))
@@ -24,8 +25,8 @@ const SelectTokenPanel = (props) => {
     },[loader,tokenList,token])
     return(
         <Panel id={ROUTES.SELECT_ADDRESS}>
-            <Header title="Select token" showTitle={true}  back={true} />
-            <Search after={null} placeholder='Search' onChange={(e) => searchToken(e.target.value)}/>  
+            <Header title={text.SELECT_TOKEN}  showTitle={true}  back={true} />
+            <Search after={null} placeholder={text.SEARCH} onChange={(e) => searchToken(e.target.value)}/>  
             {loader ? list.map(item => (
                 <TokenItem item={item} withAmount={true} key={item.symbol}/>
             )):

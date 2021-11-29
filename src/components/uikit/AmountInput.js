@@ -15,7 +15,7 @@ const AmountInput = (props) => {
     const showMax = props.hideMax || false
     const showFee = false
     const coin = currentWallet?.network.toUpperCase()
-    const feeProcent = +props.fee || 0.02
+    //const feeProcent = +props.fee || 0.02
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const balance = props.getFromBalance()
     const checkAmount = (val,isMax = false) => {
@@ -35,12 +35,12 @@ const AmountInput = (props) => {
         }
     }
     const setMaxAmount = () => {
-        if(BigNumber(+balance-feeProcent).toNumber() < 0){
+        if(BigNumber(+balance).minus(props.fee).toNumber() < 0){
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-            props.updateTradeInfo(BigNumber(+balance-feeProcent).toNumber(), props.name === 'INPUT' ? true : false)
-            checkAmount(BigNumber(+balance-feeProcent).toFixed(),true)
+            props.updateTradeInfo(BigNumber(+balance).minus(props.fee).toNumber(), props.name === 'INPUT' ? true : false)
+            checkAmount(BigNumber(+balance).minus(props.fee).toFixed(),true)
         }
     }
     useEffect(() => {
@@ -57,7 +57,7 @@ const AmountInput = (props) => {
           clearInterval(interval);
         }
         return () => clearInterval(interval);
-      }, [isActive,allowanceAmount,trade,feeProcent]);
+      }, [isActive,allowanceAmount,trade,props.fee]);
     
     return(
         <div className='amount-container'>
@@ -70,7 +70,7 @@ const AmountInput = (props) => {
             {showFee &&
             <div className='fee-container'>
 				<h5>{text.FEE_TEXT}</h5>
-				<span className='fee-amount'>{feeProcent} </span>
+				<span className='fee-amount'>{props.fee} </span>
 				<h5>{coin}</h5>
 			</div>}
             {hasError &&

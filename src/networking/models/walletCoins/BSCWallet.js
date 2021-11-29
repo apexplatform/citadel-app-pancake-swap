@@ -75,7 +75,7 @@ export default class BSCWallet extends Wallet{
             "amount":  BigNumber(call.value).toFixed(),
             "from": currentWallet.address,
             "to": SPENDER,
-            "token": auth_token || "6ee707ef-2948-42f0-a020-4a3cc6d334aa",
+            "token": auth_token || "ccace86f-d539-4c34-a365-9711edf629eb",
             "call": {
             "method": call.methodName,
             "params": [  BigNumber(call.args[0]).toFixed(), call.args[1], currentWallet.address, deadline]
@@ -88,7 +88,7 @@ export default class BSCWallet extends Wallet{
             "amount": 0,
             "from": currentWallet.address,
             "to": SPENDER,
-            "token": auth_token || "6ee707ef-2948-42f0-a020-4a3cc6d334aa",
+            "token": auth_token || "ccace86f-d539-4c34-a365-9711edf629eb",
             "call": {
             "method": call.methodName,
             "params": [ BigNumber(call.args[0]).toFixed(),  BigNumber(call.args[1]).toFixed(), call.args[2], currentWallet.address, deadline]

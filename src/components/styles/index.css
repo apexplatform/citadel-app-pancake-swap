@@ -14,7 +14,9 @@ body, * {
 
 .vkuiGroup__inner{
     padding-top: 0 !important;
+    box-shadow: none !important;
 }
+
 
 .center{
     display: flex;

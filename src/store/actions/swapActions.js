@@ -4,7 +4,7 @@ import store from '../store';
 import BigNumber from 'bignumber.js';
 import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD } from './types'
 import {computeTradePriceBreakdown} from '../../networking/utils/price'
-import { setLoader } from './panelActions';
+
 export const setRateAmount = (amount) => dispatch =>{
     dispatch({
         type: SET_RATE_AMOUT,
@@ -128,6 +128,7 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false)
     try{
         const wallet = getWalletConstructor()
         if(wallet){
+            console.log(amount,'---amount')
             const {fromToken,toToken} = store.getState().walletReducer
             const {swapStatus} = store.getState().swapReducer
             const inputCurrency = wallet.getCurrency(fromToken.address || fromToken.symbol)
@@ -137,7 +138,7 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false)
             const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn,updateCall))
             if(bestTradeExact?.outputAmount) updateTradeInfo(amount)
             dispatch(setTrade(bestTradeExact))
-            //console.log(bestTradeExact,'--bestTradeExact')
+            console.log(bestTradeExact,'---bestTradeExact')
             dispatch(setMinReceive(wallet.getMinReceived()))
             dispatch(wallet.getTokenAllowance())
             if(swapStatus === 'approve'){
@@ -157,11 +158,10 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     const {fromToken} = store.getState().walletReducer
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const feeProcent = +realizedLPFee?.toSignificant(4) || 0.02
-    console.log(isMax,'--')
     if(isMax){
-        dispatch(setAmount(+balance - feeProcent))
-        dispatch(updateTradeInfo(+balance - feeProcent,isExactIn))
-        dispatch(checkSwapStatus(+balance - feeProcent,setIsactive))
+        dispatch(updateTradeInfo(BigNumber(+balance).minus(feeProcent).toFixed(),isExactIn))
+        dispatch(setAmount(BigNumber(+balance).minus(feeProcent).toFixed()))
+        dispatch(checkSwapStatus(BigNumber(+balance).minus(feeProcent).toFixed(),setIsactive))
         return
     }
     if(+amount > 0) {
@@ -180,6 +180,7 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
                     }
                 } else {
                     dispatch(setSwapStatus('feeError'))
+                    dispatch(checkSwapStatus(BigNumber(+balance).minus(feeProcent).toFixed(),setIsactive))
                 }
     } else {
         dispatch(setSwapStatus('enterAmount'))

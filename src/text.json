@@ -32,5 +32,13 @@
     "ERROR_TEXT_DEFAULT": "Pancake: TRANSFER_FAILED",
     "ERROR_DESCRIPTION_DEFAULT": "The transaction failed.",
     "ERROR_TIP_DEFAULT": "Make sure you have more tokens in your wallet than you intend to swap, or try to swap a lower amount.",
-    "COMING_SOON": "Coming soon"
+    "COMING_SOON": "Coming soon",
+    "SELECT_ADDRESS": "Select address",
+    "SEARCH": "Search",
+    "SELECT_TOKEN": "Select token",
+    "PRICE": "Price",
+    "ROUTE": "Route",
+    "SWAP": "Swap",
+    "SWAP_ANYWAY": "Swap Anyway",
+    "APPROVE": "Approve"
 }
