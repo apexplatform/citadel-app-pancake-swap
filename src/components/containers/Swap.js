@@ -13,6 +13,7 @@ import {setLoader} from '../../store/actions/panelActions'
 import {setFromToken,setToToken,setAmount,setFromAmount,setToAmount} from '../../store/actions/walletActions'
 import FeeInfoBlock from '../uikit/FeeInfoBlock'
 import SwapButton from '../uikit/SwapButton'
+import Updater from '../../networking/utils/updater'
 const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
 	const {trade,parsedAmount,independentField,allowanceAmount} = props.swapReducer
@@ -76,6 +77,7 @@ const Swap = (props) => {
 			</div>
 			<FeeInfoBlock rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
 			<SwapButton isExactIn={isExactIn}/>
+			<Updater/>
 			</>
 		</Group>
 	); 

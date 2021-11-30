@@ -129,7 +129,7 @@ export default function Updater(): null {
   const chainId = 56
   // wait for listeners to settle before triggering updates
   const debouncedListeners = useDebounce(state.callListeners, 100)
-
+  const {fromToken,toToken} = store.getState().walletReducer
   const { currentBlock } = useBlock()
   const multicallContract = useMulticallContract()
   const cancellations = useRef<{ blockNumber: number; cancellations: (() => void)[] }>()
@@ -192,7 +192,7 @@ export default function Updater(): null {
         return cancel
       }),
     }
-  }, [chainId, multicallContract, currentBlock])
+  }, [state.calls,state.callListeners,currentBlock,fromToken,toToken])
 
   return null
 }

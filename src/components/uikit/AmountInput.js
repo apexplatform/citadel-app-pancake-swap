@@ -3,7 +3,6 @@ import '../styles/components/amountInput.css'
 import text from '../../text.json'
 import fileRoutes from '../../config/file-routes-config.json'
 import {connect} from 'react-redux'
-import Updater from '../../networking/utils/updater'
 import {setRateAmount,updateTradeInfo,checkSwapStatus, setSwapStatus,checkTokenAllowance,setIndependentField,getFromBalance} from '../../store/actions/swapActions'
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 import BigNumber from 'bignumber.js';
@@ -78,7 +77,7 @@ const AmountInput = (props) => {
                 <img src={fileRoutes.ERROR_ICON} alt='error'/>
                 <span className='amount-error-text'>{text.ERRORS.INSUFFICIENT_FUNDS}</span>
             </div>}
-            <Updater/>
+            {/* <Updater/> */}
         </div>
     )
 }
