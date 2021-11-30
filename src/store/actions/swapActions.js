@@ -75,42 +75,49 @@ export const getTokenBalance = () => async(dispatch) =>{
 
 export const checkTokenAllowance = () => dispatch =>{
     const wallet = getWalletConstructor()
-    dispatch(wallet.getTokenAllowance())
+    if(wallet){
+        dispatch(wallet.getTokenAllowance())
+    }
 }
 
 export const prepareSwapTransfer  = (isExactIn) => async(dispatch) => {
     const wallet = getWalletConstructor()
-    await dispatch(wallet.getBlockNumber())
-    const transaction = wallet.generateSwapTransaction(isExactIn)
-    wallet.prepareTransfer(transaction).then((response) => {
-        if(response?.ok){
-            return dispatch ({
-                type:SET_PREPARE_TRANSFER_RESPONSE,
-                payload: data
-            })
-        }else{
-            dispatch(checkErrors(response))
-        }
-    }).catch(err => {
-        dispatch(checkErrors(err))
-    })
+    if(wallet){
+        await dispatch(wallet.getBlockNumber())
+        const transaction = wallet.generateSwapTransaction(isExactIn)
+        wallet.prepareTransfer(transaction).then((response) => {
+            if(response?.ok){
+                return dispatch ({
+                    type:SET_PREPARE_TRANSFER_RESPONSE,
+                    payload: data
+                })
+            }else{
+                dispatch(checkErrors(response))
+            }
+        }).catch(err => {
+            dispatch(checkErrors(err))
+        })
+    }
+ 
 }
 
 export const prepareApprove  = () => dispatch => {
     const wallet = getWalletConstructor()
-    const transaction = wallet.generateApproveTransaction()
-    wallet.prepareTransfer(transaction).then((ok, data) => {
-        if(ok){
-            return dispatch ({
-                type:SET_PREPARE_TRANSFER_RESPONSE,
-                payload: data
-            })
-        }else{
-            dispatch(checkErrors(data))
-        }
-    }).catch(err => {
-        dispatch(checkErrors(err))
-    })
+    if(wallet){
+        const transaction = wallet.generateApproveTransaction()
+        wallet.prepareTransfer(transaction).then((ok, data) => {
+            if(ok){
+                return dispatch ({
+                    type:SET_PREPARE_TRANSFER_RESPONSE,
+                    payload: data
+                })
+            }else{
+                dispatch(checkErrors(data))
+            }
+        }).catch(err => {
+            dispatch(checkErrors(err))
+        })
+    }
 }
 
 export const swapTokens = () => dispatch =>{

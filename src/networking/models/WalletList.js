@@ -5,7 +5,8 @@ export class BSCWalletList {
             const qs = require('querystring');
             const params = window.location.search.slice(1);
             const paramsAsObject = qs.parse(params);
-            let wallets = paramsAsObject.wallets ? eval(paramsAsObject.wallets).map(item => {
+            let arr = JSON.parse(paramsAsObject.wallets)
+            let wallets = arr.length ? eval(paramsAsObject.wallets).map(item => {
                 return {
                     address: item?.address,
                     network: item?.net,
@@ -15,7 +16,7 @@ export class BSCWalletList {
             }) : new ValidationError(e)
             return wallets
         }catch(e){
-            return new ValidationError(e);
+            return new ValidationError(e)
         }
      
     }

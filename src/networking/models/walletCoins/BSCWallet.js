@@ -45,7 +45,6 @@ export default class BSCWallet extends Wallet{
         const {currentWallet,fromToken,toToken,fromTokenAmount,toTokenAmount} = store.getState().walletReducer;
         const {trade,deadline,slippageTolerance} = store.getState().swapReducer;
         const BIPS_BASE = JSBI.BigInt(10000)
-        const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
         const call = Router.swapCallParameters(trade, {
         feeOnTransfer: false,
         allowedSlippage: new Percent(JSBI.BigInt(slippageTolerance), BIPS_BASE),
@@ -66,7 +65,7 @@ export default class BSCWallet extends Wallet{
         },
         {
             title : "Slipadge tolerance",
-            value : `${priceImpactWithoutFee.lessThan(ONE_BIPS) ? '0.01' : priceImpactWithoutFee.toFixed(2)}%`,
+            value : `${slippageTolerance}%`,
             type : "text"
         }     
         ]
