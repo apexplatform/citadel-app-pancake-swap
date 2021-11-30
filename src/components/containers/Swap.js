@@ -41,6 +41,10 @@ const Swap = (props) => {
 		props.setFromAmount(formattedAmounts['INPUT'])
 		props.setToAmount(formattedAmounts['OUTPUT'])
     	props.checkSwapStatus(formattedAmounts['INPUT'])
+		if(!trade && +amount != 0){
+			console.log('--update trade--')
+			props.updateTradeInfo(amount, isExactIn)
+		}
 	},[fromToken,toToken,trade,allowanceAmount,amount])
 	return (
 		<Group className='swap-container'>
