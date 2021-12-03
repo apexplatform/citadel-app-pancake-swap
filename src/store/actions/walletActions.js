@@ -41,7 +41,6 @@ export const setSelectedToken = (token) => dispatch =>{
         type: SET_TOKEN,
         payload: token
     })
-console.log('----click',token)
 }
 
 export const setFromToken = (token) => dispatch =>{
@@ -118,12 +117,14 @@ export const loadWalletWithBalances  = () => dispatch => {
     if(wallets.length > 0){
         wallets.forEach(async item => {
             const wallet = getWalletConstructor(item)
-            let response = await wallet.getWalletBalance()
-            if(response.ok){
-                item.balance = response.data
-            }else{
-                dispatch(checkErrors(response))
-            }
+            if(wallet){
+                let response = await wallet.getWalletBalance()
+                if(response.ok){
+                    item.balance = response.data
+                }else{
+                    dispatch(checkErrors(response))
+                }
+            } 
         })
         dispatch ({
             type:SET_WALLETS,

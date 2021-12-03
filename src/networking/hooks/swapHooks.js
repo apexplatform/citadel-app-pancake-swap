@@ -13,8 +13,10 @@ import {
 	BETTER_TRADE_LESS_HOPS_THRESHOLD,
 	ADDITIONAL_BASES,
   } from '../constants/constants.js'
-  import { ADD_MULTICAL_LISTENERS,SET_ALLOWED_PAIRS,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST, SET_LOADER, SET_TO_TOKEN, SET_FROM_TOKEN, SET_EMPTY_TOKEN_LIST} from "../../store/actions/types"
+  import { ADD_MULTICAL_LISTENERS,UPDATE_MULTICAL_RESULTS,ERROR_FETCHINT_MULTICAL_RESULTS,SET_ALLOWED_PAIRS,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST, SET_LOADER, SET_TO_TOKEN, SET_FROM_TOKEN, SET_EMPTY_TOKEN_LIST} from "../../store/actions/types"
 import tokens from '../constants/tokenLists/pancake-default.tokenlist.json'
+import { CancelledError, retry } from '../utils/retry'
+import {fetchChunk,chunkArray} from '../utils/updater'
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const LOWER_HEX_REGEX = /^0x[a-f0-9]*$/
 
@@ -47,7 +49,54 @@ export const useCallsData = (calls, options) => dispatch =>{
 	if (!chainId || callKeys.length === 0) return undefined
 	const call = callKeys.map((key) => parseCallKey(key))
 	dispatch({type:ADD_MULTICAL_LISTENERS,payload: {chainId,call,options}})
+	//
+	const CALL_CHUNK_SIZE = 500
+	const outdatedCallKeys = call.map(item => {
+		return item.address + '-' + item.callData
+	})
+	const { currentBlock } = useBlock()
+	const multicallContract = useMulticallContract()
+	const chunkedCalls = chunkArray(call, CALL_CHUNK_SIZE)
+	chunkedCalls.map((chunk, index) => {
+        const { cancel, promise } = retry(() => fetchChunk(multicallContract, chunk, currentBlock), {
+          n: Infinity,
+          minWait: 2500,
+          maxWait: 3500,
+        })
+        promise
+          .then(({ results: returnData, blockNumber: fetchBlockNumber }) => {
+          //  cancellations.current = { cancellations: [], blockNumber: currentBlock }
+            const firstCallKeyIndex = chunkedCalls.slice(0, index).reduce((memo, curr) => memo + curr.length, 0)
+            const lastCallKeyIndex = firstCallKeyIndex + returnData.length
+        
+            dispatch({type: UPDATE_MULTICAL_RESULTS, payload: {
+                chainId,
+                results: outdatedCallKeys.slice(firstCallKeyIndex, lastCallKeyIndex)
+                  .reduce((memo, callKey, i) => {
+                    memo[callKey] = returnData[i] ?? null
+                    return memo
+                  }, {}),
+                blockNumber: fetchBlockNumber,
+              }},
+            )
+          })
+          .catch((error) => {
+            if (error instanceof CancelledError) {
+              console.debug('Cancelled fetch for blockNumber', currentBlock)
+              return
+            }
+            console.error('Failed to fetch multicall chunk', chunk, chainId, error)
+            dispatch({type: ERROR_FETCHINT_MULTICAL_RESULTS, payload: {
+                calls: chunk,
+                chainId,
+                fetchingBlockNumber: currentBlock,
+              }},
+            )
+          })
+		})
+	//
 	const callResults = store.getState().multicalReducer.callResults
+	console.log(callResults,'--callResults')
 	dispatch({type:REMOVE_MULTICAL_LISTENERS,payload: {chainId,calls,options}})
 	return calls?.map((call) => {
 		  if (!chainId || !call) return INVALID_RESULT

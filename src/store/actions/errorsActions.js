@@ -18,9 +18,9 @@ export const checkErrors = (error) => dispatch => {
     if (error instanceof ValidationError) {
         let errorText = {}
         errorText = {
-            text: 'Can not find address',
-            description: 'In your wallets does not have BSC addresses with private keys',
-            tip: 'You should add addresses to your wallets'
+            text: text.ADDRESS_ERROR_TEXT,
+            tip: text.ADDRESS_ERROR_TIP,
+            header: text.ADDRESS_ERROR_HEADER
         }
         dispatch({
             type: GET_VALIDATION_ERRORS,

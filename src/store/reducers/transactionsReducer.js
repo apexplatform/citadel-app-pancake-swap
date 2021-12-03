@@ -1,7 +1,8 @@
-import {SET_OPENED_TRANSACTION} from '../actions/types'
+import {SET_OPENED_TRANSACTION,SET_TRANSACTIONS_LIST} from '../actions/types'
 
 const initialState = {
-    openedTransaction: []
+    openedTransaction: [],
+    transactions: []
 }
 export default function(state=initialState,action){
     switch (action.type){
@@ -9,6 +10,11 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 openedTransaction: action.payload
+            }
+        case SET_TRANSACTIONS_LIST:
+            return {
+                ...state,
+                transactions: action.payload
             }
         default:
             return state

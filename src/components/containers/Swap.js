@@ -77,7 +77,7 @@ const Swap = (props) => {
 			</div>
 			<FeeInfoBlock rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
 			<SwapButton isExactIn={isExactIn}/>
-			<Updater/>
+			{/* <Updater/> */}
 			</>
 		</Group>
 	); 

@@ -1,4 +1,4 @@
-import {getWalletConstructor, setAmount, setToToken} from './walletActions'
+import {getWalletConstructor, setAmount} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
 import BigNumber from 'bignumber.js';

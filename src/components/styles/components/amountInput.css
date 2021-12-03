@@ -1,4 +1,4 @@
-.input-container, .fee-container{
+.input-container, .fee-container,.balance-container{
     display: flex;
     align-items: center;
 }
@@ -7,13 +7,13 @@
     position: absolute;
     right: 20px;
 }
-.fee-container h5{
+.fee-container h5, .balance-container h5{
     margin: 0;
     color: #9099A3;
 }
-.fee-amount{
+.fee-amount,.balance-amount{
     color: #67A5EB;
-    font-size: 15px;
+    font-size: 14px;
     margin-right: 4px;
     font-weight: 500;
 }
@@ -92,4 +92,11 @@ input[type=number] {
     line-height: 17px;
     color: #6A4BFF;
     transition: left 0.1ms;
+}
+
+.balance-container{
+    margin: 0;
+    margin-top: -35px;
+    position: absolute;
+    right: 20px;
 }

@@ -60,6 +60,11 @@ const AmountInput = (props) => {
     
     return(
         <div className='amount-container'>
+             <div className='balance-container'>
+				<h5>{text.BALANCE}: </h5>
+				<span className='balance-amount'>{props.name === 'INPUT' ? fromToken.balance : toToken.balance} </span>
+				<h5>{props.name === 'INPUT' ? fromToken.symbol : toToken.symbol}</h5>
+			</div>
             <div className='input-container' >
                 <input className={hasError ? 'error-input' : undefined} value={props.amount} onChange={(e) => checkAmount(e.target.value)}/>
                 <span className='input-currency' style={{ left: `${currencyOffset}px` }}>{props.name === 'INPUT' ? fromToken.symbol : toToken.symbol}</span>

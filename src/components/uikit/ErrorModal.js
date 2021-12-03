@@ -10,10 +10,17 @@ const ErrorModal = (props) => {
 		<ModalRoot activeModal={activeModal}>
 		  <ModalPage id="errors" dynamicContentHeight onClose={() => props.setActiveModal(null)}>
         <div id='modal-header'>
-            <img src='/img/icons/errorModal.svg' alt='error' />
-            <p className='error-title'>{networkErrors?.text ? text.ERROR_HEADER : 'Error!'}</p>
+        {
+        !validationErrors?.header ? 
+        <img src='/img/icons/errorModal.svg' alt='error' />:
+        <img src='/img/icons/blueAlarm.svg' alt='error' />
+        }
+        {networkErrors?.text ?
+            <p className='error-title'> { text.ERROR_HEADER }</p>:
+            <p className='error-title'>{ validationErrors?.header}</p>
+        }
         </div>
-			<p className='error-text'>{networkErrors?.text || validationErrors?.text}</p>
+			<p className='error-text'>{networkErrors?.text || validationErrors?.text} <span>{validationErrors?.text && 'Citadel.one'}</span></p>
             <p className='error-description'>{networkErrors?.description || validationErrors?.description}</p>
         <div className='error-tips'>
             <img src='/img/icons/tips.svg' alt='error' />
@@ -22,7 +29,7 @@ const ErrorModal = (props) => {
                 <span className='tips-description'>{networkErrors?.tip || validationErrors?.tip}</span>
             </div>
         </div>
-        <button className='error-btn' onClick={() => props.setActiveModal(null)}>Ok</button>
+          <button className='error-btn' id={validationErrors?.header ? 'purple-btn' : undefined} onClick={() => props.setActiveModal(null)}>Ok</button>
 		  </ModalPage>
 		</ModalRoot>
 	  );

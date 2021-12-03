@@ -4,6 +4,7 @@ import store from '../../store/store';
 import * as Sentry from "@sentry/react";
 
 const api = useApi('wallet')
+const apiTransactions = useApi('transactions')
 export default class Wallet {
   constructor(opts) {
       this.net = opts.network;
@@ -26,6 +27,17 @@ export default class Wallet {
         
       }
     } 
+  async getTransactions(params) {
+    const {auth_token} = store.getState().userReducer
+    const data = await apiTransactions.getTransactions(auth_token);
+    if (data.ok) {
+      return data;
+    } else {
+      Sentry.captureException(data.error?.message || data.error?.message?.stack);
+      if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
+      return new Error(data.error?.message);  
+    }
+  } 
   prepareClaimRewards() {
     return new ImplementationError('Method not implemented!')
   }  

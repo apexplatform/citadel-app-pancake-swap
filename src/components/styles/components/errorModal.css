@@ -1,7 +1,9 @@
 .error-text{
     margin: 0 20px 10px;
     color: #737E9C;
-    font-weight: 300;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
 }
 .error-title{
     color: #000 !important;
@@ -61,4 +63,13 @@
     font-weight: 400;
     margin: 0 20px 10px;
     font-size: 14px;
+}
+
+#purple-btn{
+    background-color: #792EC0;
+}
+
+.error-text span{
+    color: #437FEC;
+    font-weight: 400;
 }
