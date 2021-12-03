@@ -1,4 +1,4 @@
-import { ModalRoot,ModalPage,ModalPageHeader } from '@vkontakte/vkui';
+import { ModalRoot,ModalPage } from '@vkontakte/vkui';
 import {setActivePanel,setActiveModal} from '../../store/actions/panelActions'
 import {connect} from 'react-redux';
 import '../styles/components/errorModal.css'

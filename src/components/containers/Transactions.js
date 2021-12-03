@@ -1,23 +1,26 @@
-import React from 'react';
 import { CardGrid, Card, Group } from '@vkontakte/vkui';
+import {useEffect} from 'react'
 import TransactionItem from '../uikit/TransactionItem'
-import {transactions} from '../../data'
 import ROUTES from '../../routes'
-import {setSelectedTransaction} from '../../store/actions/transactionsActions'
+import {setSelectedTransaction,loadTransactions} from '../../store/actions/transactionsActions'
 import {setActivePage} from '../../store/actions/panelActions'
 import {connect} from 'react-redux';
 import Header from '../uikit/Header'
 const Transactions = (props) => {
+	const {transactions} = props.transactionsReducer
 	const setTransaction = (item) => {
 		props.setActivePage(ROUTES.TRANSACTION_DETAILS)
 		props.setSelectedTransaction(item)
 	}
+	useEffect(() => {
+		props.loadTransactions()
+	}, [])
 	return (
 		<Group className='transactions-block'>
-			<Header title="Transactions"/>
+			<Header title="Transactions" showTitle={true}/>
 			<CardGrid size="l" style={{marginTop: 10}}>
-			{transactions.map(item => (
-				<Card size="l" mode="outline" key={item.id} onClick={()=>setTransaction(item)}>
+			{transactions?.map(item => (
+				<Card size="l" mode="outline" key={item?.date?.value} onClick={()=>setTransaction(item)}>
 					<TransactionItem data={item}/>
 				</Card>
 			))}
@@ -27,7 +30,8 @@ const Transactions = (props) => {
 }
 
 const mapStateToProps=(state)=>({
-	panelReducer: state.panelReducer
+	panelReducer: state.panelReducer,
+	transactionsReducer: state.transactionsReducer
 })
 
-export default connect(mapStateToProps, {setSelectedTransaction,setActivePage}) (Transactions);
+export default connect(mapStateToProps, {setSelectedTransaction,loadTransactions,setActivePage}) (Transactions);
