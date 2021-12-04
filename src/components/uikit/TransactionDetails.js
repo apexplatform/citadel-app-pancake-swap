@@ -2,7 +2,6 @@ import { Group } from '@vkontakte/vkui';
 import moment from 'moment'
 import '../styles/panels/transactions.css'
 const TransactionDetails = ({data}) => {
-    let comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea."
     return(
 	<Group className='transaction-details'>
 		<div className='transasction-details-row'>
@@ -25,10 +24,11 @@ const TransactionDetails = ({data}) => {
             <p className='description-text'>Time & data</p>
             <p className='description-text'>{moment().from(data.date?.value)}</p>
         </div>
+        {data?.comment?.value ?
         <div>
             <p className='description-text'>Comment</p>
-            <p>{comment}</p>
-        </div>
+            <p>{data?.comment?.value}</p>
+        </div>: '' }
 	</Group>
 );
 }

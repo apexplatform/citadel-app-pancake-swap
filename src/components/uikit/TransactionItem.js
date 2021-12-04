@@ -22,7 +22,7 @@ const TransactionItem = ({data}) =>{
     return(
     <div className='transactions-item'>
         <div className='transactions-row'>
-            <img src={typeImg()} alt='type' className='transaction-type-img'/>
+            <img src={typeImg()} alt='type'  className='transaction-type-img'/>
             <div className='transactions-column-1'>
                 <div className='transactions-row'>
                     <h5 className='transaction-type-text'>{data.type?.value}</h5>
