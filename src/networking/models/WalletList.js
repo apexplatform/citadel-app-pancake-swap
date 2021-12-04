@@ -1,5 +1,16 @@
 import { ValidationError } from './Errors';
-export class BSCWalletList {
+const networks = {
+    eth: {
+        name: 'Ethereum', code: 'ETH'
+    },
+    bsc: {
+        name: 'Binance Smart Chain', code: 'BNB'
+    },
+    cosmos: {
+        name: 'COSMOS', code: 'ATOM'
+    }
+}
+export class WalletList {
     getWallets(){
         try{
             const qs = require('querystring');
@@ -10,8 +21,8 @@ export class BSCWalletList {
                 return {
                     address: item?.address,
                     network: item?.net,
-                    name: 'Binance Smart Chain',
-                    code: 'BNB'
+                    name: networks[item?.net].name,
+                    code: networks[item?.net].code
                 }
             }) : new ValidationError(e)
             return wallets

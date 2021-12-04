@@ -5,7 +5,7 @@ import {ValidationError} from '../../networking/models/Errors'
 import {checkErrors} from './errorsActions'
 import {getTokenBalance, updateTradeInfo} from './swapActions'
 import axios from 'axios';
-import { BSCWalletList } from '../../networking/models/WalletList';
+import { WalletList } from '../../networking/models/WalletList';
 import { setLoader } from './panelActions';
 export const setCurrentWallet = (wallet) => dispatch =>{
     dispatch(setLoader(false))
@@ -108,7 +108,7 @@ export const prepareTransfer  = () => dispatch => {
 }
 
 export const loadWalletWithBalances  = () => dispatch => {
-    const walletList = new BSCWalletList()
+    const walletList = new WalletList()
     const wallets = walletList.getWallets()
     if(wallets instanceof ValidationError){
         dispatch(checkErrors(wallets)) 
