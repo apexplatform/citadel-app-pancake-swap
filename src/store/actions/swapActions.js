@@ -3,7 +3,7 @@ import {checkErrors} from './errorsActions'
 import axios from 'axios';
 import {DecUtils, Dec, IntPretty } from '@keplr-wallet/unit';
 import store from '../store';
-import { SET_POOL_INFO, SET_SWAP_RATE, SET_TOKEN_IN, SET_TOKEN_OUT,SET_SLIPPAGE, SET_POOL_ID, SET_INITIAL_RATE, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE } from './types'
+import { SET_POOL_INFO,SET_DEADLINE_MINUTE, SET_SWAP_RATE, SET_TOKEN_IN, SET_TOKEN_OUT,SET_SLIPPAGE, SET_POOL_ID, SET_INITIAL_RATE, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE } from './types'
 import {calcOutGivenIn, calcSpotPrice} from '../utils/math'
 import {setPopout} from './panelActions'
 import {ScreenSpinner} from '@vkontakte/vkui';
@@ -16,6 +16,12 @@ export const setRateAmount = (amount) => dispatch =>{
 }
 
 
+export const setDeadline = (min) => dispatch =>{
+    dispatch({
+        type: SET_DEADLINE_MINUTE,
+        payload: min
+    })
+}
 export const setSlippageTolerance = (procent) => dispatch =>{
     dispatch({
         type: SET_SLIPPAGE_TOLERANCE,

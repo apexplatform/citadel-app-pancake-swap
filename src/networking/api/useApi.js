@@ -1,10 +1,10 @@
 import { apies } from './apies';
-import useAxios from './useAxios';
-
-let axiosInstance = useAxios();
+import {useAxios, useAxiosUniswap } from './useAxios';
 
 export default function useApi(type = 'general', separate = false) {
-  if (separate) axiosInstance = useAxios();
+  let axiosInstance = useAxios();
+  if (separate) axiosInstance = useAxiosUniswap()
+  else axiosInstance = useAxios();
   let api = {};
   const patterns = apies[type];
   Object.keys(patterns).map((patternName) => {

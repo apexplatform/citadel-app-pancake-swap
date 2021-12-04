@@ -1,9 +1,9 @@
-import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_AMOUNT,SET_TO_AMOUNT} from '../actions/types'
-import { addresses,tokens } from '../../data'
+import {SET_CURRENT_WALLET,SET_WALLETS,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_AMOUNT,SET_TO_AMOUNT} from '../actions/types'
+import { tokens } from '../../data'
 const initialState = {
-    currentWallet: addresses[0],
+    currentWallet: null,
     currentToken: tokens[0],
-    wallets: addresses,
+    wallets: [],
     toAddress: null,
     amount: 0,
     networks: [],
@@ -18,6 +18,11 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 currentWallet: action.payload
+            }
+        case SET_WALLETS:
+            return {
+                ...state,
+                wallets: action.payload
             }
         case SET_TOKEN:
             return {

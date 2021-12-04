@@ -1,18 +1,11 @@
-export const getTransactions = ({ net, address }) => {
-  let url = () => {
-    if (net) {
-      if (address) {
-        url = `/transactions/${net}/${address}`
-      } else {
-        url = `/transactions/${net}`
-      }
-    } else {
-      url = '/transactions'
-    }
-    return url
-  }
+export const getTransactions = (token) => {
   return {
-    url: url(),
+    url: `/transactions/`,
     method: 'get',
+    data: {
+      params: {
+        token
+      },
+    },
   }
 }

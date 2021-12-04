@@ -1,18 +1,13 @@
 import sample from 'lodash/sample'
 
-if (!process.env.REACT_APP_NODE_1 || !process.env.REACT_APP_NODE_2 || !process.env.REACT_APP_NODE_3) {
-  throw Error('One base RPC URL is undefined')
-}
-
 // Array of available nodes to connect to
-export const nodes = [process.env.REACT_APP_NODE_1, process.env.REACT_APP_NODE_2, process.env.REACT_APP_NODE_3]
+export const nodesBSC = [process.env.REACT_APP_NODE_BSC_1, process.env.REACT_APP_NODE_BSC_2, process.env.REACT_APP_NODE_BSC_3]
 
-if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_NODE_ALT) {
-  nodes.push(process.env.REACT_APP_NODE_ALT)
-}
+export const nodesETH = [process.env.REACT_APP_NODE_ETH_1, process.env.REACT_APP_NODE_ETH_2, process.env.REACT_APP_NODE_ETH_3]
+
 
 const getNodeUrl = () => {
-  return sample(nodes)
+  return sample(nodesBSC)
 }
 
 export default getNodeUrl

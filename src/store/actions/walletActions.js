@@ -1,8 +1,10 @@
-import {SET_PREPARE_TRANSFER_RESPONSE,SET_AMOUNT,SET_FROM_TOKEN,SET_TO_TOKEN, SET_FROM_AMOUNT, SET_TO_AMOUNT, SET_TO_ADDRESS,SET_CURRENT_WALLET, SET_TOKEN, SET_NETWORKS} from './types'
+import {SET_PREPARE_TRANSFER_RESPONSE,SET_WALLETS,SET_AMOUNT,SET_FROM_TOKEN,SET_TO_TOKEN, SET_FROM_AMOUNT, SET_TO_AMOUNT, SET_TO_ADDRESS,SET_CURRENT_WALLET, SET_TOKEN, SET_NETWORKS} from './types'
 import models from '../../networking/models';
 import store from '../store';
 import {checkErrors} from './errorsActions'
 import axios from 'axios';
+import {ValidationError} from '../../networking/models/Errors'
+import {WalletList} from '../../networking/models/WalletList'
 export const setCurrentWallet = (wallet) => dispatch =>{
     dispatch({
         type: SET_CURRENT_WALLET,
@@ -64,12 +66,15 @@ export const getCurrentWallet  = () => {
     return currentWallet
 }
 
-export const getWalletConstructor = () =>  {
+export const getWalletConstructor = (address) =>  {
     try{
-        const currentWallet = getCurrentWallet()
+        const currentWallet = address || getCurrentWallet()
         const WalletConstructor = models[currentWallet.network.toUpperCase()];
         const wallet = new WalletConstructor(currentWallet)
-        return wallet
+        if(wallet){
+            return wallet
+        }
+        return undefined
     }catch{
         new Error("Wallet doesn't exists ")
     }
@@ -90,6 +95,36 @@ export const prepareTransfer  = () => dispatch => {
     }).catch(err => {
         dispatch(checkErrors(err))
     })
+}
+
+export const loadWalletWithBalances  = () => dispatch => {
+    const walletList = new WalletList()
+    const wallets = walletList.getWallets()
+    if(wallets instanceof ValidationError){
+        dispatch(checkErrors(wallets)) 
+        return
+    }
+    if(wallets.length){
+        wallets.forEach(async item => {
+            const wallet = getWalletConstructor(item)
+            if(wallet){
+                let response = await wallet.getWalletBalance()
+                if(response.ok){
+                    item.balance = response.data
+                }else{
+                    dispatch(checkErrors(response))
+                }
+            }   
+        })
+        dispatch ({
+            type:SET_WALLETS,
+            payload: wallets
+        })
+        dispatch ({
+            type:SET_CURRENT_WALLET,
+            payload: wallets[0]
+        })
+    }
 }
 
 export const loadNetworks = () => dispatch =>{

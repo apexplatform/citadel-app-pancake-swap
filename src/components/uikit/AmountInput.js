@@ -9,11 +9,11 @@ import {setFromAmount,setToAmount}  from '../../store/actions/walletActions'
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
     const {currentWallet} = props.walletReducer
-    const balance = currentWallet.amount || 0
+    const balance = currentWallet?.balance?.mainBalance || 0
     const {poolInfo,initialRate,rate,slippage,slippageTolerance} = props.swapReducer
     const showMax = props.hideMax || false
     const showFee = props.hideFee || false
-    const coin = currentWallet.network.toUpperCase()
+    const coin = currentWallet?.code.toUpperCase()
     const feeProcent = (+poolInfo?.poolParams?.swapFee * 100) || 1
     console.log(rate,'--rate')
     const checkAmount = (val) => {

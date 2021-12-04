@@ -1,7 +1,7 @@
 {
     "TABBAR": {
         "BACKGROUND_COLOR": "#3C356D",
-        "DEFAULT_ITEM_COLOR": "#979EFE",
+        "DEFAULT_ITEM_COLOR": "#FFF",
         "ACTIVE_ITEM_COLOR": "#FFFFFF",
         "HOVER_ITEM_COLOR": "#979EFE",
         "DISABLE_ITEM_COLOR": "#979EFE",

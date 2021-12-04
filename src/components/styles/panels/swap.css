@@ -1,14 +1,13 @@
-.swap-btn{   
-    background: #792EC0;
-    border-radius: 4px;
-    color: white;
-}
-.swap-btn:hover{
-    background: #54178E;
-}
+
 .swap-container{
     margin-bottom: 160px;
 }
+#loader{
+    margin-bottom: -5px !important;
+    margin-right: 10px;
+    display: inline-block;
+}
+
 .swap-row{
     display: flex;
     align-items: center;
@@ -16,13 +15,11 @@
     border: 1px solid #D3D9DE;
     border-radius: 6px;
 }
-
-.formTokenItem{
-    width: 95%;
+.swap-row .token-container{
+    width: 32%;
 }
-.delimeter{
-    border-top: 1px dashed #D3D9DE;
-    width: 100%;
+.swap-row .amount-container{
+    width: 60%;
 }
 .swap-column{
     display: flex;
@@ -35,6 +32,14 @@
     width: 100%;
     padding: 0;
 }
+.delimeter{
+    border-top: 1px dashed #D3D9DE;
+    width: 100%;
+}
+.formAddressItem{
+    width: 95%;
+}
+
 .swap-amount-btn{
     border: 1px solid #D3D9DE;
     border-radius: 4px;
@@ -43,9 +48,8 @@
     height: 46px;
 }
 .swap-block{
-    margin-bottom: -10px !important;
+    margin-bottom: -20px !important;
 }
-
 .swap-amount-btn:hover{
     background-color: #792EC0;
 }
@@ -54,8 +58,3 @@
     fill: white !important;
 }
 
-
-#disabled-btn{
-    background: #CCD3FF !important;
-    cursor: no-drop !important;
-}

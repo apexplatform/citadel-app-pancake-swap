@@ -10,6 +10,7 @@ const AddressBlock = (props) => {
     const {currentWallet} = props.walletReducer
     return(
         <Card onClick={()=> props.setActivePage(ROUTES.SELECT_ADDRESS)} className="address-block-card">
+            {currentWallet ?
             <div className='address-block'>
                 <div className="address-icon center">
                     <Icon icon={currentWallet?.network} width={24} height={24}/>
@@ -20,12 +21,12 @@ const AddressBlock = (props) => {
                         <span className="address-text">({fotmatAddress(currentWallet?.address)})</span>
                     </div>
                     <div className='address-row'>
-                        <p className="address-block-amount">{currentWallet.amount}</p>
-                        <span className="address-network">{currentWallet?.network}</span>
+                        <p className="address-block-amount">{currentWallet?.balance?.mainBalance}</p>
+                        <span className="address-network">{currentWallet?.code}</span>
                     </div>
                 </div>
                 <Icon20ChevronRightOutline fill="#818C99" width={30} height={30}/> 
-            </div>
+            </div>: null }
         </Card>
     )
 }

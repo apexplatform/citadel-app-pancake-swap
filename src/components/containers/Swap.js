@@ -19,8 +19,8 @@ const Swap = (props) => {
     const feeProcent = poolInfo?.fee || 1
 	const balanceSwaped = toTokenAmount * +initialRate * (100 - feeProcent) / 100
     const balance = fromTokenAmount * +initialRate * (100 + feeProcent) / 100
-	const showFee = fromToken.network.toLowerCase() === currentWallet.network
-	const showFee2 = toToken.network.toLowerCase() === currentWallet.network
+	const showFee = fromToken.network.toLowerCase() === currentWallet?.network
+	const showFee2 = toToken.network.toLowerCase() === currentWallet?.network
 	const reverseTokens = () => {
 		props.setFromToken(toToken)
 		props.setToToken(fromToken)
@@ -42,10 +42,6 @@ const Swap = (props) => {
 					<div className='swap-row'>
 						<TokenSelect selectedToken={fromToken}/>
 						<AmountInput setDisabled={setDisabled} hideFee={!showFee} hideMax={true} isFirst={true} amount={fromTokenAmount}/>
-					</div>
-					<div className='usd-container'>
-						<span>$</span>
-						<b>0.05</b>
 					</div>
 				</FormItem>
 			</div>

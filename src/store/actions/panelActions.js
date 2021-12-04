@@ -1,4 +1,4 @@
-import { SET_ACTIVE_PANEL, SET_ACTIVE_PAGE, SET_POPOUT } from "./types";
+import { SET_ACTIVE_PANEL, SET_ACTIVE_PAGE,SET_LOADER, SET_POPOUT } from "./types";
 
 export const setActivePanel = (panel) => dispatch =>{
     dispatch({
@@ -18,5 +18,11 @@ export const setPopout = (item) => dispatch =>{
     dispatch({
         type: SET_POPOUT,
         payload: item
+    })
+}
+export const setLoader = (status) => dispatch =>{
+    dispatch({
+        type: SET_LOADER,
+        payload: status
     })
 }

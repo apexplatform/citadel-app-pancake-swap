@@ -26,7 +26,7 @@ const AddressItem = (props) => {
                         <span className="address">({fotmatAddress(item.address)})</span>
                     </div>
                     <div className='address-row'>
-                        <p className="address-name address-amount">{item.amount}</p>
+                        <p className="address-name address-amount">{item.balance?.mainBalance}</p>
                         <span className="address-network">{item.network}</span>
                     </div>
                 </div>

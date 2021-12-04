@@ -12,13 +12,14 @@ import {updatePoolInfo,calculateSpotPriceWithoutSwapFee} from './store/actions/s
 import {initApp} from './store/actions/vkActions'
 import SelectAddressPanel from './components/panels/SelectAddressPanel'
 import SelectTokenPanel from './components/panels/SelectTokenPanel'
-import {loadNetworks} from './store/actions/walletActions'
+import {loadNetworks,loadWalletWithBalances} from './store/actions/walletActions'
 const App = (props) => {
     const {activePage,popout} = props.panelReducer
 	useEffect(() => {
 		props.initApp()
 		props.loadNetworks()
-		props.updatePoolInfo()
+		//props.updatePoolInfo()
+		props.loadWalletWithBalances()
 	}, []);
 	return (
 		<Provider store={store}>
@@ -40,4 +41,4 @@ const mapStateToProps=(state)=>({
 	panelReducer: state.panelReducer
 })
 
-export default connect(mapStateToProps, {updatePoolInfo,calculateSpotPriceWithoutSwapFee,loadNetworks,initApp}) (App);
+export default connect(mapStateToProps, {loadWalletWithBalances,updatePoolInfo,calculateSpotPriceWithoutSwapFee,loadNetworks,initApp}) (App);

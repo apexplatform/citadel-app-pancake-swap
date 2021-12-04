@@ -1,11 +1,10 @@
-import {SET_ACTIVE_PANEL,SET_ACTIVE_PAGE, SET_POPOUT} from '../actions/types'
-import {ScreenSpinner} from '@vkontakte/vkui';
+import {SET_ACTIVE_PANEL,SET_ACTIVE_PAGE,SET_LOADER, SET_ACTIVE_MODAL} from '../actions/types'
 import ROUTES from '../../routes'
 const initialState = {
     activePage: ROUTES.HOME,
     activePanel: ROUTES.SWAP,
     activeModal: null,
-    popout: <ScreenSpinner size='large' />
+    loader: false
 }
 export default function(state=initialState,action){
     switch (action.type){
@@ -14,15 +13,20 @@ export default function(state=initialState,action){
                 ...state,
                 activePanel: action.payload
             }
+        case SET_LOADER:
+            return {
+                ...state,
+                loader: action.payload
+            }
         case SET_ACTIVE_PAGE:
             return {
                 ...state,
                 activePage: action.payload
             }
-        case SET_POPOUT:
+        case SET_ACTIVE_MODAL:
             return {
                 ...state,
-                popout: action.payload
+                activeModal: action.payload
             }
         default:
             return state
