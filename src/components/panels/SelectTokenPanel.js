@@ -22,7 +22,7 @@ const SelectTokenPanel = (props) => {
             setList(sortList(tokenList.filter(token => token.symbol !== fromToken.symbol)))
         }
         setLoader(tokenList.length > 15)
-    },[loader,tokenList])
+    },[loader,tokenList,token])
     return(
         <Panel id={ROUTES.SELECT_ADDRESS}>
             <Header title={text.SELECT_TOKEN}  showTitle={true}  back={true} />
