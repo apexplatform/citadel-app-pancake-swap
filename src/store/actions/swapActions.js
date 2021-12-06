@@ -104,7 +104,12 @@ export const prepareSwapTransfer  = (isExactIn) => async(dispatch) => {
 export const prepareApprove  = () => dispatch => {
     const wallet = getWalletConstructor()
     if(wallet){
-        const transaction = wallet.generateApproveTransaction()
+        const contractData = {
+            address: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
+            name: "PancakeSwap: Router v2",
+            url: "https://bscscan.com/address/0x10ed43c718714eb63d5aa57b78b54704e256024e"
+        }
+        const transaction = wallet.generateApproveTransaction(contractData)
         wallet.prepareTransfer(transaction).then((ok, data) => {
             if(ok){
                 return dispatch ({

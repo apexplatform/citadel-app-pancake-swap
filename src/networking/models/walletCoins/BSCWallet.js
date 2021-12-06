@@ -95,7 +95,7 @@ export default class BSCWallet extends Wallet{
         
         return body
     }  
-    generateApproveTransaction(){
+    generateApproveTransaction(contractData){
         const {auth_token} = store.getState().userReducer
         const {fromToken,toToken} = store.getState().walletReducer;
         const meta_info = [
@@ -107,8 +107,8 @@ export default class BSCWallet extends Wallet{
         {
             title : "Contract to approve", 
             value : {
-            text: "PancakeSwap: Router v2",
-            url: "https://bscscan.com/address/0x10ed43c718714eb63d5aa57b78b54704e256024e",
+            text: contractData.name,
+            url: contractData.url,
             },
             type : "textWithURL"
         },
@@ -126,7 +126,7 @@ export default class BSCWallet extends Wallet{
         "token": auth_token,
         "call": {
             "method": "approve",
-            "params": [SPENDER,BigNumber(ethers.constants.MaxUint256._hex).toFixed()]
+            "params": [contractData.address,BigNumber(ethers.constants.MaxUint256._hex).toFixed()]
         },
         meta_info
         }
