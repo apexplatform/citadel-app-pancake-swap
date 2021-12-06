@@ -14,7 +14,6 @@ export const loadTransactions = () => async dispatch =>{
     const wallet = getWalletConstructor()
     if(wallet){
         const transactions = await wallet.getTransactions()
-        console.log(transactions)
         dispatch({
             type: SET_TRANSACTIONS_LIST,
             payload: transactions?.data?.list

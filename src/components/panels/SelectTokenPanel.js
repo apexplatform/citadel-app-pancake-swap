@@ -13,7 +13,6 @@ const SelectTokenPanel = (props) => {
     const [loader, setLoader] = useState(tokenList.length > 10)
     const [token,searchToken] = useState('')
     useEffect(()=>{
-        console.log('----tokenList----',tokenList)
         if(token.length > 0) {
             let arr = tokenList.filter(item => item.symbol.substr(0,token.length).toLowerCase() === token.toLowerCase() || item.name.substr(0,token.length).toLowerCase() === token.toLowerCase())
             setList(sortList(arr))

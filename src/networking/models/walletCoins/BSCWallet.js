@@ -1,12 +1,9 @@
-import useApi from '../../api/useApi';
 import {useTradeExact,tryParseAmount,loadBlockNumber,loadTokenBalances} from '../../hooks/swapHooks'
 import {useCurrency} from '../../hooks/tokenHooks'
 import { JSBI, Percent, Router } from '@pancakeswap/sdk'
 import {basisPointsToPercent} from '../../utils/price'
 import store from '../../../store/store';
 import { ethers } from 'ethers'
-import {ONE_BIPS} from '../../constants/constants'
-import {computeTradePriceBreakdown} from '../../utils/price'
 import {SPENDER} from '../../constants/constants'
 import BigNumber from 'bignumber.js';
 import Wallet from '../Wallet'
@@ -37,7 +34,6 @@ export default class BSCWallet extends Wallet{
         return trade?.minimumAmountOut(pct) || 0
     }
     getTokenBalances(){
-        console.log('---loadTokenBalances---loadTokenBalances')
         return loadTokenBalances()
     }
     generateSwapTransaction(isExactIn){

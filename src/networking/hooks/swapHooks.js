@@ -96,7 +96,6 @@ export const useCallsData = (calls, options) => dispatch =>{
 		})
 	//
 	const callResults = store.getState().multicalReducer.callResults
-	console.log(callResults,'--callResults')
 	dispatch({type:REMOVE_MULTICAL_LISTENERS,payload: {chainId,calls,options}})
 	return calls?.map((call) => {
 		  if (!chainId || !call) return INVALID_RESULT
@@ -267,6 +266,7 @@ export function tryParseAmount(value, currency) {
 	} else {
 		allowedPairs = store.getState().swapReducer.allowedPairs
 	}
+//	console.log(allowedPairs,'--allowedPairs')
 	const singleHopOnly = false
 	const MAX_HOPS = 3
 	if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {

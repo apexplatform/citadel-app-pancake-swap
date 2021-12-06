@@ -137,7 +137,6 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false)
     try{
         const wallet = getWalletConstructor()
         if(wallet){
-            console.log(amount,'---amount')
             const {fromToken,toToken} = store.getState().walletReducer
             const {swapStatus} = store.getState().swapReducer
             const inputCurrency = wallet.getCurrency(fromToken.address || fromToken.symbol)
@@ -145,9 +144,7 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false)
             let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
             dispatch(setParsedAmount(parsedAmount))
             const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn,updateCall))
-            if(bestTradeExact?.outputAmount) updateTradeInfo(amount)
             dispatch(setTrade(bestTradeExact))
-            console.log(bestTradeExact,'---bestTradeExact')
             dispatch(setMinReceive(wallet.getMinReceived()))
             dispatch(wallet.getTokenAllowance())
             if(swapStatus === 'approve'){
@@ -167,8 +164,7 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     const {fromToken} = store.getState().walletReducer
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const feeProcent = +realizedLPFee?.toSignificant(4) || 0.02
-    console.log('--checkSwapStatus--')
-    if(isMax){
+    if(isMax && !trade){
         dispatch(updateTradeInfo(BigNumber(+balance).minus(feeProcent).toFixed(),isExactIn))
         dispatch(setAmount(BigNumber(+balance).minus(feeProcent).toFixed()))
         dispatch(checkSwapStatus(BigNumber(+balance).minus(feeProcent).toFixed(),setIsactive))

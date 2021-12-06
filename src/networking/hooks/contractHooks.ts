@@ -27,7 +27,7 @@ function useContract(address: string | undefined, ABI: any): any {
   try {
     return getContract(address, ABI)
   } catch (error) {
-    console.error('Failed to get contract', error)
+    // console.error('Failed to get contract', error)
     return null
   }
 }

@@ -13,7 +13,6 @@ import {setLoader} from '../../store/actions/panelActions'
 import {setFromToken,setToToken,setAmount,setFromAmount,setToAmount} from '../../store/actions/walletActions'
 import FeeInfoBlock from '../uikit/FeeInfoBlock'
 import SwapButton from '../uikit/SwapButton'
-import Updater from '../../networking/utils/updater'
 const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
 	const {trade,parsedAmount,independentField,allowanceAmount} = props.swapReducer
@@ -22,6 +21,7 @@ const Swap = (props) => {
 	const showFee2 = toToken?.symbol?.toLowerCase() === currentWallet?.code
 	const dependentField = independentField === 'INPUT' ? 'OUTPUT' : 'INPUT'
 	const formattedPrice = trade?.executionPrice?.toSignificant(6)
+	const [isActive,setIsactive] = useState(!trade && +amount != 0)
 	const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
 	const parsedAmounts =  {
         'INPUT': independentField === 'INPUT' ? parsedAmount : trade?.inputAmount,
@@ -42,11 +42,18 @@ const Swap = (props) => {
 		props.setFromAmount(formattedAmounts['INPUT'])
 		props.setToAmount(formattedAmounts['OUTPUT'])
     	props.checkSwapStatus(formattedAmounts['INPUT'])
-		if(!trade && +amount != 0){
-			console.log('--update trade--')
-			props.updateTradeInfo(amount, isExactIn)
+		let interval = null;
+		if (isActive) {
+			interval = setInterval(() => {
+			  setIsactive(trade ? false : true)
+			  isActive ? props.updateTradeInfo(amount, isExactIn) : null
+			 
+			}, 1000);
+		} else if (!isActive) {
+			clearInterval(interval);
 		}
-	},[fromToken,toToken,trade,allowanceAmount,amount])
+		return () => clearInterval(interval);
+	},[fromToken,toToken,amount,trade])
 	return (
 		<Group className='swap-container'>
 			<Header title="Swap"/>

@@ -119,7 +119,7 @@ function useCombinedTokenMapFromUrls(urls: string[] | undefined): TokenAddressMa
             const newTokens = Object.assign(listToTokenMap(current))
             return combineMaps(allTokens, newTokens)
           } catch (error) {
-            console.error('Could not show token list due to error', error)
+           // console.error('Could not show token list due to error', error)
             return allTokens
           }
         }, EMPTY_LIST)
