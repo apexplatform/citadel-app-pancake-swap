@@ -166,13 +166,13 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false)
 export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isExactIn=true) => dispatch => {
     const balance = dispatch(getFromBalance())
     const {trade,allowanceAmount,slippageTolerance} = store.getState().swapReducer
-    const {fromToken} = store.getState().walletReducer
-    const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
-    const feeProcent = +realizedLPFee?.toSignificant(4) || 0.02
+    const {fromToken,currentWallet} = store.getState().walletReducer
+    const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
+    let feeProcent = currentWallet?.code == fromToken?.symbol ? 0.01 : 0
     if(isMax && !trade){
-        dispatch(updateTradeInfo(BigNumber(balance).toFixed(),isExactIn))
-        dispatch(setAmount(BigNumber(balance).toFixed()))
-        dispatch(checkSwapStatus(BigNumber(balance).toFixed(),setIsactive))
+        dispatch(updateTradeInfo(BigNumber(balance).minus(feeProcent).toFixed(),isExactIn))
+        dispatch(setAmount(BigNumber(balance).minus(feeProcent).toFixed()))
+        dispatch(checkSwapStatus(BigNumber(balance).minus(feeProcent).toFixed(),setIsactive))
         return
     }
     if(+amount > 0) {

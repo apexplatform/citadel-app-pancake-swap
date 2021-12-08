@@ -21,7 +21,7 @@ const SelectTokenPanel = (props) => {
         } else {
             setList(sortList(tokenList.filter(token => token.symbol !== fromToken.symbol)))
         }
-        setLoader(tokenList.length > 15)
+        setLoader(tokenList.length > 10)
     },[loader,tokenList,token])
     return(
         <Panel id={ROUTES.SELECT_ADDRESS}>

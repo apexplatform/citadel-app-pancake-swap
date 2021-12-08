@@ -1,5 +1,6 @@
 import { Group } from '@vkontakte/vkui';
 import moment from 'moment'
+import {Icon24ExternalLinkOutline} from '@vkontakte/icons'
 import '../styles/panels/transactions.css'
 const TransactionDetails = ({data}) => {
     return(
@@ -24,6 +25,17 @@ const TransactionDetails = ({data}) => {
             <p className='description-text'>Time & data</p>
             <p className='description-text'>{moment().from(data.date?.value)}</p>
         </div>
+        {data?.meta_info?.map((item,i) =>(
+            <div className='transasction-details-row' key={i}>
+                <p className='description-text'>{item?.title}</p>
+                <div className='transasction-details-row'>
+                    <span>{item?.value?.text || item?.value} </span>
+                    {item?.value?.url ? 
+                    <a href={item?.value?.url} target='_blank' style={{cursor: 'pointer'}} ><Icon24ExternalLinkOutline fill='#67A5EB' width={20} height={20}/></a>: ''}
+                </div>
+            </div>
+        ))
+        }
         {data?.comment?.value ?
         <div>
             <p className='description-text'>Comment</p>

@@ -13,7 +13,7 @@ const AmountInput = (props) => {
     const {allowanceAmount,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
     const showFee = false
-    const coin = currentWallet?.network.toUpperCase()
+    const coin = currentWallet?.code
     //const feeProcent = +props.fee || 0.02
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const balance = props.getFromBalance()
@@ -34,11 +34,12 @@ const AmountInput = (props) => {
         }
     }
     const setMaxAmount = () => {
-        if(BigNumber(balance).toNumber() <= 0){
+        let fee = coin == fromToken.symbol ? 0.01 : 0
+        if(BigNumber(balance).minus(fee).toNumber() <= 0){
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-            checkAmount(BigNumber(balance).toFixed(),true)
+            checkAmount(BigNumber(balance).minus(fee).toFixed(),true)
         }
     }
     useEffect(() => {
