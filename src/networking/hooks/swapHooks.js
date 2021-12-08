@@ -329,6 +329,10 @@ export function tryParseAmount(value, currency) {
 		type: SET_EMPTY_TOKEN_LIST,
 		payload: []
 	})
+	dispatch({
+        type: SET_LOADER,
+        payload: false
+    })
 	list.forEach(async(token) =>{
 		if(token?.address){
 			const contract = useTokenContract(token.address)
