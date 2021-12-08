@@ -34,12 +34,11 @@ const AmountInput = (props) => {
         }
     }
     const setMaxAmount = () => {
-        if(BigNumber(+balance).minus(props.fee).toNumber() < 0){
+        if(BigNumber(balance).toNumber() <= 0){
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-          //  props.updateTradeInfo(BigNumber(+balance).minus(props.fee).toNumber(), props.name === 'INPUT' ? true : false)
-            checkAmount(BigNumber(+balance).minus(props.fee).toFixed(),true)
+            checkAmount(BigNumber(balance).toFixed(),true)
         }
     }
     useEffect(() => {

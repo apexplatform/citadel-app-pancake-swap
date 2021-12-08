@@ -170,9 +170,9 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const feeProcent = +realizedLPFee?.toSignificant(4) || 0.02
     if(isMax && !trade){
-        dispatch(updateTradeInfo(BigNumber(+balance).minus(feeProcent).toFixed(),isExactIn))
-        dispatch(setAmount(BigNumber(+balance).minus(feeProcent).toFixed()))
-        dispatch(checkSwapStatus(BigNumber(+balance).minus(feeProcent).toFixed(),setIsactive))
+        dispatch(updateTradeInfo(BigNumber(balance).toFixed(),isExactIn))
+        dispatch(setAmount(BigNumber(balance).toFixed()))
+        dispatch(checkSwapStatus(BigNumber(balance).toFixed(),setIsactive))
         return
     }
     if(+amount > 0) {

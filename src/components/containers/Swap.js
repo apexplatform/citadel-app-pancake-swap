@@ -15,7 +15,7 @@ import FeeInfoBlock from '../uikit/FeeInfoBlock'
 import SwapButton from '../uikit/SwapButton'
 const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
-	const {trade,parsedAmount,independentField,allowanceAmount} = props.swapReducer
+	const {trade,parsedAmount,independentField} = props.swapReducer
 	const {fromToken,toToken,currentWallet, amount} = props.walletReducer
 	const showFee = fromToken?.symbol?.toLowerCase() === currentWallet?.code
 	const showFee2 = toToken?.symbol?.toLowerCase() === currentWallet?.code
