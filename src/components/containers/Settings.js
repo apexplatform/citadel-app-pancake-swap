@@ -42,7 +42,9 @@ import InputNumber from '../uikit/InputNumber'
     }
     const setSlippageProcent = (val) => {
         val = val.replace(/[^0-9\.]/g, '')
-        if(val[0] == '0' && val[1] != '.'){
+        if(+currentProcent == 0 && val.length == 2 && val[1] != '.' && val[1] == '0'){
+            setCurrentProcent(val[0]);
+        }else if(val[0] == '0' && val[1] != '.'){
             setCurrentProcent(BigNumber(+val).toFixed());
         } else {
             setCurrentProcent(val);   
@@ -51,7 +53,9 @@ import InputNumber from '../uikit/InputNumber'
     }
     const setDeadline = (val) => {
         val = val.replace(/[^0-9\.]/g, '')
-        if(val[0] == '0' && val[1] != '.' ){
+        if(+minute == 0 && val.length == 2 && val[1] != '.' && val[1] == '0'){
+            setMinute(val[0]);
+        } else if(val[0] == '0' && val[1] != '.' ){
             setMinute(BigNumber(val).toFixed());
         } else {
             setMinute(val);
