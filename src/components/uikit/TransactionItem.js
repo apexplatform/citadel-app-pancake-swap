@@ -2,6 +2,7 @@ import '../styles/components/transactionsItem.css';
 import moment from 'moment'
 import fileRoutes from '../../config/file-routes-config.json'
 const TransactionItem = ({data}) =>{
+    let type = data.type?.value.toLowerCase()
     let statusClass = () => {
         if(data.status?.value){
             if(data.type?.value === 'stake'){
@@ -13,19 +14,22 @@ const TransactionItem = ({data}) =>{
         }
     }
     let typeImg = () => {
-        if(data.status?.value){
-            return fileRoutes.ICONS_FOLDER + data.type?.value + '.svg'
+      
+        if(type.includes('swap')){
+            return fileRoutes.ICONS_FOLDER + 'swap.svg'
+        } else if(type){
+            return fileRoutes.ICONS_FOLDER + type + '.svg'
         }else{
-            return fileRoutes.ICONS_FOLDER + data.type?.value + '-error.svg'
+            return fileRoutes.ICONS_FOLDER + type + '-error.svg'
         }
     }
     return(
     <div className='transactions-item'>
         <div className='transactions-row'>
-            <img src={typeImg()} alt='type'  className='transaction-type-img'/>
+            <img src={typeImg()} alt='type' className='transaction-type-img'/>
             <div className='transactions-column-1'>
                 <div className='transactions-row'>
-                    <h5 className='transaction-type-text'>{data.type?.value}</h5>
+                    <h5 className='transaction-type-text'>{type.includes('swap') ? 'Swap' : data.type?.value}</h5>
                     {data.status?.value ?
                     <img src={fileRoutes.SUCCESS_ICON} alt='type'/>:
                     <img src={fileRoutes.ERROR_ICON} alt='type'/>}

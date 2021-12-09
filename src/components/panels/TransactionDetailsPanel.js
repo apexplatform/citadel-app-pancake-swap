@@ -6,9 +6,10 @@ import Header from '../uikit/Header'
 import {setActivePage} from '../../store/actions/panelActions'
 const TransactionDetailsPanel = (props) => {
     const {openedTransaction} = props.transactionsReducer
+    let type = openedTransaction.type?.value.toLowerCase() || null
     return(
         <Panel id={ROUTES.TRANSACTION_DETAILS}>
-            <Header showTitle={true} title={openedTransaction && openedTransaction.type?.value} back={true} />
+            <Header showTitle={true} title={type.includes('swap') ? 'Swap' : type} back={true} />
             <TransactionDetails data={openedTransaction}/>
         </Panel>
     )
