@@ -17,8 +17,8 @@ const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
 	const {trade,parsedAmount,independentField} = props.swapReducer
 	const {fromToken,toToken,currentWallet, amount} = props.walletReducer
-	const showFee = fromToken?.symbol?.toLowerCase() === currentWallet?.code
-	const showFee2 = toToken?.symbol?.toLowerCase() === currentWallet?.code
+	const showFee = fromToken?.symbol === currentWallet?.code
+	//const showFee2 = toToken?.symbol === currentWallet?.code
 	const dependentField = independentField === 'INPUT' ? 'OUTPUT' : 'INPUT'
 	const formattedPrice = trade?.executionPrice?.toSignificant(6)
 	const [isActive,setIsactive] = useState(!trade && +amount != 0)
@@ -63,7 +63,7 @@ const Swap = (props) => {
 				<FormItem top={"From" + (independentField === 'OUTPUT' ? ' (estimated)' : '') } className='formTokenItem'>
 					<div className='swap-row'>
 						<TokenSelect selectedToken={fromToken} name='from'/>
-						<AmountInput inputAmount={formattedAmounts['OUTPUT']} setExactIn={setExactIn}  name='INPUT' setField={setIndependentField} slippage={priceImpactWithoutFee} hideFee={!showFee} hideMax={true} amount={formattedAmounts['INPUT']} fee={realizedLPFee?.toSignificant(4) || 0.02} isExactIn={isExactIn}/>
+						<AmountInput inputAmount={formattedAmounts['OUTPUT']} setExactIn={setExactIn}  name='INPUT' setField={setIndependentField} slippage={priceImpactWithoutFee} hideFee={showFee} hideMax={true} amount={formattedAmounts['INPUT']} fee={realizedLPFee?.toSignificant(4) || 0.02} isExactIn={isExactIn}/>
 					</div>
 				</FormItem>
 			</div>
@@ -78,7 +78,7 @@ const Swap = (props) => {
 				<FormItem top={"To" + (independentField === 'INPUT' ? ' (estimated)' : '')} className='formTokenItem' >
 					<div className='swap-row'>
 						<TokenSelect selectedToken={toToken} name='to'/>
-						<AmountInput setExactIn={setExactIn} inputAmount={formattedAmounts['INPUT']} setField={setIndependentField} name='OUTPUT' slippage={priceImpactWithoutFee} isExactIn={isExactIn} isSecond={true} hideMax={false} hideFee={!showFee2}  fee={realizedLPFee?.toSignificant(4) || 0.02} amount={formattedAmounts['OUTPUT']}/>
+						<AmountInput setExactIn={setExactIn} inputAmount={formattedAmounts['INPUT']} setField={setIndependentField} name='OUTPUT' slippage={priceImpactWithoutFee} isExactIn={isExactIn} isSecond={true} hideMax={false}  fee={realizedLPFee?.toSignificant(4) || 0.02} amount={formattedAmounts['OUTPUT']}/>
 					</div>
 				</FormItem>
 			</div>

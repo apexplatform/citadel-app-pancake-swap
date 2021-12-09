@@ -1,5 +1,6 @@
 import { Group, Div,Button } from '@vkontakte/vkui';
 import Header from '../uikit/Header'
+import {setActivePanel} from '../../store/actions/panelActions'
 import {connect} from 'react-redux';
 import '../styles/panels/settings.css'
 import { useState,useEffect } from 'react';
@@ -9,6 +10,7 @@ import text from '../../text.json'
 import BigNumber from 'bignumber.js';
 import InputNumber from '../uikit/InputNumber'
  const Settings = (props) => {
+    const {previousPanel} = props.panelReducer
     const {slippageTolerance,deadlineMin} = props.swapReducer
     const [minute,setMinute] = useState(deadlineMin)
     const [minute2,setMinute2] = useState(deadlineMin)
@@ -36,22 +38,23 @@ import InputNumber from '../uikit/InputNumber'
         }
         setActiveOption(false)
         setIDname('initial-procent')
+        props.setActivePanel(previousPanel)
     }
     const setSlippageProcent = (val) => {
         val = val.replace(/[^0-9\.]/g, '')
-        if(val[val.length-1] == '.'){
-            setCurrentProcent(val);
-        } else {
+        if(val[0] == '0' && val[1] != '.'){
             setCurrentProcent(BigNumber(+val).toFixed());
+        } else {
+            setCurrentProcent(val);   
         }
         setButtonOption(false)
     }
     const setDeadline = (val) => {
         val = val.replace(/[^0-9\.]/g, '')
-        if(val[val.length-1] == '.'){
-            setMinute(val);
+        if(val[0] == '0' && val[1] != '.' ){
+            setMinute(BigNumber(val).toFixed());
         } else {
-            setMinute(BigNumber(+val).toFixed());
+            setMinute(val);
         }
         setButtonOption2(false)
         setActiveOption(false)
@@ -134,7 +137,8 @@ import InputNumber from '../uikit/InputNumber'
 
 const mapStateToProps=(state)=>({
 	walletReducer: state.walletReducer,
-    swapReducer: state.swapReducer
+    swapReducer: state.swapReducer,
+    panelReducer: state.panelReducer
 })
 
-export default connect(mapStateToProps, {setDeadline,setSlippageTolerance}) (Settings);
+export default connect(mapStateToProps, {setActivePanel,setDeadline,setSlippageTolerance}) (Settings);

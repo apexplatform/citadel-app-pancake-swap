@@ -12,14 +12,16 @@ const AmountInput = (props) => {
     const {currentWallet,fromToken,toToken,amount} = props.walletReducer
     const {allowanceAmount,trade,swapStatus} = props.swapReducer
     const showMax = props.hideMax || false
-    const showFee = false
+    const showFee = props.hideFee || false
     const coin = currentWallet?.code
-    //const feeProcent = +props.fee || 0.02
+    const fee = coin == fromToken.symbol ? 0.01 : 0
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const balance = props.getFromBalance()
     const checkAmount = (val,isMax = false) => {
         val = val.replace(/[^0-9\.]/g, '')
-        if(val[0] == '0' && val[1] != '.' ){
+        if(+props.amount == 0 && val.length == 2 && val[1] != '.' && val[1] == '0'){
+            props.setAmount(val[0]);
+        }else if(val[0] == '0' && val[1] != '.' ){
             props.setAmount(BigNumber(val).toFixed())
         } else {
             props.setAmount(val);
@@ -34,12 +36,17 @@ const AmountInput = (props) => {
         }
     }
     const setMaxAmount = () => {
-        let fee = coin == fromToken.symbol ? 0.01 : 0
+        
         if(BigNumber(balance).minus(fee).toNumber() <= 0){
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
             checkAmount(BigNumber(balance).minus(fee).toFixed(),true)
+        }
+    }
+    const checkValue = (val) => {
+        if(val.length == 0){
+            props.setAmount(0)
         }
     }
     useEffect(() => {
@@ -66,7 +73,7 @@ const AmountInput = (props) => {
 				<h5>{props.name === 'INPUT' ? fromToken.symbol : toToken.symbol}</h5>
 			</div>
             <div className='input-container' >
-                <input className={hasError ? 'error-input' : undefined} value={props.amount} onChange={(e) => checkAmount(e.target.value)}/>
+                <input className={hasError ? 'error-input' : undefined} value={props.amount} onChange={(e) => checkAmount(e.target.value)} onBlur={(e) => checkValue(e.target.value)}/>
                 <span className='input-currency' style={{ left: `${currencyOffset}px` }}>{props.name === 'INPUT' ? fromToken.symbol : toToken.symbol}</span>
                 {showMax && <button className='max-btn' onClick={() => setMaxAmount()}>Max</button>}
             </div>
@@ -74,7 +81,7 @@ const AmountInput = (props) => {
             {showFee &&
             <div className='fee-container'>
 				<h5>{text.FEE_TEXT}</h5>
-				<span className='fee-amount'>{props.fee} </span>
+				<span className='fee-amount'>{fee} </span>
 				<h5>{coin}</h5>
 			</div>}
             {hasError &&

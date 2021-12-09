@@ -2,7 +2,7 @@
     background: #F2F7FC;
     border-radius: 8px;
     padding: 5px 15px;
-    margin: 10px 15px;
+    margin: 30px 15px;
 }
 
 .fee-row{
@@ -42,4 +42,13 @@
 .route-row img{
     width: 20px;
     margin-right: 4px;
+}
+
+#bold-text .fee-text{
+    color: #E14377 !important;
+    font-weight: 500;
+}
+
+#bold-text span{
+    font-weight: 500;
 }

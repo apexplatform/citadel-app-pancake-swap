@@ -1,23 +1,31 @@
 import { Div, Group } from '@vkontakte/vkui';
 import '../styles/components/swapButton.css'
+import { Icon20ChevronRightOutline } from '@vkontakte/icons';
 import {prepareSwapTransfer,prepareApprove} from '../../store/actions/swapActions'
 import {connect} from 'react-redux';
 import Loader from '../uikit/Loader'
 import text from '../../text.json'
 import { useState } from 'react';
+import ROUTES from '../../routes'
+import {setActivePanel,setPreviosPanel} from '../../store/actions/panelActions'
 const SwapButton = (props) => {
     const [approve,setApprove]  = useState(true)
     const {swapStatus} = props.swapReducer
     const {fromToken} = props.walletReducer
 	return (
         <Group>
+             {swapStatus == 'swapAnyway' &&
+            <Div className='swapAnyway-alarm' onClick={() => { props.setActivePanel(ROUTES.SETTINGS); props.setPreviosPanel(ROUTES.SWAP)}}>
+                <span>{text.SWAP_ANYWAY_ALARM} <span className='bold-span'>{text.SETTINGS}</span></span>
+                <Icon20ChevronRightOutline fill="#E5457A" width={26} height={26}/> 
+            </Div>}
             {swapStatus == 'swap' &&
             <Div className='swap-btn' onClick={() => props.prepareSwapTransfer(props.isExactIn)}>
                 <span>{text.SWAP}</span>
             </Div>}
             {swapStatus == 'swapAnyway' &&
-            <Div className='swap-btn swap-anyway-btn' onClick={() => props.prepareSwapTransfer(props.isExactIn)}>
-                <span>{text.SWAP_ANYWAY}</span>
+            <Div className='swap-btn' id="disabled-btn">
+                <span>{text.SWAP}</span>
             </Div>}
             {swapStatus == 'loading' &&
             <Div className='swap-btn loading-btn' id="disabled-btn">
@@ -61,4 +69,4 @@ const mapStateToProps=(state)=>({
 	swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {prepareApprove,prepareSwapTransfer}) (SwapButton);
+export default connect(mapStateToProps, {setPreviosPanel,prepareApprove,setActivePanel,prepareSwapTransfer}) (SwapButton);

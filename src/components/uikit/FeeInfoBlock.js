@@ -5,7 +5,7 @@ import text from '../../text.json'
 import { Icon20ChevronRightOutline } from '@vkontakte/icons';
 const FeeInfoBlock = (props) => {
     const {fromToken,toToken} = props.walletReducer
-    const {minReceived,trade} = props.swapReducer
+    const {minReceived,trade,swapStatus} = props.swapReducer
     const {rate,priceImpact,fee} = props
     const path = trade?.route?.path || []
     return(
@@ -20,12 +20,13 @@ const FeeInfoBlock = (props) => {
                     {toToken.symbol} per { fromToken.symbol}
                 </span>: <span className='fee-text'>-</span>}
            </div>
-           <div className='fee-row'>
+           <div className='fee-row' id={swapStatus == 'swapAnyway' ? 'bold-text' : undefined}>
                 <span className='fee-text'>
                     {text.PRICE_IMPACT}
                 </span>
-                <span>
-                    <span>{priceImpact ? (priceImpact.lessThan(ONE_BIPS) ? '<0.01%' : `${priceImpact.toFixed(2)}%`) : '-'}</span>
+                <span className='fee-text'>
+                    {priceImpact ? (priceImpact.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpact.toFixed(2)}`) : '-'}
+                    <span>{ priceImpact ? '%' : ''} </span>
                 </span>
            </div>
            <div className='fee-row'>
@@ -33,7 +34,8 @@ const FeeInfoBlock = (props) => {
                     {text.MINIMUM_RECEIVED}
                 </span>
                 <span>
-                    <span className='fee-text'> {minReceived != 0 ? minReceived?.toSignificant(4) : minReceived}  {toToken.symbol}</span>
+                    <span className='fee-text'> {minReceived != 0 ? minReceived?.toSignificant(4) : minReceived} </span>
+                    { toToken.symbol}
                 </span>
            </div>
            <div className='fee-row'>

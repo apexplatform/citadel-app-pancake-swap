@@ -23,6 +23,7 @@ export const SET_GAS_PRICE = 'SET_GAS_PRICE'
 export const SET_TOKEN_LIST = 'SET_TOKEN_LIST'
 export const SET_EMPTY_TOKEN_LIST = "SET_EMPTY_TOKEN_LIST"
 export const SET_ALLOWED_PAIRS = 'SET_ALLOWED_PAIRS'
+export const SET_PREVIOS_PANEL = "SET_PREVIOS_PANEL"
 // token types
 export const SET_TO_TOKEN = 'SET_TO_TOKEN'
 export const SET_SWAP_STATUS = 'SET_SWAP_STATUS'

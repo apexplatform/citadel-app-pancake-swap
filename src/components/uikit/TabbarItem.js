@@ -1,5 +1,5 @@
 import '../styles/components/tabbar.css'
-import {setActivePanel} from '../../store/actions/panelActions'
+import {setActivePanel,setPreviosPanel} from '../../store/actions/panelActions'
 import {connect} from 'react-redux';
 import { Config } from '../../config/config';
 import Icon from './Icon'
@@ -14,6 +14,7 @@ const TabbarItem = (props) => {
         }
     },[])
     const changePanel = () => {
+        props.setPreviosPanel(activePanel)
         props.setActivePanel(props.routes)
         if(activePanel === props.routes){
             setItemColor(config.tabbarParamsFromConfig('ACTIVE_ITEM_COLOR'))
@@ -39,4 +40,4 @@ const mapStateToProps=(state)=>({
 	panelReducer: state.panelReducer
 })
 
-export default connect(mapStateToProps, {setActivePanel}) (TabbarItem);
+export default connect(mapStateToProps, {setPreviosPanel,setActivePanel}) (TabbarItem);

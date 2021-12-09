@@ -1,10 +1,11 @@
-import {SET_ACTIVE_PANEL,SET_ACTIVE_PAGE,SET_LOADER, SET_ACTIVE_MODAL} from '../actions/types'
+import {SET_ACTIVE_PANEL,SET_PREVIOS_PANEL,SET_ACTIVE_PAGE,SET_LOADER, SET_ACTIVE_MODAL} from '../actions/types'
 import ROUTES from '../../routes'
 const initialState = {
     activePage: ROUTES.HOME,
     activePanel: ROUTES.SWAP,
     activeModal: null,
-    loader: false
+    loader: false,
+    previousPanel: ROUTES.SWAP
 }
 export default function(state=initialState,action){
     switch (action.type){
@@ -17,6 +18,11 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 loader: action.payload
+            }
+        case SET_PREVIOS_PANEL:
+            return {
+                ...state,
+                previousPanel: action.payload
             }
         case SET_ACTIVE_PAGE:
             return {

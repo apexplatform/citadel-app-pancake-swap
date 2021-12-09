@@ -68,3 +68,20 @@
 #disabled-line{
     border: 1px solid #CBD2FE;
 }
+
+.swapAnyway-alarm{
+    background: #FFEEF4;
+    border-radius: 8px;
+    padding: 10px;
+    margin: -15px 15px 15px;
+    display: flex;
+    padding-left: 20px;
+    align-items: center;
+    color: #E14377;
+    font-size: 14px;
+    justify-content: space-between;
+}
+
+.swapAnyway-alarm .bold-span{
+    font-weight: 500;
+}
