@@ -1,6 +1,7 @@
 import '../styles/components/transactionsItem.css';
 import moment from 'moment'
 import fileRoutes from '../../config/file-routes-config.json'
+import text from '../../text.json'
 const TransactionItem = ({data}) =>{
     let type = data.type?.value.toLowerCase()
     let statusClass = () => {
@@ -14,14 +15,23 @@ const TransactionItem = ({data}) =>{
         }
     }
     let typeImg = () => {
-      
         if(type.includes('swap')){
             return fileRoutes.ICONS_FOLDER + 'swap.svg'
-        } else if(type){
+            
+        }else if(type.includes('approve')){
+            return fileRoutes.ICONS_FOLDER + 'approve.svg'
+        } 
+        else if(type){
             return fileRoutes.ICONS_FOLDER + type + '.svg'
         }else{
             return fileRoutes.ICONS_FOLDER + type + '-error.svg'
         }
+    }
+    const formatFee = (fee) => {
+        if(fee.length){
+            return fee.substr(0,7)
+        }
+        return fee
     }
     return(
     <div className='transactions-item'>
@@ -30,7 +40,7 @@ const TransactionItem = ({data}) =>{
             <div className='transactions-column-1'>
                 <div className='transactions-row'>
                     <h5 className='transaction-type-text'>{type.includes('swap') ? 'Swap' : data.type?.value}</h5>
-                    {data.status?.value ?
+                    {data.status?.value == 'Success' ?
                     <img src={fileRoutes.SUCCESS_ICON} alt='type'/>:
                     <img src={fileRoutes.ERROR_ICON} alt='type'/>}
                 </div>
@@ -42,9 +52,9 @@ const TransactionItem = ({data}) =>{
                 <h5 className={statusClass()+' transactions-amount'}>{data.amount?.value?.amount}</h5>
                 <p className='transactions-net'>{data.amount?.value?.ticker}</p>
             </div>
-            <div className='transactions-row'>
-                <p className='gray-text'>Fee:</p>
-                <h5 className='transactions-fee'>{data.fee?.value?.amount}</h5>
+            <div className='transactions-fee-row'>
+                <p className='gray-text'>{text.PROVIDER_FEE}:</p>
+                <h5 className='transactions-fee'>{formatFee(data.fee?.value?.amount)}</h5>
                 <p className='gray-text'>{data.fee?.value?.ticker}</p>
             </div>
         </div>

@@ -46,5 +46,9 @@
     "ADDRESS_ERROR_HEADER": "Address required for this app",
     "BALANCE": "Balance",
     "SWAP_ANYWAY_ALARM": "For swap to proceed, please increase the slippage tolerance in",
-    "SETTINGS": "Settings"
+    "SETTINGS": "Settings",
+    "NO_TRANSACTIONS": "No transactions yet",
+    "NO_TRANSACTIONS_DESCRIPTION": "Your transaction records with status and details will be displayed here",
+    "TRANSACTIONS_DETAILS": "Transaction details",
+    "PROVIDER_FEE": "Liquidity provider fee"
 }

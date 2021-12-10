@@ -12,15 +12,15 @@ import InputNumber from '../uikit/InputNumber'
  const Settings = (props) => {
     const {previousPanel} = props.panelReducer
     const {slippageTolerance,deadlineMin} = props.swapReducer
-    const [minute,setMinute] = useState(deadlineMin)
+    const [minute,setMinute] = useState(+deadlineMin == 20 ? '0' : deadlineMin)
     const [minute2,setMinute2] = useState(deadlineMin)
     const [deadlineInputId,setDeadlineInputId] = useState('default-input')
     const [inputId,setInputId] = useState('default-input')
-    const [currentProcent,setCurrentProcent] = useState(slippageTolerance)
+    const procent = [1,3,5]
+    const [currentProcent,setCurrentProcent] = useState(procent.includes(+slippageTolerance) ? '0' : slippageTolerance)
     const [isButtonOption, setButtonOption] = useState(true)
     const [isButtonOption2, setButtonOption2] = useState(true)
     const [currentProcent2,setCurrentProcent2] = useState(slippageTolerance)
-    const procent = [1,3,5]
     const [IDname,setIDname] = useState('initial-procent')
     const [activeOption,setActiveOption] = useState(false)
     const save = () => {

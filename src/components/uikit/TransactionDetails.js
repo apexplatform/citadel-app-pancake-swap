@@ -1,9 +1,9 @@
 import { Group } from '@vkontakte/vkui';
 import moment from 'moment'
-import {Icon24ExternalLinkOutline} from '@vkontakte/icons'
+import { Icon24ExternalLinkOutline } from '@vkontakte/icons';
 import '../styles/panels/transactions.css'
 const TransactionDetails = ({data}) => {
-    return(
+   return(
 	<Group className='transaction-details'>
 		<div className='transasction-details-row'>
             <p className='description-text'>Send to</p>
@@ -19,7 +19,7 @@ const TransactionDetails = ({data}) => {
         </div>
         <div className='transasction-details-row'>
             <p className='description-text'>Status</p>
-            <span className={data.status.value ? 'transactions-status' : "transactions-status-failed"}>{data.status.value ? 'Confirmed' : 'Failed'}</span>
+            <span className={data.status?.value == 'Success' ? 'transactions-status' : "transactions-status-failed"}>{data.status?.value}</span>
         </div>
         <div className='transasction-details-row'>
             <p className='description-text'>Time & data</p>
