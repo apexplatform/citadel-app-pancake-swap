@@ -27,17 +27,21 @@ export default class Wallet {
         
       }
     } 
-  async getTransactions(params) {
-    const {auth_token} = store.getState().userReducer
-    const data = await apiTransactions.getTransactions(auth_token);
-    if (data.ok) {
-      return data;
-    } else {
-      Sentry.captureException(data.error?.message || data.error?.message?.stack);
-      if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
-      return new Error(data.error?.message);  
-    }
-  } 
+    async getTransactions() {
+      const {auth_token} = store.getState().userReducer
+      const params = {
+        auth_token,
+        address: this.address,
+        net: this.net
+      }
+      const data = await apiTransactions.getTransactions(params);
+      if (data.ok) {
+        return data;
+      } else {
+        if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
+        return new Error(data.error?.message);  
+      }
+    } 
   prepareClaimRewards() {
     return new ImplementationError('Method not implemented!')
   }  

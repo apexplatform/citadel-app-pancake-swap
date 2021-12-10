@@ -1,10 +1,10 @@
-export const getTransactions = (token) => {
+export const getTransactions = (data) => {
   return {
-    url: `/transactions/`,
+    url: `/transactions/${data.net}/${data.address}`,
     method: 'get',
     data: {
       params: {
-        token
+        token: data.auth_token
       },
     },
   }
