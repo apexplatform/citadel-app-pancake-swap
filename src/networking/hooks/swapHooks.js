@@ -17,6 +17,7 @@ import {
 import tokens from '../constants/tokenLists/pancake-default.tokenlist.json'
 import { CancelledError, retry } from '../utils/retry'
 import {fetchChunk,chunkArray} from '../utils/updater'
+import BigNumber from 'bignumber.js'
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const LOWER_HEX_REGEX = /^0x[a-f0-9]*$/
 
@@ -337,21 +338,23 @@ export function tryParseAmount(value, currency) {
 		if(token?.address){
 			const contract = useTokenContract(token.address)
 			let balance = await contract?.balanceOf(currentWallet?.address)
+			console.log(balance?._hex,'==balance?._hex')
 				if(token.symbol === toToken.symbol){
+					
 					dispatch({
 						type: SET_TO_TOKEN,
-						payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
+						payload: {...token,balance: balance?._hex != '0x00' ? BigNumber(parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)).toFixed(6) : '0'}
 					})  
 				}
 				if(token.symbol === fromToken.symbol){
 					dispatch({
 						type: SET_FROM_TOKEN,
-						payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
+						payload: {...token,balance: balance?._hex != '0x00' ? BigNumber(parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)).toFixed(6): '0'}
 					})  
 				}
 			dispatch({
 				type: SET_TOKEN_LIST,
-				payload: {...token,balance: parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)}
+				payload: {...token,balance: balance?._hex != '0x00' ? BigNumber(parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)).toFixed(6) : '0'}
 			})
 		} else {
 			dispatch({

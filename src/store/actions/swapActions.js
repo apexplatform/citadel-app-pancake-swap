@@ -170,9 +170,9 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
     let feeProcent = currentWallet?.code == fromToken?.symbol ? 0.01 : 0
     if(isMax && !trade){
-        dispatch(updateTradeInfo(BigNumber(balance).minus(feeProcent).toFixed(),isExactIn))
-        dispatch(setAmount(BigNumber(balance).minus(feeProcent).toFixed()))
-        dispatch(checkSwapStatus(BigNumber(balance).minus(feeProcent).toFixed(),setIsactive))
+        dispatch(updateTradeInfo(BigNumber(balance).minus(feeProcent).toFixed(6),isExactIn))
+        dispatch(setAmount(BigNumber(balance).minus(feeProcent).toFixed(6)))
+        dispatch(checkSwapStatus(BigNumber(balance).minus(feeProcent).toFixed(6),setIsactive))
         return
     }
     if(+amount > 0) {
