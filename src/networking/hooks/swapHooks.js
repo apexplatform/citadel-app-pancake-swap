@@ -324,7 +324,7 @@ export function tryParseAmount(value, currency) {
   }
   
   export const loadTokenBalances = () => dispatch => {
-	const {currentWallet,fromToken,toToken} = store.getState().walletReducer
+	const {currentWallet,fromToken,toToken,tokenList} = store.getState().walletReducer
 	let list = [{...Currency.ETHER, symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokens['tokens']]
 	dispatch({
 		type: SET_EMPTY_TOKEN_LIST,
@@ -335,34 +335,35 @@ export function tryParseAmount(value, currency) {
         payload: false
     })
 	list.forEach(async(token) =>{
-		if(token?.address){
-			const contract = useTokenContract(token.address)
-			let balance = await contract?.balanceOf(currentWallet?.address)
-			console.log(balance?._hex,'==balance?._hex')
-				if(token.symbol === toToken.symbol){
-					
-					dispatch({
-						type: SET_TO_TOKEN,
-						payload: {...token,balance: balance?._hex != '0x00' ? BigNumber(parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)).toFixed(6) : '0'}
-					})  
-				}
-				if(token.symbol === fromToken.symbol){
-					dispatch({
-						type: SET_FROM_TOKEN,
-						payload: {...token,balance: balance?._hex != '0x00' ? BigNumber(parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)).toFixed(6): '0'}
-					})  
-				}
-			dispatch({
-				type: SET_TOKEN_LIST,
-				payload: {...token,balance: balance?._hex != '0x00' ? BigNumber(parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)).toFixed(6) : '0'}
-			})
-		} else {
-			dispatch({
-				type: SET_TOKEN_LIST,
-				payload: {...token,balance: currentWallet?.balance?.mainBalance || 0}
-			})
-		}
-		
+		let found = tokenList?.find(elem => elem.address === token?.address)
+		if(!found){
+			if(token?.address){
+				const contract = useTokenContract(token.address)
+				let balance = await contract?.balanceOf(currentWallet?.address)
+					if(token.symbol === toToken.symbol){
+						
+						dispatch({
+							type: SET_TO_TOKEN,
+							payload: {...token,balance: balance?._hex != '0x00' ? BigNumber(parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)).toFixed(6) : '0'}
+						})  
+					}
+					if(token.symbol === fromToken.symbol){
+						dispatch({
+							type: SET_FROM_TOKEN,
+							payload: {...token,balance: balance?._hex != '0x00' ? BigNumber(parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)).toFixed(6): '0'}
+						})  
+					}
+				dispatch({
+					type: SET_TOKEN_LIST,
+					payload: {...token,balance: balance?._hex != '0x00' ? BigNumber(parseInt(balance?._hex,16)/Math.pow(10,+token.decimals)).toFixed(6) : '0'}
+				})
+			} else {
+				dispatch({
+					type: SET_TOKEN_LIST,
+					payload: {...token,balance: currentWallet?.balance?.mainBalance || 0}
+				})
+			}
+		}			
 	})
 	dispatch({
         type: SET_LOADER,
