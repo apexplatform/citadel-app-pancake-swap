@@ -3,7 +3,7 @@ import '../styles/components/amountInput.css'
 import text from '../../text.json'
 import fileRoutes from '../../config/file-routes-config.json'
 import {connect} from 'react-redux'
-import {setRateAmount,updateTradeInfo,checkSwapStatus, setSwapStatus,checkTokenAllowance,setIndependentField,getFromBalance} from '../../store/actions/swapActions'
+import {setRateAmount,updateTradeInfo,setSwapDisable,checkSwapStatus, setSwapStatus,checkTokenAllowance,setIndependentField,getFromBalance} from '../../store/actions/swapActions'
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 import BigNumber from 'bignumber.js';
 const AmountInput = (props) => {
@@ -28,9 +28,10 @@ const AmountInput = (props) => {
             props.setAmount(val);
         }
         props.setIndependentField(props.name)
+        props.setSwapDisable(false)
         props.setExactIn(props.name === 'INPUT' ? true : false)
         if(+val > 0){
-            props.updateTradeInfo(val,props.name === 'INPUT' ? true : false,val.length > 2 ? true : false)
+            props.updateTradeInfo(val,props.name === 'INPUT' ? true : false)
             props.checkSwapStatus(val,setIsactive,isMax,props.name === 'INPUT' ? true : false)
         } else {
             props.setSwapStatus('enterAmount')
@@ -42,7 +43,7 @@ const AmountInput = (props) => {
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-            checkAmount(BigNumber(balance).minus(fee).toFixed(6),true)
+            checkAmount(BigNumber(balance).minus(fee).toString(),true)
         }
     }
     const checkValue = (val) => {
@@ -100,4 +101,4 @@ const mapStateToProps=(state)=>({
     swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {checkSwapStatus,setIndependentField,getFromBalance,checkTokenAllowance,setSwapStatus,setAmount,updateTradeInfo,setRateAmount,setToAmount}) (AmountInput);
+export default connect(mapStateToProps, {setSwapDisable,checkSwapStatus,setIndependentField,getFromBalance,checkTokenAllowance,setSwapStatus,setAmount,updateTradeInfo,setRateAmount,setToAmount}) (AmountInput);

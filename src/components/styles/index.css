@@ -24,10 +24,7 @@ body, * {
     text-align: center;
 }
 
-.vkuiModalPage__in-wrap{
-    height: auto !important;
-    bottom: 60% !important;
-}
+
 
 .vkuiModalPage__in{
     border-radius: 12px;

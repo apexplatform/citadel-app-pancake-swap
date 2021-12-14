@@ -1,7 +1,7 @@
 import ROUTES from './routes'
 import Swap from './components/containers/Swap'
 import Transactions from './components/containers/Transactions'
-import { View,Group,Panel} from '@vkontakte/vkui';
+import { View,Group,Panel,ModalRoot} from '@vkontakte/vkui';
 import {setActivePanel,setActiveModal} from './store/actions/panelActions'
 import {connect} from 'react-redux';
 import Tabbar from './components/uikit/Tabbar'
@@ -9,10 +9,14 @@ import AddressBlock from './components/uikit/AddressBlock'
 import { Config } from './config/config'
 import Settings from './components/containers/Settings'
 import ErrorModal from './components/uikit/ErrorModal'
+import ConfirmModal from './components/uikit/ConfirmModal'
 const MainPanel = (props) => {
-    const {activePanel} = props.panelReducer
+    const {activePanel,activeModal} = props.panelReducer
     const config = new Config()
-    const modal = <ErrorModal/>
+    const modal = <ModalRoot activeModal={activeModal}>
+                    <ErrorModal id="errors"/>
+                    <ConfirmModal id="confirm"/>
+                  </ModalRoot>
     return(
         <Panel id={ROUTES.HOME}>
             <Group>

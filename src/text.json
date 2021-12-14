@@ -50,5 +50,8 @@
     "NO_TRANSACTIONS": "No transactions yet",
     "NO_TRANSACTIONS_DESCRIPTION": "Your transaction records with status and details will be displayed here",
     "TRANSACTIONS_DETAILS": "Transaction details",
-    "PROVIDER_FEE": "Liquidity provider fee"
+    "PROVIDER_FEE": "Liquidity provider fee",
+    "CONFIRM_SWAP": "Confirm swap",
+    "CONFIRM_TEXT": "Input is estimated. You will sell at most ",
+    "CONFIRM_TEXT_2": "or the transaction will revert"
 }

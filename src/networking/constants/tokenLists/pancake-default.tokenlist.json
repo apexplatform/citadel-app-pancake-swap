@@ -184,7 +184,7 @@
       "address": "0x8C851d1a123Ff703BD1f9dabe631b69902Df5f97",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0x8C851d1a123Ff703BD1f9dabe631b69902Df5f97/logo.png"
+      "logoURI": "https://bscscan.com/token/images/binaryx_32.png"
     },
     {
       "name": "BunnyPark",
@@ -288,7 +288,7 @@
       "address": "0xA6c897CaaCA3Db7fD6e2D2cE1a00744f40aB87Bb",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0xA6c897CaaCA3Db7fD6e2D2cE1a00744f40aB87Bb/logo.png"
+      "logoURI": "https://bscscan.com/token/images/deathroad_32.png"
     },
     {
       "name": "DragonSlayer",
@@ -360,7 +360,7 @@
       "address": "0xb3a6381070B1a15169DEA646166EC0699fDAeA79",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0xb3a6381070B1a15169DEA646166EC0699fDAeA79/logo.png"
+      "logoURI": "https://bscscan.com/images/main/empty-token.png"
     },
     {
       "name": "StepHero",
@@ -432,7 +432,7 @@
       "address": "0xc732B6586A93b6B7CF5FeD3470808Bc74998224D",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0xc732B6586A93b6B7CF5FeD3470808Bc74998224D/logo.png"
+      "logoURI": "https://bscscan.com/token/images/kryptomon2_32.png"
     },
     {
       "name": "Linear Token",
@@ -480,7 +480,7 @@
       "address": "0x68E374F856bF25468D365E539b700b648Bf94B67",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0x68E374F856bF25468D365E539b700b648Bf94B67/logo.png"
+      "logoURI": "https://bscscan.com/token/images/mist_32.png"
     },
     {
       "name": "Mound Token",
@@ -552,7 +552,7 @@
       "address": "0x09607078980CbB0665ABa9c6D1B84b8eAD246aA0",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0x09607078980CbB0665ABa9c6D1B84b8eAD246aA0/logo.png"
+      "logoURI": "https://bscscan.com/images/main/empty-token.png"
     },
     {
       "name": "Pink Token",
@@ -576,7 +576,7 @@
       "address": "0x394bBA8F309f3462b31238B3fd04b83F71A98848",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0x394bBA8F309f3462b31238B3fd04b83F71A98848/logo.png"
+      "logoURI": "https://bscscan.com/images/main/empty-token.png"
     },
     {
       "name": "Moonpot",
@@ -824,7 +824,7 @@
       "address": "0xFAfD4CB703B25CB22f43D017e7e0d75FEBc26743",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0xFAfD4CB703B25CB22f43D017e7e0d75FEBc26743/logo.png"
+      "logoURI": "https://bscscan.com/images/main/empty-token.png"
     },
     {
       "name": "WINk",
@@ -864,7 +864,7 @@
       "address": "0xFbe0b4aE6E5a200c36A341299604D5f71A5F0a48",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0xFbe0b4aE6E5a200c36A341299604D5f71A5F0a48/logo.png"
+      "logoURI": "https://bscscan.com/images/main/empty-token.png"
     }
   ]
 }

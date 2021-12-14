@@ -73,3 +73,8 @@
     color: #437FEC;
     font-weight: 400;
 }
+
+#errors .vkuiModalPage__in-wrap{
+    height: auto !important;
+    bottom: 60% !important;
+}

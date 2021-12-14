@@ -2,13 +2,19 @@ import {getWalletConstructor, setAmount} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
 import BigNumber from 'bignumber.js';
-import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD } from './types'
+import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD, SET_DISABLE_SWAP } from './types'
 import {computeTradePriceBreakdown} from '../../networking/utils/price'
-
+import { setActiveModal } from './panelActions';
 export const setRateAmount = (amount) => dispatch =>{
     dispatch({
         type: SET_RATE_AMOUT,
         payload: amount
+    })
+}
+export const setSwapDisable = (status) => dispatch =>{
+    dispatch({
+        type: SET_DISABLE_SWAP,
+        payload: status
     })
 }
 
@@ -80,9 +86,15 @@ export const checkTokenAllowance = () => dispatch =>{
     }
 }
 
+export const getcomputeTradePriceBreakdown = () => dispatch =>{
+    const {trade} = store.getState().swapReducer
+    return computeTradePriceBreakdown(trade)
+}
 export const prepareSwapTransfer  = (isExactIn) => async(dispatch) => {
     const wallet = getWalletConstructor()
     if(wallet){
+        dispatch(setSwapDisable(true))
+      //  dispatch(setActiveModal('confirm'))
         await dispatch(wallet.getBlockNumber())
         const transaction = wallet.generateSwapTransaction(isExactIn)
         wallet.prepareTransfer(transaction).then((response) => {
@@ -167,7 +179,7 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     const balance = dispatch(getFromBalance())
     const {trade,allowanceAmount,slippageTolerance} = store.getState().swapReducer
     const {fromToken,currentWallet} = store.getState().walletReducer
-    const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
+    const { priceImpactWithoutFee } = getcomputeTradePriceBreakdown()
     let feeProcent = currentWallet?.code == fromToken?.symbol ? 0.01 : 0
     if(isMax && !trade){
         dispatch(updateTradeInfo(BigNumber(balance).minus(feeProcent).toFixed(6),isExactIn))
@@ -201,7 +213,7 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
 
 export const getFromBalance = () => dispatch =>  {
     const {fromToken,currentWallet} = store.getState().walletReducer
-    if(fromToken.symbol === 'BNB') return currentWallet?.balance?.mainBalance
+ //   if(fromToken.symbol === 'BNB') return currentWallet?.balance?.mainBalance
     if(fromToken.balance) return fromToken.balance
     return 0
 }

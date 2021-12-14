@@ -47,6 +47,7 @@ const FeeInfoBlock = (props) => {
                     {fromToken.symbol}
                 </span>
            </div>
+           {props.name == 'swap' ?
            <div className='fee-row'>
                 <span className='fee-text'>
                     {text.ROUTE}
@@ -62,7 +63,7 @@ const FeeInfoBlock = (props) => {
                     ))
                     }
                 </div> : '-'}
-           </div>
+           </div>:''}
         </div>
     )
 }

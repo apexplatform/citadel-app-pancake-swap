@@ -1,0 +1,89 @@
+.confirm-modal-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.confirm-modal-header p{
+    font-weight: 500;
+}
+#confirm .token-icon{
+    width: 40px !important;
+    height: 40px !important;
+}
+
+.separator-line{
+    border-bottom: 1px dashed #C3CEEB;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+.confirm-modal-row,.confirm-token-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.confirm-modal-row{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#confirm .vkuiModalPage__in-wrap{
+    height: auto !important;
+    bottom: 55% !important;
+}
+
+#confirm .token-symbol{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    margin: 0;
+}
+
+#confirm .token-amount{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    color: #792EC0;
+    margin: 0;
+}
+
+.confirm-token-item{
+    margin-top: 10px;
+    width: 46%;
+}
+
+#confirm .token-amount span{
+    color: #818C99;
+}
+
+#blue-token .token-amount{
+    color: #00A3FF;
+}
+
+#blue-token .token-icon{
+    background-color: #00A3FF !important;
+}
+
+.confirm-alarm-text{
+    color: #818C99;
+    font-size: 13px;
+    margin: 10px 20px 0;
+}
+
+.confirm-alarm-text span{
+    font-weight: 400;
+    color: rgb(8, 98, 165)
+}
+
+#confirm .fee-row span{
+    font-size: 13px;
+}
+
+#confirm .fee-info-block{
+    margin: 15px;
+}

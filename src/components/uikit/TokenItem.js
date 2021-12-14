@@ -6,7 +6,6 @@ import {setActivePage} from '../../store/actions/panelActions'
 import ROUTES from '../../routes'
 const TokenItem = (props) => {
     const {currentToken,currentWallet} = props.walletReducer
-    let balance = props.item.symbol === currentWallet.code ? currentWallet?.balance?.mainBalance : props.item.balance
     const selectToken = (item) =>{
         if(currentToken === 'from'){
             props.setFromToken(item)
@@ -20,14 +19,14 @@ const TokenItem = (props) => {
         <Card className={"token-card"} onClick={() => selectToken(props.item)}>
             <div className='token-item'>
                 <div className="token-icon center">
-                    <img src={props.item?.logoURI} alt ='icon' onError={(e) => {e.target.src='/img/coins/eth.svg'}}/>
+                    <img src={props.item?.logoURI} alt ='icon' onError={(e) => {e.target.src='/img/icons/unsupported.svg'}}/>
                 </div>
                 <div className="token-content">
                     <p className="token-symbol">{props.item.name}</p>
                 </div>
                 {props.withAmount &&
                 <div className="token-amount-block">
-                    <p className="token-symbol">{balance || 0}</p>
+                    <p className="token-symbol">{props.item.balance || 0}</p>
                     <span>{props.item.symbol}</span>
                 </div>}
             </div>

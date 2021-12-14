@@ -10,10 +10,15 @@ import ROUTES from '../../routes'
 import {setActivePanel,setPreviosPanel} from '../../store/actions/panelActions'
 const SwapButton = (props) => {
     const [approve,setApprove]  = useState(true)
-    const {swapStatus} = props.swapReducer
+    const {swapStatus,disableSwap} = props.swapReducer
     const {fromToken} = props.walletReducer
 	return (
         <Group>
+            {disableSwap ? 
+            <Div className='swap-btn' id="disabled-btn">
+                <span>{text.SWAP}</span>
+            </Div>:
+            <div>
              {swapStatus == 'swapAnyway' &&
             <Div className='swapAnyway-alarm' onClick={() => { props.setActivePanel(ROUTES.SETTINGS); props.setPreviosPanel(ROUTES.SWAP)}}>
                 <span>{text.SWAP_ANYWAY_ALARM} <span className='bold-span'>{text.SETTINGS}</span></span>
@@ -36,7 +41,7 @@ const SwapButton = (props) => {
                 <span>{text.FEE_ERROR_TEXT}</span>
             </Div>}
             {swapStatus == 'insufficientBalance' &&
-            <Div className='swap-btn' id="disabled-btn">
+            <Div className='swap-btn' id="disabled-btn" >
                 <span>Insufficient {fromToken.symbol} balance </span>
             </Div>}
             {swapStatus == 'enterAmount' &&
@@ -61,6 +66,7 @@ const SwapButton = (props) => {
                 </div>
             </Group>
             }
+            </div>}
         </Group>
 	); 
 }

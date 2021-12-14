@@ -3,9 +3,8 @@ import { FormItem,Div,Group } from '@vkontakte/vkui';
 import '../styles/panels/swap.css'
 import AmountInput from '../uikit/AmountInput'
 import TokenSelect from '../uikit/TokenSelect'
-import {swapTokens,updateTradeInfo,checkTokenAllowance,checkSwapStatus,setIndependentField,setSwapStatus} from '../../store/actions/swapActions'
+import {swapTokens,updateTradeInfo,checkTokenAllowance,checkSwapStatus,setIndependentField,setSwapStatus,getcomputeTradePriceBreakdown} from '../../store/actions/swapActions'
 import Header from '../uikit/Header'
-import {computeTradePriceBreakdown} from '../../networking/utils/price'
 import {connect} from 'react-redux';
 import Icon from '../uikit/Icon'
 import Loader from '../uikit/Loader'
@@ -22,7 +21,7 @@ const Swap = (props) => {
 	const dependentField = independentField === 'INPUT' ? 'OUTPUT' : 'INPUT'
 	const formattedPrice = trade?.executionPrice?.toSignificant(6)
 	const [isActive,setIsactive] = useState(!trade && +amount != 0)
-	const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
+	const { priceImpactWithoutFee, realizedLPFee } = props.getcomputeTradePriceBreakdown()
 	const parsedAmounts =  {
         'INPUT': independentField === 'INPUT' ? parsedAmount : trade?.inputAmount,
         'OUTPUT': independentField === 'OUTPUT' ? parsedAmount : trade?.outputAmount,
@@ -82,7 +81,7 @@ const Swap = (props) => {
 					</div>
 				</FormItem>
 			</div>
-			<FeeInfoBlock rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
+			<FeeInfoBlock name='swap' rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
 			<SwapButton isExactIn={isExactIn}/>
 			{/* <Updater/> */}
 			</>
@@ -95,4 +94,4 @@ const mapStateToProps=(state)=>({
 	panelReducer: state.panelReducer
 })
 
-export default connect(mapStateToProps, {setLoader,checkSwapStatus,setSwapStatus,setIndependentField,checkTokenAllowance,setAmount,updateTradeInfo,swapTokens,setToAmount,setFromToken,setToToken,setFromAmount}) (Swap);
+export default connect(mapStateToProps, {setLoader,checkSwapStatus,setSwapStatus,setIndependentField,getcomputeTradePriceBreakdown,checkTokenAllowance,setAmount,updateTradeInfo,swapTokens,setToAmount,setFromToken,setToToken,setFromAmount}) (Swap);
