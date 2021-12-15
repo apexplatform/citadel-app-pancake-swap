@@ -207,7 +207,7 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
     const balance = dispatch(getFromBalance())
     const {trade,allowanceAmount,slippageTolerance} = store.getState().swapReducer
     const {fromToken,currentWallet} = store.getState().walletReducer
-    const { priceImpactWithoutFee } = getcomputeTradePriceBreakdown()
+    const { priceImpactWithoutFee } = dispatch(getcomputeTradePriceBreakdown())
     let feeProcent = currentWallet?.code == fromToken?.symbol ? 0.01 : 0
     if(isMax && !trade){
         dispatch(updateTradeInfo(BigNumber(balance).minus(feeProcent).toFixed(6),isExactIn))
@@ -215,6 +215,7 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
         dispatch(checkSwapStatus(BigNumber(balance).minus(feeProcent).toFixed(6),setIsactive))
         return
     }
+   // console.log(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance,parseFloat(priceImpactWithoutFee?.toFixed(2)||0) , +slippageTolerance)
     if(+amount > 0) {
         if(+amount > +balance){
             dispatch(setSwapStatus('insufficientBalance'))
