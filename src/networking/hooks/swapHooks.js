@@ -330,9 +330,12 @@ export function tryParseAmount(value, currency) {
 		}else{
 			balance = BigNumber(parseInt(hex,16)/Math.pow(10,decimals)).toString()
 		}
+		if(balance.length < 8){
+			return balance
+		}
 		let balanceArr = balance.split('.')
-		if(balanceArr[1].length > 5){
-			balanceArr[1] = balanceArr[1].substr(0,5)
+		if(balanceArr[1]?.length > 6){
+			balanceArr[1] = balanceArr[1].substr(0,6)
 		}
 		return balanceArr[0] + '.' + balanceArr[1]
 	}

@@ -22,7 +22,7 @@
     margin: auto;
 }
 
-.confirm-modal-row,.confirm-token-item{
+.confirm-modal-row,.confirm-token-item,.accept-block div{
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -34,7 +34,7 @@
 
 #confirm .vkuiModalPage__in-wrap{
     height: auto !important;
-    bottom: 55% !important;
+    bottom: 50% !important;
 }
 
 #confirm .token-symbol{
@@ -86,4 +86,32 @@
 
 #confirm .fee-info-block{
     margin: 15px;
+}
+
+.accept-block{
+    background: #FBF6EB;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 20px;
+}
+
+.accept-block h3{
+    color: #59779A;
+    font-weight: 400;
+    font-size: 15px;
+    margin: 0;
+    margin-left: 5px;
+}
+
+.accept-block button{
+    background: #792EC0;
+    border-radius: 4px;
+    color: white;
+    font-weight: 400;
+    font-size: 15px;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
 }

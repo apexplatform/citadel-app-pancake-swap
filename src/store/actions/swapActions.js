@@ -2,7 +2,7 @@ import {getWalletConstructor, setAmount} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
 import BigNumber from 'bignumber.js';
-import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD, SET_DISABLE_SWAP } from './types'
+import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD, SET_DISABLE_SWAP, SET_EXACT_IN, SET_PRICE_UPDATED, SET_UPDATED_TRADE } from './types'
 import {computeTradePriceBreakdown} from '../../networking/utils/price'
 import { setActiveModal } from './panelActions';
 export const setRateAmount = (amount) => dispatch =>{
@@ -90,13 +90,21 @@ export const getcomputeTradePriceBreakdown = () => dispatch =>{
     const {trade} = store.getState().swapReducer
     return computeTradePriceBreakdown(trade)
 }
-export const prepareSwapTransfer  = (isExactIn) => async(dispatch) => {
+
+export const openConfirmModal = (isExactIn) => dispatch => {
+    dispatch(setActiveModal('confirm'))
+    dispatch({
+        type: SET_EXACT_IN,
+        payload: isExactIn
+    })
+}
+export const prepareSwapTransfer  = () => async(dispatch) => {
     const wallet = getWalletConstructor()
     if(wallet){
         dispatch(setSwapDisable(true))
-      //  dispatch(setActiveModal('confirm'))
+        dispatch(setActiveModal(null))
         await dispatch(wallet.getBlockNumber())
-        const transaction = wallet.generateSwapTransaction(isExactIn)
+        const transaction = wallet.generateSwapTransaction()
         wallet.prepareTransfer(transaction).then((response) => {
             if(response?.ok){
                 return dispatch ({
@@ -150,18 +158,38 @@ export const swapTokens = () => dispatch =>{
     })
 }
 
-export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false) => dispatch => {
+export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false,isConfirm=false) => dispatch => {
     try{
         const wallet = getWalletConstructor()
         if(wallet){
+            console.log(amount, '---amount')
             const {fromToken,toToken} = store.getState().walletReducer
-            const {swapStatus} = store.getState().swapReducer
+            const {swapStatus,trade} = store.getState().swapReducer
             const inputCurrency = wallet.getCurrency(fromToken.address || fromToken.symbol)
             const outputCurrency = wallet.getCurrency(toToken.address || toToken.symbol)
             let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
             dispatch(setParsedAmount(parsedAmount))
             const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn,updateCall))
-            dispatch(setTrade(bestTradeExact))
+            console.log(trade?.outputAmount?.toSignificant(6) != bestTradeExact?.outputAmount?.toSignificant(6),trade?.outputAmount?.toSignificant(6), bestTradeExact?.outputAmount?.toSignificant(6))
+            if(trade && trade?.outputAmount?.toSignificant(6) != bestTradeExact?.outputAmount?.toSignificant(6)){
+                dispatch({
+                    type: SET_PRICE_UPDATED,
+                    payload: true
+                })
+            }else{
+                dispatch({
+                    type: SET_PRICE_UPDATED,
+                    payload: false
+                })
+            }
+            if(isConfirm){
+                dispatch({
+                    type: SET_UPDATED_TRADE,
+                    payload: bestTradeExact
+                })
+            }else{
+                dispatch(setTrade(bestTradeExact))
+            }  
             dispatch(setMinReceive(wallet.getMinReceived()))
             dispatch(wallet.getTokenAllowance())
             if(swapStatus === 'approve'){

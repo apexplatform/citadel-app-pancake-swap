@@ -40,10 +40,10 @@ export default class BSCWallet extends Wallet{
     getTokenBalances(){
         return loadTokenBalances()
     }
-    generateSwapTransaction(isExactIn){
+    generateSwapTransaction(){
         const {auth_token} = store.getState().userReducer
         const {currentWallet,fromToken,toToken,fromTokenAmount,toTokenAmount} = store.getState().walletReducer;
-        const {trade,deadline,slippageTolerance} = store.getState().swapReducer;
+        const {trade,deadline,slippageTolerance,isExactIn} = store.getState().swapReducer;
         const BIPS_BASE = JSBI.BigInt(10000)
         const call = Router.swapCallParameters(trade, {
         feeOnTransfer: false,

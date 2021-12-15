@@ -53,5 +53,7 @@
     "PROVIDER_FEE": "Liquidity provider fee",
     "CONFIRM_SWAP": "Confirm swap",
     "CONFIRM_TEXT": "Input is estimated. You will sell at most ",
-    "CONFIRM_TEXT_2": "or the transaction will revert"
+    "CONFIRM_TEXT_2": "or the transaction will revert",
+    "PRICE_UPDATED": "Price Updated",
+    "ACCEPT": "Accept"
 }

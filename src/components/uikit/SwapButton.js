@@ -1,7 +1,7 @@
 import { Div, Group } from '@vkontakte/vkui';
 import '../styles/components/swapButton.css'
 import { Icon20ChevronRightOutline } from '@vkontakte/icons';
-import {prepareSwapTransfer,prepareApprove} from '../../store/actions/swapActions'
+import {openConfirmModal,prepareApprove} from '../../store/actions/swapActions'
 import {connect} from 'react-redux';
 import Loader from '../uikit/Loader'
 import text from '../../text.json'
@@ -25,7 +25,7 @@ const SwapButton = (props) => {
                 <Icon20ChevronRightOutline fill="#E5457A" width={26} height={26}/> 
             </Div>}
             {swapStatus == 'swap' &&
-            <Div className='swap-btn' onClick={() => props.prepareSwapTransfer(props.isExactIn)}>
+            <Div className='swap-btn' onClick={() => props.openConfirmModal(props.isExactIn)}>
                 <span>{text.SWAP}</span>
             </Div>}
             {swapStatus == 'swapAnyway' &&
@@ -60,7 +60,7 @@ const SwapButton = (props) => {
                     <Div className='swap-btn' onClick={() => props.prepareApprove()} id={!approve ? "disabled-btn" : undefined}>
                         <span>{text.APPROVE} {fromToken.symbol}</span>
                     </Div>
-                    <Div className='swap-btn' onClick={() => !approve ? props.prepareSwapTransfer(props.isExactIn) : null }  id={approve ? "disabled-btn" : undefined}>
+                    <Div className='swap-btn' id={approve ? "disabled-btn" : undefined}>
                         <span>{text.SWAP}</span>
                     </Div>
                 </div>
@@ -75,4 +75,4 @@ const mapStateToProps=(state)=>({
 	swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {setPreviosPanel,prepareApprove,setActivePanel,prepareSwapTransfer}) (SwapButton);
+export default connect(mapStateToProps, {setPreviosPanel,prepareApprove,setActivePanel,openConfirmModal}) (SwapButton);
