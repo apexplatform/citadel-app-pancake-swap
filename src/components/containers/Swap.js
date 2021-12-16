@@ -30,6 +30,7 @@ const Swap = (props) => {
 		[independentField]: amount,
 		[dependentField]: +amount != 0 ? parsedAmounts[dependentField]?.toSignificant(6) || 0 : '0',
 	}
+
 	const reverseTokens = () => {
 		props.setIndependentField(dependentField)
 		setExactIn(!isExactIn)
@@ -38,6 +39,7 @@ const Swap = (props) => {
 		props.updateTradeInfo(formattedAmounts[independentField], !isExactIn)
 	}
 	useEffect(() => {
+		console.log(formattedAmounts,'--formattedAmounts',trade)
 		props.setFromAmount(formattedAmounts['INPUT'])
 		props.setToAmount(formattedAmounts['OUTPUT'])
     	props.checkSwapStatus(formattedAmounts['INPUT'])

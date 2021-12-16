@@ -105,7 +105,7 @@ export default class BSCWallet extends Wallet{
         const meta_info = [
         {
             title : "Token",
-            value : `${fromToken.symbol}-${toToken.symbol} ${fromToken.address}`,
+            value : `${fromToken.symbol} ${fromToken.address}`,
             type : "text"
         },
         {

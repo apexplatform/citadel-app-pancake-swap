@@ -1,5 +1,6 @@
 import '../styles/components/transactionsItem.css';
 import moment from 'moment'
+import BigNumber from 'bignumber.js'
 import fileRoutes from '../../config/file-routes-config.json'
 import text from '../../text.json'
 const TransactionItem = ({data}) =>{
@@ -49,7 +50,7 @@ const TransactionItem = ({data}) =>{
         </div>
         <div className='transactions-column-2'>
             <div className='transactions-row'>
-                <h5 className={statusClass()+' transactions-amount'}>{data.amount?.value?.amount}</h5>
+                <h5 className={statusClass()+' transactions-amount'}>{BigNumber(data.amount?.value?.amount).toFixed()}</h5>
                 <p className='transactions-net'>{data.amount?.value?.ticker}</p>
             </div>
             <div className='transactions-fee-row'>

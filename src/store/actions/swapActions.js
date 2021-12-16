@@ -92,13 +92,12 @@ export const getcomputeTradePriceBreakdown = () => dispatch =>{
 }
 
 export const openConfirmModal = (isExactIn) => dispatch => {
-    dispatch(setActiveModal('confirm'))
     dispatch({
         type: SET_EXACT_IN,
         payload: isExactIn
     })
     const {amount} = store.getState().walletReducer
-    dispatch(updateTradeInfo(amount,isExactIn))
+    dispatch(updateTradeInfo(amount,isExactIn,false,true))
 }
 export const prepareSwapTransfer  = () => async(dispatch) => {
     const wallet = getWalletConstructor()
@@ -160,11 +159,11 @@ export const swapTokens = () => dispatch =>{
     })
 }
 
-export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false,isConfirm=false) => dispatch => {
+export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false,isSwap=false,isConfirm=false) => dispatch => {
     try{
         const wallet = getWalletConstructor()
         if(wallet){
-            console.log(amount, '---amount')
+         //   console.log(amount, '---amount')
             const {fromToken,toToken} = store.getState().walletReducer
             const {swapStatus,trade} = store.getState().swapReducer
             const inputCurrency = wallet.getCurrency(fromToken.address || fromToken.symbol)
@@ -172,39 +171,72 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false,
             let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
             dispatch(setParsedAmount(parsedAmount))
             const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn,updateCall))
-            console.log(trade?.outputAmount?.toSignificant(6) != bestTradeExact?.outputAmount?.toSignificant(6),+trade?.outputAmount?.toSignificant(6), +bestTradeExact?.outputAmount?.toSignificant(6))
-            if(trade && trade?.outputAmount?.toSignificant(6) != bestTradeExact?.outputAmount?.toSignificant(6)){
-                dispatch({
-                    type: SET_PRICE_UPDATED,
-                    payload: true
-                })
-            }else{
-                dispatch({
-                    type: SET_PRICE_UPDATED,
-                    payload: false
-                })
-            }
-            if(isConfirm){
-                if(+trade?.outputAmount?.toSignificant(6) < +bestTradeExact?.outputAmount?.toSignificant(6)){
+           // console.log(bestTradeExact,'--bestTradeExact')
+            console.log(trade?.inputAmount?.toSignificant(6),bestTradeExact?.inputAmount?.toSignificant(6))
+            if(isExactIn){
+                if(trade && trade?.outputAmount?.toSignificant(6) != bestTradeExact?.outputAmount?.toSignificant(6)){
                     dispatch({
-                        type: SET_ICON_STATUS,
-                        payload: 'upStatus'
-                    })
-                }else if(+trade?.outputAmount?.toSignificant(6) > +bestTradeExact?.outputAmount?.toSignificant(6)){
-                    dispatch({
-                        type: SET_ICON_STATUS,
-                        payload: 'downStatus'
+                        type: SET_PRICE_UPDATED,
+                        payload: true
                     })
                 }else{
                     dispatch({
-                        type: SET_ICON_STATUS,
-                        payload: 'hideStatus'
+                        type: SET_PRICE_UPDATED,
+                        payload: false
                     })
                 }
+            }else{
+                if(trade && trade?.inputAmount?.toSignificant(6) != bestTradeExact?.inputAmount?.toSignificant(6)){
+                    dispatch({
+                        type: SET_PRICE_UPDATED,
+                        payload: true
+                    })
+                }else{
+                    dispatch({
+                        type: SET_PRICE_UPDATED,
+                        payload: false
+                    })
+                }
+            }
+            
+            if(isSwap){
+                if(isExactIn){
+                    if(+trade?.outputAmount?.toSignificant(6) > +bestTradeExact?.outputAmount?.toSignificant(6)){
+                        dispatch({
+                            type: SET_ICON_STATUS,
+                            payload: 'downStatus'
+                        })
+                        dispatch(setActiveModal('confirm'))
+                    }else{
+                        dispatch(setTrade(bestTradeExact))
+                        dispatch(prepareSwapTransfer())
+                    }
+                }else{
+                    if(+trade?.inputAmount?.toSignificant(6) < +bestTradeExact?.inputAmount?.toSignificant(6)){
+                        dispatch({
+                            type: SET_ICON_STATUS,
+                            payload: 'upStatus'
+                        })
+                        dispatch(setActiveModal('confirm'))
+                    }else{
+                        dispatch(setTrade(bestTradeExact))
+                        dispatch(prepareSwapTransfer())
+                    }
+                }        
                 dispatch({
                     type: SET_UPDATED_TRADE,
                     payload: bestTradeExact
                 })
+            }else if(isConfirm){
+                dispatch({
+                    type: SET_UPDATED_TRADE,
+                    payload: bestTradeExact
+                })
+                if(isExactIn){
+                    dispatch(setIconStatus(trade,bestTradeExact,'outputAmount'))
+                }else{
+                    dispatch(setIconStatus(trade,bestTradeExact,'inputAmount'))
+                }
             }else{
                 dispatch(setTrade(bestTradeExact))
             }  
@@ -263,4 +295,23 @@ export const getFromBalance = () => dispatch =>  {
  //   if(fromToken.symbol === 'BNB') return currentWallet?.balance?.mainBalance
     if(fromToken.balance) return fromToken.balance
     return 0
+}
+
+const setIconStatus = (trade,updatedTrade,type) => dispatch => {
+    if(trade && trade?.[type]?.toSignificant(6) == updatedTrade?.[type]?.toSignificant(6)){
+        dispatch({
+            type: SET_ICON_STATUS,
+            payload: 'hideStatus'
+        })
+    }else if(trade && +trade?.[type]?.toSignificant(6) > +updatedTrade?.[type]?.toSignificant(6)){
+        dispatch({
+            type: SET_ICON_STATUS,
+            payload: 'downStatus'
+        })
+    }else{
+        dispatch({
+            type: SET_ICON_STATUS,
+            payload: 'upStatus'
+        })
+    }
 }
