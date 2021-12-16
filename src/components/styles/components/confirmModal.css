@@ -22,16 +22,32 @@
     margin: auto;
 }
 
-.confirm-modal-row,.confirm-token-item,.accept-block div{
+.confirm-token-item,.accept-block div{
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
+}
+.confirm-modal-row{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.confirm-row{
+    display: flex;
+    align-items: center;
+    width: 60%;
+    margin-left: 0;
+    justify-content: flex-start;
 }
 .confirm-modal-row{
     padding-left: 20px;
     padding-right: 20px;
 }
-
+.confirm-arrow{
+    width: 16px;
+    transform: rotate(90deg);
+    margin: 10px 0 0 12px;
+}
 #confirm .vkuiModalPage__in-wrap{
     height: auto !important;
     bottom: 50% !important;
@@ -54,7 +70,7 @@
 
 .confirm-token-item{
     margin-top: 10px;
-    width: 46%;
+    width: 100%;
 }
 
 #confirm .token-amount span{
@@ -114,4 +130,23 @@
     border: none;
     padding: 5px 15px;
     cursor: pointer;
+}
+
+.triangle-icon{
+    margin-right: 4px;
+    display: none;
+}
+
+#downStatus{
+    transform: rotate(180deg);
+    display: inline-block;
+}
+
+#hideStatus{
+    display: none;
+}
+
+#upStatus{
+    transform: none;
+    display: inline-block;
 }

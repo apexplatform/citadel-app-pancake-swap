@@ -1,4 +1,4 @@
-import {SET_POOL_INFO,SET_EXACT_IN,SET_PRICE_UPDATED, SET_ALLOWED_PAIRS,SET_TOKEN_IN, SET_TOKEN_OUT,SET_SWAP_RATE, SET_SLIPPAGE, SET_INITIAL_RATE, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_ALLOWANCE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE, SET_PARSED_AMOUNT,SET_DEADLINE_MINUTE, SET_FIELD, SET_DISABLE_SWAP, SET_UPDATED_TRADE} from '../actions/types'
+import {SET_POOL_INFO,SET_ICON_STATUS,SET_EXACT_IN,SET_PRICE_UPDATED, SET_ALLOWED_PAIRS,SET_TOKEN_IN, SET_TOKEN_OUT,SET_SWAP_RATE, SET_SLIPPAGE, SET_INITIAL_RATE, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_ALLOWANCE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_DEADLINE, SET_PARSED_AMOUNT,SET_DEADLINE_MINUTE, SET_FIELD, SET_DISABLE_SWAP, SET_UPDATED_TRADE} from '../actions/types'
 const initialState = {
     poolInfo: {},
     tokenIn: {},
@@ -20,7 +20,8 @@ const initialState = {
     disableSwap: false,
     isExactIn: true,
     priceUpdated: false,
-    updatedTrade: null
+    updatedTrade: null,
+    iconStatus: undefined
 }
 export default function(state=initialState,action){
     switch (action.type){
@@ -28,6 +29,11 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 poolInfo: action.payload
+            }
+        case SET_ICON_STATUS:
+            return {
+                ...state,
+                iconStatus: action.payload
             }
         case SET_UPDATED_TRADE:
             return {

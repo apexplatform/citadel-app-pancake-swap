@@ -15,7 +15,9 @@ body, * {
 .vkuiGroup__inner{
     padding-top: 0 !important;
 }
-
+body::-webkit-scrollbar, *::-webkit-scrollbar {
+    display: none;
+}
 
 .center{
     display: flex;

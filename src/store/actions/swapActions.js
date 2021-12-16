@@ -2,7 +2,7 @@ import {getWalletConstructor, setAmount} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
 import BigNumber from 'bignumber.js';
-import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD, SET_DISABLE_SWAP, SET_EXACT_IN, SET_PRICE_UPDATED, SET_UPDATED_TRADE } from './types'
+import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD, SET_DISABLE_SWAP, SET_EXACT_IN, SET_PRICE_UPDATED, SET_UPDATED_TRADE, SET_ICON_STATUS } from './types'
 import {computeTradePriceBreakdown} from '../../networking/utils/price'
 import { setActiveModal } from './panelActions';
 export const setRateAmount = (amount) => dispatch =>{
@@ -97,6 +97,8 @@ export const openConfirmModal = (isExactIn) => dispatch => {
         type: SET_EXACT_IN,
         payload: isExactIn
     })
+    const {amount} = store.getState().walletReducer
+    dispatch(updateTradeInfo(amount,isExactIn))
 }
 export const prepareSwapTransfer  = () => async(dispatch) => {
     const wallet = getWalletConstructor()
@@ -170,7 +172,7 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false,
             let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
             dispatch(setParsedAmount(parsedAmount))
             const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn,updateCall))
-            console.log(trade?.outputAmount?.toSignificant(6) != bestTradeExact?.outputAmount?.toSignificant(6),trade?.outputAmount?.toSignificant(6), bestTradeExact?.outputAmount?.toSignificant(6))
+            console.log(trade?.outputAmount?.toSignificant(6) != bestTradeExact?.outputAmount?.toSignificant(6),+trade?.outputAmount?.toSignificant(6), +bestTradeExact?.outputAmount?.toSignificant(6))
             if(trade && trade?.outputAmount?.toSignificant(6) != bestTradeExact?.outputAmount?.toSignificant(6)){
                 dispatch({
                     type: SET_PRICE_UPDATED,
@@ -183,6 +185,22 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false,
                 })
             }
             if(isConfirm){
+                if(+trade?.outputAmount?.toSignificant(6) < +bestTradeExact?.outputAmount?.toSignificant(6)){
+                    dispatch({
+                        type: SET_ICON_STATUS,
+                        payload: 'upStatus'
+                    })
+                }else if(+trade?.outputAmount?.toSignificant(6) > +bestTradeExact?.outputAmount?.toSignificant(6)){
+                    dispatch({
+                        type: SET_ICON_STATUS,
+                        payload: 'downStatus'
+                    })
+                }else{
+                    dispatch({
+                        type: SET_ICON_STATUS,
+                        payload: 'hideStatus'
+                    })
+                }
                 dispatch({
                     type: SET_UPDATED_TRADE,
                     payload: bestTradeExact

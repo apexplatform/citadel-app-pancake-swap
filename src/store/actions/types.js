@@ -28,6 +28,7 @@ export const SET_PREVIOS_PANEL = "SET_PREVIOS_PANEL"
 export const SET_EXACT_IN = "SET_EXACT_IN"
 export const SET_PRICE_UPDATED = "SET_PRICE_UPDATED"
 export const SET_UPDATED_TRADE = "SET_UPDATED_TRADE"
+export const SET_ICON_STATUS = "SET_ICON_STATUS"
 // token types
 export const SET_TO_TOKEN = 'SET_TO_TOKEN'
 export const SET_SWAP_STATUS = 'SET_SWAP_STATUS'

@@ -6,27 +6,28 @@ import {prepareSwapTransfer,setTrade} from '../../store/actions/swapActions'
 import {getcomputeTradePriceBreakdown,updateTradeInfo} from '../../store/actions/swapActions'
 import '../styles/components/confirmModal.css'
 import text from '../../text.json'
-import FeeInfoBlock from '../uikit/FeeInfoBlock'
+import ConfirmInfoBlock from '../uikit/ConfirmInfoBlock'
 const ConfirmModal = (props) => {
     const {fromToken,toToken, amount,fromTokenAmount,toTokenAmount} = props.walletReducer
     const {trade,priceUpdated,isExactIn,updatedTrade} = props.swapReducer
     const [accept, setAccept] = useState(priceUpdated)
+    const [accepted, setAccepted] = useState(true)
 	const formattedPrice = trade?.executionPrice?.toSignificant(6)
 	const { priceImpactWithoutFee, realizedLPFee } = props.getcomputeTradePriceBreakdown()
     const {activeModal} = props.panelReducer
-
     const acceptAndUpdate = () => {
         setAccept(false)
+        setAccepted(false)
         props.setTrade(updatedTrade)
     }
     useEffect(() => {
         let interval = null;
-        if (activeModal) {
+        if (activeModal && accepted) {
             interval = setInterval(() => {
-                console.log(activeModal,'--activeModal--',priceUpdated)
                 props.updateTradeInfo(amount,isExactIn,false,true)
                 setAccept(priceUpdated)
-            }, 2000);
+              
+            }, 30000);
         } else {
             clearInterval(interval);
         }
@@ -41,21 +42,25 @@ const ConfirmModal = (props) => {
             <div className='separator-line'></div>
             <div className="confirm-modal-row">
                 <div className='confirm-token-item'>
-                    <div className="token-icon center">
-                        <img src={fromToken.logoURI} alt ='icon'/>
-                    </div>
-                    <div className="token-content">
+                    <div className='confirm-row'>
+                        <div className="token-icon center">
+                            <img src={fromToken.logoURI} alt ='icon'/>
+                        </div>
                         <p className="token-symbol">{fromToken.name}</p>
+                    </div>
+                    <div className="token-content">  
                         <p className="token-amount">{fromTokenAmount || 0} <span>{fromToken.symbol}</span></p>
                     </div>
                 </div>
-                <img src='/img/icons/arrow-modal.svg' alt ='icon'/>
-                <div className='confirm-token-item' id='blue-token'>
-                    <div className="token-icon center">
-                        <img src={toToken.logoURI} alt ='icon'/>
+                <img src='/img/icons/arrow-modal.svg' className='confirm-arrow' alt ='icon'/>
+                <div className='confirm-token-item' id='blue-token'>  
+                    <div className='confirm-row'>
+                        <div className="token-icon center">
+                            <img src={toToken.logoURI} alt ='icon'/>
+                        </div>
+                        <p className="token-symbol">{toToken.name}</p>
                     </div>
                     <div className="token-content">
-                        <p className="token-symbol">{toToken.name}</p>
                         <p className="token-amount">{toTokenAmount || 0} <span> {toToken.symbol}</span></p>
                     </div>
                 </div>
@@ -68,8 +73,8 @@ const ConfirmModal = (props) => {
                 </div>
                 <button onClick={() => acceptAndUpdate()}>{text.ACCEPT}</button>
             </Div>}
-            <p className='confirm-alarm-text'>{text.CONFIRM_TEXT} <span>{amount} </span> {fromToken.symbol} {text.CONFIRM_TEXT_2}</p>
-            <FeeInfoBlock name='confirm' rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
+            {/* <p className='confirm-alarm-text'>{text.CONFIRM_TEXT} <span>{amount} </span> {fromToken.symbol} {text.CONFIRM_TEXT_2}</p> */}
+            <ConfirmInfoBlock accepted={accepted} name='confirm' rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
             <Div className='swap-btn' id={accept ? "disabled-btn" : undefined} onClick={() => {props.setActiveModal(null);props.prepareSwapTransfer();}}>
                 <span>{text.SWAP}</span>
             </Div>

@@ -260,6 +260,7 @@ export function tryParseAmount(value, currency) {
 	let allowedPairs = []
 	if(!updateCall){
 		allowedPairs = dispatch(useAllCommonPairs(currencyAmountIn?.currency, currencyOut))
+		console.log(allowedPairs,'--allowedPairs')
 		dispatch({
 			type: SET_ALLOWED_PAIRS,
 			payload: allowedPairs
