@@ -7,10 +7,11 @@ import { useEffect, useState } from 'react';
 import {sortList} from '../helpers'
 import Loader from '../uikit/Loader'
 import text from '../../text.json'
+
 const SelectTokenPanel = (props) => {
     const {tokenList,currentToken,fromToken,toToken} = props.walletReducer
+    const {loader} = props.panelReducer
     const [list,setList] = useState(sortList(tokenList))
-    const [loader, setLoader] = useState(tokenList.length > 10)
     const [token,searchToken] = useState('')
     useEffect(()=>{
         if(token.length > 0) {
@@ -21,7 +22,6 @@ const SelectTokenPanel = (props) => {
         } else {
             setList(sortList(tokenList.filter(token => token.symbol !== fromToken.symbol)))
         }
-        setLoader(tokenList.length > 10)
     },[loader,tokenList,token])
     return(
         <Panel id={ROUTES.SELECT_ADDRESS}>
@@ -36,7 +36,8 @@ const SelectTokenPanel = (props) => {
 }
 
 const mapStateToProps=(state)=>({
-	walletReducer: state.walletReducer
+	walletReducer: state.walletReducer,
+    panelReducer: state.panelReducer
 })
 
 export default connect(mapStateToProps, {}) (SelectTokenPanel);

@@ -18,7 +18,6 @@ const AmountInput = (props) => {
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const balance = props.getFromBalance()
     const checkAmount = (val,isMax = false) => {
-        console.log(val,'--val')
         val = val.replace(/[^0-9\.]/g, '')
         if(+props.amount == 0 && val.length == 2 && val[1] != '.' && val[1] == '0'){
             props.setAmount(val[0]);

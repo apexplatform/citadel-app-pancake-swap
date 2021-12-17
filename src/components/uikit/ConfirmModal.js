@@ -18,20 +18,17 @@ const ConfirmModal = (props) => {
     const acceptAndUpdate = () => {
         setAccept(false)
         setAccepted(false)
-        console.log(updatedTrade,'--updatedTrades')
         props.setTrade(updatedTrade)
     }
     useEffect(() => {
         let interval = null;
         if (activeModal && accepted) {
             interval = setInterval(() => {
-                console.log(activeModal, accepted, '---interval')
                 props.updateTradeInfo(amount,isExactIn,false,false,true)
                 setAccept(priceUpdated)     
             }, 30000);
         } else {
             clearInterval(interval);
-            console.log('---interval cleared---')
             setAccepted(true)
         }
         return () => clearInterval(interval)

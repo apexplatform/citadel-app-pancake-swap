@@ -39,7 +39,6 @@ const Swap = (props) => {
 		props.updateTradeInfo(formattedAmounts[independentField], !isExactIn)
 	}
 	useEffect(() => {
-		console.log(formattedAmounts,'--formattedAmounts',trade)
 		props.setFromAmount(formattedAmounts['INPUT'])
 		props.setToAmount(formattedAmounts['OUTPUT'])
     	props.checkSwapStatus(formattedAmounts['INPUT'])

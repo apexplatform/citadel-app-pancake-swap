@@ -174,7 +174,7 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false,
             dispatch(setParsedAmount(parsedAmount))
             const bestTradeExact = dispatch(wallet.getTradeExact(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn,updateCall))
            // console.log(bestTradeExact,'--bestTradeExact')
-            console.log(trade?.inputAmount?.toSignificant(6),bestTradeExact?.inputAmount?.toSignificant(6))
+          //  console.log(trade?.inputAmount?.toSignificant(6),bestTradeExact?.inputAmount?.toSignificant(6))
             if(isExactIn){
                 if(trade && trade?.outputAmount?.toSignificant(6) != bestTradeExact?.outputAmount?.toSignificant(6)){
                     dispatch({

@@ -38,7 +38,7 @@ export default function(state=initialState,action){
         case SET_TOKEN_LIST:
             return {
                 ...state,
-                tokenList: [...state.tokenList, action.payload]
+                tokenList: action.payload
             }
         case SET_EMPTY_TOKEN_LIST:
             return {

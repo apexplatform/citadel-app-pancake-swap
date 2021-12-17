@@ -342,7 +342,7 @@ export function tryParseAmount(value, currency) {
 	return '0'
   }
   export const loadTokenBalances = () => dispatch => {
-	const {currentWallet,fromToken,toToken,tokenList} = store.getState().walletReducer
+	const {currentWallet,fromToken,toToken} = store.getState().walletReducer
 	let list = [{...Currency.ETHER, symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokens['tokens']]
 	dispatch({
 		type: SET_EMPTY_TOKEN_LIST,
@@ -353,34 +353,30 @@ export function tryParseAmount(value, currency) {
         payload: false
     })
 	list.forEach(async(token) =>{
-		let found = tokenList?.find(elem => elem.address === token?.address)
-		if(!found){
-			if(token?.address){
-				const contract = useTokenContract(token.address)
-				let balance = await contract?.balanceOf(currentWallet?.address)		
-				if(token.symbol === toToken.symbol){
-					dispatch({
-						type: SET_TO_TOKEN,
-						payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
-					})  
-				}
-				if(token.symbol === fromToken.symbol){
-					dispatch({
-						type: SET_FROM_TOKEN,
-						payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
-					})  
-				}
+		if(token?.address){
+			const contract = useTokenContract(token.address)
+			let balance = await contract?.balanceOf(currentWallet?.address)		
+			token.balance = formatBalance(balance?._hex,+token.decimals)
+			if(token.symbol === toToken.symbol){	
 				dispatch({
-					type: SET_TOKEN_LIST,
+					type: SET_TO_TOKEN,
 					payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
-				})
-			} else {
-				dispatch({
-					type: SET_TOKEN_LIST,
-					payload: {...token,balance: formatBalance(currentWallet?.balance?.mainBalance || 0)}
-				})
+				})  
 			}
+			if(token.symbol === fromToken.symbol){
+				dispatch({
+					type: SET_FROM_TOKEN,
+					payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
+				})  
+			}
+		} else {
+			token.balance = formatBalance(currentWallet?.balance?.mainBalance || 0)
 		}			
+	})
+	console.log(list,'--list')
+	dispatch({
+		type: SET_TOKEN_LIST,
+		payload: list
 	})
 	dispatch({
         type: SET_LOADER,
