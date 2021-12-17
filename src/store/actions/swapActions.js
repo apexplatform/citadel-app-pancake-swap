@@ -119,7 +119,9 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
             dispatch(checkErrors(err))
         })
     }
- 
+    setTimeout(() => {
+        dispatch(setSwapDisable(false))
+    }, 5000);
 }
 
 export const prepareApprove  = () => dispatch => {

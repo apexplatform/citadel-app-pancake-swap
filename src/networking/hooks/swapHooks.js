@@ -260,7 +260,6 @@ export function tryParseAmount(value, currency) {
 	let allowedPairs = []
 	if(!updateCall){
 		allowedPairs = dispatch(useAllCommonPairs(currencyAmountIn?.currency, currencyOut))
-		console.log(allowedPairs,'--allowedPairs')
 		dispatch({
 			type: SET_ALLOWED_PAIRS,
 			payload: allowedPairs
@@ -324,6 +323,7 @@ export function tryParseAmount(value, currency) {
 	})
   }
   const formatBalance = (hex,decimals) => {
+	  console.log(hex,'--hex')
 	if (hex != '0x00' || hex != 0){
 		let balance = '0.0'
 		if(typeof hex == 'number'){

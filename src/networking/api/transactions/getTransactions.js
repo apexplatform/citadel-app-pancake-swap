@@ -1,6 +1,6 @@
 export const getTransactions = (data) => {
   return {
-    url: `/transactions/${data.net}/${data.address}`,
+    url: `/transactions`,
     method: 'get',
     data: {
       params: {

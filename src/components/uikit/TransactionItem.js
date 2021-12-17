@@ -45,7 +45,7 @@ const TransactionItem = ({data}) =>{
                     <img src={fileRoutes.SUCCESS_ICON} alt='type'/>:
                     <img src={fileRoutes.ERROR_ICON} alt='type'/>}
                 </div>
-                <p className='gray-text'>{moment().from(data.date?.value)}</p>
+                <p className='gray-text'>{moment(data.date?.value).fromNow()}</p>
             </div>
         </div>
         <div className='transactions-column-2'>
