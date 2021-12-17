@@ -323,7 +323,6 @@ export function tryParseAmount(value, currency) {
 	})
   }
   const formatBalance = (hex,decimals) => {
-	  console.log(hex,'--hex')
 	if (hex != '0x00' || hex != 0){
 		let balance = '0.0'
 		if(typeof hex == 'number'){

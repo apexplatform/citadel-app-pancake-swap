@@ -78,3 +78,7 @@
     margin: 0 2px;
     line-height: 20px;
 }
+
+#red-amount-text{
+    color: #E64646;
+}

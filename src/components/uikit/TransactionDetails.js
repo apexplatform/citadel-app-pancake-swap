@@ -2,6 +2,7 @@ import { Group } from '@vkontakte/vkui';
 import moment from 'moment'
 import { Icon24ExternalLinkOutline } from '@vkontakte/icons';
 import '../styles/panels/transactions.css'
+import BigNumber from 'bignumber.js'
 const TransactionDetails = ({data}) => {
    return(
 	<Group className='transaction-details'>
@@ -11,7 +12,7 @@ const TransactionDetails = ({data}) => {
         </div>
         <div className='transasction-details-row'>
             <p className='description-text'>Amount</p>
-            <span className='transactions-status'>{data.amount?.value?.amount} <span className='description-text'>{data.amount?.value?.ticker}</span></span>
+            <span className='transactions-status' id={+data.amount?.value?.amount < 0 ? 'red-amount-text' : undefined}>{BigNumber(data.amount?.value?.amount).toFixed()} <span className='description-text'>{data.amount?.value?.ticker}</span></span>
         </div>
         <div className='transasction-details-row'>
             <p className='description-text'>Fee</p>

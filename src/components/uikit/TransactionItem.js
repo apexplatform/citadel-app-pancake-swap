@@ -50,7 +50,7 @@ const TransactionItem = ({data}) =>{
         </div>
         <div className='transactions-column-2'>
             <div className='transactions-row'>
-                <h5 className={statusClass()+' transactions-amount'}>{BigNumber(data.amount?.value?.amount).toFixed()}</h5>
+                <h5 className={statusClass()+' transactions-amount'} id={+data.amount?.value?.amount < 0 ? 'red-amount-text' : undefined}>{BigNumber(data.amount?.value?.amount).toFixed()}</h5>
                 <p className='transactions-net'>{data.amount?.value?.ticker}</p>
             </div>
             <div className='transactions-fee-row'>
