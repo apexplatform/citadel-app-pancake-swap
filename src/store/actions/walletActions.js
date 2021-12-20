@@ -37,7 +37,6 @@ export const setAmount = (amount) => dispatch =>{
 
 export const setSelectedToken = (token) => dispatch =>{
     const {loader} = store.getState().panelReducer
-   // console.log(token === 'from' , loader)
     if(token === 'from' && loader) dispatch(getTokenBalance())
     dispatch(setSwapDisable(false))
     dispatch({

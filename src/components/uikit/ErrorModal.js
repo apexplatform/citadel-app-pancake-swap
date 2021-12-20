@@ -6,7 +6,7 @@ import text from '../../text.json'
 const ErrorModal = (props) => {
     const {networkErrors,validationErrors} = props.errorsReducer
     return(
-		<ModalPage id="errors" dynamicContentHeight onClose={() => props.setActiveModal(null)}>
+		<ModalPage id="errors" dynamicContentHeight>
             <div id='modal-header'>
             {
             !validationErrors?.header ? 
@@ -27,7 +27,6 @@ const ErrorModal = (props) => {
                     <span className='tips-description'>{networkErrors?.tip || validationErrors?.tip}</span>
                 </div>
             </div>
-          <button className='error-btn' id={validationErrors?.header ? 'purple-btn' : undefined} onClick={() => props.setActiveModal(null)}>Ok</button>
 		</ModalPage>
 	  );
 }
