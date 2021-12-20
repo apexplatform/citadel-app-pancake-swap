@@ -34,6 +34,9 @@
     align-items: center;
     margin: 0 15px 25px;
 }
+#error-tips{
+    margin-bottom: 55px;
+}
 .error-tips img{
     margin-right: 10px;
 }
