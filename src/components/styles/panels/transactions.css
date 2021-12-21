@@ -15,6 +15,9 @@
     margin: 0;
     height: 40px;
 }
+.transasction-details-row span{
+    text-align: right;
+}
 .description-text{
     color: #818C99;
 }
