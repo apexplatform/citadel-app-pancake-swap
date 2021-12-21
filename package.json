@@ -19,6 +19,7 @@
     "react-scripts": "^4.0.3"
   },
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.16.5",
     "@ethersproject/units": "^5.4.0",
     "@keplr-wallet/crypto": "^0.9.0-alpha.14",
     "@keplr-wallet/unit": "^0.9.0-alpha.14",
