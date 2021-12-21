@@ -66,5 +66,34 @@
 }
 
 .no-transactions-block img{
-    margin: 13% auto 20px;
+    margin: 5% auto 10px;
 }
+
+.transactions_disclaimer{
+    display: flex;
+    background: #FBF6EB;
+    border-radius: 4px;
+    margin: 15px;
+    color: #59779A;
+}
+
+.transactions_disclaimer h4{
+   margin: 0;
+   line-height: 20px;
+   font-weight: 500;
+}
+
+.transactions_disclaimer p{
+    margin: 0;
+    line-height: 18px;
+    font-weight: 300;
+    font-size: 14px;
+ }
+
+ .transactions_disclaimer img{
+     margin-right: 15px;
+ }
+
+ .transactions_disclaimer span{
+     color: #FF900D;
+ }
