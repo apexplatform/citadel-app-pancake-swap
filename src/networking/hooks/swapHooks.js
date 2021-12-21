@@ -341,7 +341,7 @@ export function tryParseAmount(value, currency) {
 	}
 	return '0'
   }
-  export const loadTokenBalances = () => dispatch => {
+  export const loadTokenBalances = (initial = false) => dispatch => {
 	const {currentWallet,fromToken,toToken} = store.getState().walletReducer
 	let list = [{...Currency.ETHER, symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokens['tokens']]
 	dispatch({
@@ -357,23 +357,25 @@ export function tryParseAmount(value, currency) {
 			const contract = useTokenContract(token.address)
 			let balance = await contract?.balanceOf(currentWallet?.address)		
 			token.balance = formatBalance(balance?._hex,+token.decimals)
-			if(token.symbol === toToken.symbol){	
-				dispatch({
-					type: SET_TO_TOKEN,
-					payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
-				})  
-			}
-			if(token.symbol === fromToken.symbol){
-				dispatch({
-					type: SET_FROM_TOKEN,
-					payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
-				})  
-			}
+			if(initial){
+				console.log(token.symbol,'--token.symbol')
+				if(token.symbol === toToken.symbol){	
+					dispatch({
+						type: SET_TO_TOKEN,
+						payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
+					})  
+				}
+				if(token.symbol === fromToken.symbol){
+					dispatch({
+						type: SET_FROM_TOKEN,
+						payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
+					})  
+				}
+			}		
 		} else {
 			token.balance = formatBalance(currentWallet?.balance?.mainBalance || 0)
 		}			
 	})
-	console.log(list,'--list')
 	dispatch({
 		type: SET_TOKEN_LIST,
 		payload: list

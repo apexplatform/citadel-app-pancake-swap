@@ -15,7 +15,7 @@ const AmountInput = (props) => {
     const showFee = props.hideFee || false
     const coin = currentWallet?.code
     const fee = coin == fromToken.symbol ? 0.01 : 0
-    const [isActive,setIsactive] = useState(swapStatus === 'approve')
+    const [isActive,setIsactive] = useState(swapStatus === 'approve' && trade)
     const balance = props.getFromBalance()
     const checkAmount = (val,isMax = false) => {
         val = val.replace(/[^0-9\.]/g, '')

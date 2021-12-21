@@ -3,7 +3,7 @@ import models from '../../networking/models';
 import store from '../store';
 import {ValidationError} from '../../networking/models/Errors'
 import {checkErrors} from './errorsActions'
-import {getTokenBalance, updateTradeInfo,setSwapDisable} from './swapActions'
+import {getTokenBalance,checkTokenAllowance, updateTradeInfo,setSwapDisable} from './swapActions'
 import axios from 'axios';
 import { WalletList } from '../../networking/models/WalletList';
 import { setLoader } from './panelActions';
@@ -51,6 +51,7 @@ export const setFromToken = (token) => dispatch =>{
         type: SET_FROM_TOKEN,
         payload: token
     })
+    dispatch(checkTokenAllowance())
     dispatch(updateTradeInfo(amount,true))
 }
 

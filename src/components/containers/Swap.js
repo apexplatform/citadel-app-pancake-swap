@@ -14,13 +14,12 @@ import FeeInfoBlock from '../uikit/FeeInfoBlock'
 import SwapButton from '../uikit/SwapButton'
 const Swap = (props) => {
 	const [isExactIn,setExactIn] = useState(true)
-	const {trade,parsedAmount,independentField} = props.swapReducer
+	const {trade,parsedAmount,independentField,allowanceAmount} = props.swapReducer
 	const {fromToken,toToken,currentWallet, amount} = props.walletReducer
 	const showFee = fromToken?.symbol === currentWallet?.code
 	//const showFee2 = toToken?.symbol === currentWallet?.code
 	const dependentField = independentField === 'INPUT' ? 'OUTPUT' : 'INPUT'
 	const formattedPrice = trade?.executionPrice?.toSignificant(6)
-	const [isActive,setIsactive] = useState(!trade && +amount != 0)
 	const { priceImpactWithoutFee, realizedLPFee } = props.getcomputeTradePriceBreakdown()
 	const parsedAmounts =  {
         'INPUT': independentField === 'INPUT' ? parsedAmount : trade?.inputAmount,
@@ -43,17 +42,15 @@ const Swap = (props) => {
 		props.setToAmount(formattedAmounts['OUTPUT'])
     	props.checkSwapStatus(formattedAmounts['INPUT'])
 		let interval = null;
-		if (isActive) {
+		if (!trade && +amount != 0) {
 			interval = setInterval(() => {
-			  setIsactive(trade ? false : true)
-			  isActive ? props.updateTradeInfo(amount, isExactIn) : null
-			 
+			  props.updateTradeInfo(amount, isExactIn)
 			}, 1000);
-		} else if (!isActive) {
+		} else {
 			clearInterval(interval);
 		}
 		return () => clearInterval(interval);
-	},[fromToken,toToken,amount,trade])
+	},[fromToken,toToken,amount,trade,allowanceAmount])
 	return (
 		<Group className='swap-container'>
 			<Header title="Swap"/>

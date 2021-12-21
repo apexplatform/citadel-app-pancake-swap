@@ -37,8 +37,8 @@ export default class BSCWallet extends Wallet{
         const pct = basisPointsToPercent(slippageTolerance)
         return trade?.minimumAmountOut(pct) || 0
     }
-    getTokenBalances(){
-        return loadTokenBalances()
+    getTokenBalances(initial){
+        return loadTokenBalances(initial)
     }
     generateSwapTransaction(){
         const {auth_token} = store.getState().userReducer
