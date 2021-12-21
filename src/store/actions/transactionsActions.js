@@ -18,6 +18,6 @@ export const loadTransactions = () => async dispatch =>{
             type: SET_TRANSACTIONS_LIST,
             payload: transactions?.data?.list
         })
-        dispatch(setLoader(false))
+        dispatch(setLoader(true))
     }
 }

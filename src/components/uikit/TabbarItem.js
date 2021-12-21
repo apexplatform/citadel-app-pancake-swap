@@ -3,7 +3,10 @@ import {setActivePanel,setPreviosPanel} from '../../store/actions/panelActions'
 import {connect} from 'react-redux';
 import { Config } from '../../config/config';
 import Icon from './Icon'
+import ROUTES from '../../routes'
+import {loadTransactions} from '../../store/actions/transactionsActions'
 import { useEffect, useState } from 'react';
+import {setLoader} from '../../store/actions/panelActions'
 const TabbarItem = (props) => {
     const {activePanel} = props.panelReducer
     const config = new Config()
@@ -18,6 +21,10 @@ const TabbarItem = (props) => {
         props.setActivePanel(props.routes)
         if(activePanel === props.routes){
             setItemColor(config.tabbarParamsFromConfig('ACTIVE_ITEM_COLOR'))
+        }
+        if(props.routes == ROUTES.TRANSACTIONS){
+            props.setLoader(false)
+            props.loadTransactions()
         }
     }
     const setHoverColor = () => {
@@ -40,4 +47,4 @@ const mapStateToProps=(state)=>({
 	panelReducer: state.panelReducer
 })
 
-export default connect(mapStateToProps, {setPreviosPanel,setActivePanel}) (TabbarItem);
+export default connect(mapStateToProps, {setLoader,loadTransactions,setPreviosPanel,setActivePanel}) (TabbarItem);

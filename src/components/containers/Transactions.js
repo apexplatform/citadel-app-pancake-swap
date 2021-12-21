@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import Header from '../uikit/Header'
 import Loader from '../uikit/Loader'
 import text from '../../text.json'
-import {setLoader} from '../../store/actions/panelActions'
+
 const Transactions = (props) => {
 	const {transactions} = props.transactionsReducer
 	const {loader} = props.panelReducer
@@ -16,10 +16,6 @@ const Transactions = (props) => {
 		props.setActivePage(ROUTES.TRANSACTION_DETAILS)
 		props.setSelectedTransaction(item)
 	}
-	useEffect(() => {
-		props.setLoader(true)
-		props.loadTransactions()
-	}, [])
 	return (
 		<Group className='transactions-block'>
 			<Header title="Transactions" showTitle={true}/>
@@ -30,7 +26,7 @@ const Transactions = (props) => {
 					<p>{text.TRANSACTIONS_DISCLAIMER} <span> (Fix ETA - January’22).</span></p>
 				</div>
 			</Div>
-			{ !loader ?
+			{ loader ?
 			<CardGrid size="l" style={{marginTop: 10}}>
 			{transactions?.length ? transactions.map((item,i) => (
 				<Card size="l" mode="outline" key={i} onClick={()=>setTransaction(item)}>
@@ -55,4 +51,4 @@ const mapStateToProps=(state)=>({
 	transactionsReducer: state.transactionsReducer
 })
 
-export default connect(mapStateToProps, {setLoader,setSelectedTransaction,loadTransactions,setActivePage}) (Transactions);
+export default connect(mapStateToProps, {setSelectedTransaction,loadTransactions,setActivePage}) (Transactions);
