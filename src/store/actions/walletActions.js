@@ -6,17 +6,19 @@ import {checkErrors} from './errorsActions'
 import {getTokenBalance,checkTokenAllowance, updateTradeInfo,setSwapDisable} from './swapActions'
 import axios from 'axios';
 import { WalletList } from '../../networking/models/WalletList';
-import { setLoader } from './panelActions';
+import {loadTransactions} from './transactionsActions'
+import {setLoader} from './panelActions'
 export const setCurrentWallet = (wallet) => dispatch =>{
-    dispatch(setLoader(false))
     dispatch({
         type: SET_CURRENT_WALLET,
         payload: wallet
     })
     dispatch(getTokenBalance(true))
     dispatch(checkTokenAllowance())
+    dispatch(setLoader(false))
+    dispatch(loadTransactions())
+    dispatch(setLoader(true))
 }
-
 export const setToAddress = (address) => dispatch =>{
     dispatch({
         type: SET_TO_ADDRESS,
