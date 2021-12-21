@@ -83,10 +83,10 @@ export const useCallsData = (calls, options) => dispatch =>{
           })
           .catch((error) => {
             if (error instanceof CancelledError) {
-              console.debug('Cancelled fetch for blockNumber', currentBlock)
+          //    console.debug('Cancelled fetch for blockNumber', currentBlock)
               return
             }
-            console.error('Failed to fetch multicall chunk', chunk, chainId, error)
+          //  console.error('Failed to fetch multicall chunk', chunk, chainId, error)
             dispatch({type: ERROR_FETCHINT_MULTICAL_RESULTS, payload: {
                 calls: chunk,
                 chainId,
@@ -123,7 +123,7 @@ export function tryParseAmount(value, currency) {
 	  }
 	} catch (error) {
 	  // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)
-	  console.debug(`Failed to parse input amount: "${value}"`, error)
+	//  console.debug(`Failed to parse input amount: "${value}"`, error)
 	}
 	// necessary for all paths to return a value
 	return undefined
@@ -342,12 +342,14 @@ export function tryParseAmount(value, currency) {
 	return '0'
   }
   export const loadTokenBalances = (initial = false) => dispatch => {
+
 	const {currentWallet,fromToken,toToken} = store.getState().walletReducer
 	let list = [{...Currency.ETHER, symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokens['tokens']]
 	dispatch({
 		type: SET_EMPTY_TOKEN_LIST,
 		payload: []
 	})
+	console.log(currentWallet)
 	dispatch({
         type: SET_LOADER,
         payload: false
@@ -358,7 +360,6 @@ export function tryParseAmount(value, currency) {
 			let balance = await contract?.balanceOf(currentWallet?.address)		
 			token.balance = formatBalance(balance?._hex,+token.decimals)
 			if(initial){
-				console.log(token.symbol,'--token.symbol')
 				if(token.symbol === toToken.symbol){	
 					dispatch({
 						type: SET_TO_TOKEN,

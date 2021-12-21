@@ -11,6 +11,5 @@ export const loadTokenAllowance = () => dispatch => {
       type: SET_ALLOWANCE,
       payload: parseInt(returnData?._hex || '0x0', 16)
     })
-    console.log(fromToken,'----allowance--',parseInt(returnData?._hex || '0x0', 16))
   })
 }
