@@ -50,7 +50,7 @@ const Swap = (props) => {
 			clearInterval(interval);
 		}
 		return () => clearInterval(interval);
-	},[fromToken,toToken,amount,trade,allowanceAmount])
+	},[fromToken,toToken,amount,trade])
 	return (
 		<Group className='swap-container'>
 			<Header title="Swap"/>

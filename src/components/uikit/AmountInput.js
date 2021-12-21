@@ -64,7 +64,7 @@ const AmountInput = (props) => {
           clearInterval(interval);
         }
         return () => clearInterval(interval);
-      }, [isActive,allowanceAmount,trade,props.fee]);
+      }, [isActive,allowanceAmount,trade]);
     
     return(
         <div className='amount-container'>
