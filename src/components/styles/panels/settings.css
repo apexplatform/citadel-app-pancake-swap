@@ -49,6 +49,7 @@
     margin-right: 10px;
     border: none;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .settings-panel h4{
