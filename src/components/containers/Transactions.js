@@ -20,7 +20,7 @@ const Transactions = (props) => {
 		<Group className='transactions-block'>
 			<Header title="Transactions" showTitle={true}/>
 			<Div className="transactions_disclaimer">
-				<img src='/img/icons/disclaimer.svg' alt='disclaimer'/>
+				<img src='img/icons/disclaimer.svg' alt='disclaimer'/>
 				<div>
 					<h4>Note</h4>
 					<p>{text.TRANSACTIONS_DISCLAIMER} <span> (Fix ETA - January’22).</span></p>
@@ -34,7 +34,7 @@ const Transactions = (props) => {
 				</Card>
 			)):
 			<div className='no-transactions-block'>
-				<img src='/img/icons/noTransactions.svg' alt='empty' />
+				<img src='img/icons/noTransactions.svg' alt='empty' />
 				<h3>{text.NO_TRANSACTIONS}</h3>
 				<p>{text.NO_TRANSACTIONS_DESCRIPTION}</p>
 			</div>
