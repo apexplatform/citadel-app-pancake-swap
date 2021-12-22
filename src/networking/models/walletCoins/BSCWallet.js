@@ -47,7 +47,7 @@ export default class BSCWallet extends Wallet{
         const BIPS_BASE = JSBI.BigInt(10000)
         const call = Router.swapCallParameters(trade, {
         feeOnTransfer: false,
-        allowedSlippage: new Percent(JSBI.BigInt(slippageTolerance), BIPS_BASE),
+        allowedSlippage: new Percent(JSBI.BigInt(Math.floor(slippageTolerance*100)), BIPS_BASE),
         recipient: currentWallet?.address,
         deadline: deadline,
         })
