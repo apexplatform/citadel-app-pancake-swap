@@ -104,4 +104,5 @@ input[type=number] {
 
 .balance-container h5{
     margin-right: 4px;
+    line-height: 15px;
 }
