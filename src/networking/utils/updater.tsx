@@ -178,10 +178,10 @@ export default function Updater(): null {
           })
           .catch((error: any) => {
             if (error instanceof CancelledError) {
-              console.debug('Cancelled fetch for blockNumber', currentBlock)
+            //  console.debug('Cancelled fetch for blockNumber', currentBlock)
               return
             }
-            console.error('Failed to fetch multicall chunk', chunk, chainId, error)
+           // console.error('Failed to fetch multicall chunk', chunk, chainId, error)
             dispatch({type: ERROR_FETCHINT_MULTICAL_RESULTS, payload: {
                 calls: chunk,
                 chainId,

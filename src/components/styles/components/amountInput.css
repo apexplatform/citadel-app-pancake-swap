@@ -16,6 +16,7 @@
     font-size: 14px;
     margin-right: 4px;
     font-weight: 500;
+    line-height: 15px;
 }
 .max-btn{
     padding: 0px 16px;
@@ -99,4 +100,8 @@ input[type=number] {
     margin-top: -35px;
     position: absolute;
     right: 20px;
+}
+
+.balance-container h5{
+    margin-right: 4px;
 }

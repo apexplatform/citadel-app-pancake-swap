@@ -42,7 +42,7 @@
     "SWAP_ANYWAY": "Swap Anyway",
     "APPROVE": "Approve",
     "ADDRESS_ERROR_TEXT": "Seems like you don't have any BSC addresses imported into ",
-    "ADDRESS_ERROR_TIP": "Go to 'Add address' section and import BSC addresses of your choice with private key,seed phrase or hardware wallet ",
+    "ADDRESS_ERROR_TIP": "Go to 'Add address' section and import BSC addresses of your choice with private key, seed phrase or hardware wallet ",
     "ADDRESS_ERROR_HEADER": "Address required for this app",
     "BALANCE": "Balance",
     "SWAP_ANYWAY_ALARM": "For swap to proceed, please increase the slippage tolerance in",
