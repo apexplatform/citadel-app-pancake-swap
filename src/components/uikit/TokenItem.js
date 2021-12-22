@@ -19,7 +19,7 @@ const TokenItem = (props) => {
         <Card className={"token-card"} onClick={() => selectToken(props.item)}>
             <div className='token-item'>
                 <div className="token-icon center">
-                    <img src={props.item?.logoURI} alt ='icon' onError={(e) => {e.target.src='/img/icons/unsupported.svg'}}/>
+                    <img src={props.item?.logoURI} alt ='icon' onError={(e) => {e.target.src='img/icons/unsupported.svg'}}/>
                 </div>
                 <div className="token-content">
                     <p className="token-symbol">{props.item.name}</p>

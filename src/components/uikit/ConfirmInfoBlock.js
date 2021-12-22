@@ -16,7 +16,7 @@ const ConfirmInfoBlock = (props) => {
                 <span>
                     <span className='fee-text'>
                         {props.accepted ?
-                        <img src='/img/icons/triangle.svg' id={iconStatus} className='triangle-icon' alt ='icon'/>: ''}
+                        <img src='img/icons/triangle.svg' id={iconStatus} className='triangle-icon' alt ='icon'/>: ''}
                         {rate}
                     </span> 
                     {' ' + toToken.symbol} per { fromToken.symbol}
@@ -29,7 +29,7 @@ const ConfirmInfoBlock = (props) => {
                 <span>
                     <span className='fee-text'> 
                         {props.accepted ?
-                        <img src='/img/icons/triangle.svg' id={iconStatus} className='triangle-icon' alt ='icon'/>: ''}
+                        <img src='img/icons/triangle.svg' id={iconStatus} className='triangle-icon' alt ='icon'/>: ''}
                         {minReceived != 0 ? minReceived?.toSignificant(4) : minReceived} 
                     </span>
                     { ' ' + toToken.symbol}

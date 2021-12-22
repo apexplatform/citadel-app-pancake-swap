@@ -37,7 +37,7 @@ const ConfirmModal = (props) => {
         <ModalPage id="confirm" dynamicContentHeight onClose={() => props.setActiveModal(null)}>
             <div className='confirm-modal-header'>
                 <p>{ text.CONFIRM_SWAP }</p>
-                <img src='/img/icons/close.svg' alt ='icon' onClick={() => props.setActiveModal(null)}/>
+                <img src='img/icons/close.svg' alt ='icon' onClick={() => props.setActiveModal(null)}/>
             </div>
             <div className='separator-line'></div>
             <div className="confirm-modal-row">
@@ -52,7 +52,7 @@ const ConfirmModal = (props) => {
                         <p className="token-amount">{fromTokenAmount || 0} <span>{fromToken.symbol}</span></p>
                     </div>
                 </div>
-                <img src='/img/icons/arrow-modal.svg' className='confirm-arrow' alt ='icon'/>
+                <img src='img/icons/arrow-modal.svg' className='confirm-arrow' alt ='icon'/>
                 <div className='confirm-token-item' id='blue-token'>  
                     <div className='confirm-row'>
                         <div className="token-icon center">
@@ -68,7 +68,7 @@ const ConfirmModal = (props) => {
             {accept &&
             <Div className='accept-block'>
                 <div>
-                    <img src='/img/icons/info-modal.svg' alt ='icon'/>
+                    <img src='img/icons/info-modal.svg' alt ='icon'/>
                     <h3>{text.PRICE_UPDATED}</h3>
                 </div>
                 <button onClick={() => acceptAndUpdate()}>{text.ACCEPT}</button>

@@ -15,8 +15,8 @@ const ErrorModal = (props) => {
             <div id='modal-header'>
             {
             !validationErrors?.header ? 
-            <img src='/img/icons/errorModal.svg' alt='error' />:
-            <img src='/img/icons/blueAlarm.svg' alt='error' />
+            <img src='img/icons/errorModal.svg' alt='error' />:
+            <img src='img/icons/blueAlarm.svg' alt='error' />
             }
             {networkErrors?.text ?
                 <p className='error-title'> { text.ERROR_HEADER }</p>:
@@ -26,7 +26,7 @@ const ErrorModal = (props) => {
                 <p className='error-text'>{networkErrors?.text || validationErrors?.text} <span>{validationErrors?.text && 'Citadel.one'}</span></p>
                 <p className='error-description'>{networkErrors?.description || validationErrors?.description}</p>
             <div className='error-tips' id={networkErrors?.text ? 'error-tips' : undefined}>
-                <img src='/img/icons/tips.svg' alt='error' />
+                <img src='img/icons/tips.svg' alt='error' />
                 <div>
                     <h4>{text.TIP}</h4>
                     <span className='tips-description'>{networkErrors?.tip || validationErrors?.tip}</span>
