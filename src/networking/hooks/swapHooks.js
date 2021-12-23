@@ -330,6 +330,10 @@ export function tryParseAmount(value, currency) {
 		}else{
 			balance = BigNumber(parseInt(hex,16)/Math.pow(10,decimals)).toString()
 		}
+		if(balance.includes('e')){
+			balance = BigNumber(balance).toFixed(10).replace(/\.?0+$/,"")
+			return balance
+		}
 		if(balance.length < 8){
 			return balance
 		}
@@ -349,7 +353,6 @@ export function tryParseAmount(value, currency) {
 		type: SET_EMPTY_TOKEN_LIST,
 		payload: []
 	})
-	console.log(currentWallet)
 	dispatch({
         type: SET_LOADER,
         payload: false
@@ -374,7 +377,7 @@ export function tryParseAmount(value, currency) {
 				}
 			}		
 		} else {
-			token.balance = formatBalance(currentWallet?.balance?.mainBalance || 0)
+			token.balance = formatBalance(currentWallet?.balance?.mainBalance || 0,0)
 		}			
 	})
 	dispatch({
