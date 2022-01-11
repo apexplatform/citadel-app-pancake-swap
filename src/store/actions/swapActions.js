@@ -256,7 +256,6 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false,
 
 export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isExactIn=true) => dispatch => {
     const balance = dispatch(getFromBalance())
-  //  console.log(balance,'--balance')
     const {trade,allowanceAmount,slippageTolerance} = store.getState().swapReducer
     const {fromToken,currentWallet} = store.getState().walletReducer
     const { priceImpactWithoutFee } = dispatch(getcomputeTradePriceBreakdown())
@@ -267,11 +266,10 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
         dispatch(checkSwapStatus(BigNumber(balance).minus(feeProcent).toFixed(6),setIsactive))
         return
     }
-   // console.log(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance,parseFloat(priceImpactWithoutFee?.toFixed(2)||0) , +slippageTolerance)
     if(+amount > 0) {
         if(+amount > +balance){
             dispatch(setSwapStatus('insufficientBalance'))
-        } else if(+amount <= BigNumber(+balance).minus(feeProcent).toNumber()){
+        } else if(+amount <= BigNumber(+balance).minus(feeProcent).toNumber() && +currentWallet.balance?.mainBalance > 0){
                     if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))).toNumber() > +amount || fromToken.symbol === 'BNB'){
                         if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
                             dispatch(setSwapStatus('swap'))
@@ -284,7 +282,6 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
                     }
                 } else {
                     dispatch(setSwapStatus('feeError'))
-                    dispatch(checkSwapStatus(BigNumber(+balance).minus(feeProcent).toFixed(),setIsactive))
                 }
     } else {
         dispatch(setSwapStatus('enterAmount'))
