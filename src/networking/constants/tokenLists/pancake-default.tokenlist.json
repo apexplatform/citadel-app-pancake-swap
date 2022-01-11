@@ -467,14 +467,6 @@
       "logoURI": "https://tokens.pancakeswap.finance/images/0x3203c9E46cA618C8C1cE5dC67e7e9D75f5da2377.png"
     },
     {
-      "name": "MiniFootball",
-      "symbol": "MINIFOOTBALL",
-      "address": "0xD024Ac1195762F6F13f8CfDF3cdd2c97b33B248b",
-      "chainId": 56,
-      "decimals": 9,
-      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0xD024Ac1195762F6F13f8CfDF3cdd2c97b33B248b/logo.png"
-    },
-    {
       "name": "Mist",
       "symbol": "MIST",
       "address": "0x68E374F856bF25468D365E539b700b648Bf94B67",
