@@ -42,11 +42,11 @@ const AmountInput = (props) => {
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-            let amount = BigNumber(balance).minus(fee).toString()
-            if(amount.includes('e')){
-                amount = BigNumber(amount).toFixed(10).replace(/\.?0+$/,"")
+            let balanceWithoutFee = BigNumber(balance).minus(fee).toString()
+            if(balanceWithoutFee.includes('e')){
+                balanceWithoutFee = BigNumber(balanceWithoutFee).toFixed(10).replace(/\.?0+$/,"")
             }
-            checkAmount(amount,true)
+            checkAmount(balanceWithoutFee,true)
         }
     }
     const checkValue = (val) => {
@@ -62,7 +62,6 @@ const AmountInput = (props) => {
                 interval = setInterval(() => {
                   props.checkTokenAllowance()
                   if(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(amount)){
-                      console.log(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(amount),'-----')
                       props.setSwapStatus('swap')
                       setIsactive(false)
                   }

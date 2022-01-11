@@ -101,7 +101,7 @@ export default class BSCWallet extends Wallet{
     }  
     generateApproveTransaction(contractData){
         const {auth_token} = store.getState().userReducer
-        const {fromToken,toToken} = store.getState().walletReducer;
+        const {fromToken,currentWallet} = store.getState().walletReducer;
         const meta_info = [
         {
             title : "Token",
@@ -125,7 +125,7 @@ export default class BSCWallet extends Wallet{
         const body =    
         {
         "amount": 0,
-        "from": fromToken.address,
+        "from": currentWallet.address,
         "to": fromToken.address,
         "token": auth_token,
         "call": {
