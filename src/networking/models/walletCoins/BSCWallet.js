@@ -22,8 +22,8 @@ export default class BSCWallet extends Wallet{
     getParseAmount(amount,currency){
         return tryParseAmount(amount?.toString(),currency)
     } 
-    getTokenAllowance(){
-        return loadTokenAllowance()
+    getTokenAllowance(token=null){
+        return loadTokenAllowance(token)
     }
     getcomputeTradePriceBreakdown(){
         const {trade} = store.getState().swapReducer

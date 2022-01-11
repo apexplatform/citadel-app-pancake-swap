@@ -54,7 +54,7 @@ export const setFromToken = (token) => dispatch =>{
         type: SET_FROM_TOKEN,
         payload: token
     })
-    dispatch(checkTokenAllowance())
+    dispatch(checkTokenAllowance(token))
     dispatch(updateTradeInfo(amount,true))
 }
 
@@ -115,23 +115,12 @@ export const prepareTransfer  = () => dispatch => {
 
 export const loadWalletWithBalances  = () => dispatch => {
     const walletList = new WalletList()
-    const wallets = walletList.getWallets()
+    const wallets = walletList.loadWalletsWithBalances()
     if(wallets instanceof ValidationError){
         dispatch(checkErrors(wallets)) 
         return
     }
-    if(wallets.length > 0){
-        wallets.forEach(async item => {
-            const wallet = getWalletConstructor(item)
-            if(wallet){
-                let response = await wallet.getWalletBalance()
-                if(response.ok){
-                    item.balance = response.data
-                }else{
-                    dispatch(checkErrors(response))
-                }
-            } 
-        })
+    if(wallets.length){
         dispatch ({
             type:SET_WALLETS,
             payload: wallets

@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import {setRateAmount,updateTradeInfo,setSwapDisable,checkSwapStatus, setSwapStatus,checkTokenAllowance,setIndependentField,getFromBalance} from '../../store/actions/swapActions'
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 import BigNumber from 'bignumber.js';
+import {useInterval} from '../helpers/index'
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
     const [currencyOffset,setCurrencyOffset] = [(props.amount?.toString().length + 1) * 8 || 30]
@@ -37,12 +38,15 @@ const AmountInput = (props) => {
         }
     }
     const setMaxAmount = () => {
-        
         if(BigNumber(balance).minus(fee).toNumber() <= 0){
             props.setAmount(0)
             props.setSwapStatus('insufficientBalance')
         }else{
-            checkAmount(BigNumber(balance).minus(fee).toString(),true)
+            let amount = BigNumber(balance).minus(fee).toString()
+            if(amount.includes('e')){
+                amount = BigNumber(amount).toFixed(10).replace(/\.?0+$/,"")
+            }
+            checkAmount(amount,true)
         }
     }
     const checkValue = (val) => {
@@ -52,20 +56,23 @@ const AmountInput = (props) => {
     }
     useEffect(() => {
         let interval = null;
-        if (isActive) {
-          interval = setInterval(() => {
-            props.checkTokenAllowance()
-            if(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(amount)){
-                props.setSwapStatus('swap')
-                setIsactive(false)
-            }
-          }, 5000);
-        } else if (!isActive) {
-          clearInterval(interval);
+        if(props.name === 'INPUT'){
+            console.log(isActive,'--isActive')
+            if (isActive) {
+                interval = setInterval(() => {
+                  props.checkTokenAllowance()
+                  if(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(amount)){
+                      console.log(allowanceAmount/Math.pow(10,+fromToken.decimals) > parseInt(amount),'-----')
+                      props.setSwapStatus('swap')
+                      setIsactive(false)
+                  }
+                }, 5000);
+              } else {
+                clearInterval(interval);
+              }
+              return () => clearInterval(interval);
         }
-        return () => clearInterval(interval);
       }, [isActive,allowanceAmount,trade]);
-    
     return(
         <div className='amount-container'>
              <div className='balance-container'>
