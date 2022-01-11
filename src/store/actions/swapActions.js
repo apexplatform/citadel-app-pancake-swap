@@ -2,7 +2,7 @@ import {getWalletConstructor, setAmount} from './walletActions'
 import {checkErrors} from './errorsActions'
 import store from '../store';
 import BigNumber from 'bignumber.js';
-import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD, SET_DISABLE_SWAP, SET_EXACT_IN, SET_PRICE_UPDATED, SET_UPDATED_TRADE, SET_ICON_STATUS } from './types'
+import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD, SET_DISABLE_SWAP, SET_EXACT_IN, SET_PRICE_UPDATED, SET_UPDATED_TRADE, SET_ICON_STATUS, SET_ALLOWANCE } from './types'
 import {computeTradePriceBreakdown} from '../../networking/utils/price'
 import { setActiveModal } from './panelActions';
 export const setRateAmount = (amount) => dispatch =>{
@@ -79,10 +79,15 @@ export const getTokenBalance = (initial) => async(dispatch) =>{
     }
 }
 
-export const checkTokenAllowance = () => dispatch =>{
+export const checkTokenAllowance = (token=null) => async(dispatch) =>{
     const wallet = getWalletConstructor()
     if(wallet){
-        dispatch(wallet.getTokenAllowance())
+        const amount = await wallet.getTokenAllowance(token)
+        
+        dispatch({
+            type: SET_ALLOWANCE,
+            payload: amount
+        })
     }
 }
 
@@ -243,11 +248,6 @@ export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false,
                 dispatch(setTrade(bestTradeExact))
             }  
             dispatch(setMinReceive(wallet.getMinReceived()))
-            if(swapStatus === 'approve'){
-                setInterval(() => {
-                    wallet.getTokenAllowance()
-                },10000)
-            }
         }
     } catch(err) {
         dispatch(checkErrors(err))
@@ -293,8 +293,7 @@ export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isEx
 }
 
 export const getFromBalance = () => dispatch =>  {
-    const {fromToken,currentWallet} = store.getState().walletReducer
- //   if(fromToken.symbol === 'BNB') return currentWallet?.balance?.mainBalance
+    const {fromToken} = store.getState().walletReducer
     if(fromToken.balance) return fromToken.balance
     return 0
 }

@@ -1,4 +1,5 @@
 import { ValidationError } from './Errors';
+import {getWalletConstructor} from '../../store/actions/walletActions'
 const networks = {
     eth: {
         name: 'Ethereum', code: 'ETH'
@@ -31,6 +32,27 @@ export class WalletList {
         }
      
     }
+    loadWalletsWithBalances(){
+        const wallets = this.getWallets()
+        if(wallets instanceof ValidationError){
+            return wallets
+        }
+        try{
+            if(wallets.length > 0){
+                wallets.forEach(async item => {
+                    const wallet = getWalletConstructor(item)
+                    if(wallet){
+                        let response = await wallet.getWalletBalance()
+                        if(response.ok){
+                            item.balance = response.data
+                        }
+                    } 
+                })
+            }
+        }catch{}
+        return wallets
+    }
+    
 }
 
 // https://localhost:10888/?token=ccace86f-d539-4c34-a365-9711edf629eb&wallets=[%220x4dd28bee5135fc5dbb358a68ba941a5bf8e7aab2%22]

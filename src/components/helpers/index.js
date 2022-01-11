@@ -1,3 +1,4 @@
+import { useEffect,useRef } from 'react'
 export const sortList = (list) => {
     let sortedList = list.sort(function(a,b) {
         if(a.balance == b.balance)
@@ -11,3 +12,25 @@ export const sortList = (list) => {
     })
     return sortedList
 }
+
+
+export function useInterval(callback, delay) {
+    const savedCallback = useRef();
+  
+    // Remember the latest function.
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+  
+    // Set up the interval.
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay);
+        return () => clearInterval(id);
+      }
+    },[]);
+  }
+  
