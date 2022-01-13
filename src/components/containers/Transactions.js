@@ -19,13 +19,13 @@ const Transactions = (props) => {
 	return (
 		<Group className='transactions-block'>
 			<Header title="Transactions" showTitle={true}/>
-			<Div className="transactions_disclaimer">
+			{/* <Div className="transactions_disclaimer">
 				<img src='img/icons/disclaimer.svg' alt='disclaimer'/>
 				<div>
 					<h4>Note</h4>
 					<p>{text.TRANSACTIONS_DISCLAIMER} <span> (Fix ETA - January’22).</span></p>
 				</div>
-			</Div>
+			</Div> */}
 			{ loader ?
 			<CardGrid size="l" style={{marginTop: 10}}>
 			{transactions?.length ? transactions.map((item,i) => (
