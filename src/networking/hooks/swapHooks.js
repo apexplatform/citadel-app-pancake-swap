@@ -4,6 +4,7 @@ import { wrappedCurrency } from './wrappedCurrency'
 import store from '../../store/store';
 import {isValidMethodArgs,toCallState,PairState} from './multicalHooks'
 import flatMap from 'lodash/flatMap'
+import {getWalletConstructor} from '../../store/actions/walletActions'
 import { Interface } from '@ethersproject/abi'
 import { useTokenContract , useMulticallContract} from './contractHooks'
 import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
@@ -13,7 +14,7 @@ import {
 	BETTER_TRADE_LESS_HOPS_THRESHOLD,
 	ADDITIONAL_BASES,
   } from '../constants/constants.js'
-  import { ADD_MULTICAL_LISTENERS,UPDATE_MULTICAL_RESULTS,ERROR_FETCHINT_MULTICAL_RESULTS,SET_ALLOWED_PAIRS,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST, SET_LOADER, SET_TO_TOKEN, SET_FROM_TOKEN, SET_EMPTY_TOKEN_LIST} from "../../store/actions/types"
+  import { ADD_MULTICAL_LISTENERS,SET_CURRENT_WALLET,UPDATE_MULTICAL_RESULTS,ERROR_FETCHINT_MULTICAL_RESULTS,SET_ALLOWED_PAIRS,REMOVE_MULTICAL_LISTENERS,SET_DEADLINE, SET_CALLS, SET_TOKEN_LIST, SET_LOADER, SET_TO_TOKEN, SET_FROM_TOKEN, SET_EMPTY_TOKEN_LIST} from "../../store/actions/types"
 import tokens from '../constants/tokenLists/pancake-default.tokenlist.json'
 import { CancelledError, retry } from '../utils/retry'
 import {fetchChunk,chunkArray} from '../utils/updater'
@@ -267,7 +268,6 @@ export function tryParseAmount(value, currency) {
 	} else {
 		allowedPairs = store.getState().swapReducer.allowedPairs
 	}
-//	console.log(allowedPairs,'--allowedPairs')
 	const singleHopOnly = false
 	const MAX_HOPS = 3
 	if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
@@ -388,4 +388,79 @@ export function tryParseAmount(value, currency) {
         type: SET_LOADER,
         payload: true
     })
+  }
+
+
+  export const updateTokenBalances = () => async(dispatch) => {
+    const {currentWallet,fromToken,toToken} = store.getState().walletReducer
+	const wallet = getWalletConstructor()
+	if(fromToken.address){
+		const contract = useTokenContract(fromToken.address)
+		let balance = await contract?.balanceOf(currentWallet?.address)		
+		let balanceFormatted = formatBalance(balance?._hex,+fromToken.decimals)
+		console.log(balanceFormatted,'--balanceFormatted')
+		if(balanceFormatted == fromToken.balance){
+			return true
+		}else{
+			fromToken.balance = balanceFormatted
+			dispatch({
+				type: SET_FROM_TOKEN,
+				payload: fromToken
+			})
+		}
+	}else{
+		let response = await wallet.getWalletBalance()
+		if(response.ok){
+			let balance = formatBalance(response.data?.mainBalance || 0,0)
+			if(balance == fromToken.balance){
+				return true
+			}else{
+				fromToken.balance = balance
+				dispatch({
+					type: SET_FROM_TOKEN,
+					payload: fromToken
+				})
+				currentWallet.balance = response.data
+				dispatch ({
+					type:SET_CURRENT_WALLET,
+					payload: currentWallet
+				})
+			}
+		}
+	}
+	if(toToken.address){
+		const contract = useTokenContract(toToken.address)
+		let balance = await contract?.balanceOf(currentWallet?.address)		
+		let balanceFormatted = formatBalance(balance?._hex,+toToken.decimals)
+		console.log(balanceFormatted,'--balanceFormatted')
+		if(balanceFormatted == toToken.balance){
+			return true
+		}else{
+			toToken.balance = balanceFormatted
+			dispatch({
+				type: SET_TO_TOKEN,
+				payload: toToken
+			})
+		}
+	}else{
+		let response = await wallet.getWalletBalance()
+		if(response.ok){
+			let balance = formatBalance(response.data?.mainBalance || 0,0)
+			if(balance == toToken.balance){
+				return true
+			}else{
+				toToken.balance = balance
+				dispatch({
+					type: SET_TO_TOKEN,
+					payload: toToken
+				})
+				currentWallet.balance = response.data
+				dispatch ({
+					type:SET_CURRENT_WALLET,
+					payload: currentWallet
+				})
+			}
+		}
+	}
+	return false
   }

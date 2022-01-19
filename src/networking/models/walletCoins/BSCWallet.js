@@ -1,4 +1,4 @@
-import {useTradeExact,tryParseAmount,loadBlockNumber,loadTokenBalances} from '../../hooks/swapHooks'
+import {useTradeExact,tryParseAmount,loadBlockNumber,loadTokenBalances,updateTokenBalances} from '../../hooks/swapHooks'
 import {useCurrency} from '../../hooks/tokenHooks'
 import { JSBI, Percent, Router } from '@pancakeswap/sdk'
 import {basisPointsToPercent,computeTradePriceBreakdown} from '../../utils/price'
@@ -39,6 +39,9 @@ export default class BSCWallet extends Wallet{
     }
     getTokenBalances(initial){
         return loadTokenBalances(initial)
+    }
+    updateTokenBalances(){
+        return updateTokenBalances()
     }
     generateSwapTransaction(){
         const {auth_token} = store.getState().userReducer

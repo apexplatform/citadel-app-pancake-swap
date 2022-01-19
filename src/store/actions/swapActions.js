@@ -127,6 +127,21 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
     setTimeout(() => {
         dispatch(setSwapDisable(false))
     }, 5000);
+    let interval = null
+    let tryAgain = true
+    if(tryAgain){
+        interval = setInterval(async()=>{
+            tryAgain = await dispatch(wallet.updateTokenBalances())
+            console.log(tryAgain,'---tryAgain--0')
+            if(!tryAgain){
+                clearInterval(interval)
+            }
+        },10000)
+    }
+    if(!tryAgain){
+        clearInterval(interval)
+    }
+    console.log(tryAgain,'---tryAgain--1')
 }
 
 export const prepareApprove  = () => dispatch => {
@@ -313,3 +328,4 @@ const setIconStatus = (trade,updatedTrade,type) => dispatch => {
         })
     }
 }
+
