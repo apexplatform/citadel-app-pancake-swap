@@ -132,7 +132,6 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
     if(tryAgain){
         interval = setInterval(async()=>{
             tryAgain = await dispatch(wallet.updateTokenBalances())
-            console.log(tryAgain,'---tryAgain--0')
             if(!tryAgain){
                 clearInterval(interval)
             }
@@ -141,7 +140,6 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
     if(!tryAgain){
         clearInterval(interval)
     }
-    console.log(tryAgain,'---tryAgain--1')
 }
 
 export const prepareApprove  = () => dispatch => {

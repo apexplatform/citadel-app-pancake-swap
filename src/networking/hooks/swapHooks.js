@@ -398,7 +398,6 @@ export function tryParseAmount(value, currency) {
 		const contract = useTokenContract(fromToken.address)
 		let balance = await contract?.balanceOf(currentWallet?.address)		
 		let balanceFormatted = formatBalance(balance?._hex,+fromToken.decimals)
-		console.log(balanceFormatted,'--balanceFormatted')
 		if(balanceFormatted == fromToken.balance){
 			return true
 		}else{
@@ -432,7 +431,6 @@ export function tryParseAmount(value, currency) {
 		const contract = useTokenContract(toToken.address)
 		let balance = await contract?.balanceOf(currentWallet?.address)		
 		let balanceFormatted = formatBalance(balance?._hex,+toToken.decimals)
-		console.log(balanceFormatted,'--balanceFormatted')
 		if(balanceFormatted == toToken.balance){
 			return true
 		}else{
