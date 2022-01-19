@@ -57,7 +57,6 @@ const AmountInput = (props) => {
     useEffect(() => {
         let interval = null;
         if(props.name === 'INPUT'){
-            console.log(isActive,'--isActive')
             if (isActive) {
                 interval = setInterval(() => {
                   props.checkTokenAllowance()
