@@ -12,7 +12,7 @@ const Tabbar = (props) => {
                     <TabbarItem key={item.TITLE} icon={item.ICON} title={item.TITLE} routes={item.ROUTES} />
                 ))
             }
-            <TabbarItem title={'Transaction'} icon='transaction' routes={ROUTES.TRANSACTIONS} />
+            <TabbarItem title={'Transactions'} icon='transaction' routes={ROUTES.TRANSACTIONS} />
             <TabbarItem title={'Settings'} icon='settings' routes={ROUTES.SETTINGS} />
         </div>
     )
