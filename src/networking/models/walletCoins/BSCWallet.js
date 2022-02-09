@@ -16,7 +16,7 @@ export default class BSCWallet extends Wallet{
     getBlockNumber(){
         return loadBlockNumber()
     }
-    getTradeExact(amount,currency,isExactIn,updateCall){
+    getBestTrade(amount,currency,isExactIn,updateCall){
         return useTradeExact(amount,currency,isExactIn,updateCall)
     } 
     getParseAmount(amount,currency){
