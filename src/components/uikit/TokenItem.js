@@ -4,8 +4,9 @@ import '../styles/components/tokenItem.css'
 import {setSelectedToken,setFromToken,setToToken} from '../../store/actions/walletActions'
 import {setActivePage} from '../../store/actions/panelActions'
 import ROUTES from '../../routes'
+import {numberWithCommas} from '../helpers/numberFormatter'
 const TokenItem = (props) => {
-    const {currentToken,currentWallet} = props.walletReducer
+    const {currentToken} = props.walletReducer
     const selectToken = (item) =>{
         if(currentToken === 'from'){
             props.setFromToken(item)
@@ -26,7 +27,7 @@ const TokenItem = (props) => {
                 </div>
                 {props.withAmount &&
                 <div className="token-amount-block">
-                    <p className="token-symbol">{props.item.balance || 0}</p>
+                    <p className="token-symbol">{numberWithCommas(props.item.balance || 0)}</p>
                     <span>{props.item.symbol}</span>
                 </div>}
             </div>

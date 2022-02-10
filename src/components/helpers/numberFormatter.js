@@ -55,3 +55,15 @@ export const formatNumber = (amount) => {
   const intval = +decval !== 0 ? new IntPretty(decval).trim(true).maxDecimals(3).toString() : decval
   return intval.toString().replaceAll(',','')
 }
+
+export function numberWithCommas(x,decimals) {
+  if(+x==0){
+    return x
+  }
+  let numFexed = decimals ? x?.toFixed(decimals) : x
+  if(numFexed == '0.00'){
+    return '~0'
+  }
+  let num = numFexed?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return num
+}

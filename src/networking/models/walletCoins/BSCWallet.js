@@ -13,8 +13,8 @@ export default class BSCWallet extends Wallet{
     constructor(opts) {
         super(opts);
     }   
-    getBlockNumber(){
-        return loadBlockNumber()
+    getBlockNumber(deadlineMin){
+        return loadBlockNumber(deadlineMin)
     }
     getBestTrade(amount,currency,isExactIn,updateCall){
         return useTradeExact(amount,currency,isExactIn,updateCall)
@@ -22,8 +22,8 @@ export default class BSCWallet extends Wallet{
     getParseAmount(amount,currency){
         return tryParseAmount(amount?.toString(),currency)
     } 
-    getTokenAllowance(token=null){
-        return loadTokenAllowance(token)
+    getTokenAllowance(token,currentWallet){
+        return loadTokenAllowance(token,currentWallet)
     }
     getcomputeTradePriceBreakdown(){
         const {trade} = store.getState().swapReducer
@@ -43,10 +43,8 @@ export default class BSCWallet extends Wallet{
     updateTokenBalances(){
         return updateTokenBalances()
     }
-    generateSwapTransaction(){
+    generateSwapTransaction(currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount,trade,deadline,slippageTolerance,isExactIn){
         const {auth_token} = store.getState().userReducer
-        const {currentWallet,fromToken,toToken,fromTokenAmount,toTokenAmount} = store.getState().walletReducer;
-        const {trade,deadline,slippageTolerance,isExactIn} = store.getState().swapReducer;
         const BIPS_BASE = JSBI.BigInt(10000)
         const call = Router.swapCallParameters(trade, {
         feeOnTransfer: false,
@@ -102,9 +100,8 @@ export default class BSCWallet extends Wallet{
         
         return body
     }  
-    generateApproveTransaction(contractData){
+    generateApproveTransaction(fromToken,currentWallet,contractData){
         const {auth_token} = store.getState().userReducer
-        const {fromToken,currentWallet} = store.getState().walletReducer;
         const meta_info = [
         {
             title : "Token",

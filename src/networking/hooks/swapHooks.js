@@ -312,8 +312,7 @@ export function tryParseAmount(value, currency) {
 	return null
   }
   
-  export const loadBlockNumber = () => async(dispatch) => {
-	const {deadlineMin} = store.getState().swapReducer
+  export const loadBlockNumber = (deadlineMin) => async(dispatch) => {
 	const contract = useMulticallContract()
 	await contract?.getCurrentBlockTimestamp().then((returnData) => {
 	  dispatch({

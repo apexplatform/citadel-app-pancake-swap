@@ -74,15 +74,17 @@ export const getTokenBalance = (initial) => async(dispatch) =>{
             type: SET_EMPTY_TOKEN_LIST,
             payload: []
         })
+        const {deadlineMin} = store.getState().swapReducer
         await dispatch(wallet.getTokenBalances(initial))
-        await dispatch(wallet.getBlockNumber())
+        await dispatch(wallet.getBlockNumber(deadlineMin))
     }
 }
 
 export const checkTokenAllowance = (token=null) => async(dispatch) =>{
     const wallet = getWalletConstructor()
     if(wallet){
-        const amount = await wallet.getTokenAllowance(token)
+        const {currentWallet,fromToken} = store.getState().walletReducer
+        const amount = await wallet.getTokenAllowance(token || fromToken,currentWallet)
         
         dispatch({
             type: SET_ALLOWANCE,
@@ -109,8 +111,11 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
     if(wallet){
         dispatch(setSwapDisable(true))
         dispatch(setActiveModal(null))
-        await dispatch(wallet.getBlockNumber())
-        const transaction = wallet.generateSwapTransaction()
+        const {deadlineMin} = store.getState().swapReducer
+        await dispatch(wallet.getBlockNumber(deadlineMin))
+        const {currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount} = store.getState().walletReducer;
+        const {trade,deadline,slippageTolerance,isExactIn} = store.getState().swapReducer;
+        const transaction = wallet.generateSwapTransaction(currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount,trade,deadline,slippageTolerance,isExactIn)
         wallet.prepareTransfer(transaction).then((response) => {
             if(response?.ok){
                 return dispatch ({
@@ -145,12 +150,13 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
 export const prepareApprove  = () => dispatch => {
     const wallet = getWalletConstructor()
     if(wallet){
+        const {fromToken,currentWallet} = store.getState().walletReducer;
         const contractData = {
             address: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
             name: "PancakeSwap: Router v2",
             url: "https://bscscan.com/address/0x10ed43c718714eb63d5aa57b78b54704e256024e"
         }
-        const transaction = wallet.generateApproveTransaction(contractData)
+        const transaction = wallet.generateApproveTransaction(fromToken,currentWallet,contractData)
         wallet.prepareTransfer(transaction).then((ok, data) => {
             if(ok){
                 return dispatch ({

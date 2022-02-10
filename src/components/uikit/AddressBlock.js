@@ -5,6 +5,7 @@ import ROUTES from '../../routes'
 import {connect} from 'react-redux';
 import {setActivePage} from '../../store/actions/panelActions'
 import {fotmatAddress} from '../helpers/addressFormatter.js'
+import {numberWithCommas} from '../helpers/numberFormatter'
 import Icon from './Icon'
 const AddressBlock = (props) => {
     const {currentWallet} = props.walletReducer
@@ -21,7 +22,7 @@ const AddressBlock = (props) => {
                         <span className="address-text">({fotmatAddress(currentWallet?.address)})</span>
                     </div>
                     <div className='address-row'>
-                        <p className="address-block-amount">{currentWallet?.balance?.mainBalance}</p>
+                        <p className="address-block-amount">{numberWithCommas(currentWallet?.balance?.mainBalance)}</p>
                         <span className="address-network">{currentWallet?.code}</span>
                     </div>
                 </div>
