@@ -65,7 +65,7 @@ export default class BSCWallet extends Wallet{
             type : "text"
         },
         {
-            title : "Slipadge tolerance",
+            title : "Slippage tolerance",
             value : `${slippageTolerance}%`,
             type : "text"
         }     
