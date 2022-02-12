@@ -6,6 +6,7 @@ import {setCurrentWallet} from '../../store/actions/walletActions'
 import {setActivePage} from '../../store/actions/panelActions'
 import '../styles/components/addressItem.css'
 import Icon from './Icon'
+import {numberWithCommas} from '../helpers/numberFormatter'
 const AddressItem = (props) => {
     const {currentWallet} = props.walletReducer
     const {item} = props
@@ -26,7 +27,7 @@ const AddressItem = (props) => {
                         <span className="address">({fotmatAddress(item.address)})</span>
                     </div>
                     <div className='address-row'>
-                        <p className="address-name address-amount">{item?.balance?.mainBalance}</p>
+                        <p className="address-name address-amount">{numberWithCommas(item?.balance?.mainBalance)}</p>
                         <span className="address-network">{item.code}</span>
                     </div>
                 </div>

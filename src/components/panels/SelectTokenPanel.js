@@ -15,7 +15,7 @@ const SelectTokenPanel = (props) => {
     const [token,searchToken] = useState('')
     useEffect(()=>{
         if(token.length > 0) {
-            let arr = tokenList.filter(item => item.symbol.substr(0,token.length).toLowerCase() === token.toLowerCase() || item.name.substr(0,token.length).toLowerCase() === token.toLowerCase())
+            let arr = tokenList.filter(item => item.name.toLowerCase().includes(token.toLowerCase()) || item.symbol.toLowerCase().includes(token.toLowerCase()))
             setList(sortList(arr))
         } else if(currentToken === 'from'){
             setList(sortList(tokenList.filter(token => token.symbol !== toToken.symbol)))

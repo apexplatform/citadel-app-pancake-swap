@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 import {setRateAmount,updateTradeInfo,setSwapDisable,checkSwapStatus, setSwapStatus,checkTokenAllowance,setIndependentField,getFromBalance} from '../../store/actions/swapActions'
 import {setToAmount,setAmount}  from '../../store/actions/walletActions'
 import BigNumber from 'bignumber.js';
-import {useInterval} from '../helpers/index'
+import {numberWithCommas} from '../helpers/numberFormatter'
 const AmountInput = (props) => {
     const [hasError, setError] = useState(false)
     const [currencyOffset,setCurrencyOffset] = [(props.amount?.toString().length + 1) * 8 || 30]
@@ -75,7 +75,7 @@ const AmountInput = (props) => {
         <div className='amount-container'>
              <div className='balance-container'>
 				<h5>{text.BALANCE}:</h5>
-				<span className='balance-amount'> {props.name === 'INPUT' ? fromToken.balance : toToken.balance} </span>
+				<span className='balance-amount'> {props.name === 'INPUT' ? numberWithCommas(fromToken.balance) : numberWithCommas(toToken.balance)} </span>
 				<h5>{props.name === 'INPUT' ? fromToken.symbol : toToken.symbol}</h5>
 			</div>
             <div className='input-container' >
