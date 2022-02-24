@@ -18,6 +18,12 @@ const AmountInput = (props) => {
     const fee = coin == fromToken.symbol ? 0.01 : 0
     const [isActive,setIsactive] = useState(swapStatus === 'approve')
     const balance = props.getFromBalance()
+    let isBNB = false
+    if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
+        isBNB = true
+    }else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
+        isBNB = true
+    }
     const checkAmount = (val,isMax = false) => {
         val = val.replace(/[^0-9\.]/g, '')
         if(+props.amount == 0 && val.length == 2 && val[1] != '.' && val[1] == '0'){
@@ -31,7 +37,7 @@ const AmountInput = (props) => {
         props.setSwapDisable(false)
         props.setExactIn(props.name === 'INPUT' ? true : false)
         if(+val > 0){
-            props.updateTradeInfo(val,props.name === 'INPUT' ? true : false)
+            !isBNB && props.updateTradeInfo(val,props.name === 'INPUT' ? true : false)
             props.checkSwapStatus(val,setIsactive,isMax,props.name === 'INPUT' ? true : false)
         } else {
             props.setSwapStatus('enterAmount')

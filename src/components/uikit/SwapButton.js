@@ -1,7 +1,7 @@
 import { Div, Group } from '@vkontakte/vkui';
 import '../styles/components/swapButton.css'
 import { Icon20ChevronRightOutline } from '@vkontakte/icons';
-import {openConfirmModal,prepareApprove} from '../../store/actions/swapActions'
+import {openConfirmModal,prepareApprove,prepareSwapTransfer} from '../../store/actions/swapActions'
 import {connect} from 'react-redux';
 import Loader from '../uikit/Loader'
 import text from '../../text.json'
@@ -13,10 +13,13 @@ const SwapButton = (props) => {
     const {swapStatus,disableSwap} = props.swapReducer
     const {fromToken,toToken} = props.walletReducer
     let textSwap = text.SWAP
+    let isBNB = false
     if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
         textSwap = 'Wrap'
+        isBNB = true
     }else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
         textSwap = 'Unwrap'
+        isBNB = true
     }
 	return (
         <Group>
@@ -31,7 +34,7 @@ const SwapButton = (props) => {
                 <Icon20ChevronRightOutline fill="#E5457A" width={26} height={26}/> 
             </Div>}
             {swapStatus == 'swap' &&
-            <Div className='swap-btn' onClick={() => props.openConfirmModal(props.isExactIn)}>
+            <Div className='swap-btn' onClick={() => isBNB ? props.prepareSwapTransfer() : props.openConfirmModal(props.isExactIn)}>
                 <span>{textSwap}</span>
             </Div>}
             {swapStatus == 'swapAnyway' &&
@@ -81,4 +84,4 @@ const mapStateToProps=(state)=>({
 	swapReducer: state.swapReducer
 })
 
-export default connect(mapStateToProps, {setPreviosPanel,prepareApprove,setActivePanel,openConfirmModal}) (SwapButton);
+export default connect(mapStateToProps, {prepareSwapTransfer,setPreviosPanel,prepareApprove,setActivePanel,openConfirmModal}) (SwapButton);
