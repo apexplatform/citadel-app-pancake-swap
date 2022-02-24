@@ -59,12 +59,12 @@ export const setFromToken = (token) => dispatch =>{
 }
 
 export const setToToken = (token) => dispatch =>{
-    const {toTokenAmount} = store.getState().walletReducer
+    const {amount} = store.getState().walletReducer
     dispatch({
         type: SET_TO_TOKEN,
         payload: token
     })
-    dispatch(updateTradeInfo(toTokenAmount,false))
+    dispatch(updateTradeInfo(amount,true))
 }
 
 export const setFromAmount = (balance) => dispatch =>{
