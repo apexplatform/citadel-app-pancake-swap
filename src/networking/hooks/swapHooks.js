@@ -384,6 +384,11 @@ export function tryParseAmount(value, currency) {
 			type: SET_FROM_TOKEN,
 			payload: {...fromToken,balance: formatBalance(currentWallet?.balance?.mainBalance || 0,0)}
 		})  
+	}else if(toToken.symbol == 'BNB'){
+		dispatch({
+			type: SET_TO_TOKEN,
+			payload: {...toToken,balance: formatBalance(currentWallet?.balance?.mainBalance || 0,0)}
+		})  
 	}
 	dispatch({
 		type: SET_TOKEN_LIST,
