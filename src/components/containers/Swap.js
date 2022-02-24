@@ -25,9 +25,23 @@ const Swap = (props) => {
         'INPUT': independentField === 'INPUT' ? parsedAmount : trade?.inputAmount,
         'OUTPUT': independentField === 'OUTPUT' ? parsedAmount : trade?.outputAmount,
       }
-	const formattedAmounts = {
-		[independentField]: amount,
-		[dependentField]: +amount != 0 ? parsedAmounts[dependentField]?.toSignificant(6) || 0 : '0',
+	let isBNB = false
+	if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
+		isBNB = true
+	}else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
+		isBNB = true
+	}
+	let formattedAmounts = {}
+	if(isBNB){
+		formattedAmounts = {
+			[independentField]: amount,
+			[dependentField]: amount,
+		}
+	}else{
+		formattedAmounts = {
+			[independentField]: amount,
+			[dependentField]: +amount != 0 ? parsedAmounts[dependentField]?.toSignificant(6) || 0 : '0',
+		}
 	}
 
 	const reverseTokens = () => {

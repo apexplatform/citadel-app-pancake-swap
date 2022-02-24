@@ -8,43 +8,29 @@ const FeeInfoBlock = (props) => {
     const {minReceived,trade,swapStatus} = props.swapReducer
     const {rate,priceImpact,fee} = props
     let path = []
+    let isBNB = false
     if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
         path.push({...fromToken,tokenInfo:fromToken})
         path.push({...toToken,tokenInfo:toToken})
+        isBNB = true
     }else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
         path.push({...fromToken,tokenInfo:fromToken})
         path.push({...toToken,tokenInfo:toToken})
+        isBNB = true
     }else if(trade?.route?.path){
         path = trade?.route?.path
+        isBNB = false
     }
     return(
-        <div className='fee-info-block'>
+        isBNB ? 
+          <div className='fee-info-block'>
            <div className='fee-row'>
                 <span className='fee-text'>
                     {text.PRICE}
                 </span>
-                {rate ?
                 <span>
-                    <span className='fee-text'>{rate}  </span>
+                    <span className='fee-text'>1  </span>
                     {toToken.symbol} per { fromToken.symbol}
-                </span>: <span className='fee-text'>-</span>}
-           </div>
-           <div className='fee-row' id={swapStatus == 'swapAnyway' ? 'bold-text' : undefined}>
-                <span className='fee-text'>
-                    {text.PRICE_IMPACT}
-                </span>
-                <span className='fee-text'>
-                    {priceImpact ? (priceImpact.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpact.toFixed(2)}`) : '-'}
-                    <span>{ priceImpact ? '%' : ''} </span>
-                </span>
-           </div>
-           <div className='fee-row'>
-                <span className='fee-text'>
-                    {text.MINIMUM_RECEIVED}
-                </span>
-                <span>
-                    <span className='fee-text'> {minReceived != 0 ? minReceived?.toSignificant(4) : minReceived} </span>
-                    { toToken.symbol}
                 </span>
            </div>
            <div className='fee-row'>
@@ -64,7 +50,11 @@ const FeeInfoBlock = (props) => {
                 <div className='route-row'>
                     { path.map((token,i) => (
                         <span className='route-row' key={i}>
-                           {token.tokenInfo?.logoURI && <img src={token.tokenInfo?.logoURI} alt='t'/>}
+                          {token.symbol == 'BNB' ? 
+                           <div className="token-eth-icon center">
+                               <img src={token.tokenInfo?.logoURI} alt='t'/>
+                            </div>:
+                            token.tokenInfo?.logoURI && <img src={token.tokenInfo?.logoURI} alt='t'/>}
                             {token.symbol}
                             { i < path.length-1 && <Icon20ChevronRightOutline fill='#C5D0DB' width={25} height={25}/>}
                         </span>
@@ -72,6 +62,65 @@ const FeeInfoBlock = (props) => {
                     }
                 </div> : '-'}
            </div>
+        </div>:
+        <div className='fee-info-block'>
+         <div className='fee-row'>
+              <span className='fee-text'>
+                  {text.PRICE}
+              </span>
+              {rate ?
+              <span>
+                  <span className='fee-text'>{rate}  </span>
+                  {toToken.symbol} per { fromToken.symbol}
+              </span>: <span className='fee-text'>-</span>}
+         </div>
+         <div className='fee-row' id={swapStatus == 'swapAnyway' ? 'bold-text' : undefined}>
+              <span className='fee-text'>
+                  {text.PRICE_IMPACT}
+              </span>
+              <span className='fee-text'>
+                  {priceImpact ? (priceImpact.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpact.toFixed(2)}`) : '-'}
+                  <span>{ priceImpact ? '%' : ''} </span>
+              </span>
+         </div>
+         <div className='fee-row'>
+              <span className='fee-text'>
+                  {text.MINIMUM_RECEIVED}
+              </span>
+              <span>
+                  <span className='fee-text'> {minReceived != 0 ? minReceived?.toSignificant(4) : minReceived} </span>
+                  {toToken.symbol}
+              </span>
+         </div>
+         <div className='fee-row'>
+              <span className='fee-text'>
+                  {text.PROVIDER_FEE_TEXT}
+              </span>
+              <span>
+                  <span className='fee-text'> {fee} </span>
+                  {fromToken.symbol}
+              </span>
+         </div>
+         <div className='fee-row'>
+              <span className='fee-text'>
+                  {text.ROUTE}
+              </span>
+              {path.length ? 
+              <div className='route-row'>
+                  { path.map((token,i) => (
+                      <span className='route-row' key={i}>
+                        {token.symbol == 'BNB' ? 
+                         <div className="token-eth-icon center">
+                             <img src={token.tokenInfo?.logoURI} alt='t'/>
+                          </div>:
+                          token.tokenInfo?.logoURI && <img src={token.tokenInfo?.logoURI} alt='t'/>}
+                          {token.symbol}
+                          { i < path.length-1 && <Icon20ChevronRightOutline fill='#C5D0DB' width={25} height={25}/>}
+                      </span>
+                  ))
+                  }
+              </div> : '-'}
+         </div>
         </div>
     )
 }
