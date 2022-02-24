@@ -7,7 +7,16 @@ const FeeInfoBlock = (props) => {
     const {fromToken,toToken} = props.walletReducer
     const {minReceived,trade,swapStatus} = props.swapReducer
     const {rate,priceImpact,fee} = props
-    const path = trade?.route?.path || []
+    let path = []
+    if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
+        path.push({...fromToken,tokenInfo:fromToken})
+        path.push({...toToken,tokenInfo:toToken})
+    }else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
+        path.push({...fromToken,tokenInfo:fromToken})
+        path.push({...toToken,tokenInfo:toToken})
+    }else if(trade?.route?.path){
+        path = trade?.route?.path
+    }
     return(
         <div className='fee-info-block'>
            <div className='fee-row'>

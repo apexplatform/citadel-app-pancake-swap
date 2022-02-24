@@ -115,8 +115,14 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
         await dispatch(wallet.getBlockNumber(deadlineMin))
         const {currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount} = store.getState().walletReducer;
         const {trade,deadline,slippageTolerance,isExactIn} = store.getState().swapReducer;
-        const transaction = wallet.generateSwapTransaction(currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount,trade,deadline,slippageTolerance,isExactIn)
-        wallet.prepareTransfer(transaction).then((response) => {
+        let transaction = null
+        if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
+            transaction = wallet.generateDepositTransaction(currentWallet,fromToken,fromTokenAmount,toToken)
+        }else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
+            transaction = wallet.generateWithdrawTransaction(currentWallet,fromToken,fromTokenAmount,toToken)
+        }else{
+            transaction = wallet.generateSwapTransaction(currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount,trade,deadline,slippageTolerance,isExactIn)
+        }wallet.prepareTransfer(transaction).then((response) => {
             if(response?.ok){
                 return dispatch ({
                     type:SET_PREPARE_TRANSFER_RESPONSE,

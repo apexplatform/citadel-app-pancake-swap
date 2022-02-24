@@ -11,7 +11,13 @@ import {setActivePanel,setPreviosPanel} from '../../store/actions/panelActions'
 const SwapButton = (props) => {
     const [approve,setApprove]  = useState(true)
     const {swapStatus,disableSwap} = props.swapReducer
-    const {fromToken} = props.walletReducer
+    const {fromToken,toToken} = props.walletReducer
+    let textSwap = text.SWAP
+    if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
+        textSwap = 'Wrap'
+    }else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
+        textSwap = 'Unwrap'
+    }
 	return (
         <Group>
             {disableSwap ? 
@@ -26,7 +32,7 @@ const SwapButton = (props) => {
             </Div>}
             {swapStatus == 'swap' &&
             <Div className='swap-btn' onClick={() => props.openConfirmModal(props.isExactIn)}>
-                <span>{text.SWAP}</span>
+                <span>{textSwap}</span>
             </Div>}
             {swapStatus == 'swapAnyway' &&
             <Div className='swap-btn' id="disabled-btn">

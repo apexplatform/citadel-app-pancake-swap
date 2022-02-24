@@ -27,12 +27,13 @@ export default class Wallet {
         
       }
     } 
-    async getTransactions() {
+    async getTransactions(limit,offset) {
       const {auth_token} = store.getState().userReducer
       const params = {
         auth_token,
         address: this.address,
-        net: this.net
+        net: this.net,
+        limit,offset
       }
       const data = await apiTransactions.getTransactions(params);
       if (data.ok) {
@@ -41,7 +42,7 @@ export default class Wallet {
         if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
         return new Error(data.error?.message);  
       }
-    } 
+  } 
   prepareClaimRewards() {
     return new ImplementationError('Method not implemented!')
   }  
