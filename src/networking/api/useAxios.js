@@ -1,8 +1,7 @@
 import axios from 'axios';
 export default function useAxios() {
   const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_BACKEND_URL,
-    withCredentials: true
+    baseURL: process.env.REACT_APP_BACKEND_URL
   });
   const responseHandler = (response) => {
     return response.data;

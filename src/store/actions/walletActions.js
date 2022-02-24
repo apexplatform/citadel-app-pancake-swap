@@ -16,7 +16,7 @@ export const setCurrentWallet = (wallet) => dispatch =>{
     dispatch(getTokenBalance(true))
     dispatch(checkTokenAllowance())
     dispatch(setLoader(false))
-    dispatch(loadTransactions())
+    dispatch(loadTransactions(10,0))
     dispatch(setLoader(true))
 }
 export const setToAddress = (address) => dispatch =>{

@@ -5,8 +5,8 @@ export const getTransactions = (data) => {
     data: {
       params: {
         token: data.auth_token,
-        limit: 99,
-        offset: 0
+        limit: data.limit,
+        offset: data.offset
       },
     },
   }

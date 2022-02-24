@@ -347,7 +347,7 @@ export function tryParseAmount(value, currency) {
   export const loadTokenBalances = (initial = false) => dispatch => {
 
 	const {currentWallet,fromToken,toToken} = store.getState().walletReducer
-	let list = [{...Currency.ETHER, symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokens['tokens']]
+	let list = [{...Currency.ETHER, symbol: 'BNB', logoURI: "img/coins/bnb.svg"}, ...tokens['tokens']]
 	dispatch({
 		type: SET_EMPTY_TOKEN_LIST,
 		payload: []

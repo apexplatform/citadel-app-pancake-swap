@@ -28,3 +28,12 @@
     position: absolute;
     right: 0;
 }
+.bnb-icon-block{
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    background-color: #2787F5;
+    margin: auto;
+    width: 24px;
+    height: 24px;
+}

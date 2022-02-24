@@ -136,5 +136,79 @@ export default class BSCWallet extends Wallet{
         }
         
         return body
+    }
+    generateDepositTransaction(currentWallet,fromToken,amount,toToken){
+        const {auth_token} = store.getState().userReducer
+        console.log(amount,'---amount')
+        const inputCurrency = this.getCurrency(fromToken.address || fromToken.symbol)
+        let parsedAmount = this.getParseAmount(amount, inputCurrency)
+        console.log(parsedAmount,'---parsedAmount')
+        const meta_info = [
+        {
+            title : "Deposit from",
+            value : `${fromToken.symbol}`,
+            type : "text"
+        },
+        {
+            title : "Deposit to",
+            value : `${toToken.symbol}`,
+            type : "text"
+        },
+        {
+            title : "Deposit amount",
+            value : amount + ' ' + fromToken.symbol,
+            type : "text"
+        } 
+        ]
+        const body =    
+        {
+        "amount": `0x${parsedAmount.raw.toString(16)}`,
+        "from": currentWallet.address,
+        "to": toToken.address,
+        "token": auth_token,
+        "call": {
+            "method": "deposit",
+            "params": []
+        },
+        meta_info
+        }
+        
+        return body
     } 
+    generateWithdrawTransaction(currentWallet,fromToken,amount,toToken){
+        const {auth_token} = store.getState().userReducer
+        const inputCurrency = this.getCurrency(fromToken.address || fromToken.symbol)
+        let parsedAmount = this.getParseAmount(amount, inputCurrency)
+        const meta_info = [
+        {
+            title : "Withdraw from",
+            value : `${fromToken.symbol}`,
+            type : "text"
+        },
+        {
+            title : "Withdraw to",
+            value : `${toToken.symbol}`,
+            type : "text"
+        },
+        {
+            title : "Withdraw amount",
+            value : amount + fromToken.symbol,
+            type : "text"
+        } 
+        ]
+        const body =    
+        {
+        "amount": 0,
+        "from": currentWallet.address,
+        "to": fromToken.address,
+        "token": auth_token,
+        "call": {
+            "method": "withdraw",
+            "params": [`0x${parsedAmount.raw.toString(16)}`]
+        },
+        meta_info
+        }
+        
+        return body
+    }  
 }

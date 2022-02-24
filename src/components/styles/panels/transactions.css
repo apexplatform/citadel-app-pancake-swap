@@ -100,3 +100,13 @@
  .transactions_disclaimer span{
      color: #FF900D;
  }
+
+
+.transactions-grid{
+    margin:10px;
+    margin-bottom: 150px;
+}
+
+.transactions-card{
+    margin-bottom:10px;
+}

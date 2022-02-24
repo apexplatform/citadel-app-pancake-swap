@@ -24,7 +24,7 @@ const TabbarItem = (props) => {
         }
         if(props.routes == ROUTES.TRANSACTIONS){
             props.setLoader(false)
-            props.loadTransactions()
+            props.loadTransactions(10,0)
         }
     }
     const setHoverColor = () => {
@@ -48,3 +48,4 @@ const mapStateToProps=(state)=>({
 })
 
 export default connect(mapStateToProps, {setLoader,loadTransactions,setPreviosPanel,setActivePanel}) (TabbarItem);
+
