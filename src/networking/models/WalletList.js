@@ -2,15 +2,41 @@ import { ValidationError } from './Errors';
 import {getWalletConstructor} from '../../store/actions/walletActions'
 const networks = {
     eth: {
-        name: 'Ethereum', code: 'ETH'
+      name: "Ethereum",
+      code: "ETH",
+      getTxUrl(txHash) {
+          return txHash ? `https://etherscan.io/tx/${txHash}` : null;
+      }
     },
     bsc: {
-        name: 'Binance Smart Chain', code: 'BNB'
+      name: "Binance Smart Chain",
+      code: "BNB",
+      getTxUrl(txHash) {
+          return txHash ? `https://bscscan.com/tx/${txHash}` : null;
+      }
     },
     cosmos: {
-        name: 'COSMOS', code: 'ATOM'
-    }
-}
+      name: "COSMOS",
+      code: "ATOM",
+      getTxUrl(txHash) {
+          return txHash ? `https://www.mintscan.io/cosmos/txs/${txHash}` : null;
+      }
+    },
+    osmosis: {
+      name: "Osmosis",
+      code: "OSMO",
+      getTxUrl(txHash) {
+          return txHash ? `https://www.mintscan.io/osmosis/txs/${txHash}` : null;
+      }
+    },
+    persistence: {
+      name: "Persistence",
+      code: "XPRT",
+      getTxUrl(txHash) {
+          return txHash ? `https://www.mintscan.io/persistence/txs/${txHash}` : null;
+      }
+    },
+  };
 export class WalletList {
     getWallets(){
         try{
@@ -23,7 +49,8 @@ export class WalletList {
                     address: item?.address,
                     network: item?.net,
                     name: networks[item?.net].name,
-                    code: networks[item?.net].code
+                    code: networks[item?.net].code,
+                    getTxUrl:  networks[item?.net].getTxUrl
                 }
             }) : new ValidationError(e)
             return wallets

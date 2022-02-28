@@ -56,5 +56,6 @@
     "CONFIRM_TEXT_2": "or the transaction will revert",
     "PRICE_UPDATED": "Price Updated",
     "ACCEPT": "Accept",
-    "TRANSACTIONS_DISCLAIMER": "There might be a lag in BSC transactions display. Sorry for the inconvenience, we are already working on it!"
+    "TRANSACTIONS_DISCLAIMER": "There might be a lag in BSC transactions display. Sorry for the inconvenience, we are already working on it!",
+    "VIEW_TRANSACTION": "View transaction"
 }
