@@ -3,6 +3,7 @@ import { transactions } from './transactions';
 import { swap } from './swap';
 import { bridge } from './bridge';
 import { wallet } from './wallet';
+import { socket } from '../socket/calls'
 import { auth } from './auth/';
 export const apies = {
   swap,
@@ -10,5 +11,6 @@ export const apies = {
   transactions,
   bridge,
   wallet,
-  auth
+  auth,
+  socket
 };

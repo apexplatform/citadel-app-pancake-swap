@@ -139,10 +139,8 @@ export default class BSCWallet extends Wallet{
     }
     generateDepositTransaction(currentWallet,fromToken,amount,toToken){
         const {auth_token} = store.getState().userReducer
-        console.log(amount,'---amount')
         const inputCurrency = this.getCurrency(fromToken.address || fromToken.symbol)
         let parsedAmount = this.getParseAmount(amount, inputCurrency)
-        console.log(parsedAmount,'---parsedAmount')
         const meta_info = [
         {
             title : "Deposit from",
