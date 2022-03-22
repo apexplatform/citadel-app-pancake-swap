@@ -16,7 +16,7 @@
       "address": "0xe8670901e86818745b28c8b30b17986958fce8cc",
       "chainId": 56,
       "decimals": 6,
-      "logoURI": "https://app.citadel.one/cryptofont/SVG/xct.svg"
+      "logoURI": "img/coins/citadel-1.svg"
     }, 
     {
       "name": "Binance Pegged USDT",
