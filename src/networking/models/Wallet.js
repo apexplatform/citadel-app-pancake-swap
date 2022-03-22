@@ -2,7 +2,7 @@ import useApi from '../api/useApi';
 import {ImplementationError,NetworkError} from './Errors'
 import store from '../../store/store';
 import * as Sentry from "@sentry/react";
-const apiSocket = useApi("socket");
+
 const api = useApi('wallet')
 const apiTransactions = useApi('transactions')
 export default class Wallet {
@@ -27,29 +27,6 @@ export default class Wallet {
         
       }
     } 
-    async sendCustomMessage(type,message) {
-      const { auth_token, socket_token } = store.getState().userReducer;
-      const data = await apiSocket.sendCustomMessage({
-        data: {
-          to: 'main-front',
-          from: auth_token,
-          toDeviceId: socket_token,
-          type,
-          message
-        },
-        token: auth_token,
-      });
-      if (data.ok) {
-        return data;
-      } else {
-        Sentry.captureException(
-          data.error?.message || data.error?.message?.stack
-        );
-        if (data.error?.error_type === "custom_error")
-          return new NetworkError(data.error?.message);
-        return new Error(data.error?.message);
-      }
-    }
     async getTransactions(limit,offset) {
       const {auth_token} = store.getState().userReducer
       const params = {
