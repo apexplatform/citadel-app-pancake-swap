@@ -13,14 +13,11 @@ import {initApp} from './store/actions/vkActions'
 import SelectAddressPanel from './components/panels/SelectAddressPanel'
 import SelectTokenPanel from './components/panels/SelectTokenPanel'
 import {loadWalletWithBalances} from './store/actions/walletActions'
-import {loadSocketToken} from './store/actions/userActions'
-import socket from "./networking/socket";
 const App = (props) => {
     const {activePage} = props.panelReducer
 
 	useEffect(() => {
 		props.initApp()
-		props.loadSocketToken();
 		props.loadWalletWithBalances()
 		props.getTokenBalance(true)
 		props.updateTradeInfo(1,true)
@@ -47,4 +44,4 @@ const mapStateToProps=(state)=>({
 	panelReducer: state.panelReducer,
 })
 
-export default connect(mapStateToProps, {loadSocketToken,checkTokenAllowance,updateTradeInfo,loadWalletWithBalances,getTokenBalance,initApp}) (App);
+export default connect(mapStateToProps, {checkTokenAllowance,updateTradeInfo,loadWalletWithBalances,getTokenBalance,initApp}) (App);

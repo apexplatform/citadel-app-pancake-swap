@@ -109,7 +109,7 @@ export const openConfirmModal = (isExactIn) => dispatch => {
 export const prepareSwapTransfer  = () => async(dispatch) => {
     const wallet = getWalletConstructor()
     if(wallet){
-        wallet.sendCustomMessage('sign-message', { address: wallet.address, net: wallet.net, message: 'test' })
+       // wallet.sendCustomMessage('sign-message', { address: wallet.address, net: wallet.net, message: 'test' })
         dispatch(setSwapDisable(true))
         dispatch(setActiveModal(null))
         const {deadlineMin} = store.getState().swapReducer
