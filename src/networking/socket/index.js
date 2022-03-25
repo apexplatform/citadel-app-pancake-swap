@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import { SET_WALLETS } from '../../store/actions/types';
+import { SET_WALLETS, SET_SIGNED_MESSAGE } from '../../store/actions/types';
 import store from "../../store/store";
 const { auth_token } = store.getState().userReducer;
 const socket = io(
@@ -20,6 +20,12 @@ socket.on('connect',()=>{
 
 socket.on('message-from-front',(data)=>{
 	console.log('message-from-front in app', data)
+	if(data?.type == 'message'){
+		store.dispatch({
+			type: SET_SIGNED_MESSAGE,
+			payload: data?.message,
+		  });
+	}
 })
 
 
