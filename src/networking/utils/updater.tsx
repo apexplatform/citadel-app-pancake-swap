@@ -1,9 +1,9 @@
 import { Contract } from '@ethersproject/contracts'
 import { useEffect, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {useBlock,parseCallKey} from '../hooks/swapHooks'
-import { useMulticallContract } from '../hooks/contractHooks'
-import useDebounce from '../hooks/useDebounce'
+import {useBlock,parseCallKey} from '../methods/swapHooks'
+import { useMulticallContract } from '../methods/contractHooks'
+import useDebounce from '../methods/useDebounce'
 import { CancelledError, retry, RetryableError } from './retry'
 import {ERROR_FETCHINT_MULTICAL_RESULTS, FETCHING_MULTICAL_RESULTS, UPDATE_MULTICAL_RESULTS } from "../../store/actions/types"
 import store from '../../store/store'

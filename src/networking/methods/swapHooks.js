@@ -268,7 +268,6 @@ export function tryParseAmount(value, currency) {
 	} else {
 		allowedPairs = store.getState().swapReducer.allowedPairs
 	}
-	console.log(allowedPairs)
 	const singleHopOnly = false
 	const MAX_HOPS = 3
 	if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {

@@ -5,7 +5,7 @@ const initialState = {
     callListeners: null,
     calls: []
 }
-import {toCallKey} from '../../networking/hooks/swapHooks'
+import {toCallKey} from '../../networking/methods/swapHooks'
 
 export default createReducer(initialState, (builder) =>
   builder

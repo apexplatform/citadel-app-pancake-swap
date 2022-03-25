@@ -8,7 +8,6 @@ import text from '../../text.json'
 const TransactionDetails = (props) => {
   const { data } = props
   const { currentWallet } = props.walletReducer;
-  console.log(currentWallet)
   return (
     <Group className="transaction-details">
       <div className="transasction-details-row">

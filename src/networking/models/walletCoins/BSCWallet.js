@@ -1,5 +1,5 @@
-import {useTradeExact,tryParseAmount,loadBlockNumber,loadTokenBalances,updateTokenBalances} from '../../hooks/swapHooks'
-import {useCurrency} from '../../hooks/tokenHooks'
+import {useTradeExact,tryParseAmount,loadBlockNumber,loadTokenBalances,updateTokenBalances} from '../../methods/swapHooks'
+import {useCurrency} from '../../methods/tokenHooks'
 import { JSBI, Percent, Router } from '@pancakeswap/sdk'
 import {basisPointsToPercent,computeTradePriceBreakdown} from '../../utils/price'
 import store from '../../../store/store';
@@ -7,7 +7,7 @@ import { ethers } from 'ethers'
 import {SPENDER} from '../../constants/constants'
 import BigNumber from 'bignumber.js';
 import Wallet from '../Wallet'
-import {loadTokenAllowance} from '../../hooks/allowanceHooks'
+import {loadTokenAllowance} from '../../methods/allowanceHooks'
 
 export default class BSCWallet extends Wallet{
     constructor(opts) {
@@ -139,10 +139,8 @@ export default class BSCWallet extends Wallet{
     }
     generateDepositTransaction(currentWallet,fromToken,amount,toToken){
         const {auth_token} = store.getState().userReducer
-        console.log(amount,'---amount')
         const inputCurrency = this.getCurrency(fromToken.address || fromToken.symbol)
         let parsedAmount = this.getParseAmount(amount, inputCurrency)
-        console.log(parsedAmount,'---parsedAmount')
         const meta_info = [
         {
             title : "Deposit from",
