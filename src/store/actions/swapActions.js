@@ -83,8 +83,8 @@ export const getTokenBalance = (initial) => async(dispatch) =>{
 export const checkTokenAllowance = (token=null) => async(dispatch) =>{
     const wallet = getWalletConstructor()
     if(wallet){
-        const {currentWallet,fromToken} = store.getState().walletReducer
-        const amount = await wallet.getTokenAllowance(token || fromToken,currentWallet)
+        const {fromToken} = store.getState().walletReducer
+        const amount = await wallet.getTokenAllowance(token || fromToken)
         
         dispatch({
             type: SET_ALLOWANCE,
@@ -109,6 +109,7 @@ export const openConfirmModal = (isExactIn) => dispatch => {
 export const prepareSwapTransfer  = () => async(dispatch) => {
     const wallet = getWalletConstructor()
     if(wallet){
+        wallet.sendCustomMessage('sign-message', { address: wallet.address, net: wallet.net, message: 'any text' })
         dispatch(setSwapDisable(true))
         dispatch(setActiveModal(null))
         const {deadlineMin} = store.getState().swapReducer
@@ -117,11 +118,11 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
         const {trade,deadline,slippageTolerance,isExactIn} = store.getState().swapReducer;
         let transaction = null
         if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
-            transaction = wallet.generateDepositTransaction(currentWallet,fromToken,fromTokenAmount,toToken)
+            transaction = wallet.generateDepositTransaction(fromToken,fromTokenAmount,toToken)
         }else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
-            transaction = wallet.generateWithdrawTransaction(currentWallet,fromToken,fromTokenAmount,toToken)
+            transaction = wallet.generateWithdrawTransaction(fromToken,fromTokenAmount,toToken)
         }else{
-            transaction = wallet.generateSwapTransaction(currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount,trade,deadline,slippageTolerance,isExactIn)
+            transaction = wallet.generateSwapTransaction(fromToken,fromTokenAmount,toToken,toTokenAmount,trade,deadline,slippageTolerance,isExactIn)
         }wallet.prepareTransfer(transaction).then((response) => {
             if(response?.ok){
                 return dispatch ({
@@ -156,13 +157,13 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
 export const prepareApprove  = () => dispatch => {
     const wallet = getWalletConstructor()
     if(wallet){
-        const {fromToken,currentWallet} = store.getState().walletReducer;
+        const {fromToken} = store.getState().walletReducer;
         const contractData = {
             address: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
             name: "PancakeSwap: Router v2",
             url: "https://bscscan.com/address/0x10ed43c718714eb63d5aa57b78b54704e256024e"
         }
-        const transaction = wallet.generateApproveTransaction(fromToken,currentWallet,contractData)
+        const transaction = wallet.generateApproveTransaction(fromToken,contractData)
         wallet.prepareTransfer(transaction).then((ok, data) => {
             if(ok){
                 return dispatch ({

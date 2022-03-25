@@ -22,8 +22,8 @@ export default class BSCWallet extends Wallet{
     getParseAmount(amount,currency){
         return tryParseAmount(amount?.toString(),currency)
     } 
-    getTokenAllowance(token,currentWallet){
-        return loadTokenAllowance(token,currentWallet)
+    getTokenAllowance(token){
+        return loadTokenAllowance(token,this.address)
     }
     getcomputeTradePriceBreakdown(){
         const {trade} = store.getState().swapReducer
@@ -43,13 +43,13 @@ export default class BSCWallet extends Wallet{
     updateTokenBalances(){
         return updateTokenBalances()
     }
-    generateSwapTransaction(currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount,trade,deadline,slippageTolerance,isExactIn){
+    generateSwapTransaction(fromToken,fromTokenAmount,toToken,toTokenAmount,trade,deadline,slippageTolerance,isExactIn){
         const {auth_token} = store.getState().userReducer
         const BIPS_BASE = JSBI.BigInt(10000)
         const call = Router.swapCallParameters(trade, {
         feeOnTransfer: false,
         allowedSlippage: new Percent(JSBI.BigInt(Math.floor(slippageTolerance*100)), BIPS_BASE),
-        recipient: currentWallet?.address,
+        recipient: this.address,
         deadline: deadline,
         })
         let body = null
@@ -74,12 +74,12 @@ export default class BSCWallet extends Wallet{
         body =    
         {
             "amount":  BigNumber(call.value).toFixed(),
-            "from": currentWallet.address,
+            "from": this.address,
             "to": SPENDER,
             "token": auth_token,
             "call": {
             "method": call.methodName,
-            "params": [  BigNumber(call.args[0]).toFixed(), call.args[1], currentWallet.address, deadline]
+            "params": [  BigNumber(call.args[0]).toFixed(), call.args[1], this.address, deadline]
             },
             meta_info
         }
@@ -87,12 +87,12 @@ export default class BSCWallet extends Wallet{
         body =    
         {
             "amount": 0,
-            "from": currentWallet.address,
+            "from": this.address,
             "to": SPENDER,
             "token": auth_token,
             "call": {
             "method": call.methodName,
-            "params": [ BigNumber(call.args[0]).toFixed(),  BigNumber(call.args[1]).toFixed(), call.args[2], currentWallet.address, deadline]
+            "params": [ BigNumber(call.args[0]).toFixed(),  BigNumber(call.args[1]).toFixed(), call.args[2], this.address, deadline]
             },
             meta_info
         }
@@ -100,7 +100,7 @@ export default class BSCWallet extends Wallet{
         
         return body
     }  
-    generateApproveTransaction(fromToken,currentWallet,contractData){
+    generateApproveTransaction(fromToken,contractData){
         const {auth_token} = store.getState().userReducer
         const meta_info = [
         {
@@ -125,7 +125,7 @@ export default class BSCWallet extends Wallet{
         const body =    
         {
         "amount": 0,
-        "from": currentWallet.address,
+        "from": this.address,
         "to": fromToken.address,
         "token": auth_token,
         "call": {
@@ -137,7 +137,7 @@ export default class BSCWallet extends Wallet{
         
         return body
     }
-    generateDepositTransaction(currentWallet,fromToken,amount,toToken){
+    generateDepositTransaction(fromToken,amount,toToken){
         const {auth_token} = store.getState().userReducer
         const inputCurrency = this.getCurrency(fromToken.address || fromToken.symbol)
         let parsedAmount = this.getParseAmount(amount, inputCurrency)
@@ -161,7 +161,7 @@ export default class BSCWallet extends Wallet{
         const body =    
         {
         "amount": `0x${parsedAmount.raw.toString(16)}`,
-        "from": currentWallet.address,
+        "from": this.address,
         "to": toToken.address,
         "token": auth_token,
         "call": {
@@ -173,7 +173,7 @@ export default class BSCWallet extends Wallet{
         
         return body
     } 
-    generateWithdrawTransaction(currentWallet,fromToken,amount,toToken){
+    generateWithdrawTransaction(fromToken,amount,toToken){
         const {auth_token} = store.getState().userReducer
         const inputCurrency = this.getCurrency(fromToken.address || fromToken.symbol)
         let parsedAmount = this.getParseAmount(amount, inputCurrency)
@@ -197,7 +197,7 @@ export default class BSCWallet extends Wallet{
         const body =    
         {
         "amount": 0,
-        "from": currentWallet.address,
+        "from": this.address,
         "to": fromToken.address,
         "token": auth_token,
         "call": {
