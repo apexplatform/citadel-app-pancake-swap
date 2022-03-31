@@ -1,6 +1,6 @@
 import  { getWalletConstructor } from '../../store/actions/walletActions'
 import { networks } from '../models/network.js'
-import { SET_CURRENT_WALLET } from '../../store/actions/types'
+import { SET_CURRENT_WALLET, SET_SWAP_INFO} from '../../store/actions/types'
 import store from '../../store/store';
 import { Currency } from '@pancakeswap/sdk'
 import tokenList from '../constants/tokenLists/pancake-default.tokenlist.json'
@@ -36,12 +36,10 @@ export const getSwapInfoByUrl = async() => {
         }else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
             isBNB = true
         }
-        console.log(isBNB,'--isBNB')
         if(fromToken && toToken && !isBNB){
             const inputCurrency = wallet.getCurrency(fromToken.address || fromToken.symbol)
             const outputCurrency = wallet.getCurrency(toToken.address || toToken.symbol)
             let parsedAmount = wallet.getParseAmount(paramsAsObject.amountIn, isExactIn ? inputCurrency : outputCurrency)
-            console.log(inputCurrency,outputCurrency,parsedAmount)
             trade = store.dispatch(wallet.getBestTrade(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn, false))
             if(!trade){
                 setTimeout(() => {
@@ -49,7 +47,9 @@ export const getSwapInfoByUrl = async() => {
                 }, 5000)
             }
             console.log(trade,'--best route')
-            return trade  
+            store.dispatch({
+                type: SET_SWAP_INFO,
+                payload: trade })
         }
         return 'Enter correct tokens'
     }else{

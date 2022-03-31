@@ -10,6 +10,8 @@ import { Config } from './config/config'
 import Settings from './components/containers/Settings'
 import ErrorModal from './components/uikit/ErrorModal'
 import ConfirmModal from './components/uikit/ConfirmModal'
+import { useEffect } from "react";
+
 const MainPanel = (props) => {
     const {activePanel,activeModal} = props.panelReducer
     const config = new Config()
@@ -17,6 +19,15 @@ const MainPanel = (props) => {
                     <ErrorModal id="errors"/>
                     <ConfirmModal id="confirm"/>
                   </ModalRoot>
+    const { swapInfo } = props.swapReducer
+        useEffect(() => {
+        window.addEventListener("message", (event) => {
+        //   if (event.origin !== "https://localhost:10889") return;
+            if(event.data == 'getSwapInfo'){
+            event.source.postMessage(swapInfo, event.origin);
+            }
+        }, false);
+    },[swapInfo])
     return(
         <Panel id={ROUTES.HOME}>
             <Group>
@@ -42,7 +53,8 @@ const MainPanel = (props) => {
 }
 
 const mapStateToProps=(state)=>({
-	panelReducer: state.panelReducer
+	panelReducer: state.panelReducer,
+    swapReducer: state.swapReducer
 })
 
 export default connect(mapStateToProps, {setActiveModal,setActivePanel}) (MainPanel);

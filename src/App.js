@@ -18,9 +18,8 @@ import socket from './networking/socket';
 import {getSwapInfoByUrl,buildSwapTx} from './networking/methods/urlMethods'
 const App = (props) => {
     const {activePage} = props.panelReducer
-	let swapInfo = null
 	useEffect(async() => {
-		swapInfo = await getSwapInfoByUrl()
+		await getSwapInfoByUrl()
 		props.loadWalletWithBalances()
 		props.loadSocketToken();
 		props.getTokenBalance(true)
