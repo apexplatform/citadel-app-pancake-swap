@@ -160,7 +160,7 @@ export default class BSCWallet extends Wallet{
         ]
         const body =    
         {
-        "amount": `0x${parsedAmount.raw.toString(16)}`,
+        "amount": amount,
         "from": this.address,
         "to": toToken.address,
         "token": auth_token,
