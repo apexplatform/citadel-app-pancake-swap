@@ -1,4 +1,4 @@
-import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_AMOUNT,SET_WALLETS,SET_TO_AMOUNT,SET_EMPTY_TOKEN_LIST, SET_TOKEN_LIST, SET_INITIAL_LOAD} from '../actions/types'
+import {SET_CURRENT_WALLET,SET_TOKEN,SET_SIGNED_MESSAGE,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_AMOUNT,SET_WALLETS,SET_TO_AMOUNT,SET_EMPTY_TOKEN_LIST, SET_TOKEN_LIST, SET_INITIAL_LOAD} from '../actions/types'
 import tokenList from '../../networking/constants/tokenLists/pancake-default.tokenlist.json'
 import {Currency} from '@pancakeswap/sdk'
 const tokens = [{...Currency.ETHER,symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokenList['tokens']]
@@ -15,7 +15,8 @@ const initialState = {
     toToken: tokens[1],
     fromTokenAmount: 0,
     toTokenAmount: 0,
-    initialLoader: true
+    initialLoader: true,
+    signedMessage: null
 }
 
 export default function(state=initialState,action){
@@ -25,6 +26,11 @@ export default function(state=initialState,action){
                 ...state,
                 currentWallet: action.payload
             }
+        case SET_SIGNED_MESSAGE:
+            return {
+                ...state,
+                signedMessage: action.payload,
+            };
         case SET_INITIAL_LOAD:
             return {
                 ...state,
