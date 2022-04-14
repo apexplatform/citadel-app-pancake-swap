@@ -45,7 +45,7 @@ socket.on('address-balance-updated-app',(data)=>{
 		  });
 		const wallet = getWalletConstructor()
 		if(wallet){
-		 	setTimeout(() => wallet.updateTokenBalances(), 3000)
+			store.dispatch(wallet.updateTokenBalances())
 		} 
 	}
 })
