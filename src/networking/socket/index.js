@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
 import { SET_WALLETS, SET_SIGNED_MESSAGE } from '../../store/actions/types';
 import store from "../../store/store";
+import {getWalletConstructor} from '../../store/actions/walletActions'
 const { auth_token } = store.getState().userReducer;
 const socket = io(
 	'https://api-websockets-apps.apps.citadel.okd.3ahtim54r.ru/apps',
@@ -34,7 +35,7 @@ socket.on('address-balance-updated-app',(data)=>{
 	const {wallets} = store.getState().walletReducer
 	if(data.address && data.balance && data.net){
 		wallets.map(item => {
-			if(item.address == data.address && item.net == data.net){
+			if(item.address == data.address && item.network == data.net){
 				item.balance = data.balance
 			}
 		})
@@ -42,6 +43,10 @@ socket.on('address-balance-updated-app',(data)=>{
 			type: SET_WALLETS,
 			payload: wallets,
 		  });
+		const wallet = getWalletConstructor()
+		if(wallet){
+		 	setTimeout(() => wallet.updateTokenBalances(), 3000)
+		} 
 	}
 })
 
