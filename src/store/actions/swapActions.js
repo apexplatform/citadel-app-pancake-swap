@@ -114,7 +114,7 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
         dispatch(setActiveModal(null))
         const {deadlineMin} = store.getState().swapReducer
         await dispatch(wallet.getBlockNumber(deadlineMin))
-        const {currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount} = store.getState().walletReducer;
+        const {fromToken,fromTokenAmount,toToken,toTokenAmount} = store.getState().walletReducer;
         const {trade,deadline,slippageTolerance,isExactIn} = store.getState().swapReducer;
         let transaction = null
         if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
@@ -125,7 +125,7 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
             transaction = wallet.generateSwapTransaction(fromToken,fromTokenAmount,toToken,toTokenAmount,trade,deadline,slippageTolerance,isExactIn)
         }wallet.prepareTransfer(transaction).then((response) => {
             if(response?.ok){
-                return dispatch ({
+                dispatch ({
                     type:SET_PREPARE_TRANSFER_RESPONSE,
                     payload: data
                 })
@@ -139,19 +139,6 @@ export const prepareSwapTransfer  = () => async(dispatch) => {
     setTimeout(() => {
         dispatch(setSwapDisable(false))
     }, 5000);
-    let interval = null
-    let tryAgain = true
-    if(tryAgain){
-        interval = setInterval(async()=>{
-            tryAgain = await dispatch(wallet.updateTokenBalances())
-            if(!tryAgain){
-                clearInterval(interval)
-            }
-        },10000)
-    }
-    if(!tryAgain){
-        clearInterval(interval)
-    }
 }
 
 export const prepareApprove  = () => dispatch => {
