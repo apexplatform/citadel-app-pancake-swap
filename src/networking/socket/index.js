@@ -32,9 +32,9 @@ socket.on('message-from-front',(data)=>{
 socket.on('address-balance-updated-app',(data)=>{
 	console.log('address-balance-updated-app', data)
 	const {wallets} = store.getState().walletReducer
-	if(data.address && data.balance){
+	if(data.address && data.balance && data.net){
 		wallets.map(item => {
-			if(item.address == data.address){
+			if(item.address == data.address && item.net == data.net){
 				item.balance = data.balance
 			}
 		})
