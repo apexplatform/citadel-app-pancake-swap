@@ -73,7 +73,7 @@ export default class BSCWallet extends Wallet{
         if(['swapETHForExactTokens','swapExactETHForTokens','swapExactETHForTokensSupportingFeeOnTransferTokens'].includes(call.methodName)){
         body =    
         {
-            "amount":  BigNumber(call.value).toFixed(),
+            "amount":  fromTokenAmount,
             "from": this.address,
             "to": SPENDER,
             "token": auth_token,
@@ -139,8 +139,6 @@ export default class BSCWallet extends Wallet{
     }
     generateDepositTransaction(fromToken,amount,toToken){
         const {auth_token} = store.getState().userReducer
-        const inputCurrency = this.getCurrency(fromToken.address || fromToken.symbol)
-        let parsedAmount = this.getParseAmount(amount, inputCurrency)
         const meta_info = [
         {
             title : "Deposit from",
