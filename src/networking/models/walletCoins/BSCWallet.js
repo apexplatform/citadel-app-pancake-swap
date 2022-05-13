@@ -47,10 +47,10 @@ export default class BSCWallet extends Wallet{
         const {auth_token} = store.getState().userReducer
         const BIPS_BASE = JSBI.BigInt(10000)
         const call = Router.swapCallParameters(trade, {
-        feeOnTransfer: false,
-        allowedSlippage: new Percent(JSBI.BigInt(Math.floor(slippageTolerance*100)), BIPS_BASE),
-        recipient: this.address,
-        deadline: deadline,
+            feeOnTransfer: false,
+            allowedSlippage: new Percent(JSBI.BigInt(Math.floor(slippageTolerance*100)), BIPS_BASE),
+            recipient: this.address,
+            deadline: deadline,
         })
         let body = null
         let meta_info = [
