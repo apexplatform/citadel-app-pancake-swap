@@ -22,7 +22,7 @@ export default class Wallet {
         return data;
       } else {
         Sentry.captureException(data.error?.message || data.error?.message?.stack);
-        if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
+        if(data.error.error_type === 'network_error') return new NetworkError(data.error?.message);
         return new Error(data.error?.message);
         
       }
@@ -39,7 +39,7 @@ export default class Wallet {
       if (data.ok) {
         return data;
       } else {
-        if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
+        if(data.error.error_type === 'network_error') return new NetworkError(data.error?.message);
         return new Error(data.error?.message);  
       }
   } 
@@ -57,7 +57,7 @@ export default class Wallet {
       return data;
     } else {
       Sentry.captureException(data.error?.message || data.error?.message?.stack);
-      if(data.error.error_type === 'custom_error') return new NetworkError(data.error?.message?.stack);
+      if(data.error.error_type === 'network_error') return new NetworkError(data.error?.message);
       return new Error(data.error?.message);
     }
   }  
@@ -80,7 +80,7 @@ export default class Wallet {
       Sentry.captureException(
         data.error?.message || data.error?.message?.stack
       );
-      if (data.error?.error_type === "custom_error")
+      if (data.error?.error_type === "network_error")
         return new NetworkError(data.error?.message);
       return new Error(data.error?.message);
     }

@@ -55,6 +55,13 @@ export const checkErrors = (error) => dispatch => {
                 tip: text.ERROR_TIP_3
             }
         }
+        else if(error.message?.includes('TRANSFER_FROM_FAILED')){
+            errorText = {
+                text: text.ERROR_TEXT_DEFAULT,
+                description: "Something went wrong.",
+                tip: "Please try to increase slippage tolerance or change the swap amount."
+            }
+        }
         else {
             errorText = {
                 text: text.ERROR_TEXT_DEFAULT,

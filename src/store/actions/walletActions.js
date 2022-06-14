@@ -99,14 +99,14 @@ export const getWalletConstructor = (address) =>  {
 export const prepareTransfer  = () => dispatch => {
     const wallet = getWalletConstructor()
     const transaction = wallet.generateBaseTransaction()
-    wallet.prepareTransfer(transaction).then((ok, data) => {
-        if(ok){
+    wallet.prepareTransfer(transaction).then((res) => {
+        if(res.ok){
             return dispatch ({
                 type:SET_PREPARE_TRANSFER_RESPONSE,
                 payload: data
             })
         }else{
-            dispatch(checkErrors(data))
+            dispatch(checkErrors(res))
         }
     }).catch(err => {
         dispatch(checkErrors(err))
