@@ -118,6 +118,7 @@ export const loadWalletWithBalances  = () => dispatch => {
     const wallets = walletList.loadWalletsWithBalances()
     if(wallets instanceof ValidationError){
         dispatch(checkErrors(wallets)) 
+        stopSplashLoader()
         return
     }
     if(wallets.length){
@@ -129,6 +130,7 @@ export const loadWalletWithBalances  = () => dispatch => {
             type:SET_CURRENT_WALLET,
             payload: wallets[0]
         })
+        stopSplashLoader()
     }
     dispatch(setLoader(true))
 }
@@ -142,4 +144,12 @@ export const loadNetworks = () => dispatch =>{
             })
         ))
     } catch {}
+}
+
+export const stopSplashLoader = () => {
+    let splash = document.getElementsByClassName("splash")
+    for (let i = 0; i < splash.length; i++){
+        splash[i].style.display = 'none'
+    }
+    document.getElementById('root').style.display = 'block';
 }
