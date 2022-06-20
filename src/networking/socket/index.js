@@ -21,6 +21,9 @@ socket.on('connect',()=>{
 
 socket.on('message-from-front',async(data)=>{
 	console.log('message-from-front in app', data)
+	if(data.type === 'view-scrt-balance'){
+		// update secret token balance
+	}
 })
 
 
