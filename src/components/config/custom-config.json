@@ -1,0 +1,21 @@
+{
+    "TABBAR": {
+        "BACKGROUND_COLOR": "#00BFDB",
+        "DEFAULT_ITEM_COLOR": "#004149",
+        "ACTIVE_ITEM_COLOR": "#fff",
+        "HOVER_ITEM_COLOR": "rgba(0, 65, 73, 0.7)",
+        "DISABLE_ITEM_COLOR": "#f5f5f5",
+        "TABBAR_ITEMS": [
+            {"TITLE": "Address list", "ICON": "address-list", "ROUTES": "/"},
+            {"TITLE": "Transactions", "ICON": "transactions", "ROUTES": "/main/transactions"}
+        ]
+    },
+    "HEADER": {
+        "TITLE": "App header",
+        "BACK_TITLE": "Back",
+        "BACKGROUND_COLOR": "#FFF",
+        "TOP_BACKGROUND_COLOR": "#00BFDB"
+    },
+    "DEFAULT_ADDRESS_BLOCK": true
+}
+

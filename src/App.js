@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MainView from "./MainView";
+import { Provider, useDispatch } from 'react-redux';
+import { store } from './store/store';
+import { walletActions, usersActions } from './store/actions'
+import { useEffect } from "react";
+// eslint-disable-next-line
+import socket from "./networking/socket";
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+      dispatch(usersActions.loadUserConfig());
+      dispatch(walletActions.loadWalletWithBalances());
+      // eslint-disable-next-line
+  },[])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+            <Route path="/*" element={<MainView />} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
