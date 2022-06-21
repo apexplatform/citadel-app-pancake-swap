@@ -1,5 +1,4 @@
 import ROUTES from "../../routes";
-import { useRef } from 'react'
 import { useSelector } from "react-redux";
 import Header from "@citadeldao/apps-ui-kit/dist/components/uiKit/Header";
 import text from "../../text.json";
@@ -11,16 +10,13 @@ import CustomIcons from '@citadeldao/apps-ui-kit/dist/components/uiKit/CustomIco
 import '../styles/panels/transactions.css';
 import { useNavigate } from 'react-router-dom';
 import { fotmatAddress } from '../helpers/addressFormatter'
-import { Config } from '../config/config';
 const TransactionDetails = (props) => {
   const data = useSelector(state => state.transaction.openedTransaction)
-  const headerRef = useRef()
   const navigate = useNavigate()
-  const config = new Config()
   const back = () => navigate(ROUTES.TRANSACTIONS + '?' + window.location.search.slice(1))
   return (
     <Panel id={ROUTES.TRANSACTION_DETAILS}>
-      <Header config={config} refs={headerRef} title={text.TRANSACTIONS_DETAILS} onClick={() => back()} back={true} />
+      <Header title={text.TRANSACTIONS_DETAILS} onClick={() => back()} back={true} />
       <Content>
       <div className="transaction-details">
       {data.to?.value && <div className="transaction-details-row">

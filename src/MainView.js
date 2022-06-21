@@ -2,26 +2,24 @@ import React, {useState,useEffect} from 'react'
 import './components/styles/panels/index.css'
 import GuidesPanel from './components/panels/GuidesPanel'
 import ROUTES from "./routes";
-import MainPanel from '@citadeldao/apps-ui-kit/dist/components/uiKit/Panel'
 import AddressListPanel from './components/panels/AddressListPanel'
 import TransactionsPanel from './components/panels/TransactionsPanel'
 import TransactionsDetailsPanel from './components/panels/TransactionDetails'
 import { useLocation } from 'react-router-dom'
-import Modal from '@citadeldao/apps-ui-kit/dist/components/uiKit/Modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { errorActions } from './store/actions'
-import NotificationCard from '@citadeldao/apps-ui-kit/dist/components/uiKit/NotificationCard'
-import TipCard from '@citadeldao/apps-ui-kit/dist/components/uiKit/TipCard';
 import text from './text.json'
-import View from '@citadeldao/apps-ui-kit/dist/components/uiKit/View'
-import StatusPopup from '@citadeldao/apps-ui-kit/dist/components/uiKit/StatusPopup';
+import { useNavigate } from 'react-router-dom';
+import { StatusPopup, PopupWindow , TipCard, NotificationCard, Panel, Modal, View, AddressSectionCard}  from '@citadeldao/apps-ui-kit/dist/main';
 import InfoPanel from './components/panels/InfoPanel'
-import PopupWindow from '@citadeldao/apps-ui-kit/dist/components/uiKit/PopupWindow'
+import { Config } from './components/config/config';
+import SelectAddressPanel from './components/panels/SelectAddressPanel';
 const MainView = () => {
     const location = useLocation();
     const dispatch = useDispatch()
     const showModal = useSelector(state => state.errors.openErrorModal)
     const {validationErrors, errors} = useSelector(state => state.errors)
+    const {activeWallet} = useSelector(state => state.wallet)
     const [showSuccess, setShowSuccess] = useState(errors)
     useEffect(() => {
       setShowSuccess(errors)
@@ -30,18 +28,23 @@ const MainView = () => {
       setShowSuccess(false)
       dispatch(errorActions.clearErrors())
     }
+    const navigate = useNavigate()
+    console.log(activeWallet,'--activeWallet')
+    const config = new Config()
     return(
         <View>
-            <MainPanel>
-              <PopupWindow show={showSuccess} id='/'>
+            <Panel config={config}>
+              <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS)} style={{margin: '20px 20px 0'}} data={activeWallet} id='/show'></AddressSectionCard>
+              <PopupWindow show={showSuccess} id='/show'>
                   <StatusPopup text={errors?.text} type='error' showPopup={clearErrors}/>       
               </PopupWindow>
               <AddressListPanel id={ROUTES.ADDRESS_LIST} />
               <TransactionsPanel id={ROUTES.TRANSACTIONS} />
               <GuidesPanel id={ROUTES.INFO_MENU_GUIDE} />
+              <SelectAddressPanel id={ROUTES.SELECT_ADDRESS} />
               <TransactionsDetailsPanel id={ROUTES.TRANSACTION_DETAILS} />
-            </MainPanel>
-            <InfoPanel/>
+            </Panel>
+            <InfoPanel config={config}/>
             <Modal show={showModal && !location.pathname.includes('/info')}>
               { validationErrors?.text && <div>
                 <NotificationCard text={text.ADDRESS_ERROR_HEADER} iconColor="#00B2FE" boldText/>

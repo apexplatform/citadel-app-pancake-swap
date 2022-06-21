@@ -1,22 +1,84 @@
-import React from 'react'
-import Tabbar from '@citadeldao/apps-ui-kit/dist/components/uiKit/Tabbar'
-import Header from '@citadeldao/apps-ui-kit/dist/components/uiKit/Header'
-import text from '../../text.json'
-import Content from '@citadeldao/apps-ui-kit/dist/components/uiKit/Content'
-import NotificationCard from '@citadeldao/apps-ui-kit/dist/components/uiKit/NotificationCard'
-//import { AddressCard } from '@citadeldao/apps-ui-kit/dist/main'
+import React, {useState} from 'react';
+import { Content, CustomIcon, Header, Tabbar, SelectToken } from '@citadeldao/apps-ui-kit/dist/main';
 import { Config } from '../config/config';
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
+import '../styles/panels/swap.css'
 const AddressListPanel = () => {
     const config = new Config()
     const { wallets } = useSelector((state) => state.wallet)
     console.log(wallets)
+    const [value, setValue] = useState(0)
+    const [balanceView, setBalanceView] = useState('View Balance')
+    const data = [
+        {
+            network: 'Secret',
+            name: 'SECRET',
+            net: 'secret',
+            code: 'SCRT',
+            symbol: 'SCRT',
+            balance: 20450.5,
+            usdPrice: 450.05,
+        },
+        {
+            network: 'Osmosis',
+            code: 'OSMO',
+            name: 'OSMOSIS',
+            symbol: 'SCRT',
+            net: 'osmosis',
+            balance: 20450.5,
+            usdPrice: 450.05
+        },
+        {
+            network: 'Sifchain',
+            code: 'ROWAN',
+            name: 'SIFCHAIN',
+            symbol: 'SCRT',
+            net: 'sifchain',
+            balance: 20450.5,
+            usdPrice: 450.05
+        },
+        {
+            network: 'Sifchain',
+            name: 'SIFCHAIN',
+            code: 'ROWAN',
+            symbol: 'SCRT',
+            net: 'sifchain',
+            balance: 20450.5,
+            usdPrice: 450.05,
+        }
+    ]
+    const [selectedOption, setSelectedOption] = useState(data[0])
     return (
         <div className='panel'>
             <Header config={config}/>
             <Content>
-                <NotificationCard text={text.AUTORESTAKE_ALERT} iconColor='#00B2FE' textColor='#026573' bgColor='#F3FCFD'/>
-                <NotificationCard text={text.LEDGER_ALERT_TEXT} description={text.LEDGER_ALERT_DESCRIPTION} iconColor='#FAA305' textColor='#000' bgColor='#FFEDCD'/> 
+                <div className='swap-inputs'>
+                <SelectToken 
+                    max={true} 
+                    usdPrice='23' 
+                    balance={true} 
+                    token={true} 
+                    data={data} 
+                    value={value}  setValue={setValue} 
+                    selectedOption={selectedOption}  setSelectedOption={setSelectedOption} 
+                    balanceView={balanceView} setBalanceView={setBalanceView} 
+                    onClick={() => console.log(value)}
+                    />
+            <CustomIcon icon='swap-icon' id='swap-center-btn' />
+            <SelectToken 
+                    max={true} 
+                    balance={true} 
+                    token={true} 
+                    data={data} 
+                    value={value}  setValue={setValue} 
+                    selectedOption={selectedOption}  setSelectedOption={setSelectedOption} 
+                    balanceView={balanceView} setBalanceView={setBalanceView} 
+                    onClick={() => console.log(value)}
+                    />
+                </div>
+          
+                {/* <NotificationCard text={text.AUTORESTAKE_ALERT} iconColor='#00B2FE' textColor='#026573' bgColor='#F3FCFD'/>
+                <NotificationCard text={text.LEDGER_ALERT_TEXT} description={text.LEDGER_ALERT_DESCRIPTION} iconColor='#FAA305' textColor='#000' bgColor='#FFEDCD'/>  */}
                 {/* {wallets?.map((elem,i) =>(
                     <AddressCard data={elem} key={i}/>  
                 ))} */}

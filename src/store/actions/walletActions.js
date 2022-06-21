@@ -31,7 +31,13 @@ const loadWalletWithBalances = () => async(dispatch) => {
             type: types.SET_WALLETS,
             payload: wallets
         })
-         stopSplashLoader()
+        setTimeout(()=>{
+            dispatch({
+                type: types.SET_ACTIVE_WALLET,
+                payload: wallets[0]
+            })
+        },1000)
+        stopSplashLoader()
     })
 }
 
