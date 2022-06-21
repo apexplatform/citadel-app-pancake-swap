@@ -3,16 +3,16 @@ import { Content, Header, Tabbar, Search } from '@citadeldao/apps-ui-kit/dist/ma
 import AddressBlock from '@citadeldao/apps-ui-kit/dist/components/uiKit/AddressBlock'
 import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
-import ROUTES from "../../routes";
 import { walletActions } from '../../store/actions';
 import { useNavigate } from 'react-router-dom';
 const SelectAddressPanel = () => {
     const config = new Config()
     const { wallets, activeWallet } = useSelector((state) => state.wallet)
+    const previousPanel = useSelector(state => state.panels.previousPanel)
     console.log(activeWallet)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const back = () => navigate(ROUTES.ADDRESS_LIST + '?' + window.location.search.slice(1))
+    const back = () => navigate(previousPanel + '?' + window.location.search.slice(1))
     return (
         <div className='panel'>
             <Header title="Select an address" style={{marginTop: '10px'}} onClick={() => back()} back={true}/>

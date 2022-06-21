@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import { Content, CustomIcon, Header, Tabbar, SelectToken } from '@citadeldao/apps-ui-kit/dist/main';
 import { Config } from '../config/config';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom'
+import { panelActions } from '../../store/actions'
 import '../styles/panels/swap.css'
 const AddressListPanel = () => {
     const config = new Config()
@@ -48,6 +50,12 @@ const AddressListPanel = () => {
         }
     ]
     const [selectedOption, setSelectedOption] = useState(data[0])
+    const location = useLocation()
+    const dispatch = useDispatch()
+    useEffect(()=>{
+        dispatch(panelActions.setPreviousPanel(location.pathname))
+        // eslint-disable-next-line
+    },[wallets])
     return (
         <div className='panel'>
             <Header config={config}/>

@@ -34,7 +34,7 @@ const MainView = () => {
     return(
         <View>
             <Panel config={config}>
-              <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS)} style={{margin: '20px 20px 0'}} data={activeWallet} id='/show'></AddressSectionCard>
+              <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS + '?' + window.location.search.slice(1))} style={{margin: '20px 20px 0'}} data={activeWallet} id='/show'></AddressSectionCard>
               <PopupWindow show={showSuccess} id='/show'>
                   <StatusPopup text={errors?.text} type='error' showPopup={clearErrors}/>       
               </PopupWindow>

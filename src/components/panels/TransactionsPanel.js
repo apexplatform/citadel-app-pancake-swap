@@ -5,16 +5,19 @@ import Content from '@citadeldao/apps-ui-kit/dist/components/uiKit/Content'
 import TransactionItem from "@citadeldao/apps-ui-kit/dist/components/uiKit/Transactiontem"
 import Loader from '@citadeldao/apps-ui-kit/dist/components/uiKit/Loader'
 import text from "../../text.json"
-import { transactionActions } from '../../store/actions';
+import { transactionActions , panelActions} from '../../store/actions';
 import {useDispatch,useSelector} from "react-redux";
 import { Config } from '../config/config';
+import { useLocation } from 'react-router-dom'
 const TransactionsPanel = () => {
     const dispatch = useDispatch()
     const { wallets } = useSelector((state) => state.wallet)
     const transactions = useSelector((state) => state.transaction.transactions)
     const loader = useSelector((state) => state.transaction.transactionsLoaded)
+    const location = useLocation();
     useEffect(()=>{
         dispatch(transactionActions.loadTransactions())
+        dispatch(panelActions.setPreviousPanel(location.pathname))
         // eslint-disable-next-line
     },[wallets])
     const config = new Config()
