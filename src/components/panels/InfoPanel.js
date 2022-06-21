@@ -1,19 +1,15 @@
-import React, {useState} from 'react'
+import React, {useState,useRef} from 'react'
 // eslint-disable-next-line
-import Tab from '@citadeldao/apps-ui-kit/dist/components/uiKit/Tab'
-// eslint-disable-next-line
-import Tablist from '@citadeldao/apps-ui-kit/dist/components/uiKit/Tablist'
-import Header from '@citadeldao/apps-ui-kit/dist/components/uiKit/Header'
+import { Tablist, Header, Content, Tab} from '@citadeldao/apps-ui-kit/dist/main'
 import GuidesPanel from './GuidesPanel'
-import Content from '@citadeldao/apps-ui-kit/dist/components/uiKit/Content'
-import { Config } from '../config/config';
-const InfoPanel = () => {
+const InfoPanel = (props) => {
     // eslint-disable-next-line
     const [active, setActive] = useState('Guides')
-    const config = new Config()
+    const headerRef = useRef()
     return (
         <section id='info-panel'>
-            <Header config={config}/>
+            <div className='panel-header-line' style={{background: props.config.headerParamsFromConfig('TOP_BACKGROUND_COLOR') }}></div>
+            <Header refs={headerRef}/>
             <Content>
                 <GuidesPanel/>
                 {/* <Tablist active={active} setActive={setActive} type="button">
