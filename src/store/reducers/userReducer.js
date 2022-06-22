@@ -5,7 +5,7 @@ const paramsAsObject = qs.parse(params);
 const initialState = {
     auth_token: paramsAsObject?.token,
     socket_token: null,
-    user_configs: null
+    user_configs: 'null'
 }
 export default function UserReducer(state=initialState,action){
     switch (action.type){

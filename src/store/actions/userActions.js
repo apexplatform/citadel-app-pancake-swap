@@ -22,16 +22,18 @@ const loadSocketToken = () => (dispatch) => {
     } catch {}
   };
 
-const loadUserConfig = () => (dispatch) => {
+const loadUserConfig = async() => {
   const {auth_token} = store.getState().user
   try {
-    axiosInstance.get('/configs?token=' + auth_token).then((res) => {
-      dispatch({
+    let result = await axiosInstance.get('/configs?token=' + auth_token)
+      store.dispatch({
         type: types.SET_USER_CONFIG,
-        payload: res.data.data && JSON.parse(res.data?.data),
+        payload: result.data?.data && JSON.parse(result.data?.data),
       })
-    });
-  } catch {}
+    return result.data?.data && JSON.parse(result.data?.data)
+  } catch {
+    return null
+  }
 };
 
 const setUserConfig = (config=null) => {

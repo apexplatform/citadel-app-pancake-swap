@@ -31,13 +31,26 @@ const loadWalletWithBalances = () => async(dispatch) => {
             type: types.SET_WALLETS,
             payload: wallets
         })
-        setTimeout(()=>{
-            dispatch({
-                type: types.SET_ACTIVE_WALLET,
-                payload: wallets[0]
+        usersActions.loadUserConfig().then(user_configs =>{
+            wallets?.forEach((item,i) => {
+                if(item.address === user_configs?.lastWalletInfo?.address){  
+                    setTimeout(()=>{
+                        dispatch ({
+                            type: types.SET_ACTIVE_WALLET,
+                            payload: item
+                        })
+                    },1000) 
+                }
             })
-        },1000)
-        stopSplashLoader()
+            setTimeout(()=>{
+                stopSplashLoader()
+            },1000) 
+        }).catch(() => {
+            dispatch(setActiveWallet(wallets[0]))
+            setTimeout(()=>{
+                stopSplashLoader()
+            },1000) 
+        })
     })
 }
 
