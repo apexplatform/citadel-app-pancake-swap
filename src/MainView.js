@@ -29,7 +29,6 @@ const MainView = () => {
       dispatch(errorActions.clearErrors())
     }
     const navigate = useNavigate()
-    console.log(activeWallet,'--activeWallet')
     const config = new Config()
     return(
         <View>

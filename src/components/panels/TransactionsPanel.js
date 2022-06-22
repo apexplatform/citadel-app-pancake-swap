@@ -1,32 +1,35 @@
 import React, { useEffect } from 'react'
-import Tabbar from '@citadeldao/apps-ui-kit/dist/components/uiKit/Tabbar'
-import Header from '@citadeldao/apps-ui-kit/dist/components/uiKit/Header'
-import Content from '@citadeldao/apps-ui-kit/dist/components/uiKit/Content'
-import TransactionItem from "@citadeldao/apps-ui-kit/dist/components/uiKit/Transactiontem"
-import Loader from '@citadeldao/apps-ui-kit/dist/components/uiKit/Loader'
+import { TransactionItem, Loader, Content, Tabbar, Header } from "@citadeldao/apps-ui-kit/dist/main"
 import text from "../../text.json"
-import { transactionActions , panelActions} from '../../store/actions';
+import { transactionActions, panelActions } from '../../store/actions';
 import {useDispatch,useSelector} from "react-redux";
-import { Config } from '../config/config';
+import {useNavigate} from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
+import ROUTES from "../../routes";
+import { Config } from '../config/config';
 const TransactionsPanel = () => {
-    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const location = useLocation()
+    const config = new Config()
+    const dispatch = useDispatch();
     const { wallets } = useSelector((state) => state.wallet)
     const transactions = useSelector((state) => state.transaction.transactions)
     const loader = useSelector((state) => state.transaction.transactionsLoaded)
-    const location = useLocation();
     useEffect(()=>{
         dispatch(transactionActions.loadTransactions())
         dispatch(panelActions.setPreviousPanel(location.pathname))
         // eslint-disable-next-line
     },[wallets])
-    const config = new Config()
+    const setOpenedTransaction = (data) => {
+        dispatch(transactionActions.setOpenedTransaction(data))
+        navigate(ROUTES.TRANSACTION_DETAILS + '?' + window.location.search.slice(1))
+    }
     return (
         <div className='panel'>
             <Header title='Transactions' config={config}/>
                 <Content> 
                     { (loader && transactions?.length > 0) && transactions?.map((item, i) => (
-                        <TransactionItem data={item} key={i}/>
+                        <TransactionItem data={item} key={i} onClick={setOpenedTransaction}/>
                     ))}
                     { (loader && transactions?.length === 0) &&
                       <div className="no-transactions-block">

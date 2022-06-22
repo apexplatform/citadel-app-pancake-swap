@@ -8,7 +8,6 @@ import '../styles/panels/swap.css'
 const AddressListPanel = () => {
     const config = new Config()
     const { wallets } = useSelector((state) => state.wallet)
-    console.log(wallets)
     const [value, setValue] = useState(0)
     const [balanceView, setBalanceView] = useState('View Balance')
     const data = [

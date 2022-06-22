@@ -2,7 +2,7 @@ import ROUTES from "../../routes";
 import { useSelector } from "react-redux";
 import Header from "@citadeldao/apps-ui-kit/dist/components/uiKit/Header";
 import text from "../../text.json";
-import Panel from '@citadeldao/apps-ui-kit/dist/components/uiKit/Panel';
+import { Config } from '../config/config';
 import Content from '@citadeldao/apps-ui-kit/dist/components/uiKit/Content';
 import moment from "moment";
 import BigNumber from "bignumber.js";
@@ -11,12 +11,13 @@ import '../styles/panels/transactions.css';
 import { useNavigate } from 'react-router-dom';
 import { fotmatAddress } from '../helpers/addressFormatter'
 const TransactionDetails = (props) => {
+  const config = new Config()
   const data = useSelector(state => state.transaction.openedTransaction)
   const navigate = useNavigate()
   const back = () => navigate(ROUTES.TRANSACTIONS + '?' + window.location.search.slice(1))
   return (
-    <Panel id={ROUTES.TRANSACTION_DETAILS}>
-      <Header title={text.TRANSACTIONS_DETAILS} onClick={() => back()} back={true} />
+    <div className="panel">
+      <Header config={config} title={text.TRANSACTIONS_DETAILS} onClick={() => back()} back={true} />
       <Content>
       <div className="transaction-details">
       {data.to?.value && <div className="transaction-details-row">
@@ -92,7 +93,7 @@ const TransactionDetails = (props) => {
       )}
     </div>
       </Content>
-    </Panel>
+    </div>
   );
 };
 

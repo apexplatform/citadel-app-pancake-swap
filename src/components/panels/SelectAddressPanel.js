@@ -9,7 +9,6 @@ const SelectAddressPanel = () => {
     const config = new Config()
     const { wallets, activeWallet } = useSelector((state) => state.wallet)
     const previousPanel = useSelector(state => state.panels.previousPanel)
-    console.log(activeWallet)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const back = () => navigate(previousPanel + '?' + window.location.search.slice(1))
