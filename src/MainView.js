@@ -30,7 +30,6 @@ const MainView = () => {
     }
     const navigate = useNavigate()
     const config = new Config()
-    console.log(activeWallet)
     return(
         <View>
             <Panel config={config}>
