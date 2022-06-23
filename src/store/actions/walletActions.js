@@ -1,23 +1,28 @@
-import WalletConstructor from '../../networking/models';
 import { types } from './types';
 import { WalletList } from '../../networking/models/WalletList';
 import { ValidationError } from '../../networking/models/Errors';
 import { errorActions, usersActions } from './index'
 import { getApi } from '../../networking/api/useApi';
 import { store } from '../store';
+import models from '../../networking/models'
+import Wallet from '../../networking/models/Wallet';
 import axios from 'axios';
 
 const getWalletConstructor = (address) => {
-    try{
-        const wallet = new WalletConstructor(address)
-        if(wallet){
+    try {
+        const activeWallet = store.getState().wallet
+        const currentWallet = address || activeWallet
+        const WalletConstructor = models[currentWallet.network.toUpperCase()];
+        if(WalletConstructor){
+            const wallet = new WalletConstructor(currentWallet);
             return wallet
         }
-        return undefined
-    }catch{
-        new Error("Wallet doesn't exists ")
+        return new Wallet(currentWallet)
+    } catch {
+      new Error("Wallet doesn't exists ");
     }
-}
+  };
+  
 
 const loadWalletWithBalances = () => async(dispatch) => {
     const walletList = new WalletList()

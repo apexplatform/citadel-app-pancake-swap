@@ -1,3 +1,7 @@
 import CosmosWallet from './walletCoins/CosmosWallet'
 
-export default CosmosWallet
+const models = {
+    COSMOS: CosmosWallet
+}
+
+export default models

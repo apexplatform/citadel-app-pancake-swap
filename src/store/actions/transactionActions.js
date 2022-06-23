@@ -10,6 +10,7 @@ const loadTransactions = () => async (dispatch) => {
   const addressList = store.getState().wallet.wallets
    addressList?.forEach(async(address,i) => {
     const wallet = walletActions.getWalletConstructor(address);
+    console.log(wallet,'-11-wallet')
     const response = await wallet.getTransactions();
     const transactions = response?.data?.list.map(elem => {
       return {...elem, wallet: address}
