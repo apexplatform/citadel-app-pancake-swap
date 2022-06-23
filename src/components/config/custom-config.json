@@ -6,7 +6,8 @@
         "HOVER_ITEM_COLOR": "rgba(0, 65, 73, 0.7)",
         "DISABLE_ITEM_COLOR": "#f5f5f5",
         "TABBAR_ITEMS": [
-            {"TITLE": "Address list", "ICON": "address-list", "ROUTES": "/"},
+            {"TITLE": "Swap", "ICON": "swap", "ROUTES": "/"},
+            {"TITLE": "Pools", "ICON": "pool", "ROUTES": "/main/pools"},
             {"TITLE": "Transactions", "ICON": "transactions", "ROUTES": "/main/transactions"}
         ]
     },

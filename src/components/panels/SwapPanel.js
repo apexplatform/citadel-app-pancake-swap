@@ -1,11 +1,11 @@
 import React, {useState,useEffect} from 'react';
-import { Content, CustomIcon, Header, Tabbar, SelectToken } from '@citadeldao/apps-ui-kit/dist/main';
+import { Content, CustomIcon, Header, Tabbar, EditAmount, BigButtons, SelectToken, InfoCardBlock, InfoCardItem} from '@citadeldao/apps-ui-kit/dist/main';
 import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom'
 import { panelActions } from '../../store/actions'
 import '../styles/panels/swap.css'
-const AddressListPanel = () => {
+const SwapPanel = () => {
     const config = new Config()
     const { wallets } = useSelector((state) => state.wallet)
     const [value, setValue] = useState(0)
@@ -55,6 +55,16 @@ const AddressListPanel = () => {
         dispatch(panelActions.setPreviousPanel(location.pathname))
         // eslint-disable-next-line
     },[wallets])
+    const routes = [
+        {
+            code: 'cosmos',
+            network: 'Cosmos'
+        },
+        {
+            code: 'osmosis',
+            network: 'Osmosis'
+        }
+    ]
     return (
         <div className='panel'>
             <Header config={config}/>
@@ -83,16 +93,21 @@ const AddressListPanel = () => {
                     onClick={() => console.log(value)}
                     />
                 </div>
-          
-                {/* <NotificationCard text={text.AUTORESTAKE_ALERT} iconColor='#00B2FE' textColor='#026573' bgColor='#F3FCFD'/>
-                <NotificationCard text={text.LEDGER_ALERT_TEXT} description={text.LEDGER_ALERT_DESCRIPTION} iconColor='#FAA305' textColor='#000' bgColor='#FFEDCD'/>  */}
-                {/* {wallets?.map((elem,i) =>(
-                    <AddressCard data={elem} key={i}/>  
-                ))} */}
+            <InfoCardBlock>
+                <InfoCardItem text={'Price'} amount={2.012} symbol={'OSMO'} symbol2={'ATOM'}/>
+                <InfoCardItem text={'Price impact'} amount={10} symbol={'%'}/>
+                <InfoCardItem text={'Minimum received'} amount={1} symbol={'OSMO'}/>
+                <InfoCardItem text={'Liquidity Provider Fee'} amount={5} symbol={'%'}/>
+                <InfoCardItem text={'Route'} routes={routes}/>
+            </InfoCardBlock>
+            <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={value} minValue={1} maxValue={100}  setValue={setValue} />
+            <div className='center'>
+                <BigButtons text='SWAP' style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>
+            </div>
             </Content>
             <Tabbar config={config}/>
         </div>
     )
 }
 
-export default AddressListPanel
+export default SwapPanel

@@ -2,13 +2,15 @@ import React, {useState,useEffect} from 'react'
 import './components/styles/panels/index.css'
 import GuidesPanel from './components/panels/GuidesPanel'
 import ROUTES from "./routes";
-import AddressListPanel from './components/panels/AddressListPanel'
+import SwapPanel from './components/panels/SwapPanel'
 import TransactionsPanel from './components/panels/TransactionsPanel'
 import TransactionsDetailsPanel from './components/panels/TransactionDetails'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { errorActions } from './store/actions'
+import PoolsPanel from './components/panels/PoolsPanel'
 import text from './text.json'
+import AddPoolPanel from './components/panels/AddPoolPanel'
 import { useNavigate } from 'react-router-dom';
 import { StatusPopup, PopupWindow , TipCard, NotificationCard, Panel, Modal, View, AddressSectionCard}  from '@citadeldao/apps-ui-kit/dist/main';
 import InfoPanel from './components/panels/InfoPanel'
@@ -30,7 +32,6 @@ const MainView = () => {
     }
     const navigate = useNavigate()
     const config = new Config()
-    console.log(activeWallet,'--activeWallet')
     return(
         <View>
             <Panel config={config}>
@@ -38,7 +39,9 @@ const MainView = () => {
               <PopupWindow show={showSuccess} id='/show'>
                   <StatusPopup text={errors?.text} type='error' showPopup={clearErrors}/>       
               </PopupWindow>
-              <AddressListPanel id={ROUTES.ADDRESS_LIST} />
+              <SwapPanel id={ROUTES.SWAP} />
+              <PoolsPanel id={ROUTES.POOLS} />
+              <AddPoolPanel id={ROUTES.ADD_POOL} />
               <TransactionsPanel id={ROUTES.TRANSACTIONS} />
               <GuidesPanel id={ROUTES.INFO_MENU_GUIDE} />
               <SelectAddressPanel id={ROUTES.SELECT_ADDRESS} />
