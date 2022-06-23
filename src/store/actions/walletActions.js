@@ -32,14 +32,19 @@ const loadWalletWithBalances = () => async(dispatch) => {
             payload: wallets
         })
         usersActions.loadUserConfig().then(user_configs =>{
-            wallets?.forEach((item,i) => {
+            let flag = false
+            wallets?.forEach((item) => {
                 if(item.address === user_configs?.lastWalletInfo?.address){  
+                    flag = true
                     setTimeout(()=>{
                         dispatch ({
                             type: types.SET_ACTIVE_WALLET,
                             payload: item
                         })
                     },1000) 
+                }
+                if(!flag){
+                    dispatch(setActiveWallet(wallets[0]))
                 }
             })
             setTimeout(()=>{

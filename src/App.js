@@ -9,7 +9,6 @@ import socket from "./networking/socket";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    
       dispatch(walletActions.loadWalletWithBalances());
       // eslint-disable-next-line
   },[])

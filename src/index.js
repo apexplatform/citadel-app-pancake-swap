@@ -19,5 +19,5 @@ root.render(<Provider store={store}><App /></Provider>);
 
 const splashContainer = document.getElementById('splash');
 const splashRoot = createRoot(splashContainer);
-splashRoot.render(<Splash appName='Pancakeswap' />);
+splashRoot.render(<Splash appName='Autorestake' />);
 
