@@ -23,9 +23,9 @@ export default class Wallet {
       if (data.ok) {
         return data;
       } else {
-        if(data.error.error_type === 'network_error') return new NetworkError(data.error?.message);
-        Sentry.captureException(data.error?.message);
-        return new Error(data.error?.message);
+        if(data.error?.error_type === 'network_error') return new NetworkError(data.error?.message || data?.error);
+        Sentry.captureException(data.error?.message || data?.error);
+        return new Error(data.error?.message || data?.error);  
       }
     } 
   async getTransactions() {
@@ -39,9 +39,9 @@ export default class Wallet {
     if (data.ok) {
       return data;
     } else {
-      if(data.error.error_type === 'network_error') return new NetworkError(data.error?.message);
-      Sentry.captureException(data.error?.message);
-      return new Error(data.error?.message);  
+      if(data.error?.error_type === 'network_error') return new NetworkError(data.error?.message || data?.error);
+      Sentry.captureException(data.error?.message || data?.error);
+      return new Error(data.error?.message || data?.error);  
     }
   } 
   prepareClaimRewards() {
@@ -58,8 +58,8 @@ export default class Wallet {
       if (data.ok) {
         return data;
       } else {
-        if(data.error.error_type === 'network_error') return new NetworkError(data.error?.message);
-        Sentry.captureException(data.error?.message);
+        if(data.error?.error_type === 'network_error') return new NetworkError(data.error?.message || data?.error);
+        Sentry.captureException(data.error?.message || data?.error);
         return null;
       }
     }catch{
@@ -81,9 +81,9 @@ export default class Wallet {
     if (data.ok) {
       return data;
     } else {
-      Sentry.captureException(data.error?.message);
-      if (data.error?.error_type === "network") return new NetworkError(data.error?.message);
-      return new Error(data.error?.message);
+      if(data.error?.error_type === 'network_error') return new NetworkError(data.error?.message || data?.error);
+      Sentry.captureException(data.error?.message || data?.error);
+      return new Error(data.error?.message || data?.error);  
     }
   } 
 }

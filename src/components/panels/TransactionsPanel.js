@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { TransactionItem, Loader, Content, Tabbar, Header } from "@citadeldao/apps-ui-kit/dist/main"
+import { TransactionItem, Loader, Content, Tabbar } from "@citadeldao/apps-ui-kit/dist/main"
 import text from "../../text.json"
 import { transactionActions, panelActions } from '../../store/actions';
 import {useDispatch,useSelector} from "react-redux";
@@ -26,22 +26,21 @@ const TransactionsPanel = () => {
     }
     return (
         <div className='panel'>
-            <Header title='Transactions' config={config}/>
-                <Content> 
-                    { (loader && transactions?.length > 0) && transactions?.map((item, i) => (
-                        <TransactionItem data={item} key={i} onClick={setOpenedTransaction}/>
-                    ))}
-                    { (loader && transactions?.length === 0) &&
-                      <div className="no-transactions-block">
-                        <img src="/img/icons/noTransactions.svg" alt="empty" />
-                        <h3>{text.NO_TRANSACTIONS}</h3>
-                        <p>{text.NO_TRANSACTIONS_DESCRIPTION}</p>
-                      </div>
-                    }  
-                    {
-                        !loader && <Loader />
-                    }      
-                </Content>
+            <Content> 
+                { (loader && transactions?.length > 0) && transactions?.map((item, i) => (
+                    <TransactionItem data={item} key={i} onClick={setOpenedTransaction}/>
+                ))}
+                { (loader && transactions?.length === 0) &&
+                    <div className="no-transactions-block">
+                    <img src="/img/icons/noTransactions.svg" alt="empty" />
+                    <h3>{text.NO_TRANSACTIONS}</h3>
+                    <p>{text.NO_TRANSACTIONS_DESCRIPTION}</p>
+                    </div>
+                }  
+                {
+                    !loader && <Loader />
+                }      
+            </Content>
             <Tabbar config={config}/>
         </div>
     )
