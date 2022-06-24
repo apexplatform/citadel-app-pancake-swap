@@ -14,7 +14,7 @@ export const networks = {
       }
     },
     cosmos: {
-      name: "COSMOS",
+      name: "Cosmos",
       code: "ATOM",
       getTxUrl(txHash) {
           return txHash ? `https://www.mintscan.io/cosmos/txs/${txHash}` : null;
