@@ -1,7 +1,6 @@
-// import { getWalletConstructor } from "./walletActions";
-// import { checkErrors } from "./errorsActions";
-// import store from "../store";
+import { store } from "../store";
 import { types } from "./types";
+import { errorActions, walletActions } from "./index";
 
 const setRateAmount = (amount) => (dispatch) => {
   dispatch({
@@ -57,19 +56,59 @@ const setTokenOut = (token) => (dispatch) => {
   });
 };
 
+const setSelectedToken = (token) => (dispatch) => {
+  dispatch({
+    type: types.SET_SELECTED_TOKEN,
+    payload: token,
+  });
+};
+
 const updateSwapInfo = (amount = 0, isOut = true) => dispatch => {
   if(isOut){
     dispatch({
       type: types.SET_OUT_AMOUNT,
-      payload: +amount * 0.3,
+      payload: +amount * 0.5,
     });
   }else{
     dispatch({
       type: types.SET_OUT_AMOUNT,
-      payload: +amount / 0.3,
+      payload: +amount / 0.5,
     });
   }
 }
+
+const getSwapInfo = (amountIn, isOut) => async(dispatch) => {
+  try{
+    // let res = {error: true};
+    // const { tokenIn, tokenOut } = store.getState().swap;
+    if (+amountIn > 0) {
+      // if(isOut){
+      //   res = await getOutAmountRoute(tokenIn.code,tokenOut.code,amountIn)
+      // }else{
+      //   res = await getInAmountRoute(tokenIn.code,tokenOut.code,amountIn)
+      // }
+    }
+  }catch(e){
+    dispatch(errorActions.checkErrors(e))
+  }
+  
+}
+
+const getSwapTransaction = (formattedAmounts, isOut, slippage) => dispatch => {
+  const { tokenIn, tokenOut } = store.getState().swap;
+  const { activeWallet } = store.getState().wallet;
+  const wallet = dispatch(walletActions.getWalletConstructor(activeWallet));
+  const transaction = wallet.generateSwapTransaction(
+    isOut,
+    tokenIn,
+    formattedAmounts["INPUT"],
+    tokenOut,
+    formattedAmounts["OUTPUT"],
+    slippage,
+  );
+  console.log(transaction)
+}
+
 export const swapActions = {
     setRateAmount,
     setSwapDisable,
@@ -79,5 +118,8 @@ export const swapActions = {
     setAmount,
     setTokenIn,
     setTokenOut,
-    updateSwapInfo
+    updateSwapInfo,
+    setSelectedToken,
+    getSwapInfo,
+    getSwapTransaction
 };

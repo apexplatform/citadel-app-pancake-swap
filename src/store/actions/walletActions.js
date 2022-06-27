@@ -2,7 +2,6 @@ import { types } from './types';
 import { WalletList } from '../../networking/models/WalletList';
 import { ValidationError } from '../../networking/models/Errors';
 import { errorActions, usersActions } from './index'
-import { getApi } from '../../networking/api/useApi';
 import { store } from '../store';
 import models from '../../networking/models'
 import Wallet from '../../networking/models/Wallet';
@@ -71,7 +70,7 @@ const loadNetworks = () => async(dispatch) => {
         let keys = Object.keys(networks.data?.osmosis?.tokens)
         let tokens = []
         keys.forEach(net => {
-            tokens.push({...networks.data?.osmosis?.tokens[net], network: 'osmosis', balance: '0'})
+            tokens.push({...networks.data?.osmosis?.tokens[net], network: 'osmosis', net: 'osmosis', balance: '0'})
         })
         dispatch({
             type: types.SET_TOKENS,

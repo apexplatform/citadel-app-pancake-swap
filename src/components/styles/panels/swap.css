@@ -7,3 +7,18 @@
 .swap-inputs{
     position: relative;
 }
+
+.modal-header{
+    border-bottom: 1px dashed #C3CEEB;
+    margin: 0 0 16px;
+    padding-bottom: 10px;
+}
+
+.modal-header h4{
+    margin: 0;
+    font-size: 18px;
+    line-height: 20px;
+    letter-spacing: -0.32px;
+    color: #292929;
+    font-family: 'Panton Bold';
+}

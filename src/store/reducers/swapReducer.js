@@ -16,6 +16,17 @@ import { types } from "../actions/types";
     disableSwap: false,
     swapInfo: null,
     amount: 0,
+    selectedToken: 'INPUT',
+    routes: [
+      {
+          code: 'cosmos',
+          network: 'Cosmos'
+      },
+      {
+          code: 'osmosis',
+          network: 'Osmosis'
+      }
+    ]
   };
   export default function SwapReducer (state = initialState, action) {
     switch (action.type) {
@@ -24,10 +35,15 @@ import { types } from "../actions/types";
           ...state,
           swapInfo: action.payload,
         };
-    case types.SET_AMOUNT:
+      case types.SET_AMOUNT:
         return {
             ...state,
             amount: action.payload,
+        };
+      case types.SET_SELECTED_TOKEN:
+        return {
+          ...state,
+          selectedToken: action.payload,
         };
       case types.SET_DISABLE_SWAP:
         return {

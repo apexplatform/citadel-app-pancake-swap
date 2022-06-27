@@ -1,7 +1,7 @@
-import CosmosWallet from './walletCoins/CosmosWallet'
+import OsmosisWallet from './walletCoins/OsmosisWallet'
 
 const models = {
-    COSMOS: CosmosWallet
+    OSMOSIS: OsmosisWallet
 }
 
 export default models
