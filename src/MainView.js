@@ -16,6 +16,7 @@ import { StatusPopup, PopupWindow , TipCard, NotificationCard, Panel, Modal, Vie
 import InfoPanel from './components/panels/InfoPanel'
 import { Config } from './components/config/config';
 import SelectAddressPanel from './components/panels/SelectAddressPanel';
+import SelectTokenPanel from './components/panels/SelectTokenPanel';
 const MainView = () => {
     const location = useLocation();
     const dispatch = useDispatch()
@@ -32,6 +33,7 @@ const MainView = () => {
     }
     const navigate = useNavigate()
     const config = new Config()
+    console.log(errors,'--errors')
     return(
         <View>
             <Panel config={config}>
@@ -45,6 +47,7 @@ const MainView = () => {
               <TransactionsPanel id={ROUTES.TRANSACTIONS} />
               <GuidesPanel id={ROUTES.INFO_MENU_GUIDE} />
               <SelectAddressPanel id={ROUTES.SELECT_ADDRESS} />
+              <SelectTokenPanel id={ROUTES.SELECT_TOKEN} />
               <TransactionsDetailsPanel id={ROUTES.TRANSACTION_DETAILS} />
             </Panel>
             <InfoPanel config={config}/>

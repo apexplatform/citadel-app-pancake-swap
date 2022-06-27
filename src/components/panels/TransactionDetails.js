@@ -80,8 +80,8 @@ const TransactionDetails = (props) => {
         </div>
       ))}
       <div className="transaction-details-row">
-        <p className="transaction-description-text">{text.VIEW_TRANSACTION}
-        <a href={data.wallet.getTxUrl(data?.hash?.value)} className='transaction-link' target='_blank' rel="noreferrer"><CustomIcons icon='link' /></a></p>
+        <div className="transaction-description-text">{text.VIEW_TRANSACTION}
+        <a href={data.wallet.getTxUrl(data?.hash?.value)} className='transaction-link' target='_blank' rel="noreferrer"><CustomIcons icon='link' /></a></div>
       </div>
       {data?.comment?.value ? (
         <div>

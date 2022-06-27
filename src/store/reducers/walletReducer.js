@@ -7,7 +7,8 @@ const initialState = {
     transactionResponse: null,
     loader: true,
     activeWallet: null,
-    showSplash: true
+    showSplash: true,
+    tokens: []
 }
 
 export default function WalletReducer(state=initialState,action){
@@ -16,6 +17,11 @@ export default function WalletReducer(state=initialState,action){
             return {
                 ...state,
                 wallets: action.payload
+            }
+        case types.SET_TOKENS:
+            return {
+                ...state,
+                tokens: action.payload
             }
         case types.SET_SPLASH_MODE:
             return {

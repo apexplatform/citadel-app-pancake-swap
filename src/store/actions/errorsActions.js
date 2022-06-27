@@ -145,6 +145,12 @@ const setCustomErrors = (error) => dispatch => {
     })
 }
 
+const setConfirmModal = (error) => dispatch => {
+    dispatch({
+        type: types.SET_CONFIRM_MODAL,
+        payload: error
+    })
+}
 
 const checkErrors = (error) => dispatch => {
     if (error instanceof ValidationError) {
@@ -176,5 +182,6 @@ const checkErrors = (error) => dispatch => {
 export const errorActions = {
     clearErrors,
     checkErrors,
-    setCustomErrors
+    setCustomErrors,
+    setConfirmModal
 };

@@ -52,9 +52,6 @@ const loadWalletWithBalances = () => async(dispatch) => {
                     dispatch(setActiveWallet(wallets[0]))
                 }
             })
-            setTimeout(()=>{
-                stopSplashLoader()
-            },1000) 
         }).catch(() => {
             dispatch(setActiveWallet(wallets[0]))
             setTimeout(()=>{
@@ -66,17 +63,31 @@ const loadWalletWithBalances = () => async(dispatch) => {
 
 const loadNetworks = () => async(dispatch) => {
     try{
-        const api = getApi('restake', process.env.REACT_APP_RESTAKE_URL)
-        const response = await api.getNetworks();
+        const networks = await axios.get(process.env.REACT_APP_MAIN_SERVER_URL + '/networks.json')
         dispatch({
             type: types.SET_NETWORKS,
-            payload: response.data
+            payload: networks.data
         })
-        const nodes = await axios.get(process.env.REACT_APP_MAIN_SERVER_URL + '/staking-node?version=1.0.4')
+        let keys = Object.keys(networks.data?.osmosis?.tokens)
+        let tokens = []
+        keys.forEach(net => {
+            tokens.push({...networks.data?.osmosis?.tokens[net], network: 'osmosis', balance: '0'})
+        })
         dispatch({
-            type: types.SET_STAKE_NODES,
-            payload: nodes.data?.data
+            type: types.SET_TOKENS,
+            payload: tokens
         })
+        dispatch({
+            type: types.SET_TOKEN_IN,
+            payload: tokens[0]
+        })
+        dispatch({
+            type: types.SET_TOKEN_OUT,
+            payload: tokens[1]
+        })
+        setTimeout(()=>{
+            stopSplashLoader()
+        },1000) 
     } catch {}
 }
 

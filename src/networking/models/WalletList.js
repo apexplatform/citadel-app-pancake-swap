@@ -36,7 +36,7 @@ export class WalletList {
                     const wallet = walletActions.getWalletConstructor(item)
                     if(wallet){
                         let response = await wallet.getWalletBalance()
-                        if(response.ok){
+                        if(response?.ok){
                             item.balance = response.data.mainBalance
                         }else{
                             response = await wallet.getWalletBalance()

@@ -24,10 +24,10 @@ const loadTransactions = () => async (dispatch) => {
           payload: true,
         });
        }
-     })
-    }).catch(e => {
+     }).catch(e => {
       dispatch(errorActions.checkErrors(e))
     })
+  })
   };
 
 

@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import { Content, Tabbar, Search, Tablist, Tab } from '@citadeldao/apps-ui-kit/dist/main';
 import PoolItem from '@citadeldao/apps-ui-kit/dist/components/uiKit/PoolItem'
 import { Config } from '../config/config';
-import { useSelector, useDispatch } from 'react-redux';
-import { walletActions } from '../../store/actions';
-import { useNavigate } from 'react-router-dom';
+// import { useSelector } from 'react-redux';
+// import { walletActions } from '../../store/actions';
+// import { useNavigate } from 'react-router-dom';
 const PoolsPanel = () => {
     const config = new Config()
     const [active, setActive] = useState('All')
-    const { wallets, activeWallet } = useSelector((state) => state.wallet)
-    const previousPanel = useSelector(state => state.panels.previousPanel)
+    // const { wallets, activeWallet } = useSelector((state) => state.wallet)
+    // const previousPanel = useSelector(state => state.panels.previousPanel)
     const poolData = {
         name: 'Pool #1',
         nativeAsset: {
