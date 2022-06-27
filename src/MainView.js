@@ -20,7 +20,7 @@ import SelectTokenPanel from './components/panels/SelectTokenPanel';
 const MainView = () => {
     const location = useLocation();
     const dispatch = useDispatch()
-    const { rate, routes } = useSelector(state => state.swap)
+    const { rate, routes, tokenIn, tokenOut, amount, outAmout } = useSelector(state => state.swap)
     const showModal = useSelector(state => state.errors.openErrorModal)
     const showConfirmModal = useSelector(state => state.errors.openConfirmModal)
     const {validationErrors, errors} = useSelector(state => state.errors)
@@ -68,9 +68,9 @@ const MainView = () => {
               </div>
               <div>
                 <div className='row'>
-                    <SwapBalanceCard width='45%' amount='32.432' bgColor='#B7F6FF' color='#00BFDB' token={{name: 'Citedel.one', code: 'XCT', network: 'bsc'}} />
+                    <SwapBalanceCard width='45%' amount={amount} bgColor='#B7F6FF' color='#00BFDB' token={tokenIn} />
                     <CustomIcon icon='arrow-swap' />
-                    <SwapBalanceCard width='45%' amount='1.3' bgColor='#C6D1FF' color='rgba(58, 94, 229, 1)' token={{name: 'Binance', code: 'BNB', network: 'bsc'}} />
+                    <SwapBalanceCard width='45%' amount={outAmout} bgColor='#C6D1FF' color='rgba(58, 94, 229, 1)' token={tokenOut} />
                 </div>
                 <PriceUpdatedCard style={{margin: '16px 0'}} acceptPrice={() => setDisabledSwap(false)} text='Price updated'/>
                 <InfoCardBlock>
