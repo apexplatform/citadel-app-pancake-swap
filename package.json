@@ -5,7 +5,7 @@
   "dependencies": {
     "@babel/core": "^7.18.5",
     "@citadeldao/apps-sdk": "^0.0.12",
-    "@citadeldao/apps-ui-kit": "^0.86.0",
+    "@citadeldao/apps-ui-kit": "^0.88.0",
     "@sentry/react": "^7.1.1",
     "@sentry/tracing": "^7.1.1",
     "@testing-library/jest-dom": "^5.16.4",

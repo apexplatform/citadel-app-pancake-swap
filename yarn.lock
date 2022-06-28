@@ -1088,10 +1088,10 @@
     "bignumber.js" "^9.0.2"
     "ethers" "^5.6.4"
 
-"@citadeldao/apps-ui-kit@^0.86.0":
-  "integrity" "sha512-bUy8b0+OlWpxt/DPuORfGDhK7tFG9EYuxjjvdjiznFXOZ+Hef0jE/cFUP+rL5WI5LvWqqlJUc3Uh5KzDOthlfQ=="
-  "resolved" "https://registry.npmjs.org/@citadeldao/apps-ui-kit/-/apps-ui-kit-0.86.0.tgz"
-  "version" "0.86.0"
+"@citadeldao/apps-ui-kit@^0.88.0":
+  "integrity" "sha512-r9DXs7ANKiKI+1VSn4Sq7919VM2xXiPsXxtrjwWokDS/tJ7THUbfZrvCGihIdd5fveBoTSRVW1PIa3nnxYjB6Q=="
+  "resolved" "https://registry.npmjs.org/@citadeldao/apps-ui-kit/-/apps-ui-kit-0.88.0.tgz"
+  "version" "0.88.0"
   dependencies:
     "@babel/polyfill" "^7.12.1"
     "bignumber.js" "^9.0.2"
