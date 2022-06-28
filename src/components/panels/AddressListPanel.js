@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import { Content, CustomIcon, Header, Tabbar, SelectToken } from '@citadeldao/apps-ui-kit/dist/main';
+import { Content, CustomIcon, Header, Tabbar, SelectToken, DropdownSearch } from '@citadeldao/apps-ui-kit/dist/main';
 import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom'

@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@citadeldao/apps-sdk": "^0.0.12",
-    "@citadeldao/apps-ui-kit": "^0.62.0",
+    "@citadeldao/apps-ui-kit": "^0.88.0",
     "@sentry/react": "^7.1.1",
     "@sentry/tracing": "^7.1.1",
     "@testing-library/jest-dom": "^5.16.4",
