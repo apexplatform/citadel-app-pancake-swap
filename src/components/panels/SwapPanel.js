@@ -84,6 +84,7 @@ const SwapPanel = () => {
                         token={true} 
                         data={tokens} 
                         name='INPUT'
+                        title="From token"
                         onMaxClick={() => setMaxValue('INPUT')}
                         checkAmount={checkAmount}
                         value={formattedAmounts["INPUT"]} 
@@ -99,6 +100,7 @@ const SwapPanel = () => {
                             token={true} 
                             data={tokens} 
                             name='OUTPUT'
+                            title="To token"
                             onMaxClick={() => setMaxValue('OUTPUT')}
                             checkAmount={checkAmount}
                             value={formattedAmounts["OUTPUT"]}
@@ -114,7 +116,7 @@ const SwapPanel = () => {
                 <InfoCardItem text={'Liquidity Provider Fee'} amount={5} symbol={'%'}/>
                 <InfoCardItem text={'Route'} routes={routes}/>
             </InfoCardBlock>
-            <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={1} saveValue={() => {}} maxValue={100}  setValue={setSlippage} />
+            <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippage} />
             <div className='center'>
                 <BigButtons text='SWAP' onClick={() => dispatch(errorActions.setConfirmModal(true))} style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>
             </div>

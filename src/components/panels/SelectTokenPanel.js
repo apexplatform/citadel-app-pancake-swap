@@ -27,13 +27,18 @@ const SelectTokenPanel = () => {
         setTokentList(arr);
         if (wallet.length < 1) setTokentList(tokens?.filter(elem => elem.code !== secondToken.code));
       };
+     
+    const setToken = (token) => {
+      dispatch(selectedToken === 'INPUT' ? swapActions.setTokenIn(token) : swapActions.setTokenOut(token));
+      back();
+    }
     return (
         <div className='panel'>
             <Header title="Select token" style={{marginTop: '10px'}} onClick={() => back()} back={true}/>
             <Content>
                 <Search style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
                 {tokenList?.map((elem,i) =>(
-                  <AddressBlock onClick={() => dispatch(selectedToken === 'INPUT' ? swapActions.setTokenIn(elem) : swapActions.setTokenOut(elem))} active={activeToken?.code === elem?.code} style={{marginBottom: '10px'}} data={elem} key={i}/>  
+                  <AddressBlock onClick={() => setToken(elem)} active={activeToken?.code === elem?.code} style={{marginBottom: '10px'}} data={elem} key={i}/>  
                 ))}
             </Content>
             <Tabbar config={config}/>

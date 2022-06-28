@@ -1,6 +1,6 @@
 #swap-center-btn{
     position: absolute;
-    left: 40%;
+    left: 45%;
     top: 27%;
 }
 
@@ -21,4 +21,17 @@
     letter-spacing: -0.32px;
     color: #292929;
     font-family: 'Panton Bold';
+}
+
+
+@media screen and (max-width: 500px) {
+    #swap-center-btn{
+        left: 43%;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #swap-center-btn{
+        left: 42%;
+    }
 }
