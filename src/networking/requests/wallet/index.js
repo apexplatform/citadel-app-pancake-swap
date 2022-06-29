@@ -23,8 +23,14 @@ const getStakeNodes = () => {
   return request
 }
 
+const getNetworks = () => {
+  const request = new utils.Request('get', process.env.REACT_APP_MAIN_SERVER_URL + '/networks.json')
+  return request
+}
+
 export const wallet = {
   getWalletBalance,
   prepareBaseTransfer,
-  getStakeNodes
+  getStakeNodes,
+  getNetworks
 }
