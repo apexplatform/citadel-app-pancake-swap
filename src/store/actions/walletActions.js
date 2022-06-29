@@ -2,10 +2,11 @@ import { types } from './types';
 import { WalletList } from '../../networking/models/WalletList';
 import { ValidationError } from '../../networking/models/Errors';
 import { errorActions, usersActions } from './index'
+import { getRequest } from '../../networking/requests/getRequest';
 import { store } from '../store';
 import models from '../../networking/models'
 import Wallet from '../../networking/models/Wallet';
-import axios from 'axios';
+import { utils } from '@citadeldao/apps-sdk';
 
 const getWalletConstructor = (address) => {
     try {
@@ -62,15 +63,16 @@ const loadWalletWithBalances = () => async(dispatch) => {
 
 const loadNetworks = () => async(dispatch) => {
     try{
-        const networks = await axios.get(process.env.REACT_APP_MAIN_SERVER_URL + '/networks.json')
+        const rm = new utils.RequestManager()
+        const networks = await rm.send(getRequest('wallet').getNetworks())
         dispatch({
             type: types.SET_NETWORKS,
-            payload: networks.data
+            payload: networks
         })
-        let keys = Object.keys(networks.data?.osmosis?.tokens)
+        let keys = Object.keys(networks?.osmosis?.tokens)
         let tokens = []
         keys.forEach(net => {
-            tokens.push({...networks.data?.osmosis?.tokens[net], network: 'osmosis', net: 'osmosis', balance: '0'})
+            tokens.push({...networks?.osmosis?.tokens[net], network: 'osmosis', net: 'osmosis', balance: '0'})
         })
         dispatch({
             type: types.SET_TOKENS,
