@@ -1,19 +1,21 @@
 import Wallet from '../Wallet';
-import { getApi } from '../../api/useApi';
+import { getRequest } from '../../requests/getRequest';
+import { utils } from '@citadeldao/apps-sdk';
+
+const requestManager = new utils.RequestManager()
+const restakeRequest = getRequest('restake')
 export default class CosmosWallet extends Wallet {
     async getStakeList(){
-        const api = getApi('restake', process.env.REACT_APP_RESTAKE_URL)
         try{
-            const response = await api.getValidators({net: this.net, address: this.address});
+            const response = await requestManager.send(restakeRequest.getValidators({net: this.net, address: this.address}));
             return response.data
         }catch(e){
             return null
         }
     }
     async getDelegatorStatus(){
-        const api = getApi('restake', process.env.REACT_APP_RESTAKE_URL)
         try{
-            const response = await api.getDelegatorStatus({net: this.net, address: this.address});
+            const response = await requestManager.send(restakeRequest.getDelegatorStatus({net: this.net, address: this.address}));
             return response.data
         }catch(e){
             console.log(e)
@@ -21,9 +23,8 @@ export default class CosmosWallet extends Wallet {
         }
     }
     async getBalances(){
-        const api = getApi('restake', process.env.REACT_APP_RESTAKE_URL)
         try{
-            const response = await api.getBalances({net: this.net, address: this.address});
+            const response = await requestManager.send(restakeRequest.getBalances({net: this.net, address: this.address}));
             return response.data
         }catch(e){
             console.log(e)
@@ -31,9 +32,8 @@ export default class CosmosWallet extends Wallet {
         }
     }
     async getNetworkConfig(){
-        const api = getApi('restake', process.env.REACT_APP_RESTAKE_URL)
         try{
-            const response = await api.getNetworkConfig(this.net);
+            const response = await requestManager.send(restakeRequest.getNetworkConfig(this.net));
             return response
         }catch(e){
             console.log(e)
@@ -41,18 +41,16 @@ export default class CosmosWallet extends Wallet {
         }
     }
     async setPermissionRestake(data){
-        const api = getApi('restake', process.env.REACT_APP_RESTAKE_URL)
         try{
-            const response = await api.postPermissionRestake({net: this.net, address: this.address, transaction: data});
+            const response = await requestManager.send(restakeRequest.postPermissionRestake({net: this.net, address: this.address, transaction: data}));
             return response
         }catch(e){
             return new Error(e?.message)
         }
     }
     async deleteRestakeAddress(){
-        const api = getApi('restake', process.env.REACT_APP_RESTAKE_URL)
         try{
-            const response = await api.deleteRestakeAddress({net: this.net, address: this.address});
+            const response = await requestManager.send(restakeRequest.deleteRestakeAddress({net: this.net, address: this.address}));
             return response.data
         }catch(e){
             console.log(e)

@@ -2,11 +2,11 @@ import { types } from './types';
 import { WalletList } from '../../networking/models/WalletList';
 import { ValidationError } from '../../networking/models/Errors';
 import { errorActions, usersActions } from './index'
-import { getApi } from '../../networking/api/useApi';
+import { getRequest } from '../../networking/requests/getRequest';
 import { store } from '../store';
 import models from '../../networking/models'
 import Wallet from '../../networking/models/Wallet';
-import axios from 'axios';
+import { utils } from '@citadeldao/apps-sdk';
 
 const getWalletConstructor = (address) => {
     try {
@@ -66,16 +66,18 @@ const loadWalletWithBalances = () => async(dispatch) => {
 
 const loadNetworks = () => async(dispatch) => {
     try{
-        const api = getApi('restake', process.env.REACT_APP_RESTAKE_URL)
-        const response = await api.getNetworks();
+        const restakeRequest = getRequest('restake').getNetworks()
+        const rm = new utils.RequestManager()
+        const result = await rm.send(restakeRequest);
+        const walletRequest = getRequest('wallet').getStakeNodes()
+        const nodes = await rm.send(walletRequest)
         dispatch({
             type: types.SET_NETWORKS,
-            payload: response.data
+            payload: result.data
         })
-        const nodes = await axios.get(process.env.REACT_APP_MAIN_SERVER_URL + '/staking-node?version=1.0.4')
         dispatch({
             type: types.SET_STAKE_NODES,
-            payload: nodes.data?.data
+            payload: nodes.data
         })
     } catch {}
 }

@@ -1,19 +1,19 @@
 import { types } from './types';
-import axios from "axios";
 import { store } from '../store'
+import { getRequest } from '../../networking/requests/getRequest';
+import { utils } from '@citadeldao/apps-sdk';
+
+const requestManager = new utils.RequestManager()
+const userRequest = getRequest('user')
+
 const setAuthToken = (token) => ({
     type: types.SET_OPENED_TRANSACTION,
     payload: token
 });
 
-const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_URL,
-  withCredentials: true,
-});
-
 const loadSocketToken = () => (dispatch) => {
     try {
-      axiosInstance.get('/api/profile/socket').then((res) => {
+      requestManager.send(userRequest.getSocketToken()).then((res) => {
         dispatch({
           type: types.SET_SOCKET_TOKEN,
           payload: res.data?.data,
@@ -25,12 +25,13 @@ const loadSocketToken = () => (dispatch) => {
 const loadUserConfig = async() => {
   const {auth_token} = store.getState().user
   try {
-    let result = await axiosInstance.get('/configs?token=' + auth_token)
-      store.dispatch({
-        type: types.SET_USER_CONFIG,
-        payload: result.data?.data && JSON.parse(result.data?.data),
-      })
-    return result.data?.data && JSON.parse(result.data?.data)
+    let result = await requestManager.send(userRequest.getUserConfig(auth_token))
+    console.log(result,'-loadUserConfig')
+    store.dispatch({
+      type: types.SET_USER_CONFIG,
+      payload: result.data && JSON.parse(result.data),
+    })
+    return result.data && JSON.parse(result.data)
   } catch {
     return null
   }
@@ -40,9 +41,7 @@ const setUserConfig = (config=null) => {
   const {auth_token} = store.getState().user
   const data = { config }
   try {
-    axiosInstance.put('/configs?token=' + auth_token, data).then((res) => {
-      console.log(res,'--res')
-    });
+    requestManager.send(userRequest.setUserConfig(auth_token,data))
   } catch {}
 };
 
