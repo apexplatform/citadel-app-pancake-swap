@@ -83,6 +83,7 @@ const SwapPanel = () => {
                         balance={true} 
                         token={true} 
                         data={tokens} 
+                        action={true}
                         name='INPUT'
                         title="From token"
                         onMaxClick={() => setMaxValue('INPUT')}
@@ -99,6 +100,7 @@ const SwapPanel = () => {
                             usdPrice={toUSD * formattedAmounts["OUTPUT"]}
                             token={true} 
                             data={tokens} 
+                            action={true}
                             name='OUTPUT'
                             title="To token"
                             onMaxClick={() => setMaxValue('OUTPUT')}
