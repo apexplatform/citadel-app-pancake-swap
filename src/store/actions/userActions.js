@@ -39,7 +39,7 @@ const loadUserConfig = async() => {
 
 const setUserConfig = (config=null) => {
   const {auth_token} = store.getState().user
-  const data = { config }
+  const data = { data: { config } }
   try {
     requestManager.send(userRequest.setUserConfig(auth_token,data))
   } catch {}
