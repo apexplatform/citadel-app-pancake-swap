@@ -16,7 +16,7 @@ const SwapPanel = () => {
     const [slippage, setSlippage] = useState(0)
     const [balanceView, setBalanceView] = useState('View Balance')
     const [isExactIn, setExactIn] = useState(true);
-    const { rate, independentField, routes, outAmout, fromUSD, toUSD, amount, tokenIn,tokenOut } = useSelector(state => state.swap)
+    const { rate, independentField, routes, outAmout, amount, tokenIn, tokenOut } = useSelector(state => state.swap)
     const { tokens } = useSelector(state => state.wallet)
     const location = useLocation()
     const dispatch = useDispatch()
@@ -79,7 +79,6 @@ const SwapPanel = () => {
                 <div className='swap-inputs'>
                     <SelectToken 
                         max={true} 
-                        usdPrice={fromUSD * formattedAmounts["INPUT"]} 
                         balance={true} 
                         token={true} 
                         data={tokens} 
@@ -97,7 +96,6 @@ const SwapPanel = () => {
                     <SelectToken 
                             max={true} 
                             balance={true} 
-                            usdPrice={toUSD * formattedAmounts["OUTPUT"]}
                             token={true} 
                             data={tokens} 
                             action={true}

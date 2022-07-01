@@ -32,11 +32,11 @@ const SelectAddressPanel = () => {
     }
     return (
         <div className='panel'>
-            <Header title="Select an address" style={{marginTop: '10px'}} onClick={() => back()} back={true}/>
+            <Header border title="Select an address" style={{marginTop: '10px'}} onClick={() => back()} back={true}/>
             <Content>
                 <Search style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
                 {walletList?.map((elem,i) =>(
-                    <AddressBlock onClick={() => setActiveWallet(elem)} active={activeWallet?.address === elem?.address} style={{marginBottom: '10px'}} data={elem} key={i} usdPrice='312'/>  
+                  <AddressBlock onClick={() => setActiveWallet(elem)} active={activeWallet?.address === elem?.address} style={{marginBottom: '10px'}} data={elem} key={i} usdPrice='312'/>  
                 ))}
             </Content>
             <Tabbar config={config}/>

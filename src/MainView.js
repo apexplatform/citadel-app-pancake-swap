@@ -8,9 +8,7 @@ import TransactionsDetailsPanel from './components/panels/TransactionDetails'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { errorActions } from './store/actions'
-import PoolsPanel from './components/panels/PoolsPanel'
 import text from './text.json'
-import AddPoolPanel from './components/panels/AddPoolPanel'
 import { useNavigate } from 'react-router-dom';
 import { StatusPopup, PopupWindow, CustomIcon, InfoCardItem, SwapBalanceCard, BigButtons, InfoCardBlock, PriceUpdatedCard, TipCard, NotificationCard, Panel, Modal, View, AddressSectionCard}  from '@citadeldao/apps-ui-kit/dist/main';
 import InfoPanel from './components/panels/InfoPanel'
@@ -36,7 +34,6 @@ const MainView = () => {
     const navigate = useNavigate()
     const config = new Config()
     const [disabledSwap, setDisabledSwap] = useState(true)
-    console.log(errors,'--errors')
     return(
         <View>
             <Panel config={config}>
@@ -45,8 +42,6 @@ const MainView = () => {
                   <StatusPopup text={errors?.text} type='error' showPopup={clearErrors}/>       
               </PopupWindow>
               <SwapPanel id={ROUTES.SWAP} />
-              <PoolsPanel id={ROUTES.POOLS} />
-              <AddPoolPanel id={ROUTES.ADD_POOL} />
               <TransactionsPanel id={ROUTES.TRANSACTIONS} />
               <GuidesPanel id={ROUTES.INFO_MENU_GUIDE} />
               <SelectAddressPanel id={ROUTES.SELECT_ADDRESS} />

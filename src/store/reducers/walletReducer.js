@@ -1,4 +1,7 @@
-import {types} from '../actions/types'
+import { types } from '../actions/types'
+import tokenList from '../../networking/constants/tokenLists/pancake-default.tokenlist.json'
+import { Currency } from '@pancakeswap/sdk'
+const tokens = [{...Currency.ETHER, code: 'BNB', name: "Binance Smart Chain", network: 'bsc', logoURI: "https://bscscan.com/token/images/binance_32.png"}, ...tokenList['tokens']]
 
 const initialState = {
     wallets: null,
@@ -8,7 +11,7 @@ const initialState = {
     loader: true,
     activeWallet: null,
     showSplash: true,
-    tokens: []
+    tokens: tokens
 }
 
 export default function WalletReducer(state=initialState,action){

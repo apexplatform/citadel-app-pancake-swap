@@ -6,6 +6,8 @@ import WalletReducer from './walletReducer';
 import PanelReducer from './panelReducer';
 import SwapReducer from './swapReducer';
 import PoolReducer from './poolReducer';
+import MulticalReducer from './multicalReducer';
+import ListReducer from "./listReducer";
 export const state = combineReducers({
     transaction: TransactionsReducer,
     user: UserReducer,
@@ -13,5 +15,7 @@ export const state = combineReducers({
     wallet: WalletReducer,
     panels: PanelReducer,
     swap: SwapReducer,
-    pool: PoolReducer
+    pool: PoolReducer,
+    multical: MulticalReducer,
+    lists: ListReducer
 });

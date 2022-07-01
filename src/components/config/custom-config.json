@@ -7,7 +7,6 @@
         "DISABLE_ITEM_COLOR": "#f5f5f5",
         "TABBAR_ITEMS": [
             {"TITLE": "Swap", "ICON": "swap", "ROUTES": "/"},
-            {"TITLE": "Pools", "ICON": "pool", "ROUTES": "/main/pools"},
             {"TITLE": "Transactions", "ICON": "transactions", "ROUTES": "/main/transactions"}
         ]
     },

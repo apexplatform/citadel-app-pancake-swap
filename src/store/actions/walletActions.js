@@ -7,6 +7,7 @@ import { store } from '../store';
 import models from '../../networking/models'
 import Wallet from '../../networking/models/Wallet';
 import { utils } from '@citadeldao/apps-sdk';
+import BigNumber from 'bignumber.js'
 
 const getWalletConstructor = (address) => {
     try {
@@ -42,10 +43,7 @@ const loadWalletWithBalances = () => async(dispatch) => {
                 if(item.address === user_configs?.lastWalletInfo?.address){  
                     flag = true
                     setTimeout(()=>{
-                        dispatch ({
-                            type: types.SET_ACTIVE_WALLET,
-                            payload: item
-                        })
+                        dispatch(setActiveWallet(item, false))
                     },1000) 
                 }
                 if(!flag){
@@ -69,26 +67,6 @@ const loadNetworks = () => async(dispatch) => {
             type: types.SET_NETWORKS,
             payload: networks
         })
-        let keys = Object.keys(networks?.osmosis?.tokens)
-        let tokens = []
-        keys.forEach(net => {
-            tokens.push({...networks?.osmosis?.tokens[net], network: 'osmosis', net: 'osmosis', balance: '0'})
-        })
-        dispatch({
-            type: types.SET_TOKENS,
-            payload: tokens
-        })
-        dispatch({
-            type: types.SET_TOKEN_IN,
-            payload: tokens[0]
-        })
-        dispatch({
-            type: types.SET_TOKEN_OUT,
-            payload: tokens[1]
-        })
-        setTimeout(()=>{
-            stopSplashLoader()
-        },1000) 
     } catch {}
 }
 
@@ -130,18 +108,77 @@ const stopSplashLoader = () => {
 }
 
 
-const setActiveWallet = (wallet) => (dispatch) => {
+const setActiveWallet = (wallet, save = true) => (dispatch) => {
     dispatch({
         type: types.SET_ACTIVE_WALLET,
         payload: wallet,
     });
-    const config = {
+    if(save){
+        const config = {
             lastWalletInfo: {
                 address: wallet.address,
                 network: wallet.network
             }
         }
-    usersActions.setUserConfig(config)
+        usersActions.setUserConfig(config)
+    }
+    loadTokenBalances(wallet)
+}
+
+const formatBalance = (hex,decimals) => {
+    if(hex === '0x00'){
+        return 0
+    }else{
+		let balance = '0.0'
+		if(typeof hex == 'number'){
+			balance = hex.toString()
+		}else{
+			balance = BigNumber(parseInt(hex,16)/Math.pow(10,decimals)).toString()
+		}
+		if(balance.includes('e')){
+			balance = BigNumber(balance).toFixed(10).replace(/\.?0+$/,"")
+			return balance
+		}
+		if(balance.length < 8){
+			return balance
+		}
+		let balanceArr = balance.split('.')
+		if(balanceArr[1]?.length > 6){
+			balanceArr[1] = balanceArr[1].substr(0,6)
+		}
+		return balanceArr[0] + '.' + balanceArr[1]
+	}
+}
+
+const loadTokenBalances = (address) => {
+    const wallet = getWalletConstructor(address)
+    const { tokens } = store.getState().wallet;
+    const { tokenIn, tokenOut } = store.getState().swap;
+    tokens.forEach(async(token) => {
+        if(token?.address){
+            let balance = await wallet.getTokenBalance(token)
+            if(balance){
+                token.balance = formatBalance(balance?._hex,+token.decimals)
+            }
+            if(token.code === tokenIn.code){	
+                store.dispatch({
+                    type: types.SET_TOKEN_IN,
+                    payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
+                })  
+            }
+            if(token.code === tokenOut.code){
+                store.dispatch({
+                    type: types.SET_TOKEN_OUT,
+                    payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
+                })  
+            }
+        }else{
+            token.balance = address?.balance
+        }
+    })
+    setTimeout(()=>{
+        stopSplashLoader()
+    },1000) 
 }
 
 export const walletActions = {
@@ -150,5 +187,6 @@ export const walletActions = {
     loadNetworks,
     preparePermissionTransfer,
     stopSplashLoader,
-    setActiveWallet
+    setActiveWallet,
+    loadTokenBalances
 };
