@@ -13,9 +13,14 @@ function App() {
       // dispatch(walletActions.loadNetworks())
       // eslint-disable-next-line
   },[])
+  let baseURL = ''
+  if(window.location.href.includes('apps.citadel.one/')){
+    const urlSlices = window.location.href.split('/')
+    baseURL = urlSlices[3]
+  }
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename={baseURL}>
         <Routes>
             <Route path="/*" element={<MainView />} />
         </Routes>
