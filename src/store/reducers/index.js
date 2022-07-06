@@ -8,6 +8,7 @@ import SwapReducer from './swapReducer';
 import PoolReducer from './poolReducer';
 import MulticalReducer from './multicalReducer';
 import ListReducer from "./listReducer";
+import BlockReducer from './blockReducer';
 export const state = combineReducers({
     transaction: TransactionsReducer,
     user: UserReducer,
@@ -17,5 +18,6 @@ export const state = combineReducers({
     swap: SwapReducer,
     pool: PoolReducer,
     multical: MulticalReducer,
-    lists: ListReducer
+    lists: ListReducer,
+    blocks: BlockReducer
 });

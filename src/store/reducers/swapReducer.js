@@ -1,7 +1,7 @@
 import { types } from "../actions/types";
 import tokenList from '../../networking/constants/tokenLists/pancake-default.tokenlist.json'
 import { Currency } from '@pancakeswap/sdk'
-const tokens = [{...Currency.ETHER, code: 'BNB', network: 'bsc', logoURI: "https://bscscan.com/token/images/binance_32.png"}, ...tokenList['tokens']]
+const tokens = [{...Currency.ETHER, symbol: 'BNB', network: 'bsc', logoURI: "https://bscscan.com/token/images/binance_32.png"}, ...tokenList['tokens']]
 
 const initialState = {
   tokenIn: tokens[2],
@@ -11,15 +11,18 @@ const initialState = {
   slippage: 0,
   rateAmount: 0,
   slippageTolerance: 5,
+  trade: null,
   swapStatus: "enterAmount",
   independentField: "INPUT",
   outAmout: 0,
+  parsedAmount: 0,
   swapFee: 0,
   fromUSD: 0,
   toUSD: 0,
   disableSwap: false,
   swapInfo: null,
   amount: 0,
+  minReceived: null,
   selectedToken: 'INPUT',
   routes: [
     {
@@ -39,6 +42,21 @@ export default function SwapReducer (state = initialState, action) {
         ...state,
         swapInfo: action.payload,
       };
+    case types.SET_PARSED_AMOUNT:
+      return {
+          ...state,
+          parsedAmount: action.payload
+      }
+    case types.SET_TRADE:
+      return {
+        ...state,
+        trade: action.payload,
+      };
+    case types.SET_MIN_RECEIVED:
+      return {
+          ...state,
+          minReceived: action.payload
+      }
     case types.SET_AMOUNT:
       return {
           ...state,

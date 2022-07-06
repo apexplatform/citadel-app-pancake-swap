@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { errorActions, panelActions, swapActions } from '../../store/actions';
 import { useNavigate } from 'react-router-dom';
-import { formatByDecimals } from "../helpers/numberFormatter";
+import { ONE_BIPS } from '../../networking/constants/constants'
 import '../styles/panels/swap.css';
 import ROUTES from '../../routes';
 import BigNumber from "bignumber.js";
@@ -16,8 +16,10 @@ const SwapPanel = () => {
     const [slippage, setSlippage] = useState(0)
     const [balanceView, setBalanceView] = useState('View Balance')
     const [isExactIn, setExactIn] = useState(true);
-    const { rate, independentField, routes, outAmout, amount, tokenIn, tokenOut } = useSelector(state => state.swap)
+    const { independentField, minReceived, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
     const { tokens } = useSelector(state => state.wallet)
+    const formattedPrice = trade?.executionPrice?.toSignificant(6)
+    const { priceImpactWithoutFee, realizedLPFee } = swapActions.getTradeFeePrice()
     const location = useLocation()
     const dispatch = useDispatch()
     useEffect(()=>{
@@ -25,20 +27,49 @@ const SwapPanel = () => {
         // eslint-disable-next-line
     },[wallets])
     const dependentField = independentField === "INPUT" ? "OUTPUT" : "INPUT";
-    const parsedAmounts = {
-        INPUT: independentField === "INPUT" ? amount : outAmout,
-        OUTPUT: independentField === "OUTPUT" ? amount : outAmout,
-    };
-    const formattedAmounts = {
-        [independentField]: formatByDecimals(amount,+tokenIn?.decimals),
-        [dependentField]: formatByDecimals(parsedAmounts[dependentField],+tokenOut?.decimals),
-    };
+    const parsedAmounts =  {
+        'INPUT': independentField === 'INPUT' ? parsedAmount : trade?.inputAmount,
+        'OUTPUT': independentField === 'OUTPUT' ? parsedAmount : trade?.outputAmount,
+    }
+    let isBNB = false
+    let routes = []
+    if(tokenIn.symbol === 'BNB' && tokenOut.symbol === 'WBNB'){
+        routes.push({logoURI: tokenIn.logoURI, name: tokenIn.symbol})
+        routes.push({logoURI: tokenOut.logoURI, name: tokenOut.symbol})
+        isBNB = true
+    }else if(tokenIn.symbol === 'WBNB' && tokenOut.symbol === 'BNB'){
+        routes.push({logoURI: tokenIn.logoURI, name: tokenIn.symbol})
+        routes.push({logoURI: tokenOut.logoURI, name: tokenOut.symbol})
+        isBNB = true
+    }else if(trade?.route?.path){
+        routes = trade?.route?.path.map(item => {
+            return {
+                logoURI: item.tokenInfo.logoURI,
+                name: item.symbol
+            }
+        })
+        isBNB = false
+    }
+    console.log(routes,'----routes')
+    let formattedAmounts = {}
+	if(isBNB){
+		formattedAmounts = {
+			[independentField]: amount,
+			[dependentField]: amount,
+		}
+	}else{
+		formattedAmounts = {
+			[independentField]: amount,
+			[dependentField]: +amount !== 0 ? parsedAmounts[dependentField]?.toSignificant(6) || 0 : '0',
+		}
+	}
     const reverseTokens = () => {
         dispatch(swapActions.setTokenIn(tokenOut));
         dispatch(swapActions.setAmount(formattedAmounts[dependentField]));
         dispatch(swapActions.setTokenOut(tokenIn));
         dispatch(swapActions.updateSwapInfo(formattedAmounts[dependentField], isExactIn));
     };
+
     const setSelectedOption = (name) => {
         dispatch(swapActions.setSelectedToken(name))
         navigate(ROUTES.SELECT_TOKEN  + '?' + window.location.search.slice(1))
@@ -71,7 +102,7 @@ const SwapPanel = () => {
         }
         dispatch(swapActions.setIndependentField(name));
         setExactIn(name === "INPUT" ? true : false);
-        dispatch(swapActions.updateSwapInfo(amount, isExactIn));
+        dispatch(swapActions.getSwapInfo(amount, isExactIn));
       };
     return (
         <div className='panel'>
@@ -88,7 +119,7 @@ const SwapPanel = () => {
                         onMaxClick={() => setMaxValue('INPUT')}
                         checkAmount={checkAmount}
                         value={formattedAmounts["INPUT"]} 
-                        selectedOption={tokenIn} 
+                        selectedOption={{...tokenIn, code: tokenIn.symbol }} 
                         balanceView={balanceView} setBalanceView={setBalanceView} 
                         onClick={() => setSelectedOption('INPUT')}
                         />
@@ -104,16 +135,16 @@ const SwapPanel = () => {
                             onMaxClick={() => setMaxValue('OUTPUT')}
                             checkAmount={checkAmount}
                             value={formattedAmounts["OUTPUT"]}
-                            selectedOption={tokenOut} 
+                            selectedOption={{...tokenOut, code: tokenOut.symbol }} 
                             balanceView={balanceView} setBalanceView={setBalanceView} 
                             onClick={() => setSelectedOption('OUTPUT')}
                         />
                 </div>
             <InfoCardBlock>
-                <InfoCardItem text={'Price'} amount={rate} symbol={'OSMO'} symbol2={'ATOM'}/>
-                <InfoCardItem text={'Price impact'} amount={10} symbol={'%'}/>
-                <InfoCardItem text={'Minimum received'} amount={1} symbol={'OSMO'}/>
-                <InfoCardItem text={'Liquidity Provider Fee'} amount={5} symbol={'%'}/>
+                <InfoCardItem text={'Price'} amount={formattedPrice || '-'} symbol={tokenIn.symbol} symbol2={tokenOut.symbol}/>
+                <InfoCardItem text={'Price impact'} amount={priceImpactWithoutFee ? (priceImpactWithoutFee.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpactWithoutFee.toFixed(2)}`) : '-'} symbol={'%'}/>
+                <InfoCardItem text={'Minimum received'} amount={minReceived !== 0 ? minReceived?.toSignificant(4) : minReceived} symbol={tokenOut.symbol}/>
+                <InfoCardItem text={'Liquidity Provider Fee'} amount={realizedLPFee?.toSignificant(4) || 0} symbol={priceImpactWithoutFee ? '%' : ''}/>
                 <InfoCardItem text={'Route'} routes={routes}/>
             </InfoCardBlock>
             <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippage} />

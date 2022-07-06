@@ -8,7 +8,7 @@ type TagDetails = Tags[]
 export interface TagInfo extends TagDetails {
   id: string
 }
-// use ordering of default list of lists to assign priority
+// get ordering of default list of lists to assign priority
 function sortByListPriority(urlA: string, urlB: string) {
   const first = DEFAULT_LIST_OF_LISTS.includes(urlA) ? DEFAULT_LIST_OF_LISTS.indexOf(urlA) : Number.MAX_SAFE_INTEGER
   const second = DEFAULT_LIST_OF_LISTS.includes(urlB) ? DEFAULT_LIST_OF_LISTS.indexOf(urlB) : Number.MAX_SAFE_INTEGER
@@ -42,7 +42,7 @@ export type TokenAddressMap = Readonly<
 >
 
 /**
- * An empty result, useful as a default.
+ * An empty result, getful as a default.
  */
 const EMPTY_LIST: TokenAddressMap = {
   [ChainId.MAINNET]: {},
@@ -84,7 +84,7 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
   return map
 }
 
-export function useAllLists():  {
+export function getAllLists():  {
   [url: string]: {
    current: TokenList | null,
    pendingUpdate: TokenList | null,
@@ -103,8 +103,8 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
 }
 
 // merge tokens contained within lists from urls
-function useCombinedTokenMapFromUrls(urls: string[] | undefined): TokenAddressMap {
-  const lists = useAllLists()
+function getCombinedTokenMapFromUrls(urls: string[] | undefined): TokenAddressMap {
+  const lists = getAllLists()
     if (!urls) return EMPTY_LIST
 
     return (
@@ -127,49 +127,49 @@ function useCombinedTokenMapFromUrls(urls: string[] | undefined): TokenAddressMa
 }
 
 // filter out unsupported lists
-export function useActiveListUrls(): any {
+export function getActiveListUrls(): any {
   store.getState().lists.activeListUrls?.filter((url: any) => !UNSUPPORTED_LIST_URLS.includes(url),
   )
 }
 
-export function useInactiveListUrls(): string[] {
-  const lists = useAllLists()
-  const allActiveListUrls = useActiveListUrls()
+export function getInactiveListUrls(): string[] {
+  const lists = getAllLists()
+  const allActiveListUrls = getActiveListUrls()
   return Object.keys(lists).filter((url) => !allActiveListUrls?.includes(url) && !UNSUPPORTED_LIST_URLS.includes(url))
 }
 
 // get all the tokens from active lists, combine with local default tokens
-export function useCombinedActiveList(): TokenAddressMap {
-  const activeListUrls = useActiveListUrls()
-  const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
+export function getCombinedActiveList(): TokenAddressMap {
+  const activeListUrls = getActiveListUrls()
+  const activeTokens = getCombinedTokenMapFromUrls(activeListUrls)
   const defaultTokenMap = listToTokenMap(DEFAULT_TOKEN_LIST)
   return combineMaps(activeTokens, defaultTokenMap)
 }
 
 // all tokens from inactive lists
-export function useCombinedInactiveList(): TokenAddressMap {
-  const allInactiveListUrls: string[] = useInactiveListUrls()
-  return useCombinedTokenMapFromUrls(allInactiveListUrls)
+export function getCombinedInactiveList(): TokenAddressMap {
+  const allInactiveListUrls: string[] = getInactiveListUrls()
+  return getCombinedTokenMapFromUrls(allInactiveListUrls)
 }
 
-// used to hide warnings on import for default tokens
-export function useDefaultTokenList(): TokenAddressMap {
+// getd to hide warnings on import for default tokens
+export function getDefaultTokenList(): TokenAddressMap {
   return listToTokenMap(DEFAULT_TOKEN_LIST)
 }
 
-// list of tokens not supported on interface, used to show warnings and prevent swaps and adds
-export function useUnsupportedTokenList(): TokenAddressMap {
+// list of tokens not supported on interface, getd to show warnings and prevent swaps and adds
+export function getUnsupportedTokenList(): TokenAddressMap {
   // get hard coded unsupported tokens
   const localUnsupportedListMap = listToTokenMap(UNSUPPORTED_TOKEN_LIST)
 
   // get any loaded unsupported tokens
-  const loadedUnsupportedListMap = useCombinedTokenMapFromUrls(UNSUPPORTED_LIST_URLS)
+  const loadedUnsupportedListMap = getCombinedTokenMapFromUrls(UNSUPPORTED_LIST_URLS)
 
   // format into one token address map
   return combineMaps(localUnsupportedListMap, loadedUnsupportedListMap)
 }
 
-export function useIsListActive(url: string): boolean {
-  const activeListUrls = useActiveListUrls()
+export function getIsListActive(url: string): boolean {
+  const activeListUrls = getActiveListUrls()
   return Boolean(activeListUrls?.includes(url))
 }

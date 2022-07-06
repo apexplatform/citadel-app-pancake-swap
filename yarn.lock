@@ -1089,10 +1089,10 @@
     "dotenv-webpack" "^7.1.0"
     "ethers" "^5.6.4"
 
-"@citadeldao/apps-ui-kit@^0.122.0":
-  "integrity" "sha512-h2p9O3dEXOmcCbKDOBit9+S+C/XSATEs+QCEFBdWERqAVc5VHQuizuM63PY/nuFiaH4Ja0uBo14dPEMvp5lILw=="
-  "resolved" "https://registry.npmjs.org/@citadeldao/apps-ui-kit/-/apps-ui-kit-0.122.0.tgz"
-  "version" "0.122.0"
+"@citadeldao/apps-ui-kit@^0.142.0":
+  "integrity" "sha512-4bO7+X4DNymUbGOq8anwZBDrj/dIzonnof7H0DDpgtPNZJTtf8tX3hGZQqkdZhxhhzf7jb64h7kxBY8xjf2avw=="
+  "resolved" "https://registry.npmjs.org/@citadeldao/apps-ui-kit/-/apps-ui-kit-0.142.0.tgz"
+  "version" "0.142.0"
   dependencies:
     "@babel/polyfill" "^7.12.1"
     "bignumber.js" "^9.0.2"
@@ -6627,9 +6627,9 @@
     "js-tokens" "^3.0.0 || ^4.0.0"
 
 "lottie-web@^5.9.4":
-  "integrity" "sha512-4GI1jC2+YV9DyTXEz4HnAuaoOMT6yBs9KxG50rsmM7eRjUhyBpbETSVuzHAkamfP+nyNuQ84jhQxDnfjBrJdQg=="
-  "resolved" "https://registry.npmjs.org/lottie-web/-/lottie-web-5.9.5.tgz"
-  "version" "5.9.5"
+  "integrity" "sha512-JFs7KsHwflugH5qIXBpB4905yC1Sub2MZWtl/elvO/QC6qj1ApqbUZJyjzJseJUtVpgiDaXQLjBlIJGS7UUUXA=="
+  "resolved" "https://registry.npmjs.org/lottie-web/-/lottie-web-5.9.6.tgz"
+  "version" "5.9.6"
 
 "lower-case@^2.0.2":
   "integrity" "sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg=="

@@ -1,6 +1,6 @@
 import { types } from '../actions/types'
 import { createReducer } from '@reduxjs/toolkit'
-import {toCallKey} from '../../networking/methods/swap'
+import { toCallKey } from '../../networking/methods/swap'
 const initialState = {
     callResults: [],
     callListeners: null,

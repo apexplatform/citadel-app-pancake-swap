@@ -2,11 +2,11 @@
 import { Currency, ETHER, Token } from '@pancakeswap/sdk'
 import {
   TokenAddressMap,
-  useDefaultTokenList,
-  useUnsupportedTokenList,
-  useCombinedActiveList,
-  useCombinedInactiveList,
-} from './lists'
+  getDefaultTokenList,
+  getUnsupportedTokenList,
+  getCombinedActiveList,
+  getCombinedInactiveList,
+} from './lists.ts'
 import { getAddress } from '@ethersproject/address'
 
 export function filterTokens(tokens: Token[], search: string): Token[] {
@@ -56,8 +56,8 @@ export interface ListenerOptions {
 export const NEVER_RELOAD: ListenerOptions = {
   blocksPerFetch: Infinity,
 }
-// reduce token map into standard address <-> Token mapping, optionally include user added tokens
-function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean): { [address: string]: Token } {
+// reduce token map into standard address <-> Token mapping, optionally include getr added tokens
+function getTokensFromMap(tokenMap: TokenAddressMap, includegetrAdded: boolean): { [address: string]: Token } {
   const chainId = 56
     if (!chainId) return {}
 
@@ -69,23 +69,23 @@ function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean):
     return mapWithoutUrls
 }
 
-export function useDefaultTokens(): { [address: string]: Token } {
-  const defaultList = useDefaultTokenList()
-  return useTokensFromMap(defaultList, false)
+export function getDefaultTokens(): { [address: string]: Token } {
+  const defaultList = getDefaultTokenList()
+  return getTokensFromMap(defaultList, false)
 }
 
-export function useAllTokens(): { [address: string]: Token } {
-  const allTokens = useCombinedActiveList()
-  return useTokensFromMap(allTokens, true)
+export function getAllTokens(): { [address: string]: Token } {
+  const allTokens = getCombinedActiveList()
+  return getTokensFromMap(allTokens, true)
 }
 
-export function useAllInactiveTokens(): { [address: string]: Token } {
+export function getAllInactiveTokens(): { [address: string]: Token } {
   // get inactive tokens
-  const inactiveTokensMap = useCombinedInactiveList()
-  const inactiveTokens = useTokensFromMap(inactiveTokensMap, false)
+  const inactiveTokensMap = getCombinedInactiveList()
+  const inactiveTokens = getTokensFromMap(inactiveTokensMap, false)
 
   // filter out any token that are on active list
-  const activeTokensAddresses = Object.keys(useAllTokens())
+  const activeTokensAddresses = Object.keys(getAllTokens())
   const filteredInactive = activeTokensAddresses
     ? Object.keys(inactiveTokens).reduce<{ [address: string]: Token }>((newMap, address) => {
         if (!activeTokensAddresses.includes(address)) {
@@ -98,13 +98,13 @@ export function useAllInactiveTokens(): { [address: string]: Token } {
   return filteredInactive
 }
 
-export function useUnsupportedTokens(): { [address: string]: Token } {
-  const unsupportedTokensMap = useUnsupportedTokenList()
-  return useTokensFromMap(unsupportedTokensMap, false)
+export function getUnsupportedTokens(): { [address: string]: Token } {
+  const unsupportedTokensMap = getUnsupportedTokenList()
+  return getTokensFromMap(unsupportedTokensMap, false)
 }
 
-export function useIsTokenActive(token: Token | undefined | null): boolean {
-  const activeTokens = useAllTokens()
+export function getIsTokenActive(token: Token | undefined | null): boolean {
+  const activeTokens = getAllTokens()
 
   if (!activeTokens || !token) {
     return false
@@ -113,10 +113,10 @@ export function useIsTokenActive(token: Token | undefined | null): boolean {
   return !!activeTokens[token.address]
 }
 
-// used to detect extra search results
-export function useFoundOnInactiveList(searchQuery: string): Token[] | undefined {
+// getd to detect extra search results
+export function getFoundOnInactiveList(searchQuery: string): Token[] | undefined {
   const chainId = 56
-  const inactiveTokens = useAllInactiveTokens()
+  const inactiveTokens = getAllInactiveTokens()
     if (!chainId || searchQuery === '') {
       return undefined
     }
@@ -128,16 +128,16 @@ export function useFoundOnInactiveList(searchQuery: string): Token[] | undefined
 // undefined if invalid or does not exist
 // null if loading
 // otherwise returns the token
-export function useToken(tokenAddress?: string): Token | undefined | null {
-  const tokens = useAllTokens()
+export function getToken(tokenAddress?: string): Token | undefined | null {
+  const tokens = getAllTokens()
   const address = isAddress(tokenAddress)
   const token: Token | undefined = address ? tokens[address] : undefined
   return  token
 }
 
-export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
+export function getCurrency(currencyId: string | undefined): Currency | null | undefined {
   const isBNB = currencyId?.toUpperCase() === 'BNB'
-  const token = useToken(isBNB ? undefined : currencyId)
+  const token = getToken(isBNB ? undefined : currencyId)
   return isBNB ? ETHER : token
 }
 

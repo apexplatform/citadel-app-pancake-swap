@@ -160,13 +160,13 @@ const loadTokenBalances = (address) => {
             if(balance){
                 token.balance = formatBalance(balance?._hex,+token.decimals)
             }
-            if(token.code === tokenIn.code){	
+            if(token.symbol === tokenIn.symbol){	
                 store.dispatch({
                     type: types.SET_TOKEN_IN,
                     payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
                 })  
             }
-            if(token.code === tokenOut.code){
+            if(token.symbol === tokenOut.symbol){
                 store.dispatch({
                     type: types.SET_TOKEN_OUT,
                     payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}

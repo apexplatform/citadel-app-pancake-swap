@@ -33,7 +33,7 @@ export async function fetchChunk(
   let returnData
   try {
     // prettier-ignore
-    [resultsBlockNumber, returnData] = await multicallContract.aggregate(
+    [resultsBlockNumber, returnData] = await multicallContract.call('aggregate',
       chunk.map((obj:any) => [obj?.address, obj?.callData])
     )
   } catch (error) {

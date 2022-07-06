@@ -1,6 +1,9 @@
 import { store } from "../store";
 import { types } from "./types";
 import { errorActions, walletActions } from "./index";
+import { getParsedAmount, getBestTrade } from '../../networking/methods/swap';
+import { getCurrency } from '../../networking/methods/tokens.ts';
+import { basisPointsToPercent, computeTradePriceBreakdown } from '../../networking/utils/price.ts';
 
 const setRateAmount = (amount) => (dispatch) => {
   dispatch({
@@ -77,18 +80,53 @@ const updateSwapInfo = (amount = 0, isOut = true) => dispatch => {
   }
 }
 
-const getSwapInfo = (amountIn, isOut) => async(dispatch) => {
+export const setTrade = (bestTrade) => dispatch =>{
+  dispatch({
+      type: types.SET_TRADE,
+      payload: bestTrade
+  })
+}
+
+export const setMinReceive = (amount) => dispatch =>{
+  dispatch({
+      type: types.SET_MIN_RECEIVED,
+      payload: amount
+  })
+}
+function getMinReceived(trade){
+  const { slippageTolerance } = store.getState().swap
+  const pct = basisPointsToPercent(slippageTolerance)
+  return trade?.minimumAmountOut(pct) || 0
+}
+
+const setParsedAmount = (amount) => dispatch =>{
+  dispatch({
+      type: types.SET_PARSED_AMOUNT,
+      payload: amount
+  })
+}
+
+const getTradeFeePrice = () => {
+  const {trade} = store.getState().swap
+  return computeTradePriceBreakdown(trade)
+}
+
+const getSwapInfo = (amountIn, isOut=true, updateCall = false) => async(dispatch) => {
   try{
-    // let res = {error: true};
-    // const { tokenIn, tokenOut } = store.getState().swap;
-    if (+amountIn > 0) {
-      // if(isOut){
-      //   res = await getOutAmountRoute(tokenIn.code,tokenOut.code,amountIn)
-      // }else{
-      //   res = await getInAmountRoute(tokenIn.code,tokenOut.code,amountIn)
-      // }
-    }
+    const { tokenIn, tokenOut } = store.getState().swap;
+    const inputCurrency = getCurrency(tokenIn.address || tokenIn.symbol)
+  //  console.log(inputCurrency,'--inputCurrency')
+    const outputCurrency = getCurrency(tokenOut.address || tokenOut.symbol)
+ //   console.log(outputCurrency,'--outputCurrency')
+    let parsedAmount = getParsedAmount(amountIn, isOut ? inputCurrency : outputCurrency)
+    dispatch(setParsedAmount(parsedAmount))
+    const bestTradeExact = dispatch(getBestTrade(parsedAmount, isOut ? outputCurrency : inputCurrency, isOut, updateCall))
+    console.log(bestTradeExact,'--bestTradeExact')
+    dispatch(setTrade(bestTradeExact))
+    dispatch(setMinReceive(getMinReceived(bestTradeExact)))
+    console.log(getMinReceived(bestTradeExact),'--getMinReceived(bestTradeExact))')
   }catch(e){
+    console.log(e)
     dispatch(errorActions.checkErrors(e))
   }
   
@@ -121,5 +159,7 @@ export const swapActions = {
     updateSwapInfo,
     setSelectedToken,
     getSwapInfo,
-    getSwapTransaction
+    getSwapTransaction,
+    setParsedAmount,
+    getTradeFeePrice
 };

@@ -16,18 +16,18 @@ const SelectTokenPanel = () => {
     const navigate = useNavigate()
     const activeToken = selectedToken === 'INPUT' ? tokenIn : tokenOut
     const secondToken = selectedToken !== 'INPUT' ? tokenIn : tokenOut
-    const [tokenList, setTokentList] = useState(sortList(tokens?.filter(elem => elem.code !== secondToken.code)))
+    const [tokenList, setTokentList] = useState(sortList(tokens?.filter(elem => elem.symbol !== secondToken.symbol)))
     const back = () => navigate(previousPanel + '?' + window.location.search.slice(1))
     const searchWallet = (wallet) => {
         let arr = tokens.filter(
           (item) =>
-            (item.code.substr(0, wallet.length).toLowerCase() ===
+            (item.symbol.substr(0, wallet.length).toLowerCase() ===
               wallet.toLowerCase() ||
             item.name.substr(0, wallet.length).toLowerCase() ===
-              wallet.toLowerCase()) && item.code !== secondToken.code
+              wallet.toLowerCase()) && item.symbol !== secondToken.symbol
         );
         setTokentList(sortList(arr));
-        if (wallet.length < 1) setTokentList(sortList(tokens?.filter(elem => elem.code !== secondToken.code)));
+        if (wallet.length < 1) setTokentList(sortList(tokens?.filter(elem => elem.symbol !== secondToken.symbol)));
       };
      
     const setToken = (token) => {
@@ -41,7 +41,7 @@ const SelectTokenPanel = () => {
             <Content>
                 <Search style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
                 {tokenList?.map((elem,i) =>(
-                  <AddressBlock logoURI={elem?.logoURI} onClick={() => setToken(elem)} active={activeToken?.code === elem?.code} style={{marginBottom: '10px'}} data={elem} key={i}/>  
+                  <AddressBlock logoURI={elem?.logoURI} onClick={() => setToken(elem)} active={activeToken?.symbol === elem?.symbol} style={{marginBottom: '10px'}} data={{...elem, code: elem.symbol}} key={i}/>  
                 ))}
             </Content>
             <Tabbar config={config}/>

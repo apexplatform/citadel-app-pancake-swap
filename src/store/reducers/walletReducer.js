@@ -1,7 +1,7 @@
 import { types } from '../actions/types'
 import tokenList from '../../networking/constants/tokenLists/pancake-default.tokenlist.json'
 import { Currency } from '@pancakeswap/sdk'
-const tokens = [{...Currency.ETHER, code: 'BNB', name: "Binance Smart Chain", network: 'bsc', logoURI: "https://bscscan.com/token/images/binance_32.png"}, ...tokenList['tokens']]
+const tokens = [{...Currency.ETHER, symbol: 'BNB', name: "Binance Smart Chain", network: 'bsc', logoURI: "https://bscscan.com/token/images/binance_32.png"}, ...tokenList['tokens']]
 
 const initialState = {
     wallets: null,

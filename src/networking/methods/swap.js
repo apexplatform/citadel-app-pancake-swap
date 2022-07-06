@@ -5,7 +5,7 @@ import { store } from '../../store/store';
 import { isValidMethodArgs, toCallState, PairState } from './multical.ts'
 import flatMap from 'lodash/flatMap'
 import { Interface } from '@ethersproject/abi'
-import IUniswapV2Pair from '../constants/abi/IUniswapV2Pair.json'
+import IPancakePairABI from '../constants/abi/IPancakePairABI.json'
 import {
 	BASES_TO_CHECK_TRADES_AGAINST,
 	CUSTOM_BASES,
@@ -51,14 +51,12 @@ export const getCallsData = (calls, options) => dispatch =>{
 	if (!chainId || callKeys.length === 0) return undefined
 	const call = callKeys.map((key) => parseCallKey(key))
 	dispatch({type: types.ADD_MULTICAL_LISTENERS, payload: {chainId,call,options}})
-	//
 	const CALL_CHUNK_SIZE = 500
 	const outdatedCallKeys = call.map(item => {
 		return item.address + '-' + item.callData
 	})
-	const { currentBlock } = getBlock()
-	// const multicallContract = getMulticallContract()
-    const multicallContract = new eth.Contract('eth', '0xfF6FD90A470Aaa0c1B8A54681746b07AcdFedc9B', MulticalABI);
+	const { currentBlock } = store.getState().blocks
+    const multicallContract = new eth.Contract('bsc', '0xfF6FD90A470Aaa0c1B8A54681746b07AcdFedc9B', MulticalABI);
 	const chunkedCalls = chunkArray(call, CALL_CHUNK_SIZE)
 	chunkedCalls.forEach((chunk, index) => {
         const { promise } = retry(() => fetchChunk(multicallContract, chunk, currentBlock), {
@@ -71,7 +69,6 @@ export const getCallsData = (calls, options) => dispatch =>{
           //  cancellations.current = { cancellations: [], blockNumber: currentBlock }
             const firstCallKeyIndex = chunkedCalls.slice(0, index).reduce((memo, curr) => memo + curr.length, 0)
             const lastCallKeyIndex = firstCallKeyIndex + returnData.length
-        
             dispatch({type: types.UPDATE_MULTICAL_RESULTS, payload: {
                 chainId,
                 results: outdatedCallKeys.slice(firstCallKeyIndex, lastCallKeyIndex)
@@ -85,7 +82,7 @@ export const getCallsData = (calls, options) => dispatch =>{
           })
           .catch((error) => {
             if (error instanceof CancelledError) {
-          //    console.debug('Cancelled fetch for blockNumber', currentBlock)
+              console.log('Cancelled fetch for blockNumber', currentBlock)
               return
             }
           //  console.error('Failed to fetch multicall chunk', chunk, chainId, error)
@@ -97,8 +94,8 @@ export const getCallsData = (calls, options) => dispatch =>{
             )
           })
 		})
-	//
-	const callResults = store.getState().multicalReducer.callResults
+
+	const callResults = store.getState().multical.callResults
 	dispatch({type: types.REMOVE_MULTICAL_LISTENERS,payload: {chainId,calls,options}})
 	return calls?.map((call) => {
 		  if (!chainId || !call) return types.INVALID_RESULT
@@ -112,7 +109,7 @@ export const getCallsData = (calls, options) => dispatch =>{
 		})
   }
 
-export function tryParseAmount(value, currency) {
+export function getParsedAmount(value, currency) {
 	if (!value || !currency) {
 	  return undefined
 	}
@@ -125,14 +122,12 @@ export function tryParseAmount(value, currency) {
 	  }
 	} catch (error) {
 	  // should fail if the getr specifies too many decimal places of precision (or maybe exceed max uint?)
-	//  console.debug(`Failed to parse input amount: "${value}"`, error)
+		console.log(`Failed to parse input amount: "${value}"`, error)
 	}
 	// necessary for all paths to return a value
 	return undefined
   }
-  export const getBlock = () => {
-	return store.getState().blockReducer
-  }
+
 
   export const getMultipleContractSingleData = (addresses, contractInterface,methodName,callInputs,options) => dispatch => {
 	const fragment = contractInterface.getFunction(methodName)
@@ -151,7 +146,7 @@ export function tryParseAmount(value, currency) {
 		  : []
 	dispatch({type:types.SET_CALLS,payload: {chainId: 56,calls}})
 	const results = dispatch(getCallsData(calls, options))
-	const { currentBlock } = getBlock()
+	const { currentBlock } = store.getState().blocks
 	return results.map((result) => toCallState(result, contractInterface, fragment, currentBlock))
   }
   
@@ -164,7 +159,7 @@ export function tryParseAmount(value, currency) {
 	const pairAddresses = tokens.map(([tokenA, tokenB]) => {
 		  return tokenA && tokenB && !tokenA.equals(tokenB) ? Pair.getAddress(tokenA, tokenB) : undefined
 		})
-	const PAIR_INTERFACE = new Interface(IUniswapV2Pair)
+	const PAIR_INTERFACE = new Interface(IPancakePairABI)
 	const results = dispatch(getMultipleContractSingleData(pairAddresses, PAIR_INTERFACE, 'getReserves'))
 	return results.map((result, i) => {
 		const { result: reserves, loading } = result
@@ -258,7 +253,7 @@ export function tryParseAmount(value, currency) {
 	return tradeA.executionPrice.raw.multiply(minimumDelta.add(ONE_HUNDRED_PERCENT)).lessThan(tradeB.executionPrice)
   }
 
-  export const getTradeExact = (currencyAmountIn, currencyOut,isExactIn,updateCall) => dispatch =>{
+  export const getBestTrade = (currencyAmountIn, currencyOut,isExactIn,updateCall) => dispatch =>{
 	let allowedPairs = []
 	if(!updateCall){
 		allowedPairs = dispatch(getAllCommonPairs(currencyAmountIn?.currency, currencyOut))
@@ -269,6 +264,7 @@ export function tryParseAmount(value, currency) {
 	} else {
 		allowedPairs = store.getState().swapReducer.allowedPairs
 	}
+	console.log(allowedPairs,'--allowedPairs')
 	const singleHopOnly = false
 	const MAX_HOPS = 3
 	if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
