@@ -1,6 +1,6 @@
 {
     "TABBAR": {
-        "BACKGROUND_COLOR": "#00BFDB",
+        "BACKGROUND_COLOR": "#7C63F5",
         "DEFAULT_ITEM_COLOR": "#004149",
         "ACTIVE_ITEM_COLOR": "#fff",
         "HOVER_ITEM_COLOR": "rgba(0, 65, 73, 0.7)",
@@ -15,7 +15,7 @@
         "TITLE": "App header",
         "BACK_TITLE": "Back",
         "BACKGROUND_COLOR": "#FFF",
-        "TOP_BACKGROUND_COLOR": "#00BFDB"
+        "TOP_BACKGROUND_COLOR": "#7C63F5"
     },
     "DEFAULT_ADDRESS_BLOCK": true
 }
