@@ -4,7 +4,7 @@ import { types } from '../../store/actions/types';
 
 const { auth_token } = store.getState().user;
 const socket = io(
-	'https://api-websockets-apps.apps.citadel.okd.3ahtim54r.ru/apps',
+	process.env.REACT_APP_SOCKET_URL,
 	{
 		transports: ['websocket'],
 		upgrade: false,

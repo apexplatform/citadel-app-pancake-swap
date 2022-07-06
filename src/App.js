@@ -15,7 +15,7 @@ function App() {
   },[])
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename={window.location.pathname}>
         <Routes>
             <Route path="/*" element={<MainView />} />
         </Routes>

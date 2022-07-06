@@ -2,6 +2,7 @@
   "name": "ca-swap",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@citadeldao/apps-sdk": "^0.0.18",
     "@citadeldao/apps-ui-kit": "^0.142.0",
