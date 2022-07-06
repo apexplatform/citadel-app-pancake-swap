@@ -1,4 +1,6 @@
-
+:root {
+  --appThemeColor: white; 
+}
 html, body {
   height: 100%;
   margin: 0px;
@@ -17,10 +19,5 @@ html, body {
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #00BFDB; 
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #0091A6; 
+  background: var(--appThemeColor); 
 }
