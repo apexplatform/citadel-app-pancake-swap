@@ -10,7 +10,7 @@ import { utils } from '@citadeldao/apps-sdk';
 
 const getWalletConstructor = (address) => {
     try {
-        const activeWallet = store.getState().wallet
+        const { activeWallet } = store.getState().wallet
         const currentWallet = address || activeWallet
         const WalletConstructor = models[currentWallet.network.toUpperCase()];
         if(WalletConstructor){
