@@ -32,7 +32,7 @@ const TransactionsPanel = () => {
                 ))}
                 { (loader && transactions?.length === 0) &&
                     <div className="no-transactions-block">
-                    <img src="/img/icons/noTransactions.svg" alt="empty" />
+                    <img src="img/icons/noTransactions.svg" alt="empty" />
                     <h3>{text.NO_TRANSACTIONS}</h3>
                     <p>{text.NO_TRANSACTIONS_DESCRIPTION}</p>
                     </div>

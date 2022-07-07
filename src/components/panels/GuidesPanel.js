@@ -14,29 +14,29 @@ const GuidesPanel = () => {
             <GuidesCard text={text.GUIDES_HEADER_2}>
                 <div className='row guide-content-1'>
                     <p>{text.GUIDES_DESCRIPTION_2}</p>
-                    <img src='/img/guides/guide1.svg' alt='quide1' />
+                    <img src='img/guides/guide1.svg' alt='quide1' />
                 </div>
             </GuidesCard>
             <GuidesCard text={text.GUIDES_HEADER_3}>
                 <div className='row guide-content-2'>
                     <p>{text.GUIDES_DESCRIPTION_3}</p>
-                    <img src='/img/guides/guide2.svg' alt='quide1' />
+                    <img src='img/guides/guide2.svg' alt='quide1' />
                 </div>
                 <div className='row guide-content-2'>
                     <p>{text.GUIDES_DESCRIPTION_3_2}</p>
-                    <img src='/img/guides/guide3.svg' alt='quide1' />
+                    <img src='img/guides/guide3.svg' alt='quide1' />
                 </div>
             </GuidesCard>
             <GuidesCard text={text.GUIDES_HEADER_4}>
                 <div className='row guide-content-3'>
                     <p>{text.GUIDES_DESCRIPTION_4}</p>
-                    <img src='/img/guides/guide4.svg' alt='quide1' />
+                    <img src='img/guides/guide4.svg' alt='quide1' />
                 </div>
             </GuidesCard>
             <GuidesCard text={text.GUIDES_HEADER_5}>
                 <div className='row guide-content-4'>
                     <p>{text.GUIDES_DESCRIPTION_5}</p>
-                    <img src='/img/guides/guide5.svg' alt='quide1' />
+                    <img src='img/guides/guide5.svg' alt='quide1' />
                 </div>
             </GuidesCard>
         </div>

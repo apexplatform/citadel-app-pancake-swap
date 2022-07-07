@@ -9,14 +9,14 @@ const initialState = {
   rate: 0,
   initialRate: 1,
   slippage: 0,
-  rateAmount: 0,
-  slippageTolerance: 5,
+  slippageTolerance: 1,
   trade: null,
   swapStatus: "enterAmount",
   independentField: "INPUT",
-  outAmout: 0,
+  amountOut: 0,
   parsedAmount: 0,
   swapFee: 0,
+  isExactIn: true,
   fromUSD: 0,
   toUSD: 0,
   disableSwap: false,
@@ -24,6 +24,7 @@ const initialState = {
   amount: 0,
   minReceived: null,
   selectedToken: 'INPUT',
+  deadlineMin: 20,
   routes: [
     {
         code: 'cosmos',
@@ -42,6 +43,11 @@ export default function SwapReducer (state = initialState, action) {
         ...state,
         swapInfo: action.payload,
       };
+    case types.SET_EXACT_IN:
+      return {
+        ...state,
+        isExactIn: action.payload,
+      };
     case types.SET_PARSED_AMOUNT:
       return {
           ...state,
@@ -54,13 +60,13 @@ export default function SwapReducer (state = initialState, action) {
       };
     case types.SET_MIN_RECEIVED:
       return {
-          ...state,
-          minReceived: action.payload
+        ...state,
+        minReceived: action.payload
       }
     case types.SET_AMOUNT:
       return {
-          ...state,
-          amount: action.payload,
+        ...state,
+        amount: action.payload,
       };
     case types.SET_SELECTED_TOKEN:
       return {
@@ -90,7 +96,7 @@ export default function SwapReducer (state = initialState, action) {
     case types.SET_OUT_AMOUNT:
       return {
         ...state,
-        outAmout: action.payload,
+        amountOut: action.payload,
       };
     case types.SET_SWAP_STATUS:
       return {
@@ -101,11 +107,6 @@ export default function SwapReducer (state = initialState, action) {
       return {
         ...state,
         independentField: action.payload,
-      };
-    case types.SET_RATE_AMOUT:
-      return {
-        ...state,
-        rateAmount: action.payload,
       };
     case types.SET_SLIPPAGE_TOLERANCE:
       return {

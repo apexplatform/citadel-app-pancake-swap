@@ -253,18 +253,8 @@ export function getParsedAmount(value, currency) {
 	return tradeA.executionPrice.raw.multiply(minimumDelta.add(ONE_HUNDRED_PERCENT)).lessThan(tradeB.executionPrice)
   }
 
-  export const getBestTrade = (currencyAmountIn, currencyOut,isExactIn,updateCall) => dispatch =>{
-	let allowedPairs = []
-	if(!updateCall){
-		allowedPairs = dispatch(getAllCommonPairs(currencyAmountIn?.currency, currencyOut))
-		dispatch({
-			type: types.SET_ALLOWED_PAIRS,
-			payload: allowedPairs
-		})
-	} else {
-		allowedPairs = store.getState().swapReducer.allowedPairs
-	}
-	console.log(allowedPairs,'--allowedPairs')
+  export const getBestTrade = (currencyAmountIn, currencyOut,isExactIn) => dispatch =>{
+	let allowedPairs = dispatch(getAllCommonPairs(currencyAmountIn?.currency, currencyOut))
 	const singleHopOnly = false
 	const MAX_HOPS = 3
 	if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {

@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js'
 
 const getWalletConstructor = (address) => {
     try {
-        const activeWallet = store.getState().wallet
+        const { activeWallet } = store.getState().wallet
         const currentWallet = address || activeWallet
         const WalletConstructor = models[currentWallet.network.toUpperCase()];
         if(WalletConstructor){
@@ -161,6 +161,11 @@ const loadTokenBalances = (address) => {
                 token.balance = formatBalance(balance?._hex,+token.decimals)
             }
             if(token.symbol === tokenIn.symbol){	
+                let allowance = await wallet.loadTokenAllowance(token)
+                store.dispatch({
+                    type: types.SET_ALLOWANCE,
+                    payload: allowance,
+                });
                 store.dispatch({
                     type: types.SET_TOKEN_IN,
                     payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}

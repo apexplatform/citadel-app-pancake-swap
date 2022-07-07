@@ -1,22 +1,23 @@
 import React, {useState,useEffect} from 'react';
-import { Content, CustomIcon, Tabbar, EditAmount, BigButtons, SelectToken, InfoCardBlock, InfoCardItem} from '@citadeldao/apps-ui-kit/dist/main';
+import { Content, CustomIcon, Tabbar, EditAmount, SelectToken, InfoCardBlock, InfoCardItem} from '@citadeldao/apps-ui-kit/dist/main';
 import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { errorActions, panelActions, swapActions } from '../../store/actions';
+import { panelActions, swapActions } from '../../store/actions';
 import { useNavigate } from 'react-router-dom';
-import { ONE_BIPS } from '../../networking/constants/constants'
+import { ONE_BIPS } from '../../networking/constants/constants';
 import '../styles/panels/swap.css';
+import SwapButton from '../uikit/SwapButton';
 import ROUTES from '../../routes';
 import BigNumber from "bignumber.js";
 const SwapPanel = () => {
     const config = new Config()
     const navigate = useNavigate()
     const { wallets } = useSelector((state) => state.wallet)
-    const [slippage, setSlippage] = useState(0)
     const [balanceView, setBalanceView] = useState('View Balance')
     const [isExactIn, setExactIn] = useState(true);
-    const { independentField, minReceived, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
+    const { independentField, minReceived, slippageTolerance, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
+    const [slippage, setSlippage] = useState(slippageTolerance)
     const { tokens } = useSelector(state => state.wallet)
     const formattedPrice = trade?.executionPrice?.toSignificant(6)
     const { priceImpactWithoutFee, realizedLPFee } = swapActions.getTradeFeePrice()
@@ -44,13 +45,12 @@ const SwapPanel = () => {
     }else if(trade?.route?.path){
         routes = trade?.route?.path.map(item => {
             return {
-                logoURI: item.tokenInfo.logoURI,
+                logoURI: item.tokenInfo?.logoURI,
                 name: item.symbol
             }
         })
         isBNB = false
     }
-    console.log(routes,'----routes')
     let formattedAmounts = {}
 	if(isBNB){
 		formattedAmounts = {
@@ -64,11 +64,13 @@ const SwapPanel = () => {
 		}
 	}
     const reverseTokens = () => {
+        dispatch(swapActions.setIndependentField(dependentField));
+        setExactIn(!isExactIn)
         dispatch(swapActions.setTokenIn(tokenOut));
-        dispatch(swapActions.setAmount(formattedAmounts[dependentField]));
         dispatch(swapActions.setTokenOut(tokenIn));
-        dispatch(swapActions.updateSwapInfo(formattedAmounts[dependentField], isExactIn));
+        dispatch(swapActions.setAmount(formattedAmounts[independentField],!isExactIn));
     };
+    console.log(formattedAmounts,'--formattedAmounts')
 
     const setSelectedOption = (name) => {
         dispatch(swapActions.setSelectedToken(name))
@@ -77,35 +79,43 @@ const SwapPanel = () => {
 
     const setMaxValue = (val) => {
         setExactIn(val === "INPUT" ? true : false);
-        formattedAmounts[val] = 100 // max balance
-        dispatch(swapActions.setAmount(formattedAmounts[val]));
-        dispatch(swapActions.updateSwapInfo(formattedAmounts[val],isExactIn));
+        dispatch(swapActions.setIndependentField(val));
+        formattedAmounts[val] = val === "INPUT" ? tokenIn.balance : tokenOut.balance
+        dispatch(swapActions.setAmount(formattedAmounts[val],val === "INPUT" ? true : false));
     }
+
+    useEffect(() => {
+        dispatch(swapActions.getSwapInfo(amount,isExactIn));
+        dispatch(swapActions.setAmountOut(formattedAmounts['OUTPUT']))
+        // eslint-disable-next-line 
+    },[amount,tokenIn,tokenOut])
 
     const checkAmount = (val,name) => {
         // eslint-disable-next-line 
         val = val.replace(/[^0-9\.]/g, "");
-        let amount = val
         if(val.split(".").length - 1 !== 1 && val[val.length-1] === '.') return
         if (
           val.length === 2 &&
           val[1] !== "." &&
           val[1] === "0"
         ) {
-            dispatch(swapActions.setAmount(val));
-            amount = val
+            dispatch(swapActions.setAmount(val,name === "INPUT" ? true : false));
         } else if (val[0] === "0" && val[1] !== ".") {
-            amount = BigNumber(val).toFixed()
-            dispatch(swapActions.setAmount(BigNumber(val).toFixed()));
+            dispatch(swapActions.setAmount(BigNumber(val).toFixed(),name === "INPUT" ? true : false));
         } else {
-            dispatch(swapActions.setAmount(val));
+            dispatch(swapActions.setAmount(val,name === "INPUT" ? true : false));
         }
         dispatch(swapActions.setIndependentField(name));
         setExactIn(name === "INPUT" ? true : false);
-        dispatch(swapActions.getSwapInfo(amount, isExactIn));
       };
+
+    const setSlippageTolerance = (val) => {
+        setSlippage(val)
+        dispatch(swapActions.setSlippageTolerance(val))
+    }
+
     return (
-        <div className='panel'>
+        <div className='panel swap-panel'>
             <Content>
                 <div className='swap-inputs'>
                     <SelectToken 
@@ -141,16 +151,14 @@ const SwapPanel = () => {
                         />
                 </div>
             <InfoCardBlock>
-                <InfoCardItem text={'Price'} amount={formattedPrice || '-'} symbol={tokenIn.symbol} symbol2={tokenOut.symbol}/>
-                <InfoCardItem text={'Price impact'} amount={priceImpactWithoutFee ? (priceImpactWithoutFee.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpactWithoutFee.toFixed(2)}`) : '-'} symbol={'%'}/>
-                <InfoCardItem text={'Minimum received'} amount={minReceived !== 0 ? minReceived?.toSignificant(4) : minReceived} symbol={tokenOut.symbol}/>
-                <InfoCardItem text={'Liquidity Provider Fee'} amount={realizedLPFee?.toSignificant(4) || 0} symbol={priceImpactWithoutFee ? '%' : ''}/>
+                <InfoCardItem text={'Price'} symbol={tokenIn.symbol} symbol2={tokenOut.symbol}><span className='purple-text'>{formattedPrice || '-'}</span></InfoCardItem>
+                <InfoCardItem text={'Price impact'} symbol={'%'}><span className='green-text'>{priceImpactWithoutFee ? (priceImpactWithoutFee.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpactWithoutFee.toFixed(2)}`) : '-'}</span></InfoCardItem>
+                <InfoCardItem text={'Minimum received'} symbol={tokenOut.symbol}><span className='purple-text'>{minReceived !== 0 ? minReceived?.toSignificant(4) : minReceived}</span></InfoCardItem>
+                <InfoCardItem text={'Liquidity Provider Fee'} symbol={tokenIn.symbol}><span className='pink-text'>{realizedLPFee?.toSignificant(4) || 0}</span></InfoCardItem>
                 <InfoCardItem text={'Route'} routes={routes}/>
             </InfoCardBlock>
-            <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippage} />
-            <div className='center'>
-                <BigButtons text='SWAP' onClick={() => dispatch(errorActions.setConfirmModal(true))} style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>
-            </div>
+            <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippageTolerance} />
+            <SwapButton isBNB={isBNB}/>
             </Content>
             <Tabbar config={config}/>
         </div>

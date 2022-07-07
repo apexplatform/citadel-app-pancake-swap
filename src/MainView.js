@@ -10,17 +10,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { errorActions } from './store/actions'
 import text from './text.json'
 import { useNavigate } from 'react-router-dom';
-import { StatusPopup, PopupWindow, CustomIcon, InfoCardItem, SwapBalanceCard, BigButtons, InfoCardBlock, PriceUpdatedCard, TipCard, NotificationCard, Panel, Modal, View, AddressSectionCard}  from '@citadeldao/apps-ui-kit/dist/main';
+import { StatusPopup, PopupWindow, TipCard, NotificationCard, Panel, Modal, View, AddressSectionCard}  from '@citadeldao/apps-ui-kit/dist/main';
 import InfoPanel from './components/panels/InfoPanel'
 import { Config } from './components/config/config';
 import SelectAddressPanel from './components/panels/SelectAddressPanel';
 import SelectTokenPanel from './components/panels/SelectTokenPanel';
+import ConfirmModal from './components/uikit/ConfirmModal'
 const MainView = () => {
     const location = useLocation();
     const dispatch = useDispatch()
-    const { rate, routes, tokenIn, tokenOut, amount, outAmout } = useSelector(state => state.swap)
     const showModal = useSelector(state => state.errors.openErrorModal)
-    const showConfirmModal = useSelector(state => state.errors.openConfirmModal)
     const {validationErrors, errors} = useSelector(state => state.errors)
     const {activeWallet} = useSelector(state => state.wallet)
     const [showSuccess, setShowSuccess] = useState(errors)
@@ -33,7 +32,6 @@ const MainView = () => {
     }
     const navigate = useNavigate()
     const config = new Config()
-    const [disabledSwap, setDisabledSwap] = useState(true)
     return(
         <View>
             <Panel config={config}>
@@ -56,30 +54,7 @@ const MainView = () => {
                 <TipCard text={text.ADDRESS_ERROR_TIP} />
               </div> }
             </Modal>
-            <Modal show={showConfirmModal && !location.pathname.includes('/info')} showModal={() => dispatch(errorActions.setConfirmModal(false))}>
-              <div className='modal-header row'>
-                <h4>Confirm swap</h4>
-                <CustomIcon icon='close-modal' onClick={() => dispatch(errorActions.setConfirmModal(false))}/>
-              </div>
-              <div>
-                <div className='row'>
-                    <SwapBalanceCard width='45%' amount={amount} bgColor='#B7F6FF' color='#00BFDB' token={tokenIn} />
-                    <CustomIcon icon='arrow-swap' />
-                    <SwapBalanceCard width='45%' amount={outAmout} bgColor='#C6D1FF' color='rgba(58, 94, 229, 1)' token={tokenOut} />
-                </div>
-                <PriceUpdatedCard style={{margin: '16px 0'}} acceptPrice={() => setDisabledSwap(false)} text='Price updated'/>
-                <InfoCardBlock>
-                    <InfoCardItem text={'Price'} amount={rate} symbol={'OSMO'} symbol2={'ATOM'}/>
-                    <InfoCardItem text={'Price impact'} amount={10} symbol={'%'}/>
-                    <InfoCardItem text={'Minimum received'} amount={1} symbol={'OSMO'}/>
-                    <InfoCardItem text={'Liquidity Provider Fee'} amount={5} symbol={'%'}/>
-                    <InfoCardItem text={'Route'} routes={routes}/>
-                </InfoCardBlock>
-                <div className='center'>
-                    <BigButtons text='SWAP' disabled={disabledSwap} style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>
-                </div>
-              </div> 
-            </Modal>
+            <ConfirmModal />
         </View>
     )
 }
