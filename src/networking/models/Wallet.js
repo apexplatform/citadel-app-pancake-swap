@@ -1,7 +1,6 @@
 import { getRequest } from '../requests/getRequest';
-import { ImplementationError, NetworkError } from './Errors'
+import { ImplementationError } from './Errors'
 import { store } from '../../store/store';
-import * as Sentry from "@sentry/react";
 import { utils } from '@citadeldao/apps-sdk';
 
 const walletRequest = getRequest('wallet')
@@ -23,13 +22,7 @@ export default class Wallet {
       from: this.address,
       transaction: {...params, token: auth_token},
     }));
-    if (data.ok) {
-      return data;
-    } else {
-      if(data.error?.error_type === 'network_error') return new NetworkError(data.error?.message || data?.error);
-      Sentry.captureException(data.error?.message || data?.error);
-      return new Error(data.error?.message || data?.error);  
-    }
+    return data
   } 
   async getTransactions() {
     const {auth_token} = store.getState().user
@@ -40,13 +33,7 @@ export default class Wallet {
     }
     const requestManager = new utils.RequestManager()
     const data = await requestManager.send(transactionsRequest.getTransactions(params));
-    if (data.ok) {
-      return data;
-    } else {
-      if(data.error?.error_type === 'network_error') return new NetworkError(data.error?.message || data?.error);
-      Sentry.captureException(data.error?.message || data?.error);
-      return new Error(data.error?.message || data?.error);  
-    }
+    return data
   } 
   prepareClaimRewards() {
     return new ImplementationError('Method not implemented!')
@@ -60,13 +47,7 @@ export default class Wallet {
         address: this.address,
         token: auth_token
       }));
-      if (data.ok) {
-        return data;
-      } else {
-        if(data.error?.error_type === 'network_error') return new NetworkError(data.error?.message || data?.error);
-        Sentry.captureException(data.error?.message || data?.error);
-        return null;
-      }
+      return data
     }catch{
       return null;
     }
@@ -84,12 +65,6 @@ export default class Wallet {
       },
       token: auth_token,
     }));
-    if (data.ok) {
-      return data;
-    } else {
-      if(data.error?.error_type === 'network_error') return new NetworkError(data.error?.message || data?.error);
-      Sentry.captureException(data.error?.message || data?.error);
-      return new Error(data.error?.message || data?.error);  
-    }
+    return data
   } 
 }

@@ -1,7 +1,7 @@
 import {types} from './types'
 import text from '../../text.json'
 import {ValidationError} from '../../networking/models/Errors'
-
+import * as Sentry from "@sentry/react";
 const errorList = [
     {
         error: "Application doesn`t have permision to build transactions",
@@ -145,8 +145,15 @@ const setCustomErrors = (error) => dispatch => {
     })
 }
 
+const setConfirmModal = (error) => dispatch => {
+    dispatch({
+        type: types.SET_CONFIRM_MODAL,
+        payload: error
+    })
+}
 
 const checkErrors = (error) => dispatch => {
+    console.log(error,'--error')
     if (error instanceof ValidationError) {
         let errorText = {
             text: text.ADDRESS_ERROR_TEXT,
@@ -170,11 +177,13 @@ const checkErrors = (error) => dispatch => {
             }
         }  
         dispatch(setCustomErrors({text: errorText}))
+        Sentry.captureException(error?.message || error);
     } 
 }
 
 export const errorActions = {
     clearErrors,
     checkErrors,
-    setCustomErrors
+    setCustomErrors,
+    setConfirmModal
 };
