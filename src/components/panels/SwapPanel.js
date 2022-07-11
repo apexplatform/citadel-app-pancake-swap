@@ -1,0 +1,171 @@
+import React, {useState,useEffect} from 'react';
+import { Content, CustomIcon, Tabbar, EditAmount, SelectToken, InfoCardBlock, InfoCardItem} from '@citadeldao/apps-ui-kit/dist/main';
+import { Config } from '../config/config';
+import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { panelActions, swapActions } from '../../store/actions';
+import { useNavigate } from 'react-router-dom';
+import { ONE_BIPS } from '../../networking/constants/constants';
+import '../styles/panels/swap.css';
+import SwapButton from '../uikit/SwapButton';
+import ROUTES from '../../routes';
+import BigNumber from "bignumber.js";
+const SwapPanel = () => {
+    const config = new Config()
+    const navigate = useNavigate()
+    const { wallets } = useSelector((state) => state.wallet)
+    const [balanceView, setBalanceView] = useState('View Balance')
+    const [isExactIn, setExactIn] = useState(true);
+    const { independentField, minReceived, amountOut, slippageTolerance, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
+    const [slippage, setSlippage] = useState(slippageTolerance)
+    const { tokens } = useSelector(state => state.wallet)
+    const formattedPrice = trade?.executionPrice?.toSignificant(6)
+    const { priceImpactWithoutFee, realizedLPFee } = swapActions.getTradeFeePrice(trade)
+    const location = useLocation()
+    const dispatch = useDispatch()
+    useEffect(()=>{
+        dispatch(panelActions.setPreviousPanel(location.pathname))
+        // eslint-disable-next-line
+    },[wallets])
+    const dependentField = independentField === "INPUT" ? "OUTPUT" : "INPUT";
+    const parsedAmounts =  {
+        'INPUT': independentField === 'INPUT' ? parsedAmount : trade?.inputAmount,
+        'OUTPUT': independentField === 'OUTPUT' ? parsedAmount : trade?.outputAmount,
+    }
+    let isBNB = false
+    let routes = []
+    if(tokenIn.symbol === 'BNB' && tokenOut.symbol === 'WBNB'){
+        routes.push({logoURI: tokenIn.logoURI, name: tokenIn.symbol})
+        routes.push({logoURI: tokenOut.logoURI, name: tokenOut.symbol})
+        isBNB = true
+    }else if(tokenIn.symbol === 'WBNB' && tokenOut.symbol === 'BNB'){
+        routes.push({logoURI: tokenIn.logoURI, name: tokenIn.symbol})
+        routes.push({logoURI: tokenOut.logoURI, name: tokenOut.symbol})
+        isBNB = true
+    }else if(trade?.route?.path){
+        routes = trade?.route?.path.map(item => {
+            return {
+                logoURI: item.tokenInfo?.logoURI,
+                name: item.symbol
+            }
+        })
+        isBNB = false
+    }
+    let formattedAmounts = {}
+	if(isBNB){
+		formattedAmounts = {
+			[independentField]: amount,
+			[dependentField]: amount,
+		}
+	}else{
+		formattedAmounts = {
+			[independentField]: amount,
+			[dependentField]: +amount !== 0 ? parsedAmounts[dependentField]?.toSignificant(6) || 0 : '0',
+		}
+	}
+    const reverseTokens = () => {
+        dispatch(swapActions.setIndependentField(dependentField));
+        setExactIn(!isExactIn)
+        dispatch(swapActions.setTokenIn(tokenOut));
+        dispatch(swapActions.setTokenOut(tokenIn));
+        dispatch(swapActions.setAmount(formattedAmounts[independentField],!isExactIn));
+    };
+    const setSelectedOption = (name) => {
+        dispatch(swapActions.setSelectedToken(name))
+        navigate(ROUTES.SELECT_TOKEN  + '?' + window.location.search.slice(1))
+    }
+
+    const setMaxValue = (val) => {
+        setExactIn(val === "INPUT" ? true : false);
+        dispatch(swapActions.setIndependentField(val));
+        formattedAmounts[val] = val === "INPUT" ? tokenIn.balance : tokenOut.balance
+        if(isBNB && formattedAmounts[val] > 0.001){
+            formattedAmounts[val] = formattedAmounts[val] - 0.001
+        }
+        if(formattedAmounts[val] === 0){
+            dispatch(swapActions.setSwapStatus('insufficientBalance'))
+        }
+        dispatch(swapActions.setAmount(formattedAmounts[val],val === "INPUT" ? true : false));
+    }
+
+    useEffect(() => {
+        dispatch(swapActions.getSwapInfo(amount,isExactIn));
+        // eslint-disable-next-line 
+    },[amount,tokenIn,tokenOut])
+
+    const checkAmount = (val,name) => {
+        // eslint-disable-next-line 
+        val = val.replace(/[^0-9\.]/g, "");
+        if(val.split(".").length - 1 !== 1 && val[val.length-1] === '.') return
+        if (
+          val.length === 2 &&
+          val[1] !== "." &&
+          val[1] === "0"
+        ) {
+            dispatch(swapActions.setAmount(val,name === "INPUT" ? true : false));
+        } else if (val[0] === "0" && val[1] !== ".") {
+            dispatch(swapActions.setAmount(BigNumber(val).toFixed(),name === "INPUT" ? true : false));
+        } else {
+            dispatch(swapActions.setAmount(val,name === "INPUT" ? true : false));
+        }
+        dispatch(swapActions.setIndependentField(name));
+        setExactIn(name === "INPUT" ? true : false);
+      };
+
+    const setSlippageTolerance = (val) => {
+        setSlippage(val)
+        dispatch(swapActions.setSlippageTolerance(val))
+    }
+
+    return (
+        <div className='panel swap-panel'>
+            <Content>
+                <div className='swap-inputs'>
+                    <SelectToken 
+                        max={true} 
+                        balance={true} 
+                        token={true} 
+                        data={tokens} 
+                        action={true}
+                        name='INPUT'
+                        title="From token"
+                        onMaxClick={() => setMaxValue('INPUT')}
+                        checkAmount={checkAmount}
+                        value={formattedAmounts["INPUT"]} 
+                        selectedOption={{...tokenIn, code: tokenIn.symbol }} 
+                        balanceView={balanceView} setBalanceView={setBalanceView} 
+                        onClick={() => setSelectedOption('INPUT')}
+                        />
+                    <CustomIcon onClick={reverseTokens} icon='swap-icon' id='swap-center-btn' />
+                    <SelectToken 
+                            max={true} 
+                            balance={true} 
+                            token={true} 
+                            data={tokens} 
+                            action={true}
+                            name='OUTPUT'
+                            title="To token"
+                            onMaxClick={() => setMaxValue('OUTPUT')}
+                            checkAmount={checkAmount}
+                            value={formattedAmounts["OUTPUT"]}
+                            selectedOption={{...tokenOut, code: tokenOut.symbol }} 
+                            balanceView={balanceView} setBalanceView={setBalanceView} 
+                            onClick={() => setSelectedOption('OUTPUT')}
+                        />
+                </div>
+            <InfoCardBlock>
+                <InfoCardItem text={'Price'} symbol={tokenIn.symbol} symbol2={tokenOut.symbol}><span className='purple-text'>{formattedPrice || '-'}</span></InfoCardItem>
+                <InfoCardItem text={'Price impact'} symbol={'%'}><span className='green-text'>{priceImpactWithoutFee ? (priceImpactWithoutFee.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpactWithoutFee.toFixed(2)}`) : '-'}</span></InfoCardItem>
+                <InfoCardItem text={'Minimum received'} symbol={tokenOut.symbol}><span className='purple-text'>{minReceived !== 0 ? minReceived?.toSignificant(4) : minReceived}</span></InfoCardItem>
+                <InfoCardItem text={'Liquidity Provider Fee'} symbol={tokenIn.symbol}><span className='pink-text'>{realizedLPFee?.toSignificant(4) || 0}</span></InfoCardItem>
+                <InfoCardItem text={'Route'} routes={routes}/>
+            </InfoCardBlock>
+            <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippageTolerance} />
+            <SwapButton isBNB={isBNB}/>
+            </Content>
+            <Tabbar config={config}/>
+        </div>
+    )
+}
+
+export default SwapPanel
