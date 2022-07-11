@@ -139,7 +139,6 @@ const getSwapInfo = (amountIn, isExactIn=true, isSwap=false) => async(dispatch) 
         })
         if(isExactIn){
           let minAmount = +trade?.outputAmount?.toSignificant(6) * ((100 - +slippageTolerance) / 100)
-          console.log(minAmount, +bestTradeExact?.outputAmount?.toSignificant(6),'-----00')
           if( minAmount > +bestTradeExact?.outputAmount?.toSignificant(6)){
             dispatch(errorActions.setConfirmModal(true))
           }else{
@@ -148,7 +147,6 @@ const getSwapInfo = (amountIn, isExactIn=true, isSwap=false) => async(dispatch) 
           }
         }else{
           let minAmount = +trade?.inputAmount?.toSignificant(6) * ((100 + +slippageTolerance) / 100)
-          console.log(minAmount, +bestTradeExact?.inputAmount?.toSignificant(6),'-----11')
           if(minAmount < +bestTradeExact?.inputAmount?.toSignificant(6)){
             dispatch(errorActions.setConfirmModal(true))
           }else{
@@ -202,7 +200,6 @@ const checkSwapStatus = (amount) => dispatch => {
 
 const getApproveTransaction  = () => dispatch => {
   const wallet = walletActions.getWalletConstructor()
-  console.log(wallet,'--wallet')
   if(wallet){
       const { tokenIn } = store.getState().swap;
       const contractData = {
@@ -262,20 +259,21 @@ const getSwapTransaction  = () => async(dispatch) => {
 }
 
 export const swapActions = {
-    setSwapDisable,
-    setSwapStatus,
-    setSlippageTolerance,
-    setIndependentField,
-    setAmount,
-    setTokenIn,
-    setTokenOut,
-    setAmountOut,
-    setSelectedToken,
-    getSwapInfo,
-    setParsedAmount,
-    getTradeFeePrice,
-    getApproveTransaction,
-    getSwapTransaction,
-    checkTradeUpdate,
-    setAmountIn
+  setSwapDisable,
+  setSwapStatus,
+  setSlippageTolerance,
+  setIndependentField,
+  setAmount,
+  setTokenIn,
+  setTokenOut,
+  setAmountOut,
+  setSelectedToken,
+  getSwapInfo,
+  setParsedAmount,
+  getTradeFeePrice,
+  getApproveTransaction,
+  getSwapTransaction,
+  checkTradeUpdate,
+  setAmountIn,
+  setTrade
 };

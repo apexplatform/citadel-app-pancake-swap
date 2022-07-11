@@ -34,7 +34,6 @@ const SelectTokenPanel = () => {
       dispatch(selectedToken === 'INPUT' ? swapActions.setTokenIn(token) : swapActions.setTokenOut(token));
       back();
     }
-    console.log(tokens.length)
     return (
         <div className='panel'>
             <Header border title="Select token" style={{marginTop: '10px'}} onClick={() => back()} back={true}/>

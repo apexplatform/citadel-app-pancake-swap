@@ -19,6 +19,10 @@ const ConfirmModal = () => {
         dispatch(errorActions.setConfirmModal(false));
       },2000)
     }
+    const acceptTrade = () => {
+      dispatch(swapActions.setTrade(updatedTrade));
+      setDisabledSwap(false)
+    }
 return(
     <Modal show={showConfirmModal && !location.pathname.includes('/info')} showModal={() => dispatch(errorActions.setConfirmModal(false))}>
     <div className='modal-header row'>
@@ -31,7 +35,7 @@ return(
           <CustomIcon icon='arrow-swap' />
           <SwapBalanceCard width='45%' amount={amountOut} bgColor='#C6D1FF' color='rgba(58, 94, 229, 1)' token={{...tokenOut, code: tokenOut.symbol }} />
       </div>
-      { disabledSwap && <PriceUpdatedCard style={{margin: '16px 0'}} acceptPrice={() => setDisabledSwap(false)} text='Price updated'/> }
+      { disabledSwap && <PriceUpdatedCard style={{margin: '16px 0'}} acceptPrice={() => acceptTrade()} text='Price updated'/> }
       <InfoCardBlock>
         <InfoCardItem text={'Price'} symbol={tokenIn.symbol} symbol2={tokenOut.symbol}>
           <span className='purple-text'>

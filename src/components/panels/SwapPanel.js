@@ -70,8 +70,6 @@ const SwapPanel = () => {
         dispatch(swapActions.setTokenOut(tokenIn));
         dispatch(swapActions.setAmount(formattedAmounts[independentField],!isExactIn));
     };
-    console.log(amountOut,'--amountOut')
-
     const setSelectedOption = (name) => {
         dispatch(swapActions.setSelectedToken(name))
         navigate(ROUTES.SELECT_TOKEN  + '?' + window.location.search.slice(1))
