@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
 import { store } from "../../store/store";
 import { types } from '../../store/actions/types';
+import { swapActions, walletActions } from '../../store/actions';
 
 const { auth_token } = store.getState().user;
 const socket = io(
@@ -29,7 +30,7 @@ socket.on('message-from-front',async(data)=>{
 
 socket.on('address-balance-updated-app',async(data)=>{
 	console.log('address-balance-updated-app', data)
-	const { wallets } = store.getState().wallet
+	const { wallets, activeWallet } = store.getState().wallet
 	if(data.address && data.balance && data.net){
 		wallets.forEach(item => {
 			if(item.address === data.address && item.network === data.net){
@@ -39,8 +40,11 @@ socket.on('address-balance-updated-app',async(data)=>{
 		store.dispatch({
 			type: types.SET_WALLETS,
 			payload: wallets,
-		  });
+		});
 	}	
+	const { amountIn } = store.getState().swap
+	store.dispatch(walletActions.loadTokenBalances(activeWallet))
+	store.dispatch(swapActions.checkSwapStatus(amountIn))
 })
 
 

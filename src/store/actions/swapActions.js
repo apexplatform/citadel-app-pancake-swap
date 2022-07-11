@@ -56,8 +56,8 @@ const setTokenIn = (token) => async(dispatch) => {
     const wallet = walletActions.getWalletConstructor(activeWallet);
     let allowance = await wallet.loadTokenAllowance(token)
     store.dispatch({
-        type: types.SET_ALLOWANCE,
-        payload: allowance,
+      type: types.SET_ALLOWANCE,
+      payload: allowance,
     });
   }
 };
@@ -167,7 +167,6 @@ const getSwapInfo = (amountIn, isExactIn=true, isSwap=false) => async(dispatch) 
     console.log(e)
     dispatch(errorActions.checkErrors(e))
   }
-  
 }
 
 
@@ -181,20 +180,20 @@ const checkSwapStatus = (amount) => dispatch => {
       if(+amount > +balance){
           dispatch(setSwapStatus('insufficientBalance'))
       } else if(+amount <= BigNumber(+balance).minus(feeProcent).toNumber() && +activeWallet.balance > 0){
-                  if(BigNumber(allowance).div(BigNumber(Math.pow(10,+tokenIn.decimals))).toNumber() > +amount || tokenIn.symbol === 'BNB'){
-                      if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
-                          dispatch(setSwapStatus('swap'))
-                      }else{
-                          dispatch(setSwapStatus('swapAnyway'))
-                      }
-                  } else {
-                      dispatch(setSwapStatus('approve'))
-                  }
-              } else {
-                  dispatch(setSwapStatus('feeError'))
+          if(BigNumber(allowance).div(BigNumber(Math.pow(10,+tokenIn.decimals))).toNumber() > +amount || tokenIn.symbol === 'BNB'){
+              if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
+                dispatch(setSwapStatus('swap'))
+              }else{
+                dispatch(setSwapStatus('swapAnyway'))
               }
+          } else {
+            dispatch(setSwapStatus('approve'))
+          }
+      } else {
+        dispatch(setSwapStatus('feeError'))
+      }
   } else {
-      dispatch(setSwapStatus('enterAmount'))
+    dispatch(setSwapStatus('enterAmount'))
   }
 }
 
@@ -245,8 +244,8 @@ const getSwapTransaction  = () => async(dispatch) => {
       wallet.prepareTransfer(transaction).then((response) => {
           if(response?.ok){
             dispatch ({
-                type: types.SET_PREPARE_TRANSFER_RESPONSE,
-                payload: response.data
+              type: types.SET_PREPARE_TRANSFER_RESPONSE,
+              payload: response.data
             })
           }
       }).catch(err => {
@@ -275,5 +274,6 @@ export const swapActions = {
   getSwapTransaction,
   checkTradeUpdate,
   setAmountIn,
-  setTrade
+  setTrade,
+  checkSwapStatus
 };
