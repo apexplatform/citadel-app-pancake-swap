@@ -8,19 +8,16 @@ import { errorActions, swapActions } from '../../store/actions';
 const ConfirmModal = () => {
     const location = useLocation();
     const dispatch = useDispatch()
-    const { minReceived, trade, tokenIn, tokenOut, amount, outAmout } = useSelector(state => state.swap)
-    const formattedPrice = trade?.executionPrice?.toSignificant(6)
-    const { priceImpactWithoutFee, realizedLPFee } = swapActions.getTradeFeePrice()
+    const { minReceived, updatedTrade, tokenIn, tokenOut, amountIn, amountOut } = useSelector(state => state.swap)
+    const formattedPrice = updatedTrade?.executionPrice?.toSignificant(6)
+    const { priceImpactWithoutFee, realizedLPFee } = swapActions.getTradeFeePrice(updatedTrade)
     const showConfirmModal = useSelector(state => state.errors.openConfirmModal)
     const [disabledSwap, setDisabledSwap] = useState(true)
-    let routes = []
-    if(trade?.route?.path){
-        routes = trade?.route?.path.map(item => {
-            return {
-                logoURI: item.tokenInfo?.logoURI,
-                name: item.symbol
-            }
-        })
+    const swap = () => {
+      dispatch(swapActions.getSwapTransaction());
+      setTimeout(() => {
+        dispatch(errorActions.setConfirmModal(false));
+      },2000)
     }
 return(
     <Modal show={showConfirmModal && !location.pathname.includes('/info')} showModal={() => dispatch(errorActions.setConfirmModal(false))}>
@@ -30,20 +27,33 @@ return(
     </div>
     <div>
       <div className='row'>
-          <SwapBalanceCard width='45%' amount={amount} bgColor='#B7F6FF' color='#00BFDB' token={{...tokenIn, code: tokenIn.symbol }} />
+          <SwapBalanceCard width='45%' amount={amountIn} bgColor='#B7F6FF' color='#00BFDB' token={{...tokenIn, code: tokenIn.symbol }} />
           <CustomIcon icon='arrow-swap' />
-          <SwapBalanceCard width='45%' amount={outAmout} bgColor='#C6D1FF' color='rgba(58, 94, 229, 1)' token={{...tokenOut, code: tokenOut.symbol }} />
+          <SwapBalanceCard width='45%' amount={amountOut} bgColor='#C6D1FF' color='rgba(58, 94, 229, 1)' token={{...tokenOut, code: tokenOut.symbol }} />
       </div>
-      <PriceUpdatedCard style={{margin: '16px 0'}} acceptPrice={() => setDisabledSwap(false)} text='Price updated'/>
+      { disabledSwap && <PriceUpdatedCard style={{margin: '16px 0'}} acceptPrice={() => setDisabledSwap(false)} text='Price updated'/> }
       <InfoCardBlock>
-        <InfoCardItem text={'Price'} symbol={tokenIn.symbol} symbol2={tokenOut.symbol}><span className='purple-text'>{formattedPrice || '-'}</span></InfoCardItem>
+        <InfoCardItem text={'Price'} symbol={tokenIn.symbol} symbol2={tokenOut.symbol}>
+          <span className='purple-text'>
+            <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0.681641 7.75006L5.99989 0.067811L11.3181 7.75006L0.681641 7.75006Z" fill="#ED4242"/>
+            </svg>
+            {formattedPrice || '-'}
+          </span>
+        </InfoCardItem>
+        <InfoCardItem text={'Minimum received'} symbol={tokenOut.symbol}>
+          <span className='purple-text'>
+            <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0.681641 7.75006L5.99989 0.067811L11.3181 7.75006L0.681641 7.75006Z" fill="#ED4242"/>
+            </svg>
+            {minReceived !== 0 ? minReceived?.toSignificant(4) : minReceived}
+          </span>
+        </InfoCardItem>
         <InfoCardItem text={'Price impact'} symbol={'%'}><span className='green-text'>{priceImpactWithoutFee ? (priceImpactWithoutFee.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpactWithoutFee.toFixed(2)}`) : '-'}</span></InfoCardItem>
-        <InfoCardItem text={'Minimum received'} symbol={tokenOut.symbol}><span className='purple-text'>{minReceived !== 0 ? minReceived?.toSignificant(4) : minReceived}</span></InfoCardItem>
         <InfoCardItem text={'Liquidity Provider Fee'} symbol={tokenIn.symbol}><span className='pink-text'>{realizedLPFee?.toSignificant(4) || 0}</span></InfoCardItem>
-        <InfoCardItem text={'Route'} routes={routes}/>
-    </InfoCardBlock>
+      </InfoCardBlock>
       <div className='center'>
-          <BigButtons text='SWAP' disabled={disabledSwap} style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>
+        <BigButtons text='SWAP' onClick={() => swap()} disabled={disabledSwap} style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>
       </div>
     </div> 
   </Modal>

@@ -11,9 +11,9 @@ const initialState = {
   slippage: 0,
   slippageTolerance: 1,
   trade: null,
+  updatedTrade: null,
   swapStatus: "enterAmount",
   independentField: "INPUT",
-  amountOut: 0,
   parsedAmount: 0,
   swapFee: 0,
   isExactIn: true,
@@ -22,6 +22,8 @@ const initialState = {
   disableSwap: false,
   swapInfo: null,
   amount: 0,
+  amountOut: 0,
+  amountIn: 0,
   minReceived: null,
   selectedToken: 'INPUT',
   deadlineMin: 20,
@@ -47,6 +49,16 @@ export default function SwapReducer (state = initialState, action) {
       return {
         ...state,
         isExactIn: action.payload,
+      };
+    case types.SET_IN_AMOUNT:
+      return {
+        ...state,
+        amountIn: action.payload,
+      };
+    case types.SET_UPDATED_TRADE:
+      return {
+        ...state,
+        updatedTrade: action.payload,
       };
     case types.SET_PARSED_AMOUNT:
       return {

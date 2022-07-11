@@ -16,11 +16,11 @@ const SwapPanel = () => {
     const { wallets } = useSelector((state) => state.wallet)
     const [balanceView, setBalanceView] = useState('View Balance')
     const [isExactIn, setExactIn] = useState(true);
-    const { independentField, minReceived, slippageTolerance, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
+    const { independentField, minReceived, amountOut, slippageTolerance, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
     const [slippage, setSlippage] = useState(slippageTolerance)
     const { tokens } = useSelector(state => state.wallet)
     const formattedPrice = trade?.executionPrice?.toSignificant(6)
-    const { priceImpactWithoutFee, realizedLPFee } = swapActions.getTradeFeePrice()
+    const { priceImpactWithoutFee, realizedLPFee } = swapActions.getTradeFeePrice(trade)
     const location = useLocation()
     const dispatch = useDispatch()
     useEffect(()=>{
@@ -70,7 +70,7 @@ const SwapPanel = () => {
         dispatch(swapActions.setTokenOut(tokenIn));
         dispatch(swapActions.setAmount(formattedAmounts[independentField],!isExactIn));
     };
-    console.log(formattedAmounts,'--formattedAmounts')
+    console.log(amountOut,'--amountOut')
 
     const setSelectedOption = (name) => {
         dispatch(swapActions.setSelectedToken(name))
@@ -81,12 +81,17 @@ const SwapPanel = () => {
         setExactIn(val === "INPUT" ? true : false);
         dispatch(swapActions.setIndependentField(val));
         formattedAmounts[val] = val === "INPUT" ? tokenIn.balance : tokenOut.balance
+        if(isBNB && formattedAmounts[val] > 0.001){
+            formattedAmounts[val] = formattedAmounts[val] - 0.001
+        }
+        if(formattedAmounts[val] === 0){
+            dispatch(swapActions.setSwapStatus('insufficientBalance'))
+        }
         dispatch(swapActions.setAmount(formattedAmounts[val],val === "INPUT" ? true : false));
     }
 
     useEffect(() => {
         dispatch(swapActions.getSwapInfo(amount,isExactIn));
-        dispatch(swapActions.setAmountOut(formattedAmounts['OUTPUT']))
         // eslint-disable-next-line 
     },[amount,tokenIn,tokenOut])
 
