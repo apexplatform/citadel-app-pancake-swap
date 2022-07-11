@@ -193,5 +193,6 @@ export const walletActions = {
     preparePermissionTransfer,
     stopSplashLoader,
     setActiveWallet,
-    loadTokenBalances
+    loadTokenBalances,
+    formatBalance
 };
