@@ -1089,10 +1089,10 @@
     "dotenv-webpack" "^7.1.0"
     "ethers" "^5.6.4"
 
-"@citadeldao/apps-ui-kit@^0.147.0":
-  "integrity" "sha512-BDucjcwneQ5fC+EPkJ9Z8iw+OdZzh24FiltDq2mAPELx0b/smTLAptd+AlxksEDDwlH4LXQQxt8wE5rWJCDbHg=="
-  "resolved" "https://registry.npmjs.org/@citadeldao/apps-ui-kit/-/apps-ui-kit-0.147.0.tgz"
-  "version" "0.147.0"
+"@citadeldao/apps-ui-kit@^0.153.0":
+  "integrity" "sha512-lnIL4a9EBi3KoJ40f25Dp7N3f4jauMoeskjxFivzszbYm4gOnVBhZtAuhnhs9Y4VJoPE9PiH2aVWruxbVjCvNw=="
+  "resolved" "https://registry.npmjs.org/@citadeldao/apps-ui-kit/-/apps-ui-kit-0.153.0.tgz"
+  "version" "0.153.0"
   dependencies:
     "@babel/polyfill" "^7.12.1"
     "bignumber.js" "^9.0.2"

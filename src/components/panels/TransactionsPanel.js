@@ -7,23 +7,25 @@ import {useNavigate} from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
 import ROUTES from "../../routes";
 import { Config } from '../config/config';
+import noTransactions from '../uikit/icons/noTransactions.svg'
 const TransactionsPanel = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const config = new Config()
     const dispatch = useDispatch();
-    const { wallets } = useSelector((state) => state.wallet)
+    const { activeWallet } = useSelector((state) => state.wallet)
     const transactions = useSelector((state) => state.transaction.transactions)
     const loader = useSelector((state) => state.transaction.transactionsLoaded)
     useEffect(()=>{
         dispatch(transactionActions.loadTransactions())
         dispatch(panelActions.setPreviousPanel(location.pathname))
         // eslint-disable-next-line
-    },[wallets])
+    },[activeWallet])
     const setOpenedTransaction = (data) => {
         dispatch(transactionActions.setOpenedTransaction(data))
         navigate(ROUTES.TRANSACTION_DETAILS + '?' + window.location.search.slice(1))
     }
+    console.log(transactions,'--transactions')
     return (
         <div className='panel'>
             <Content> 
@@ -32,7 +34,7 @@ const TransactionsPanel = () => {
                 ))}
                 { (loader && transactions?.length === 0) &&
                     <div className="no-transactions-block">
-                    <img src="img/icons/noTransactions.svg" alt="empty" />
+                    <img src='img/icons/noTransactions.svg' alt='empty' />
                     <h3>{text.NO_TRANSACTIONS}</h3>
                     <p>{text.NO_TRANSACTIONS_DESCRIPTION}</p>
                     </div>

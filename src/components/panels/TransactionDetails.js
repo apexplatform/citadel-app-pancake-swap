@@ -70,6 +70,7 @@ const TransactionDetails = (props) => {
                 target="_blank"
                 style={{ cursor: "pointer" }}
                 rel="noreferrer"
+                className='transaction-link'
               >
                 <CustomIcons icon='link' />
               </a>

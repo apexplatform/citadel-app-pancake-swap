@@ -7,31 +7,35 @@ const setOpenedTransaction = (flag) => ({
 });
 
 const loadTransactions = () => async (dispatch) => {
-  const addressList = store.getState().wallet.wallets
-   addressList?.forEach(async(address,i) => {
-    const wallet = walletActions.getWalletConstructor(address);
+  dispatch({
+    type: types.SET_TRANSACTIONS_LOADED,
+    payload: false,
+  });
+  dispatch({
+    type: types.SET_TRANSACTIONS_LIST,
+    payload: [],
+  });
+  const activeWallet = store.getState().wallet.activeWallet
+  console.log(activeWallet)
+  if(activeWallet){
+    const wallet = walletActions.getWalletConstructor(activeWallet);
     wallet.getTransactions().then(response => {
-      const transactions = response?.data?.list.map(elem => {
-        return {...elem, wallet: address}
-      })
       dispatch({
         type: types.SET_TRANSACTIONS_LIST,
-        payload: transactions,
+        payload: response?.data?.list,
       });
-      if(i === addressList.length - 1){
-        dispatch({
-          type: types.SET_TRANSACTIONS_LOADED,
-          payload: true,
-        });
-       }
-     }).catch(e => {
+      dispatch({
+        type: types.SET_TRANSACTIONS_LOADED,
+        payload: true,
+      });
+    }).catch(e => {
       dispatch(errorActions.checkErrors(e))
     })
-  })
-  };
+  }
+};
 
 
 export const transactionActions = {
-    setOpenedTransaction,
-    loadTransactions
+  setOpenedTransaction,
+  loadTransactions
 };
