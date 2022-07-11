@@ -15,7 +15,7 @@ export default function TransactionsReducer(state=initialState,action){
         case types.SET_TRANSACTIONS_LIST:
             return {
                 ...state,
-                transactions: state.transactions.concat(action.payload)
+                transactions: action.payload
             }
         case types.SET_TRANSACTIONS_CLEAR:
             return {
