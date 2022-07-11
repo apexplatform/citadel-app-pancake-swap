@@ -12,14 +12,14 @@ const TransactionsPanel = () => {
     const location = useLocation()
     const config = new Config()
     const dispatch = useDispatch();
-    const { wallets } = useSelector((state) => state.wallet)
+    const { activeWallet } = useSelector((state) => state.wallet)
     const transactions = useSelector((state) => state.transaction.transactions)
     const loader = useSelector((state) => state.transaction.transactionsLoaded)
     useEffect(()=>{
         dispatch(transactionActions.loadTransactions())
         dispatch(panelActions.setPreviousPanel(location.pathname))
         // eslint-disable-next-line
-    },[wallets])
+    },[activeWallet])
     const setOpenedTransaction = (data) => {
         dispatch(transactionActions.setOpenedTransaction(data))
         navigate(ROUTES.TRANSACTION_DETAILS + '?' + window.location.search.slice(1))
