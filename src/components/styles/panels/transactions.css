@@ -50,26 +50,21 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: auto;
+    margin: 17% auto auto;
 }
 .transasction-details-row span{
     text-align: right;
 }
 .no-transactions-block h3{
-    font-weight: 500;
     margin-bottom: 0;
+    font-family: 'Panton Medium';
 }
 
 .no-transactions-block p{
-    font-weight: 300;
     color: #28436E;
     text-align: center;
     width: 70%;
     font-size: 15px;
-}
-
-.no-transactions-block img{
-    margin: 13% auto 20px;
 }
 
 .transactions-grid{
