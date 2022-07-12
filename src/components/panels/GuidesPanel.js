@@ -1,6 +1,11 @@
 import React from 'react'
 import { GuidesCard } from '@citadeldao/apps-ui-kit/dist/main'
 import text from '../../text.json'
+import guide1 from '../guides/guide1.svg'
+import guide2 from '../guides/guide2.svg'
+import guide3 from '../guides/guide3.svg'
+import guide4 from '../guides/guide4.svg'
+import guide5 from '../guides/guide5.svg'
 const GuidesPanel = () => {
     return (
         <div className='guides-panel'>
@@ -14,29 +19,29 @@ const GuidesPanel = () => {
             <GuidesCard text={text.GUIDES_HEADER_2}>
                 <div className='row guide-content-1'>
                     <p>{text.GUIDES_DESCRIPTION_2}</p>
-                    <img src='/img/guides/guide1.svg' alt='quide1' />
+                    <img src={guide1} alt='quide1' />
                 </div>
             </GuidesCard>
             <GuidesCard text={text.GUIDES_HEADER_3}>
                 <div className='row guide-content-2'>
                     <p>{text.GUIDES_DESCRIPTION_3}</p>
-                    <img src='/img/guides/guide2.svg' alt='quide1' />
+                    <img src={guide2} alt='quide1' />
                 </div>
                 <div className='row guide-content-2'>
                     <p>{text.GUIDES_DESCRIPTION_3_2}</p>
-                    <img src='/img/guides/guide3.svg' alt='quide1' />
+                    <img src={guide3} alt='quide1' />
                 </div>
             </GuidesCard>
             <GuidesCard text={text.GUIDES_HEADER_4}>
                 <div className='row guide-content-3'>
                     <p>{text.GUIDES_DESCRIPTION_4}</p>
-                    <img src='/img/guides/guide4.svg' alt='quide1' />
+                    <img src={guide4} alt='quide1' />
                 </div>
             </GuidesCard>
             <GuidesCard text={text.GUIDES_HEADER_5}>
                 <div className='row guide-content-4'>
                     <p>{text.GUIDES_DESCRIPTION_5}</p>
-                    <img src='/img/guides/guide5.svg' alt='quide1' />
+                    <img src={guide5} alt='quide1' />
                 </div>
             </GuidesCard>
         </div>
