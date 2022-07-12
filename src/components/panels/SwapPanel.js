@@ -80,11 +80,12 @@ const SwapPanel = () => {
         setExactIn(val === "INPUT" ? true : false);
         dispatch(swapActions.setIndependentField(val));
         formattedAmounts[val] = val === "INPUT" ? tokenIn.balance : tokenOut.balance
+        if(formattedAmounts[val] === 0 || formattedAmounts[val] === '~0'){
+            dispatch(swapActions.setSwapStatus('insufficientBalance'))
+            formattedAmounts[val] = 0
+        }
         if(isBNB && formattedAmounts[val] > 0.001){
             formattedAmounts[val] = formattedAmounts[val] - 0.001
-        }
-        if(formattedAmounts[val] === 0){
-            dispatch(swapActions.setSwapStatus('insufficientBalance'))
         }
         dispatch(swapActions.setAmount(formattedAmounts[val],val === "INPUT" ? true : false));
         dispatch(swapActions.getSwapInfo(formattedAmounts[val],val === "INPUT" ? true : false));

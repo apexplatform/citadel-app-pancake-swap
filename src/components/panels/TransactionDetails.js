@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { fotmatAddress } from '../helpers/addressFormatter'
 const TransactionDetails = (props) => {
   const config = new Config()
+  const { activeWallet } = useSelector(state => state.wallet)
   const data = useSelector(state => state.transaction.openedTransaction)
   const navigate = useNavigate()
   const back = () => navigate(ROUTES.TRANSACTIONS + '?' + window.location.search.slice(1))
@@ -82,7 +83,7 @@ const TransactionDetails = (props) => {
       ))}
       <div className="transaction-details-row">
         <div className="transaction-description-text">{text.VIEW_TRANSACTION}
-        <a href={data.wallet.getTxUrl(data?.hash?.value)} className='transaction-link' target='_blank' rel="noreferrer"><CustomIcons icon='link' /></a></div>
+        <a href={activeWallet.getTxUrl(data?.hash?.value)} className='transaction-link' target='_blank' rel="noreferrer"><CustomIcons icon='link' /></a></div>
       </div>
       {data?.comment?.value ? (
         <div>
