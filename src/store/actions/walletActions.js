@@ -127,7 +127,7 @@ const setActiveWallet = (wallet, save = true) => (dispatch) => {
 
 const formatBalance = (hex,decimals) => {
     if(hex === '0x00'){
-        return 0
+        return '0'
     }else{
 		let balance = '0.0'
 		if(typeof hex == 'number'){
@@ -137,6 +137,7 @@ const formatBalance = (hex,decimals) => {
 		}
 		if(balance.includes('e')){
 			balance = BigNumber(balance).toFixed(10).replace(/\.?0+$/,"")
+            if(balance.substring(0,8) === '0.000000') return '~0'
 			return balance
 		}
 		if(balance.length < 8){
@@ -144,7 +145,7 @@ const formatBalance = (hex,decimals) => {
 		}
 		let balanceArr = balance.split('.')
 		if(balanceArr[1]?.length > 6){
-			balanceArr[1] = balanceArr[1].substr(0,6)
+			balanceArr[1] = balanceArr[1].substring(0,6)
 		}
 		return balanceArr[0] + '.' + balanceArr[1]
 	}
