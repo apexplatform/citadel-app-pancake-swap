@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { TransactionItem, Loader, Content, Tabbar } from "@citadeldao/apps-ui-kit/dist/main"
+import { TransactionItem, Loader, Content, Tabbar, CustomIcon } from "@citadeldao/apps-ui-kit/dist/main"
 import text from "../../text.json"
 import { transactionActions, panelActions } from '../../store/actions';
 import {useDispatch,useSelector} from "react-redux";
@@ -32,9 +32,9 @@ const TransactionsPanel = () => {
                 ))}
                 { (loader && transactions?.length === 0) &&
                     <div className="no-transactions-block">
-                    <img src="/img/icons/noTransactions.svg" alt="empty" />
-                    <h3>{text.NO_TRANSACTIONS}</h3>
-                    <p>{text.NO_TRANSACTIONS_DESCRIPTION}</p>
+                        <CustomIcon icon='noTransactions'/>
+                        <h3>{text.NO_TRANSACTIONS}</h3>
+                        <p>{text.NO_TRANSACTIONS_DESCRIPTION}</p>
                     </div>
                 }  
                 {
