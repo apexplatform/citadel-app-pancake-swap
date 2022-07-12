@@ -5,9 +5,10 @@ import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
 import { walletActions } from '../../store/actions';
 import { useNavigate } from 'react-router-dom';
+import { formatByDecimals } from '../helpers/numberFormatter';
 const SelectAddressPanel = () => {
     const config = new Config()
-    const { wallets, activeWallet } = useSelector((state) => state.wallet)
+    const { wallets, activeWallet, usdPrice } = useSelector((state) => state.wallet)
     const [walletList, setWalletList] = useState(wallets)
     const previousPanel = useSelector(state => state.panels.previousPanel)
     const dispatch = useDispatch()
@@ -36,7 +37,7 @@ const SelectAddressPanel = () => {
             <Content>
                 <Search style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
                 {walletList?.map((elem,i) =>(
-                  <AddressBlock onClick={() => setActiveWallet(elem)} active={activeWallet?.address === elem?.address} style={{marginBottom: '10px'}} data={elem} key={i} usdPrice='312'/>  
+                  <AddressBlock onClick={() => setActiveWallet(elem)} active={activeWallet?.address === elem?.address} style={{marginBottom: '10px'}} data={elem} key={i} usdPrice={formatByDecimals(elem.balance * usdPrice,2)}/>  
                 ))}
             </Content>
             <Tabbar config={config}/>

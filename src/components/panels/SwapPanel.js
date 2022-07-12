@@ -89,8 +89,14 @@ const SwapPanel = () => {
         dispatch(swapActions.setAmount(formattedAmounts[val],val === "INPUT" ? true : false));
         dispatch(swapActions.getSwapInfo(formattedAmounts[val],val === "INPUT" ? true : false));
     }
-
+    const [windowDimensions, setWindowDimensions] = useState(window.innerWidth);
     useEffect(() => {
+        function handleResize() {
+            const { innerWidth: width } = window;
+            setWindowDimensions(width);
+        }
+        window.addEventListener('resize', handleResize);
+
         let interval = null;
 		if (!trade && +amount !== 0) {
 			interval = setInterval(() => {
@@ -99,7 +105,7 @@ const SwapPanel = () => {
 		} else {
 			clearInterval(interval);
 		}
-		return () => clearInterval(interval);
+		return () => { clearInterval(interval); window.removeEventListener('resize', handleResize)};
 
         // eslint-disable-next-line 
     },[amount,tokenIn,tokenOut,trade])
@@ -148,7 +154,7 @@ const SwapPanel = () => {
                         balanceView={balanceView} setBalanceView={setBalanceView} 
                         onClick={() => setSelectedOption('INPUT')}
                         />
-                    <CustomIcon onClick={reverseTokens} icon='swap-icon' id='swap-center-btn' />
+                    <CustomIcon onClick={reverseTokens} icon='swap-icon' id='swap-center-btn' size={windowDimensions < 500 ? 'small' : 'big'} />
                     <SelectToken 
                             max={true} 
                             balance={true} 

@@ -12,7 +12,8 @@ const initialState = {
     activeWallet: null,
     showSplash: true,
     tokens: tokens,
-    allowance: 0
+    allowance: 0,
+    usdPrice: 0
 }
 
 export default function WalletReducer(state=initialState,action){
@@ -21,6 +22,11 @@ export default function WalletReducer(state=initialState,action){
             return {
                 ...state,
                 wallets: action.payload
+            }
+        case types.SET_USD_PRICE:
+            return {
+                ...state,
+                usdPrice: action.payload
             }
         case types.SET_ALLOWANCE:
             return {

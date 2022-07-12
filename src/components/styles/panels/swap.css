@@ -84,6 +84,7 @@
 @media screen and (max-width: 500px) {
     #swap-center-btn{
         left: 43%;
+        top: 31%;
     }
 }
 

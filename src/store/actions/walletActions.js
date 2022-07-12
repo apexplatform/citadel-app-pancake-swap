@@ -8,6 +8,7 @@ import models from '../../networking/models'
 import Wallet from '../../networking/models/Wallet';
 import { utils } from '@citadeldao/apps-sdk';
 import BigNumber from 'bignumber.js'
+import axios from 'axios';
 
 const getWalletConstructor = (address) => {
     try {
@@ -36,6 +37,12 @@ const loadWalletWithBalances = () => async(dispatch) => {
         dispatch({
             type: types.SET_WALLETS,
             payload: wallets
+        })
+        axios.get('https://rest.coinapi.io/v1/assets/BNB?apikey=29F44911-083E-4782-AFF1-E7E9E91A9170').then((res) =>{
+            dispatch({
+                type: types.SET_USD_PRICE,
+                payload: res.data[0]?.price_usd
+            })
         })
         usersActions.loadUserConfig().then(user_configs =>{
             let flag = false
