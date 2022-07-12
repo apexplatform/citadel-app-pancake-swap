@@ -47,6 +47,7 @@ const setAmount = (amount,isExactIn=true) => (dispatch) => {
 };
 
 const setTokenIn = (token) => async(dispatch) => {
+  dispatch(setTrade(null))
   dispatch({
     type: types.SET_TOKEN_IN,
     payload: token,
@@ -63,6 +64,7 @@ const setTokenIn = (token) => async(dispatch) => {
 };
 
 const setTokenOut = (token) => (dispatch) => {
+  dispatch(setTrade(null))
   dispatch({
     type: types.SET_TOKEN_OUT,
     payload: token,

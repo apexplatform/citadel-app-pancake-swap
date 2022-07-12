@@ -16,7 +16,7 @@ const SwapPanel = () => {
     const { wallets } = useSelector((state) => state.wallet)
     const [balanceView, setBalanceView] = useState('View Balance')
     const [isExactIn, setExactIn] = useState(true);
-    const { independentField, minReceived, amountOut, slippageTolerance, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
+    const { independentField, minReceived, slippageTolerance, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
     const [slippage, setSlippage] = useState(slippageTolerance)
     const { tokens } = useSelector(state => state.wallet)
     const formattedPrice = trade?.executionPrice?.toSignificant(6)
@@ -69,6 +69,7 @@ const SwapPanel = () => {
         dispatch(swapActions.setTokenIn(tokenOut));
         dispatch(swapActions.setTokenOut(tokenIn));
         dispatch(swapActions.setAmount(formattedAmounts[independentField],!isExactIn));
+        dispatch(swapActions.getSwapInfo(formattedAmounts[independentField],!isExactIn));
     };
     const setSelectedOption = (name) => {
         dispatch(swapActions.setSelectedToken(name))
@@ -86,12 +87,22 @@ const SwapPanel = () => {
             dispatch(swapActions.setSwapStatus('insufficientBalance'))
         }
         dispatch(swapActions.setAmount(formattedAmounts[val],val === "INPUT" ? true : false));
+        dispatch(swapActions.getSwapInfo(formattedAmounts[val],val === "INPUT" ? true : false));
     }
 
     useEffect(() => {
-        dispatch(swapActions.getSwapInfo(amount,isExactIn));
+        let interval = null;
+		if (!trade && +amount !== 0) {
+			interval = setInterval(() => {
+                dispatch(swapActions.getSwapInfo(amount,isExactIn));
+			}, 1000);
+		} else {
+			clearInterval(interval);
+		}
+		return () => clearInterval(interval);
+
         // eslint-disable-next-line 
-    },[amount,tokenIn,tokenOut])
+    },[amount,tokenIn,tokenOut,trade])
 
     const checkAmount = (val,name) => {
         // eslint-disable-next-line 
@@ -110,6 +121,7 @@ const SwapPanel = () => {
         }
         dispatch(swapActions.setIndependentField(name));
         setExactIn(name === "INPUT" ? true : false);
+        dispatch(swapActions.getSwapInfo(val,name === "INPUT" ? true : false));
       };
 
     const setSlippageTolerance = (val) => {
