@@ -41,7 +41,7 @@
     width: 30%;
     margin-top: 10px;
 }
-.guide-content-1 img{
+.guide-content-1 .quide-img{
     width: 71%;
     margin-right: -10px;
 }
@@ -50,18 +50,18 @@
     width: 30%;
     margin-bottom: 10px;
 }
-.guide-content-2 img{
+.guide-content-2 .quide-img{
     width: 67%;
 }
 .guide-content-3 p{
     margin-bottom: 15px;
 }
-.guide-content-3 img{
+.guide-content-3 .quide-img{
     width: 100%;
     margin: auto;
 }
 
-.guide-content-4 img{
+.guide-content-4 .quide-img{
     width: 80%;
     margin-left: -15px;
 }
