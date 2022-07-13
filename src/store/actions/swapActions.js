@@ -122,7 +122,7 @@ const getTradeFeePrice = (trade) => {
   return computeTradePriceBreakdown(trade)
 }
 
-const getSwapInfo = (amountIn, isExactIn=true, isSwap=false) => async(dispatch) => {
+const getSwapInfo = (amountIn, isExactIn=true, isSwap=false, check=true) => async(dispatch) => {
   try{
     if(+amountIn > 0){
       const { tokenIn, tokenOut, independentField, trade, slippageTolerance } = store.getState().swap;
@@ -131,7 +131,6 @@ const getSwapInfo = (amountIn, isExactIn=true, isSwap=false) => async(dispatch) 
       let parsedAmount = getParsedAmount(amountIn.toString(), isExactIn ? inputCurrency : outputCurrency)
       dispatch(setParsedAmount(parsedAmount))
       const bestTradeExact = dispatch(getBestTrade(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn))
-      console.log(bestTradeExact,'--bestTradeExact')
       dispatch(setAmountIn(independentField === 'INPUT' ? amountIn : trade?.inputAmount?.toSignificant(6)))
       dispatch(setAmountOut(independentField === 'OUTPUT' ? amountIn : bestTradeExact?.outputAmount?.toSignificant(6)))
       if(isSwap){
@@ -164,7 +163,7 @@ const getSwapInfo = (amountIn, isExactIn=true, isSwap=false) => async(dispatch) 
       dispatch(setTrade(null))
       dispatch(setMinReceive(0))
     }
-    dispatch(checkSwapStatus(amountIn))
+    dispatch(checkSwapStatus(check ? amountIn : '0'))
   }catch(e){
     console.log(e)
     dispatch(errorActions.checkErrors(e))
@@ -176,24 +175,24 @@ const checkSwapStatus = (amount) => dispatch => {
   const { tokenIn, slippageTolerance, trade } = store.getState().swap
   const { activeWallet, allowance } = store.getState().wallet
   const { priceImpactWithoutFee } = getTradeFeePrice(trade)
-  const balance = tokenIn.balance
+  const balance = tokenIn?.balance
   let feeProcent = activeWallet?.code === tokenIn?.symbol ? 0.001 : 0
   if(+amount > 0) {
-      if(+amount > +balance){
-          dispatch(setSwapStatus('insufficientBalance'))
-      } else if(+amount <= BigNumber(+balance).minus(feeProcent).toNumber() && +activeWallet.balance > 0){
-          if(BigNumber(allowance).div(BigNumber(Math.pow(10,+tokenIn.decimals))).toNumber() > +amount || tokenIn.symbol === 'BNB'){
-              if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
-                dispatch(setSwapStatus('swap'))
-              }else{
-                dispatch(setSwapStatus('swapAnyway'))
-              }
-          } else {
-            dispatch(setSwapStatus('approve'))
+    if(+amount > +balance){
+      dispatch(setSwapStatus('insufficientBalance'))
+    } else if(+amount < BigNumber(+balance).minus(feeProcent).toNumber() && +activeWallet?.balance > 0){
+        if(BigNumber(allowance).div(BigNumber(Math.pow(10,+tokenIn.decimals))).toNumber() > +amount || tokenIn.symbol === 'BNB'){
+          if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
+            dispatch(setSwapStatus('swap'))
+          }else{
+            dispatch(setSwapStatus('swapAnyway'))
           }
-      } else {
-        dispatch(setSwapStatus('feeError'))
-      }
+        } else {
+          dispatch(setSwapStatus('approve'))
+        }
+    } else {
+      dispatch(setSwapStatus('feeError'))
+    }
   } else {
     dispatch(setSwapStatus('enterAmount'))
   }
@@ -202,23 +201,23 @@ const checkSwapStatus = (amount) => dispatch => {
 const getApproveTransaction  = () => dispatch => {
   const wallet = walletActions.getWalletConstructor()
   if(wallet){
-      const { tokenIn } = store.getState().swap;
-      const contractData = {
-          address: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
-          name: "PancakeSwap: Router v2",
-          url: "https://bscscan.com/address/0x10ed43c718714eb63d5aa57b78b54704e256024e"
+    const { tokenIn } = store.getState().swap;
+    const contractData = {
+      address: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
+      name: "PancakeSwap: Router v2",
+      url: "https://bscscan.com/address/0x10ed43c718714eb63d5aa57b78b54704e256024e"
+    }
+    const transaction = wallet.generateApproveTransaction(tokenIn,contractData)
+    wallet.prepareTransfer(transaction).then((ok, data) => {
+      if(ok){
+        return dispatch ({
+          type: types.SET_PREPARE_TRANSFER_RESPONSE,
+          payload: data
+        })
       }
-      const transaction = wallet.generateApproveTransaction(tokenIn,contractData)
-      wallet.prepareTransfer(transaction).then((ok, data) => {
-          if(ok){
-              return dispatch ({
-                  type: types.SET_PREPARE_TRANSFER_RESPONSE,
-                  payload: data
-              })
-          }
-      }).catch(err => {
-        dispatch(errorActions.checkErrors(err.response?.data?.error))
-      })
+    }).catch(err => {
+      dispatch(errorActions.checkErrors(err.response?.data?.error))
+    })
   }
 }
 
@@ -231,28 +230,28 @@ const getSwapTransaction  = () => async(dispatch) => {
   const wallet = walletActions.getWalletConstructor()
   dispatch(setSwapDisable(true))
   if(wallet){
-      const { deadlineMin } = store.getState().swap
-      const deadline = await wallet.loadBlockNumber(deadlineMin)
-      const {trade,slippageTolerance,isExactIn,tokenIn,tokenOut,amount,amountOut} = store.getState().swap;
-      let transaction = null
-      if(tokenIn.symbol === 'BNB' && tokenOut.symbol === 'WBNB'){
-        transaction = wallet.generateDepositTransaction(tokenIn,amount,tokenOut)
-      }else if(tokenIn.symbol === 'WBNB' && tokenOut.symbol === 'BNB'){
-        transaction = wallet.generateWithdrawTransaction(tokenIn,amount,tokenOut)
-      }else{
-        transaction = wallet.generateSwapTransaction(tokenIn,amount,tokenOut,amountOut,trade,deadline,slippageTolerance,isExactIn)
-      }
-      console.log(transaction,'--transaction')
-      wallet.prepareTransfer(transaction).then((response) => {
-          if(response?.ok){
-            dispatch ({
-              type: types.SET_PREPARE_TRANSFER_RESPONSE,
-              payload: response.data
-            })
-          }
-      }).catch(err => {
-        dispatch(errorActions.checkErrors(err.response?.data?.error))
-      })
+    const { deadlineMin } = store.getState().swap
+    const deadline = await wallet.loadBlockNumber(deadlineMin)
+    const {trade,slippageTolerance,isExactIn,tokenIn,tokenOut,amount,amountOut} = store.getState().swap;
+    let transaction = null
+    if(tokenIn.symbol === 'BNB' && tokenOut.symbol === 'WBNB'){
+      transaction = wallet.generateDepositTransaction(tokenIn,amount,tokenOut)
+    }else if(tokenIn.symbol === 'WBNB' && tokenOut.symbol === 'BNB'){
+      transaction = wallet.generateWithdrawTransaction(tokenIn,amount,tokenOut)
+    }else{
+      transaction = wallet.generateSwapTransaction(tokenIn,amount,tokenOut,amountOut,trade,deadline,slippageTolerance,isExactIn)
+    }
+    console.log(transaction,'--transaction')
+    wallet.prepareTransfer(transaction).then((response) => {
+        if(response?.ok){
+          dispatch ({
+            type: types.SET_PREPARE_TRANSFER_RESPONSE,
+            payload: response.data
+          })
+        }
+    }).catch(err => {
+      dispatch(errorActions.checkErrors(err.response?.data?.error))
+    })
   }
   setTimeout(() => {
     dispatch(setSwapDisable(false))

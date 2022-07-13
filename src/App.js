@@ -10,7 +10,7 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
       dispatch(walletActions.loadWalletWithBalances());
-      dispatch(swapActions.getSwapInfo('1'))
+      dispatch(swapActions.getSwapInfo('1',true,false,false))
       // eslint-disable-next-line
   },[])
   return (
