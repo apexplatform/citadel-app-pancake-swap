@@ -180,7 +180,7 @@ const checkSwapStatus = (amount) => dispatch => {
   if(+amount > 0) {
     if(+amount > +balance){
       dispatch(setSwapStatus('insufficientBalance'))
-    } else if(+amount < BigNumber(+balance).minus(feeProcent).toNumber() && +activeWallet?.balance > 0){
+    } else if(+amount <= BigNumber(+balance).minus(feeProcent).toNumber() && +activeWallet?.balance > 0){
         if(BigNumber(allowance).div(BigNumber(Math.pow(10,+tokenIn.decimals))).toNumber() > +amount || tokenIn.symbol === 'BNB'){
           if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
             dispatch(setSwapStatus('swap'))
