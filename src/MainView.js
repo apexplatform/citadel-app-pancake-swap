@@ -36,7 +36,6 @@ const MainView = () => {
     const navigate = useNavigate()
     const config = new Config()
     const [disabledSwap, setDisabledSwap] = useState(true)
-    console.log(errors,'--errors')
     return(
         <View>
             <Panel config={config}>

@@ -9,8 +9,8 @@ import socket from "./networking/socket";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-      dispatch(walletActions.loadWalletWithBalances());
       dispatch(walletActions.loadNetworks());
+      dispatch(walletActions.loadWalletWithBalances());
       // eslint-disable-next-line
   },[])
   return (

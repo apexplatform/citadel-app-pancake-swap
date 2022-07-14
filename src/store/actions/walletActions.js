@@ -42,10 +42,7 @@ const loadWalletWithBalances = () => async(dispatch) => {
                 if(item.address === user_configs?.lastWalletInfo?.address){  
                     flag = true
                     setTimeout(()=>{
-                        dispatch ({
-                            type: types.SET_ACTIVE_WALLET,
-                            payload: item
-                        })
+                        dispatch(setActiveWallet(wallets[0],false))
                     },1000) 
                 }
                 if(!flag){
@@ -69,26 +66,6 @@ const loadNetworks = () => async(dispatch) => {
             type: types.SET_NETWORKS,
             payload: networks
         })
-        let keys = Object.keys(networks?.osmosis?.tokens)
-        let tokens = []
-        keys.forEach(net => {
-            tokens.push({...networks?.osmosis?.tokens[net], network: 'osmosis', net: 'osmosis', balance: '0'})
-        })
-        dispatch({
-            type: types.SET_TOKENS,
-            payload: tokens
-        })
-        dispatch({
-            type: types.SET_TOKEN_IN,
-            payload: tokens[0]
-        })
-        dispatch({
-            type: types.SET_TOKEN_OUT,
-            payload: tokens[1]
-        })
-        setTimeout(()=>{
-            stopSplashLoader()
-        },1000) 
     } catch {}
 }
 
@@ -130,18 +107,57 @@ const stopSplashLoader = () => {
 }
 
 
-const setActiveWallet = (wallet) => (dispatch) => {
+const setActiveWallet = (wallet, save = true) => async(dispatch) => {
     dispatch({
         type: types.SET_ACTIVE_WALLET,
         payload: wallet,
     });
-    const config = {
+    if(save){
+        const config = {
             lastWalletInfo: {
                 address: wallet.address,
                 network: wallet.network
             }
         }
-    usersActions.setUserConfig(config)
+        usersActions.setUserConfig(config)
+    }
+    await loadTokenBalances(wallet)
+}
+
+
+const loadTokenBalances = async(address) => {
+    const wallet = getWalletConstructor(address)
+    const { networks } = store.getState().wallet
+    if(wallet && networks){
+        const balances = await wallet.getAllTokenBalance()
+        const tokensSymbols = Object.keys(networks[wallet.net]?.tokens)
+        let tokenList = []
+        tokensSymbols.forEach(symbol => {
+            let balance = 0
+            let price = {}
+            if(balances.data[symbol]){
+                balance = balances.data[symbol]?.amount
+                price = balances.data[symbol]?.price
+            }
+            tokenList.push({ ...networks[wallet.net]?.tokens[symbol], balance, price, network: wallet.net })
+        })
+        store.dispatch({
+            type: types.SET_TOKENS,
+            payload: tokenList
+        })
+        store.dispatch({
+            type: types.SET_TOKEN_IN,
+            payload: tokenList[0]
+        })
+        store.dispatch({
+            type: types.SET_TOKEN_OUT,
+            payload: tokenList[1]
+        })
+    }
+
+    setTimeout(()=>{
+        stopSplashLoader()
+    },1000) 
 }
 
 export const walletActions = {
@@ -150,5 +166,6 @@ export const walletActions = {
     loadNetworks,
     preparePermissionTransfer,
     stopSplashLoader,
-    setActiveWallet
+    setActiveWallet,
+    loadTokenBalances
 };

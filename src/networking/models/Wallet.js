@@ -68,4 +68,20 @@ export default class Wallet {
       return null;
     }
   } 
+  async getAllTokenBalance() {
+    const {auth_token} = store.getState().user
+    try{
+      const requestManager = new utils.RequestManager()
+      const data = await requestManager.executeRequest(walletRequest.getAllTokenBalance({
+        network: this.net,
+        address: this.address,
+        token: auth_token
+      }));
+      if (data?.ok) {
+        return data;
+      }
+    }catch(e){
+      return null;
+    }
+  }
 }

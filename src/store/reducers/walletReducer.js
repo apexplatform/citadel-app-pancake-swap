@@ -2,7 +2,7 @@ import {types} from '../actions/types'
 
 const initialState = {
     wallets: null,
-    networks: [],
+    networks: null,
     stakeNodes: null,
     transactionResponse: null,
     loader: true,
