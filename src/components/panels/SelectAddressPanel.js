@@ -32,7 +32,7 @@ const SelectAddressPanel = () => {
     }
     return (
         <div className='panel'>
-            <Header title="Select an address" style={{marginTop: '10px'}} onClick={() => back()} back={true}/>
+            <Header title="Select an address" border style={{marginTop: '10px'}} onClick={() => back()} back={true}/>
             <Content>
                 <Search style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
                 {walletList?.map((elem,i) =>(
