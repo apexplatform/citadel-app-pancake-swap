@@ -11,13 +11,11 @@
     justify-content: space-between;
     margin: 0;
     height: 34px;
-    font-family: 'Panton';
 }
 
 .transaction-description-text{
     color: #818C99;
     font-size: 15px;
-    font-family: 'Panton';
 }
 .transactions-status{
     font-size: 18px;
@@ -31,7 +29,7 @@
 }
 .transactions-details-fee{
     font-size: 18px;
-    font-family: 'Panton Medium';
+    font-weight: 600;
     color: #5639E0 !important;
 }
 
@@ -57,7 +55,7 @@
 }
 .no-transactions-block h3{
     margin-bottom: 0;
-    font-family: 'Panton Medium';
+    font-weight: 600;
 }
 
 .no-transactions-block p{
