@@ -176,7 +176,7 @@ const checkSwapStatus = (amount) => dispatch => {
   const { activeWallet, allowance } = store.getState().wallet
   const { priceImpactWithoutFee } = getTradeFeePrice(trade)
   const balance = tokenIn?.balance
-  let feeProcent = activeWallet?.code === tokenIn?.symbol ? 0.001 : 0
+  let feeProcent = activeWallet?.code === tokenIn?.symbol ? 0.01 : 0
   if(+amount > 0) {
     if(+amount > +balance){
       dispatch(setSwapStatus('insufficientBalance'))
