@@ -37,10 +37,10 @@ export class WalletList {
                     if(wallet){
                         let response = await wallet.getWalletBalance()
                         if(response?.ok){
-                            item.balance = walletActions.formatBalance(response.data.mainBalance,6)
+                            item.balance = response.data.mainBalance
                         }else{
                             response = await wallet.getWalletBalance()
-                            item.balance = walletActions.formatBalance(response.data.mainBalance,6)
+                            item.balance = response.data.mainBalance
                         }
                     } 
                 })

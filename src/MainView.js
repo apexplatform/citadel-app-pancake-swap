@@ -7,7 +7,7 @@ import TransactionsPanel from './components/panels/TransactionsPanel'
 import TransactionsDetailsPanel from './components/panels/TransactionDetails'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { errorActions } from './store/actions'
+import { errorActions, walletActions } from './store/actions'
 import text from './text.json'
 import { useNavigate } from 'react-router-dom';
 import { StatusPopup, PopupWindow, TipCard, NotificationCard, Panel, Modal, View, AddressSectionCard}  from '@citadeldao/apps-ui-kit/dist/main';
@@ -35,7 +35,7 @@ const MainView = () => {
     return(
         <View>
             <Panel config={config}>
-              <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS + '?' + window.location.search.slice(1))} style={{margin: '20px 20px 0'}} data={activeWallet} id='/show'></AddressSectionCard>
+              <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS + '?' + window.location.search.slice(1))} style={{margin: '20px 20px 0'}} data={{...activeWallet,balance: walletActions.formatBalance(activeWallet.balance,6)}} id='/show'></AddressSectionCard>
               <PopupWindow show={showSuccess} id='/show'>
                   <StatusPopup text={errors?.text} type='error' showPopup={clearErrors}/>       
               </PopupWindow>
