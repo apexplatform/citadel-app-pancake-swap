@@ -7,7 +7,7 @@ import TransactionsPanel from './components/panels/TransactionsPanel'
 import TransactionsDetailsPanel from './components/panels/TransactionDetails'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { errorActions, walletActions } from './store/actions'
+import { errorActions } from './store/actions'
 import text from './text.json'
 import { useNavigate } from 'react-router-dom';
 import { StatusPopup, PopupWindow, TipCard, NotificationCard, Panel, Modal, View, AddressSectionCard}  from '@citadeldao/apps-ui-kit/dist/main';
@@ -16,6 +16,7 @@ import { Config } from './components/config/config';
 import SelectAddressPanel from './components/panels/SelectAddressPanel';
 import SelectTokenPanel from './components/panels/SelectTokenPanel';
 import ConfirmModal from './components/uikit/ConfirmModal'
+import { formatByDecimals } from './components/helpers/numberFormatter';
 const MainView = () => {
     const location = useLocation();
     const dispatch = useDispatch()
@@ -31,11 +32,15 @@ const MainView = () => {
       dispatch(errorActions.clearErrors())
     }
     const navigate = useNavigate()
+    let wallet = activeWallet
+    if(activeWallet){
+      wallet = {...activeWallet,balance: formatByDecimals(activeWallet?.balance,6)}
+    }
     const config = new Config()
     return(
         <View>
             <Panel config={config}>
-              <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS + '?' + window.location.search.slice(1))} style={{margin: '20px 20px 0'}} data={{...activeWallet,balance: walletActions.formatBalance(activeWallet.balance,6)}} id='/show'></AddressSectionCard>
+              <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS + '?' + window.location.search.slice(1))} style={{margin: '20px 20px 0'}} data={wallet} id='/show'></AddressSectionCard>
               <PopupWindow show={showSuccess} id='/show'>
                   <StatusPopup text={errors?.text} type='error' showPopup={clearErrors}/>       
               </PopupWindow>
