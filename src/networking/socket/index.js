@@ -42,9 +42,12 @@ socket.on('address-balance-updated-app',async(data)=>{
 			payload: wallets,
 		});
 	}	
-	const { amountIn } = store.getState().swap
-	store.dispatch(walletActions.loadTokenBalances(activeWallet))
-	store.dispatch(swapActions.checkSwapStatus(amountIn))
+	if(activeWallet.address === data.address){
+		const { amountIn, isExactIn } = store.getState().swap
+		console.log(amountIn, isExactIn,'---updater')
+		store.dispatch(walletActions.loadTokenBalances(activeWallet))
+		store.dispatch(swapActions.getSwapInfo(amountIn, isExactIn))
+	}
 })
 
 
