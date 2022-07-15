@@ -173,7 +173,7 @@ const SwapPanel = () => {
                         />
                 </div>
             <InfoCardBlock>
-                <InfoCardItem text={'Price'} symbol={tokenIn.symbol} symbol2={tokenOut.symbol}><span className='purple-text'>{formattedPrice || '-'}</span></InfoCardItem>
+                <InfoCardItem text={'Price'} symbol={tokenOut.symbol} symbol2={tokenIn.symbol}><span className='purple-text'>{formattedPrice || '-'}</span></InfoCardItem>
                 <InfoCardItem text={'Price impact'} symbol={'%'}><span className='green-text'>{priceImpactWithoutFee ? (priceImpactWithoutFee.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpactWithoutFee.toFixed(2)}`) : '-'}</span></InfoCardItem>
                 <InfoCardItem text={'Minimum received'} symbol={tokenOut.symbol}><span className='purple-text'>{minReceived !== 0 ? minReceived?.toSignificant(4) : minReceived}</span></InfoCardItem>
                 <InfoCardItem text={'Liquidity Provider Fee'} symbol={tokenIn.symbol}><span className='pink-text'>{realizedLPFee?.toSignificant(4) || 0}</span></InfoCardItem>

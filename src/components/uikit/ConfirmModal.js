@@ -37,7 +37,7 @@ return(
       </div>
       { disabledSwap && <PriceUpdatedCard style={{margin: '16px 0'}} acceptPrice={() => acceptTrade()} text='Price updated'/> }
       <InfoCardBlock>
-        <InfoCardItem text={'Price'} symbol={tokenIn.symbol} symbol2={tokenOut.symbol}>
+        <InfoCardItem text={'Price'} symbol={tokenOut.symbol} symbol2={tokenIn.symbol}>
           <span className='purple-text'>
             <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M0.681641 7.75006L5.99989 0.067811L11.3181 7.75006L0.681641 7.75006Z" fill="#ED4242"/>
