@@ -85,7 +85,8 @@ const SwapPanel = () => {
             dispatch(swapActions.setSwapStatus('insufficientBalance'))
             formattedAmounts[val] = 0
         }
-        if(isBNB && formattedAmounts[val] > 0.01){
+        let currentToken = val === "INPUT" ? tokenIn : tokenOut
+        if(currentToken.symbol === 'BNB' && formattedAmounts[val] > 0.01){
             formattedAmounts[val] = formattedAmounts[val] - 0.01
         }
         dispatch(swapActions.setAmount(formattedAmounts[val],val === "INPUT" ? true : false));

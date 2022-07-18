@@ -56,6 +56,12 @@ socket.on('mempool-add-tx-app', (data) => {
 
 socket.on('mempool-remove-tx-app',async (data) => {
 	console.log('mempool-remove-tx-app', data)
+	const { activeWallet } = store.getState().wallet
+	if(activeWallet.address === data.from){
+		const { amountIn, isExactIn } = store.getState().swap
+		store.dispatch(walletActions.loadTokenBalances(activeWallet))
+		store.dispatch(swapActions.getSwapInfo(amountIn, isExactIn))
+	}
 })
 
 export default socket
