@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import { store } from "../../store/store";
 import { types } from '../../store/actions/types';
-import { swapActions, walletActions } from '../../store/actions';
+import { walletActions } from '../../store/actions';
 
 const { auth_token } = store.getState().user;
 const socket = io(
@@ -44,9 +44,7 @@ socket.on('address-balance-updated-app',async(data)=>{
 	}	
 	if(activeWallet.address === data.address){
 		console.log('--updater 1')
-		const { amountIn, isExactIn } = store.getState().swap
 		store.dispatch(walletActions.loadTokenBalances(activeWallet))
-		store.dispatch(swapActions.getSwapInfo(amountIn, isExactIn))
 	}
 })
 
@@ -60,9 +58,7 @@ socket.on('mempool-remove-tx-app',async (data) => {
 	const { activeWallet } = store.getState().wallet
 	if(activeWallet.address === data.from){
 		console.log('--updater 2')
-		const { amountIn, isExactIn } = store.getState().swap
 		store.dispatch(walletActions.loadTokenBalances(activeWallet))
-		store.dispatch(swapActions.getSwapInfo(amountIn, isExactIn))
 	}
 })
 

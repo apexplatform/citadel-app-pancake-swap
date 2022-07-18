@@ -1,7 +1,7 @@
 import { types } from './types';
 import { WalletList } from '../../networking/models/WalletList';
 import { ValidationError } from '../../networking/models/Errors';
-import { errorActions, usersActions } from './index'
+import { errorActions, usersActions, swapActions } from './index'
 import { getRequest } from '../../networking/requests/getRequest';
 import { store } from '../store';
 import models from '../../networking/models'
@@ -161,7 +161,7 @@ const formatBalance = (hex,decimals) => {
 const loadTokenBalances = (address) => {
     const wallet = getWalletConstructor(address)
     const { tokens } = store.getState().wallet;
-    const { tokenIn, tokenOut } = store.getState().swap;
+    const { tokenIn, tokenOut, amount, isExactIn } = store.getState().swap;
     tokens.forEach(async(token) => {
         if(token?.address){
             let balance = await wallet.getTokenBalance(token)
@@ -189,6 +189,7 @@ const loadTokenBalances = (address) => {
             token.balance = formatBalance(address?.balance, 6)
         }
     })
+    store.dispatch(swapActions.getSwapInfo(amount, isExactIn, false))
     setTimeout(()=>{
         stopSplashLoader()
     },1000) 
