@@ -1,80 +1,42 @@
-.transaction-type-text{
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: 500;
-}
-
-.transaction-details-row{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0;
-    height: 34px;
-}
-
-.transaction-description-text{
-    color: #818C99;
-    font-size: 15px;
-}
-.transactions-status{
-    font-size: 18px;
-    font-weight: 500;
-    color: #4BB34B;
-}
-.transactions-status-failed{
-    font-size: 18px;
-    font-weight: 500;
-    color: #E64646;
-}
-.transactions-details-fee{
-    font-size: 18px;
-    font-weight: 600;
-    color: #5639E0 !important;
-}
-
-.transaction-details-header{
-    text-transform: capitalize;
-    text-align: center;
+.transactions-details-block span{
     font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
 }
 
-.transactions-block{
-    margin-bottom: 145px;
+.transactions-details-block .transaction-address{
+    color: #5639E0;
 }
 
-.no-transactions-block{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 17% auto auto;
-}
-.transasction-details-row span{
-    text-align: right;
-}
-.no-transactions-block h3{
-    margin-bottom: 0;
-    font-weight: 600;
+.transactions-details-block .transactions-amount{
+    font-weight: 700;
+    color: #5639E0;
 }
 
-.no-transactions-block p{
-    color: #28436E;
-    text-align: center;
-    width: 70%;
-    font-size: 15px;
+.transactions-details-block .transaction-ticker{
+    color: black;
 }
 
-.transactions-grid{
-    margin:10px;
-    margin-bottom: 150px;
+.transactions-details-fee{
+    font-weight: 700 !important;
+    color: #0091A6;
 }
 
-.transactions-card{
-    margin-bottom:10px;
+.transactions-status{
+    color: #0F8932;
+    font-weight: 700 !important;
+} 
+
+.transactions-status-failed {
+    color:  #CC3030;
+    font-weight: 700 !important;
 }
 
-.transaction-link{
-    margin-left: 5px;
-    display: inline-flex;
+.transactions-details-block .row .custom-icon{
+    margin-left: 4px;
+}
+
+.transaction-datetime{
+    font-weight: 600 !important;
+    color: #6B93C0;
 }
