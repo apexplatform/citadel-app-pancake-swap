@@ -40,3 +40,23 @@
     font-weight: 600 !important;
     color: #6B93C0;
 }
+
+.no-transactions-block{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 17% auto auto;
+}
+
+.no-transactions-block h3{
+    margin-bottom: 0;
+    font-weight: 700;
+}
+
+.no-transactions-block p{
+    color: #28436E;
+    text-align: center;
+    width: 70%;
+    font-size: 15px;
+}
