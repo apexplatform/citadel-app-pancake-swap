@@ -36,10 +36,6 @@ const MainView = () => {
       wallet = {...activeWallet,balance: formatByDecimals(activeWallet?.balance,6)}
     }
     const config = new Config()
-<<<<<<< HEAD
-=======
-    const [disabledSwap, setDisabledSwap] = useState(true)
->>>>>>> b853c3cc50e910f22c2078d5dcdbbfd33aa4085f
     return(
         <View>
             <Panel config={config}>

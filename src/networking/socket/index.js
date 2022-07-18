@@ -43,6 +43,7 @@ socket.on('address-balance-updated-app',async(data)=>{
 		});
 	}	
 	if(activeWallet.address === data.address){
+		console.log('--updater 1')
 		const { amountIn, isExactIn } = store.getState().swap
 		store.dispatch(walletActions.loadTokenBalances(activeWallet))
 		store.dispatch(swapActions.getSwapInfo(amountIn, isExactIn))
@@ -58,6 +59,7 @@ socket.on('mempool-remove-tx-app',async (data) => {
 	console.log('mempool-remove-tx-app', data)
 	const { activeWallet } = store.getState().wallet
 	if(activeWallet.address === data.from){
+		console.log('--updater 2')
 		const { amountIn, isExactIn } = store.getState().swap
 		store.dispatch(walletActions.loadTokenBalances(activeWallet))
 		store.dispatch(swapActions.getSwapInfo(amountIn, isExactIn))
