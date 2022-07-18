@@ -60,6 +60,8 @@ const setTokenIn = (token) => async(dispatch) => {
       type: types.SET_ALLOWANCE,
       payload: allowance,
     });
+    const { amount } = store.getState().swap
+    dispatch(checkSwapStatus(amount))
   }
 };
 
@@ -171,7 +173,7 @@ const getSwapInfo = (amountIn, isExactIn=true, isSwap=false, check=true) => asyn
 }
 
 
-const checkSwapStatus = (amount) => dispatch => {
+const checkSwapStatus = (amount,ss) => dispatch => {
   const { tokenIn, slippageTolerance, trade } = store.getState().swap
   const { activeWallet, allowance } = store.getState().wallet
   const { priceImpactWithoutFee } = getTradeFeePrice(trade)

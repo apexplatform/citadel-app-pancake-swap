@@ -186,7 +186,7 @@ const loadTokenBalances = (address) => {
                 })  
             }
         }else{
-            token.balance = address?.balance
+            token.balance = formatBalance(address?.balance, 6)
         }
     })
     setTimeout(()=>{

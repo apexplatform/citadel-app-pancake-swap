@@ -15,7 +15,6 @@ import InfoPanel from './components/panels/InfoPanel'
 import { Config } from './components/config/config';
 import SelectAddressPanel from './components/panels/SelectAddressPanel';
 import SelectTokenPanel from './components/panels/SelectTokenPanel';
-import ConfirmModal from './components/uikit/ConfirmModal'
 import { formatByDecimals } from './components/helpers/numberFormatter';
 const MainView = () => {
     const location = useLocation();
@@ -59,7 +58,6 @@ const MainView = () => {
                 <TipCard text={text.ADDRESS_ERROR_TIP} />
               </div> }
             </Modal>
-            <ConfirmModal />
         </View>
     )
 }

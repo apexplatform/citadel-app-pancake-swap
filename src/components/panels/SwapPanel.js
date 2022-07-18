@@ -10,6 +10,7 @@ import '../styles/panels/swap.css';
 import SwapButton from '../uikit/SwapButton';
 import ROUTES from '../../routes';
 import BigNumber from "bignumber.js";
+import ConfirmModal from '../uikit/ConfirmModal';
 const SwapPanel = () => {
     const config = new Config()
     const navigate = useNavigate()
@@ -182,6 +183,7 @@ const SwapPanel = () => {
             <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippageTolerance} />
             <SwapButton isBNB={isBNB}/>
             </Content>
+            <ConfirmModal />
             <Tabbar config={config}/>
         </div>
     )
