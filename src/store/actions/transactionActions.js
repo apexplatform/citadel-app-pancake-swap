@@ -16,7 +16,6 @@ const loadTransactions = () => async (dispatch) => {
     payload: [],
   });
   const activeWallet = store.getState().wallet.activeWallet
-  console.log(activeWallet)
   if(activeWallet){
     const wallet = walletActions.getWalletConstructor(activeWallet);
     wallet.getTransactions().then(response => {

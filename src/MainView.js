@@ -14,6 +14,7 @@ import { StatusPopup, PopupWindow , TipCard, NotificationCard, Panel, Modal, Vie
 import InfoPanel from './components/panels/InfoPanel'
 import { Config } from './components/config/config';
 import SelectAddressPanel from './components/panels/SelectAddressPanel';
+import { formatByDecimals } from './components/helpers/numberFormatter';
 const MainView = () => {
     const location = useLocation();
     const dispatch = useDispatch()
@@ -29,11 +30,15 @@ const MainView = () => {
       dispatch(errorActions.clearErrors())
     }
     const navigate = useNavigate()
+    let wallet = activeWallet
+    if(activeWallet){
+      wallet = {...activeWallet,balance: formatByDecimals(activeWallet?.balance,6)}
+    }
     const config = new Config()
     return(
         <View>
             <Panel config={config}>
-              <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS + '?' + window.location.search.slice(1))} style={{margin: '20px 20px 0'}} data={activeWallet} id='/show'></AddressSectionCard>
+              <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS + '?' + window.location.search.slice(1))} style={{margin: '20px 20px 0'}} data={wallet} id='/show'></AddressSectionCard>
               <PopupWindow show={showSuccess} id='/show'>
                   <StatusPopup text={errors?.text} type='error' showPopup={clearErrors}/>       
               </PopupWindow>
