@@ -5,7 +5,7 @@ const tokens = [{...Currency.ETHER, symbol: 'BNB', name: "Binance Smart Chain", 
 
 const initialState = {
     wallets: null,
-    networks: [],
+    networks: null,
     stakeNodes: null,
     transactionResponse: null,
     loader: true,

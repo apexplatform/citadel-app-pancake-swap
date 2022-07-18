@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { swapActions } from '../../store/actions';
 import { useNavigate } from 'react-router-dom';
 import {sortList} from '../helpers'
-
 const SelectTokenPanel = () => {
     const config = new Config()
     const { tokens } = useSelector((state) => state.wallet)

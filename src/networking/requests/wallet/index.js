@@ -10,6 +10,16 @@ const getWalletBalance = (data) => {
   return request
 }
 
+const getAllTokenBalance = (data) => {
+  const config = {
+    params: {
+      token: data.token
+    }
+  }
+  const request = new utils.Request('get',`${process.env.REACT_APP_BACKEND_URL}/${data.network}/${data.address}/wallets/allTokenBalance`,config)
+  return request
+}
+
 const prepareBaseTransfer = (data) => {
   const config = {
       data: data.transaction
@@ -32,5 +42,6 @@ export const wallet = {
   getWalletBalance,
   prepareBaseTransfer,
   getStakeNodes,
-  getNetworks
+  getNetworks,
+  getAllTokenBalance
 }

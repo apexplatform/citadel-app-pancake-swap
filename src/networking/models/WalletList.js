@@ -1,32 +1,48 @@
 import { ValidationError } from './Errors';
 import { walletActions } from '../../store/actions'
-import { networks } from './network.js'
+import axios from 'axios';
 export class WalletList {
-    getWallets(){
+    getTxUrl(net){
+        if(net === 'eth'){
+            return (txHash) => { return `https://etherscan.io/tx/${txHash}` }
+        }else if(net === 'bsc'){
+            return (txHash) => { return `https://bscscan.com/tx/${txHash}` }
+        }else if(net === 'orai'){
+            return (txHash) => { return `https://scan.orai.io/txs/${txHash}` }
+        }else if(net === 'cheqd'){
+            return (txHash) => { return `https://explorer.cheqd.io/transactions/${txHash}` }
+        }else{
+            return (txHash) => { return `https://www.mintscan.io/${net}/txs/${txHash}` }
+        }  
+    }
+    async getWallets(){
         try{
             const qs = require('querystring');
             const params = window.location.search.slice(1);
             const paramsAsObject = qs.parse(params);
             let arr = JSON.parse(paramsAsObject.wallets)
+            let  wallets = null
+            const res = await axios.get(process.env.REACT_APP_MAIN_SERVER_URL + '/networks.json')
+            let networks = res.data
             // eslint-disable-next-line
-            let wallets = arr.length ? eval(paramsAsObject.wallets).map(item => {
+            wallets = arr.length ? eval(paramsAsObject.wallets).map(item => {
                 return {
                     address: item?.address,
                     network: item?.net,
                     name: networks[item?.net]?.name,
                     code: networks[item?.net]?.code,
+                    decimals: networks[item?.net]?.decimals,
                     publicKey: item?.publicKey,
-                    getTxUrl:  networks[item?.net]?.getTxUrl
+                    getTxUrl: this.getTxUrl(item?.net)
                 }
             }) : new ValidationError()
             return wallets
         }catch(e){
             return new ValidationError(e)
         }
-     
     }
     async loadWalletsWithBalances(){
-        const wallets = this.getWallets()
+        const wallets = await this.getWallets()
         if(wallets instanceof ValidationError){
             return wallets
         }
