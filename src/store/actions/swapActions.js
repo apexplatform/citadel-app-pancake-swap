@@ -211,11 +211,11 @@ const getApproveTransaction  = () => dispatch => {
       url: "https://bscscan.com/address/0x10ed43c718714eb63d5aa57b78b54704e256024e"
     }
     const transaction = wallet.generateApproveTransaction(tokenIn,contractData)
-    wallet.prepareTransfer(transaction).then((ok, data) => {
-      if(ok){
+    wallet.prepareTransfer(transaction).then(res => {
+      if(res.ok){
         return dispatch ({
           type: types.SET_PREPARE_TRANSFER_RESPONSE,
-          payload: data
+          payload: res.data
         })
       }
     }).catch(err => {

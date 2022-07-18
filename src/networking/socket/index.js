@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import { store } from "../../store/store";
 import { types } from '../../store/actions/types';
-import { walletActions } from '../../store/actions';
+import { swapActions, walletActions } from '../../store/actions';
 
 const { auth_token } = store.getState().user;
 const socket = io(
@@ -55,10 +55,15 @@ socket.on('mempool-add-tx-app', (data) => {
 
 socket.on('mempool-remove-tx-app',async (data) => {
 	console.log('mempool-remove-tx-app', data)
-	const { activeWallet } = store.getState().wallet
+	const { tokenIn } = store.getState().swap;
+	const { activeWallet, transactionResponse } = store.getState().wallet
 	if(activeWallet.address === data.from){
-		console.log('--updater 2')
-		store.dispatch(walletActions.loadTokenBalances(activeWallet))
+		console.log('--updater 2',transactionResponse)
+		if(transactionResponse && transactionResponse.type === "Approve"){
+			store.dispatch(swapActions.setTokenIn(tokenIn))
+		}else{
+			store.dispatch(walletActions.loadTokenBalances(activeWallet))
+		}
 	}
 })
 
