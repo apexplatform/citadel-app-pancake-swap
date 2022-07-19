@@ -125,7 +125,6 @@ const getTradeFeePrice = (trade) => {
 }
 
 const getSwapInfo = (amountIn, isExactIn=true, isSwap=false, check=true) => async(dispatch) => {
-  console.log(amountIn,'--amountIn')
   try{
     if(+amountIn > 0){
       const { tokenIn, tokenOut, independentField, trade, slippageTolerance } = store.getState().swap;
@@ -176,7 +175,6 @@ const getSwapInfo = (amountIn, isExactIn=true, isSwap=false, check=true) => asyn
 
 const checkSwapStatus = (amount) => dispatch => {
   const { tokenIn, slippageTolerance, trade } = store.getState().swap
-  console.log(amount,tokenIn,'---checkSwapStatus')
   const { activeWallet, allowance } = store.getState().wallet
   const { priceImpactWithoutFee } = getTradeFeePrice(trade)
   const balance = tokenIn?.balance
@@ -245,7 +243,6 @@ const getSwapTransaction  = () => async(dispatch) => {
     }else{
       transaction = wallet.generateSwapTransaction(tokenIn,amount,tokenOut,amountOut,trade,deadline,slippageTolerance,isExactIn)
     }
-    console.log(transaction,'--transaction')
     wallet.prepareTransfer(transaction).then((response) => {
         if(response?.ok){
           dispatch ({

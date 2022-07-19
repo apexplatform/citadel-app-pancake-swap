@@ -25,7 +25,6 @@ const TransactionsPanel = () => {
         dispatch(transactionActions.setOpenedTransaction(data))
         navigate(ROUTES.TRANSACTION_DETAILS + '?' + window.location.search.slice(1))
     }
-    console.log(transactions,'--transactions')
     return (
         <div className='panel'>
             <Content> 

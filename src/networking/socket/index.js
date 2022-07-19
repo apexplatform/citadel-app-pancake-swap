@@ -43,7 +43,6 @@ socket.on('address-balance-updated-app',async(data)=>{
 		});
 	}	
 	if(activeWallet.address === data.address){
-		console.log('--updater 1')
 		store.dispatch(walletActions.loadTokenBalances(activeWallet))
 	}
 })
@@ -58,7 +57,6 @@ socket.on('mempool-remove-tx-app',async (data) => {
 	const { tokenIn } = store.getState().swap;
 	const { activeWallet, transactionResponse } = store.getState().wallet
 	if(activeWallet.address === data.from){
-		console.log('--updater 2',transactionResponse)
 		if(transactionResponse && transactionResponse.type === "Approve"){
 			store.dispatch(swapActions.setTokenIn(tokenIn))
 		}else{
