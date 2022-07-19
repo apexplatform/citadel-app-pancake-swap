@@ -47,3 +47,12 @@
     display: none;
   }
 </style>
+<script>
+function listener(event) {
+  console.log('EVENT FROM FRONT', event, event.data);
+}
+if (window.addEventListener) {
+  console.log('subscribe front');
+  window.addEventListener("message", listener,false);
+}
+</script>
