@@ -176,6 +176,7 @@ const getSwapInfo = (amountIn, isExactIn=true, isSwap=false, check=true) => asyn
 
 const checkSwapStatus = (amount) => dispatch => {
   const { tokenIn, slippageTolerance, trade } = store.getState().swap
+  console.log(amount,tokenIn,'---checkSwapStatus')
   const { activeWallet, allowance } = store.getState().wallet
   const { priceImpactWithoutFee } = getTradeFeePrice(trade)
   const balance = tokenIn?.balance

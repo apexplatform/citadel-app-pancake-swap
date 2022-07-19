@@ -27,16 +27,7 @@ const initialState = {
   minReceived: null,
   selectedToken: 'INPUT',
   deadlineMin: 20,
-  routes: [
-    {
-        code: 'cosmos',
-        network: 'Cosmos'
-    },
-    {
-        code: 'osmosis',
-        network: 'Osmosis'
-    }
-  ]
+  routes: []
 };
 export default function SwapReducer (state = initialState, action) {
   switch (action.type) {

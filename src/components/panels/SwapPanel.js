@@ -93,7 +93,7 @@ const SwapPanel = () => {
         dispatch(swapActions.getSwapInfo(formattedAmounts[val],val === "INPUT" ? true : false));
     }
     const [windowDimensions, setWindowDimensions] = useState(window.innerWidth);
-    useEffect(() => {
+    useEffect(() => { 
         function handleResize() {
             const { innerWidth: width } = window;
             setWindowDimensions(width);

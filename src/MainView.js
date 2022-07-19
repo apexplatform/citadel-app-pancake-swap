@@ -7,7 +7,7 @@ import TransactionsPanel from './components/panels/TransactionsPanel'
 import TransactionsDetailsPanel from './components/panels/TransactionDetails'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { errorActions } from './store/actions'
+import { errorActions, swapActions } from './store/actions'
 import text from './text.json'
 import { useNavigate } from 'react-router-dom';
 import { StatusPopup, PopupWindow, TipCard, NotificationCard, Panel, Modal, View, AddressSectionCard}  from '@citadeldao/apps-ui-kit/dist/main';
@@ -20,12 +20,15 @@ const MainView = () => {
     const location = useLocation();
     const dispatch = useDispatch()
     const showModal = useSelector(state => state.errors.openErrorModal)
-    const {validationErrors, errors} = useSelector(state => state.errors)
-    const {activeWallet} = useSelector(state => state.wallet)
+    const { validationErrors, errors } = useSelector(state => state.errors)
+    const { activeWallet, allowance } = useSelector(state => state.wallet)
+    const { amount } = useSelector(state => state.swap)
     const [showSuccess, setShowSuccess] = useState(errors)
     useEffect(() => {
       setShowSuccess(errors)
-    }, [errors]);
+      dispatch(swapActions.checkSwapStatus(amount))
+      // eslint-disable-next-line 
+    }, [errors, allowance]);
     const clearErrors = () => {
       setShowSuccess(false)
       dispatch(errorActions.clearErrors())
