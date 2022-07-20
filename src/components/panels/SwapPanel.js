@@ -1,14 +1,15 @@
 import React, {useState,useEffect} from 'react';
-import { Content, CustomIcon, Tabbar, EditAmount, BigButtons, SelectToken, InfoCardBlock, InfoCardItem} from '@citadeldao/apps-ui-kit/dist/main';
+import { Content, CustomIcon, Tabbar, EditAmount, SelectToken, InfoCardBlock, InfoCardItem} from '@citadeldao/apps-ui-kit/dist/main';
 import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { errorActions, panelActions, swapActions } from '../../store/actions';
+import { panelActions, swapActions } from '../../store/actions';
 import { useNavigate } from 'react-router-dom';
 import { formatByDecimals } from "../helpers/numberFormatter";
 import '../styles/panels/swap.css';
 import ROUTES from '../../routes';
 import BigNumber from "bignumber.js";
+import SwapButton from '../uikit/SwapButton';
 const SwapPanel = () => {
     const config = new Config()
     const navigate = useNavigate()
@@ -37,7 +38,7 @@ const SwapPanel = () => {
         dispatch(swapActions.setTokenIn(tokenOut));
         dispatch(swapActions.setAmount(formattedAmounts[dependentField]));
         dispatch(swapActions.setTokenOut(tokenIn));
-        dispatch(swapActions.updateSwapInfo(formattedAmounts[dependentField], isExactIn));
+        dispatch(swapActions.getSwapInfo(formattedAmounts[dependentField], isExactIn));
     };
     const setSelectedOption = (name) => {
         dispatch(swapActions.setSelectedToken(name))
@@ -48,7 +49,7 @@ const SwapPanel = () => {
         setExactIn(val === "INPUT" ? true : false);
         formattedAmounts[val] = 100 // max balance
         dispatch(swapActions.setAmount(formattedAmounts[val]));
-        dispatch(swapActions.updateSwapInfo(formattedAmounts[val],isExactIn));
+        dispatch(swapActions.getSwapInfo(formattedAmounts[val],isExactIn));
     }
 
     const checkAmount = (val,name) => {
@@ -71,7 +72,7 @@ const SwapPanel = () => {
         }
         dispatch(swapActions.setIndependentField(name));
         setExactIn(name === "INPUT" ? true : false);
-        dispatch(swapActions.updateSwapInfo(amount, isExactIn));
+        dispatch(swapActions.getSwapInfo(amount, isExactIn));
       };
     return (
         <div className='panel'>
@@ -119,9 +120,7 @@ const SwapPanel = () => {
                 <InfoCardItem text={'Route'} routes={routes}/>
             </InfoCardBlock>
             <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippage} />
-            <div className='center'>
-                <BigButtons text='SWAP' onClick={() => dispatch(errorActions.setConfirmModal(true))} style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>
-            </div>
+            <SwapButton />
             </Content>
             <Tabbar config={config}/>
         </div>

@@ -1,6 +1,7 @@
 import { store } from "../store";
 import { types } from "./types";
-import { errorActions, walletActions } from "./index";
+import { walletActions } from "./index";
+import BigNumber from 'bignumber.js';
 
 const setRateAmount = (amount) => (dispatch) => {
   dispatch({
@@ -63,7 +64,7 @@ const setSelectedToken = (token) => (dispatch) => {
   });
 };
 
-const updateSwapInfo = (amount = 0, isOut = true) => dispatch => {
+const getSwapInfo = (amount = 0, isOut = true) => dispatch => {
   if(isOut){
     dispatch({
       type: types.SET_OUT_AMOUNT,
@@ -75,24 +76,9 @@ const updateSwapInfo = (amount = 0, isOut = true) => dispatch => {
       payload: +amount / 0.5,
     });
   }
+  dispatch(checkSwapStatus(amount))
 }
 
-const getSwapInfo = (amountIn, isOut) => async(dispatch) => {
-  try{
-    // let res = {error: true};
-    // const { tokenIn, tokenOut } = store.getState().swap;
-    if (+amountIn > 0) {
-      // if(isOut){
-      //   res = await getOutAmountRoute(tokenIn.code,tokenOut.code,amountIn)
-      // }else{
-      //   res = await getInAmountRoute(tokenIn.code,tokenOut.code,amountIn)
-      // }
-    }
-  }catch(e){
-    dispatch(errorActions.checkErrors(e))
-  }
-  
-}
 
 const getSwapTransaction = (formattedAmounts, isOut, slippage) => dispatch => {
   const { tokenIn, tokenOut } = store.getState().swap;
@@ -109,17 +95,38 @@ const getSwapTransaction = (formattedAmounts, isOut, slippage) => dispatch => {
   console.log(transaction)
 }
 
+const checkSwapStatus = (amount) => dispatch => {
+  const { tokenIn } = store.getState().swap
+  const { activeWallet, allowance } = store.getState().wallet
+  const balance = tokenIn?.balance
+  let feeProcent = activeWallet?.code === tokenIn?.symbol ? 0.01 : 0
+  if(+amount > 0) {
+    if(+amount > +balance){
+      dispatch(setSwapStatus('insufficientBalance'))
+    } else if(+amount <= BigNumber(+balance).minus(feeProcent).toNumber() && +activeWallet?.balance > 0){
+        if(BigNumber(allowance).div(BigNumber(Math.pow(10,+tokenIn.decimals))).toNumber() > +amount){
+          dispatch(setSwapStatus('swap'))
+      } else {
+        dispatch(setSwapStatus('feeError'))
+      }
+    } else {
+      dispatch(setSwapStatus('enterAmount'))
+    }
+  }
+}
+
+
 export const swapActions = {
-    setRateAmount,
-    setSwapDisable,
-    setSwapStatus,
-    setSlippageTolerance,
-    setIndependentField,
-    setAmount,
-    setTokenIn,
-    setTokenOut,
-    updateSwapInfo,
-    setSelectedToken,
-    getSwapInfo,
-    getSwapTransaction
+  setRateAmount,
+  setSwapDisable,
+  setSwapStatus,
+  setSlippageTolerance,
+  setIndependentField,
+  setAmount,
+  setTokenIn,
+  setTokenOut,
+  setSelectedToken,
+  getSwapInfo,
+  getSwapTransaction,
+  checkSwapStatus
 };
