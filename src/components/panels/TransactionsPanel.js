@@ -22,7 +22,7 @@ const TransactionsPanel = () => {
     },[activeWallet])
     const setOpenedTransaction = (data) => {
         dispatch(transactionActions.setOpenedTransaction(data))
-        navigate(ROUTES.TRANSACTION_DETAILS + '?' + window.location.search.slice(1))
+        navigate(ROUTES.TRANSACTION_DETAILS)
     }
     return (
         <div className='panel'>
