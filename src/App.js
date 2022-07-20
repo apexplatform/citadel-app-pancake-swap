@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import MainView from "./MainView";
 import { Provider, useDispatch } from 'react-redux';
 import { store } from './store/store';
@@ -14,11 +14,11 @@ function App() {
   },[])
   return (
     <Provider store={store}>
-      <BrowserRouter basename={window.location.pathname}>
+      <HashRouter>
         <Routes>
             <Route path="/*" element={<MainView />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </Provider>
   );
 }

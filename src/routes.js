@@ -11,7 +11,7 @@ const ROUTES = {
 	CONTROL_PANEL: "/main/control_panel",
 	SELECT_ADDRESS: "/main/select_address",
 	SELECT_TOKEN: "/main/select_token",
-	INFO_MENU_GUIDE: "/info/guides",
+	INFO_MENU_GUIDE: "/info/guides/",
 	INFO_MENU_CHART: "/info/chart",
 	INFO_MENU_ASSETS: "/info/assets",
 	INFO_MENU: "/info/:menu"
