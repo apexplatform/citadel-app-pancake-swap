@@ -29,6 +29,8 @@
     align-items: center;
     text-align: center;
     margin-bottom: 10px;
+    font-family: 'Panton';
+    font-weight: 600;
 }
 
 .approve-step-row .active-circle{
