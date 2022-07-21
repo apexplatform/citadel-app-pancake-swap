@@ -28,7 +28,7 @@ export default class Wallet {
       }
     } catch(e){
       Sentry.captureException(e.response?.data?.error);
-      return new Error(e.response?.data?.error)
+      return new Error(e.response?.data?.error.message)
     }
   } 
   async getTransactions() {

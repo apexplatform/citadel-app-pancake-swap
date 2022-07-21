@@ -13,7 +13,7 @@ const SelectAddressPanel = () => {
     const previousPanel = useSelector(state => state.panels.previousPanel)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const back = () => navigate(previousPanel + '?' + window.location.search.slice(1))
+    const back = () => navigate(previousPanel)
     const searchWallet = (wallet) => {
         let arr = wallets.filter(
           (item) =>

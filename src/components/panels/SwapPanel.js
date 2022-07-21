@@ -147,7 +147,9 @@ const SwapPanel = () => {
                         balance={true} 
                         token={true} 
                         data={tokens} 
+                        style={{marginBottom: '30px'}}
                         action={true}
+                        field='from'
                         name='INPUT'
                         title="From token"
                         onMaxClick={() => setMaxValue('INPUT')}
@@ -164,6 +166,7 @@ const SwapPanel = () => {
                             token={true} 
                             data={tokens} 
                             action={true}
+                            field='to'
                             name='OUTPUT'
                             title="To token"
                             onMaxClick={() => setMaxValue('OUTPUT')}
@@ -174,7 +177,7 @@ const SwapPanel = () => {
                             onClick={() => setSelectedOption('OUTPUT')}
                         />
                 </div>
-            <InfoCardBlock>
+            <InfoCardBlock style={{marginTop: '10px'}}>
                 <InfoCardItem text={'Price'} symbol={tokenOut.symbol} symbol2={tokenIn.symbol}><span className='purple-text'>{formattedPrice || '-'}</span></InfoCardItem>
                 <InfoCardItem text={'Price impact'} symbol={'%'}><span className='green-text'>{priceImpactWithoutFee ? (priceImpactWithoutFee.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpactWithoutFee.toFixed(2)}`) : '-'}</span></InfoCardItem>
                 <InfoCardItem text={'Minimum received'} symbol={tokenOut.symbol}><span className='purple-text'>{minReceived !== 0 ? minReceived?.toSignificant(4) : minReceived}</span></InfoCardItem>

@@ -1,11 +1,12 @@
 #swap-center-btn{
     position: absolute;
     left: 45%;
-    top: 27%;
+    top: 36%;
 }
 
 .swap-inputs{
     position: relative;
+    margin-top: -10px;
 }
 
 .modal-header{
@@ -85,13 +86,14 @@
 
 @media screen and (max-width: 500px) {
     #swap-center-btn{
-        left: 43%;
-        top: 31%;
+        left: 42%;
+        top: 40%;
     }
 }
 
 @media screen and (max-width: 400px) {
     #swap-center-btn{
         left: 42%;
+        top: 44%;
     }
 }

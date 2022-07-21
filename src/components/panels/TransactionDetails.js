@@ -13,7 +13,7 @@ const TransactionDetails = (props) => {
   const { activeWallet } = useSelector(state => state.wallet)
   const data = useSelector(state => state.transaction.openedTransaction)
   const navigate = useNavigate()
-  const back = () => navigate(ROUTES.TRANSACTIONS + '?' + window.location.search.slice(1))
+  const back = () => navigate(ROUTES.TRANSACTIONS)
   return (
     <div className="panel">
       <Header config={config} border title={text.TRANSACTIONS_DETAILS} onClick={() => back()} back={true} />

@@ -216,6 +216,8 @@ const getApproveTransaction  = () => dispatch => {
           type: types.SET_PREPARE_TRANSFER_RESPONSE,
           payload: res.data
         })
+      }else{
+        dispatch(errorActions.checkErrors(res))
       }
     }).catch(err => {
       dispatch(errorActions.checkErrors(err.response?.data?.error))
@@ -249,15 +251,18 @@ const getSwapTransaction  = () => async(dispatch) => {
             type: types.SET_PREPARE_TRANSFER_RESPONSE,
             payload: response.data
           })
+        }else{
+          dispatch(errorActions.checkErrors(response))
         }
     }).catch(err => {
-      dispatch(errorActions.checkErrors(err.response?.data?.error))
+      dispatch(errorActions.checkErrors(err))
     })
   }
   setTimeout(() => {
     dispatch(setSwapDisable(false))
   }, 5000);
 }
+
 
 export const swapActions = {
   setSwapDisable,
