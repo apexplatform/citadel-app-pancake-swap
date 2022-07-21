@@ -74,6 +74,7 @@ const SwapPanel = () => {
         setExactIn(name === "INPUT" ? true : false);
         dispatch(swapActions.getSwapInfo(amount, isExactIn));
       };
+      console.log(tokenIn)
     return (
         <div className='panel'>
             <Content>
@@ -84,7 +85,9 @@ const SwapPanel = () => {
                         balance={true} 
                         token={true} 
                         data={tokens} 
+                        style={{marginBottom: '30px'}}
                         action={true}
+                        field='from'
                         name='INPUT'
                         title="From token"
                         onMaxClick={() => setMaxValue('INPUT')}
@@ -102,6 +105,7 @@ const SwapPanel = () => {
                             token={true} 
                             data={tokens} 
                             action={true}
+                            field='to'
                             name='OUTPUT'
                             title="To token"
                             onMaxClick={() => setMaxValue('OUTPUT')}
@@ -112,7 +116,7 @@ const SwapPanel = () => {
                             onClick={() => setSelectedOption('OUTPUT')}
                         />
                 </div>
-            <InfoCardBlock>
+            <InfoCardBlock   style={{marginTop: '10px'}}>
                 <InfoCardItem text={'Price'} amount={rate} symbol={'OSMO'} symbol2={'ATOM'}/>
                 <InfoCardItem text={'Price impact'} amount={10} symbol={'%'}/>
                 <InfoCardItem text={'Minimum received'} amount={1} symbol={'OSMO'}/>

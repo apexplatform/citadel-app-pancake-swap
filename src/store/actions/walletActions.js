@@ -136,7 +136,7 @@ const loadTokenBalances = async(address) => {
             let balance = 0
             let price = {}
             if(balances.data[symbol]){
-                balance = balances.data[symbol]?.amount
+                balance = balances.data[symbol]?.amount + ''
                 price = balances.data[symbol]?.price
             }
             tokenList.push({ ...networks[wallet.net]?.tokens[symbol], balance, price, network: wallet.net })
