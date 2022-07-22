@@ -198,7 +198,7 @@ const loadTokenBalances = (address) => {
 
 const updateWalletList = async(wallet) => {
     let { wallets, activeWallet, networks } = store.getState().wallet
-    let metaMaskWallet = wallets.find(elem => elem.from === 'metamask')
+    let metaMaskWallet = wallets && wallets.find(elem => elem.from === 'metamask')
     if(metaMaskWallet){
         let updateActiveWallet = false
         if(metaMaskWallet.network === wallet.net && wallet.address){
@@ -227,6 +227,7 @@ const updateWalletList = async(wallet) => {
         const response = await walletInstance.getWalletBalance()
         wallet.balance = response.data.mainBalance
         wallets = wallets.concat([wallet])
+        store.dispatch(errorActions.clearErrors())
     }
     store.dispatch({
         type: types.SET_WALLETS,
