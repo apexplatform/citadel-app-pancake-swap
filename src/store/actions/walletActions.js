@@ -29,6 +29,7 @@ const getWalletConstructor = (address) => {
 const loadWalletWithBalances = () => async(dispatch) => {
     const walletList = new WalletList()
     walletList.loadWalletsWithBalances().then(wallets => {
+        console.log(wallets)
         if(wallets instanceof ValidationError){
             dispatch(errorActions.checkErrors(wallets)) 
             stopSplashLoader()
@@ -195,6 +196,44 @@ const loadTokenBalances = (address) => {
     },1000) 
 }
 
+const updateWalletList = async(wallet) => {
+    let { wallets, activeWallet, networks } = store.getState().wallet
+    let metaMaskWallet = wallets.find(elem => elem.from === 'metamask')
+    if(metaMaskWallet){
+        let updateActiveWallet = false
+        if(metaMaskWallet.network === wallet.net){
+            if(metaMaskWallet.address === activeWallet.address){
+                updateActiveWallet = true
+            }
+            metaMaskWallet.address = wallet.address
+            const walletInstance = getWalletConstructor(metaMaskWallet)
+            const response = await walletInstance.getWalletBalance()
+            metaMaskWallet.balance = response.data.mainBalance
+            console.log(metaMaskWallet,'----metaMaskWallet')
+            if(updateActiveWallet){
+                store.dispatch(setActiveWallet(metaMaskWallet))
+            }
+        }
+    }else{
+        const walletList = new WalletList()
+        wallet.network = wallet.net
+        wallet.name = networks[wallet?.net]?.name
+        wallet.code = networks[wallet?.net]?.code
+        wallet.decimals = networks[wallet?.net]?.decimals
+        wallet.from = 'metamask'
+        wallet.getTxUrl = walletList.getTxUrl(wallet?.net)
+        const walletInstance = getWalletConstructor(wallet)
+        const response = await walletInstance.getWalletBalance()
+        wallet.balance = response.data.mainBalance
+        console.log(wallet,'---new wallet')
+        wallets = wallets.concat([wallet])
+    }
+    store.dispatch({
+        type: types.SET_WALLETS,
+        payload: wallets
+    })
+}
+
 export const walletActions = {
     getWalletConstructor,
     loadWalletWithBalances,
@@ -203,5 +242,6 @@ export const walletActions = {
     stopSplashLoader,
     setActiveWallet,
     loadTokenBalances,
-    formatBalance
+    formatBalance,
+    updateWalletList
 };

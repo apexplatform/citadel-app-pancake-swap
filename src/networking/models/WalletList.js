@@ -1,6 +1,8 @@
 import { ValidationError } from './Errors';
 import { walletActions } from '../../store/actions'
 import axios from 'axios';
+import { types } from '../../store/actions/types' 
+import { store } from '../../store/store'
 export class WalletList {
     getTxUrl(net){
         if(net === 'eth'){
@@ -24,6 +26,10 @@ export class WalletList {
             let  wallets = null
             const res = await axios.get(process.env.REACT_APP_MAIN_SERVER_URL + '/networks.json')
             let networks = res.data
+            store.dispatch({
+                type: types.SET_NETWORKS,
+                payload: networks
+            })
             // eslint-disable-next-line
             wallets = arr.length ? eval(paramsAsObject.wallets).map(item => {
                 return {
@@ -33,6 +39,7 @@ export class WalletList {
                     code: networks[item?.net]?.code,
                     decimals: networks[item?.net]?.decimals,
                     publicKey: item?.publicKey,
+                    from: item?.from,
                     getTxUrl: this.getTxUrl(item?.net)
                 }
             }) : new ValidationError()

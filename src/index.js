@@ -8,6 +8,7 @@ import { createRoot } from 'react-dom/client';
 import * as Sentry from "@sentry/react";
 import { BrowserTracing } from "@sentry/tracing";
 import { Config } from './components/config/config';
+import { walletActions } from './store/actions';
 const enabled = window.location.href.search('/localhost') === -1 && window.location.href.search('/192.168.') === -1
 Sentry.init({
     dsn: enabled ? "https://5c05e134a0f74a7b985c06ad96e81e73@o510489.ingest.sentry.io/6477719" : null,
@@ -25,3 +26,15 @@ splashRoot.render(<Splash appName='Pancakeswap' />);
 var r = document.querySelector(':root');
 const config = new Config()
 r.style.setProperty('--appThemeColor', config.tabbarParamsFromConfig("BACKGROUND_COLOR"));
+
+function listener(event) {
+  console.log('EVENT FROM FRONT', event.data);
+  if(event.data?.from === 'metamask'){
+    walletActions.updateWalletList(event.data)
+  }
+}
+
+if (window.addEventListener) {
+  console.log('subscribe front');
+  window.addEventListener("message", listener,false);
+}
