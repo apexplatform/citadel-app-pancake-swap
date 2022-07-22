@@ -121,16 +121,18 @@ const setActiveWallet = (wallet, save = true) => (dispatch) => {
         type: types.SET_ACTIVE_WALLET,
         payload: wallet,
     });
-    if(save){
-        const config = {
-            lastWalletInfo: {
-                address: wallet.address,
-                network: wallet.network
+    if(wallet){
+        if(save){
+            const config = {
+                lastWalletInfo: {
+                    address: wallet.address,
+                    network: wallet.network
+                }
             }
+            usersActions.setUserConfig(config)
         }
-        usersActions.setUserConfig(config)
-    }
-    loadTokenBalances(wallet)
+        loadTokenBalances(wallet)
+    }  
 }
 
 const formatBalance = (hex,decimals) => {
