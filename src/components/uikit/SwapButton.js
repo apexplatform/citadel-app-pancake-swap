@@ -8,6 +8,7 @@ const SwapButton = (props) => {
         width: 'auto',
         marginTop: '20px',
     }
+    console.log(tokenIn)
 	return (
         <div className='center'>
             {(props.isBNB && tokenIn === 'BNB') && <BigButtons disabled={disableSwap} text='DEPOSIT' onClick={() => dispatch(swapActions.getSwapTransaction())} style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5' hideIcon={true}/>}
@@ -15,7 +16,7 @@ const SwapButton = (props) => {
             {swapStatus === 'enterAmount' && <BigButtons text='ENTER AMOUNT' disabled style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5' hideIcon={true}/>}
             {swapStatus === 'swap' && <BigButtons disabled={disableSwap} onClick={() => swapActions.checkTradeUpdate()} text='SWAP' style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>}
             {swapStatus === 'swapAnyway' && <BigButtons disabled={disableSwap}  onClick={() => swapActions.checkTradeUpdate()} text='SWAP ANYWAY' style={customStyle} textColor='#FFFFFF' bgColor='#FF5722' hideIcon={true}/>}
-            {swapStatus === 'insufficientBalance' && <BigButtons disabled text={`Insufficient ${tokenIn.symbol} balance`} style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>}
+            {swapStatus === 'insufficientBalance' && <BigButtons disabled text={`Insufficient ${tokenIn.code} balance`} style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>}
             {swapStatus === 'feeError' && <BigButtons disabled text='Insufficient balance for swap fee' style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>}
             {swapStatus === 'approve' && 
             <div>

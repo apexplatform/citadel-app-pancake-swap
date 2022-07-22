@@ -10,6 +10,7 @@ import '../styles/panels/swap.css';
 import ROUTES from '../../routes';
 import BigNumber from "bignumber.js";
 import SwapButton from '../uikit/SwapButton';
+import ConfirmModal from '../uikit/ConfirmModal';
 const SwapPanel = () => {
     const config = new Config()
     const navigate = useNavigate()
@@ -74,7 +75,6 @@ const SwapPanel = () => {
         setExactIn(name === "INPUT" ? true : false);
         dispatch(swapActions.getSwapInfo(amount, isExactIn));
       };
-      console.log(tokenIn)
     return (
         <div className='panel'>
             <Content>
@@ -126,6 +126,7 @@ const SwapPanel = () => {
             <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippage} />
             <SwapButton />
             </Content>
+            <ConfirmModal />
             <Tabbar config={config}/>
         </div>
     )
