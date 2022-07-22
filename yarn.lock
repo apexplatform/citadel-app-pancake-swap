@@ -905,14 +905,6 @@
     "@babel/helper-create-regexp-features-plugin" "^7.16.7"
     "@babel/helper-plugin-utils" "^7.16.7"
 
-"@babel/polyfill@^7.12.1":
-  "integrity" "sha512-X0pi0V6gxLi6lFZpGmeNa4zxtwEmCs42isWLNjZZDE0Y8yVfgu0T2OAHlzBbdYlqbW/YXVvoBHpATEM+goCj8g=="
-  "resolved" "https://registry.npmjs.org/@babel/polyfill/-/polyfill-7.12.1.tgz"
-  "version" "7.12.1"
-  dependencies:
-    "core-js" "^2.6.5"
-    "regenerator-runtime" "^0.13.4"
-
 "@babel/preset-env@^7.11.0", "@babel/preset-env@^7.12.1", "@babel/preset-env@^7.16.4":
   "integrity" "sha512-PfpdxotV6afmXMU47S08F9ZKIm2bJIQ0YbAAtDfIENX7G1NUAXigLREh69CWDjtgUy7dYn7bsMzkgdtAlmS68Q=="
   "resolved" "https://registry.npmjs.org/@babel/preset-env/-/preset-env-7.18.2.tgz"
@@ -1089,15 +1081,18 @@
     "dotenv-webpack" "^7.1.0"
     "ethers" "^5.6.4"
 
-"@citadeldao/apps-ui-kit@^0.210.0":
-  "integrity" "sha512-ocP7Xl8bH4elkIja48xKoaPad9WX8BF3m/ZwcDUnAFW1u9XOAuLVH3hKzfMy9bWDT51lanME+Iipwbw2sJnCLA=="
-  "resolved" "https://registry.npmjs.org/@citadeldao/apps-ui-kit/-/apps-ui-kit-0.210.0.tgz"
-  "version" "0.210.0"
+"@citadeldao/apps-ui-kit@^0.217.0":
+  "integrity" "sha512-NtflZ3wYJeG4E+5FNmSXLvR3lCT8dLVVr//dYgeyfAWAgX/GARQ+d1A5bJ2ks8c/HnqqMc3O1RdnZ5AvWaOLCQ=="
+  "resolved" "https://registry.npmjs.org/@citadeldao/apps-ui-kit/-/apps-ui-kit-0.217.0.tgz"
+  "version" "0.217.0"
   dependencies:
-    "@babel/polyfill" "^7.12.1"
     "bignumber.js" "^9.0.2"
+    "classnames" "^2.3.1"
     "lottie-web" "^5.9.4"
     "moment" "^2.29.3"
+    "react" "^18.1.0"
+    "react-dom" "^18.1.0"
+    "react-router-dom" "^6.2.2"
     "web-vitals" "^2.1.4"
 
 "@csstools/normalize.css@*":
@@ -3588,6 +3583,11 @@
   "resolved" "https://registry.npmjs.org/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz"
   "version" "1.2.2"
 
+"classnames@^2.3.1":
+  "integrity" "sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA=="
+  "resolved" "https://registry.npmjs.org/classnames/-/classnames-2.3.1.tgz"
+  "version" "2.3.1"
+
 "clean-css@^5.2.2":
   "integrity" "sha512-YYuuxv4H/iNb1Z/5IbMRoxgrzjWGhOEFfd+groZ5dMCVkpENiMZmwspdrzBo9286JjM1gZJPAyL7ZIdzuvu2AQ=="
   "resolved" "https://registry.npmjs.org/clean-css/-/clean-css-5.3.0.tgz"
@@ -3775,11 +3775,6 @@
   "integrity" "sha512-3qNgf6TqI3U1uhuSYRzJZGfFd4T+YlbyVPl+jgRiKjdZopvG4keZQwWZDAWpu1UH9nCgTpUzIV3GFawC7cJsqg=="
   "resolved" "https://registry.npmjs.org/core-js-pure/-/core-js-pure-3.23.1.tgz"
   "version" "3.23.1"
-
-"core-js@^2.6.5":
-  "integrity" "sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ=="
-  "resolved" "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz"
-  "version" "2.6.12"
 
 "core-js@^3.19.2", "core-js@^3.23.2":
   "integrity" "sha512-oAKwkj9xcWNBAvGbT//WiCdOMpb9XQG92/Fe3ABFM/R16BsHgePG00mFOgKf7IsCtfj8tA1kHtf/VwErhriz5Q=="
@@ -8064,7 +8059,7 @@
   "resolved" "https://registry.npmjs.org/react-refresh/-/react-refresh-0.11.0.tgz"
   "version" "0.11.0"
 
-"react-router-dom@^6.3.0":
+"react-router-dom@^6.2.2", "react-router-dom@^6.3.0":
   "integrity" "sha512-uaJj7LKytRxZNQV8+RbzJWnJ8K2nPsOOEuX7aQstlMZKQT0164C+X2w6bnkqU3sjtLvpd5ojrezAyfZ1+0sStw=="
   "resolved" "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.3.0.tgz"
   "version" "6.3.0"
