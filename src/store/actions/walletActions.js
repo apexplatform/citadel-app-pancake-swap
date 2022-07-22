@@ -201,7 +201,7 @@ const updateWalletList = async(wallet) => {
     let metaMaskWallet = wallets.find(elem => elem.from === 'metamask')
     if(metaMaskWallet){
         let updateActiveWallet = false
-        if(metaMaskWallet.network === wallet.net){
+        if(metaMaskWallet.network === wallet.net && wallet.address){
             if(metaMaskWallet.address === activeWallet.address){
                 updateActiveWallet = true
             }
@@ -209,10 +209,11 @@ const updateWalletList = async(wallet) => {
             const walletInstance = getWalletConstructor(metaMaskWallet)
             const response = await walletInstance.getWalletBalance()
             metaMaskWallet.balance = response.data.mainBalance
-            console.log(metaMaskWallet,'----metaMaskWallet')
             if(updateActiveWallet){
                 store.dispatch(setActiveWallet(metaMaskWallet))
             }
+        }else{
+            wallets = wallets.filter(elem => elem.from !== 'metamask')
         }
     }else{
         const walletList = new WalletList()
@@ -225,7 +226,6 @@ const updateWalletList = async(wallet) => {
         const walletInstance = getWalletConstructor(wallet)
         const response = await walletInstance.getWalletBalance()
         wallet.balance = response.data.mainBalance
-        console.log(wallet,'---new wallet')
         wallets = wallets.concat([wallet])
     }
     store.dispatch({
