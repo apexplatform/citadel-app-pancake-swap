@@ -214,6 +214,10 @@ const updateWalletList = async(wallet) => {
             }
         }else{
             wallets = wallets.filter(elem => elem.from !== 'metamask')
+            if(wallets.length === 0){
+                store.dispatch(setActiveWallet(null))
+                store.dispatch(errorActions.checkErrors(new ValidationError())) 
+            }
         }
     }else{
         const walletList = new WalletList()
