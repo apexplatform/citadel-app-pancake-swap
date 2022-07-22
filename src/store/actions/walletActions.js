@@ -227,6 +227,9 @@ const updateWalletList = async(wallet) => {
         const response = await walletInstance.getWalletBalance()
         wallet.balance = response.data.mainBalance
         wallets = wallets.concat([wallet])
+        if(!activeWallet){
+            store.dispatch(setActiveWallet(wallet))
+        }
         store.dispatch(errorActions.clearErrors())
     }
     store.dispatch({

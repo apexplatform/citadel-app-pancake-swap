@@ -4,7 +4,7 @@ import { Currency } from '@pancakeswap/sdk'
 const tokens = [{...Currency.ETHER, symbol: 'BNB', name: "Binance Smart Chain", network: 'bsc', logoURI: "https://bscscan.com/token/images/binance_32.png"}, ...tokenList['tokens']]
 
 const initialState = {
-    wallets: null,
+    wallets: [],
     networks: null,
     stakeNodes: null,
     transactionResponse: null,
