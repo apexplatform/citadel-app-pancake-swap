@@ -6,6 +6,8 @@ import { utils } from '@citadeldao/apps-sdk';
 
 const walletRequest = getRequest('wallet')
 const transactionsRequest = getRequest('transactions')
+const requestManager = new utils.RequestManager();
+
 export default class Wallet {
   constructor(opts) {
       this.net = opts.network;
@@ -16,7 +18,6 @@ export default class Wallet {
   }
   async prepareTransfer(params) {
     const {auth_token} = store.getState().user
-    const requestManager = new utils.RequestManager()
     try{
       const data = await requestManager.send(walletRequest.prepareBaseTransfer({
         network: this.net,
@@ -39,7 +40,6 @@ export default class Wallet {
       net: this.net
     }
     try{
-      const requestManager = new utils.RequestManager()
       const data = await requestManager.send(transactionsRequest.getTransactions(params));
       if (data.ok) {
         return data;
@@ -55,8 +55,7 @@ export default class Wallet {
   async getWalletBalance() {
     const {auth_token} = store.getState().user
     try{
-      const requestManager = new utils.RequestManager()
-      const data = await requestManager.executeRequest(walletRequest.getWalletBalance({
+      const data = await requestManager.send(walletRequest.getWalletBalance({
         network: this.net,
         address: this.address,
         token: auth_token
