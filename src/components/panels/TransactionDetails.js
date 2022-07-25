@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import ROUTES from "../../routes";
 import { useSelector } from "react-redux";
 import { Header, Content, CustomIcon, InfoCardBlock, InfoCardItem } from "@citadeldao/apps-ui-kit/dist/main";
@@ -14,6 +15,16 @@ const TransactionDetails = (props) => {
   const data = useSelector(state => state.transaction.openedTransaction)
   const navigate = useNavigate()
   const back = () => navigate(ROUTES.TRANSACTIONS)
+  const [windowDimensions, setWindowDimensions] = useState(window.innerWidth);
+  useEffect(() => { 
+    function handleResize() {
+        const { innerWidth: width } = window;
+        setWindowDimensions(width);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => { window.removeEventListener('resize', handleResize) };
+        // eslint-disable-next-line 
+    },[])
   return (
     <div className="panel">
       <Header config={config} border title={text.TRANSACTIONS_DETAILS} onClick={() => back()} back={true} />
@@ -21,7 +32,7 @@ const TransactionDetails = (props) => {
         <InfoCardBlock className='transactions-details-block'>
           {data.to?.value && 
           <InfoCardItem text='Address'>
-            <span className="transaction-address">{fotmatAddress(data.to?.value)}</span>
+            <span className="transaction-address">{windowDimensions < 600 ? fotmatAddress(data.to?.value): data?.to?.value }</span>
           </InfoCardItem> }
           <InfoCardItem text='Amount'>
             <span className="transactions-amount">
