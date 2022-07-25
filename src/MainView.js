@@ -14,7 +14,7 @@ import { StatusPopup, PopupWindow , TipCard, NotificationCard, Panel, Modal, Vie
 import InfoPanel from './components/panels/InfoPanel'
 import { Config } from './components/config/config';
 import SelectAddressPanel from './components/panels/SelectAddressPanel';
-import { formatByDecimals } from './components/helpers/numberFormatter';
+import { prettyNumber } from './components/helpers/numberFormatter';
 const MainView = () => {
     const location = useLocation();
     const dispatch = useDispatch()
@@ -28,6 +28,7 @@ const MainView = () => {
       if(window.location.pathname.includes('/info/')){
         navigate(window.location.pathname)
       }
+      // eslint-disable-next-line
     }, [errors]);
     const clearErrors = () => {
       setShowSuccess(false)
@@ -36,7 +37,7 @@ const MainView = () => {
     const navigate = useNavigate()
     let wallet = activeWallet
     if(activeWallet){
-      wallet = {...activeWallet,balance: formatByDecimals(activeWallet?.balance,6)}
+      wallet = {...activeWallet,balance: prettyNumber(activeWallet?.balance)}
     }
     const config = new Config()
     return(

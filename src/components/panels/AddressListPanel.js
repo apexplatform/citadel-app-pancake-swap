@@ -66,6 +66,8 @@ const AddressListPanel = () => {
                     balance={true} 
                     token={true} 
                     data={data} 
+                    style={{marginBottom: '30px'}}
+                    field='from'
                     value={value}  setValue={setValue} 
                     selectedOption={selectedOption}  setSelectedOption={setSelectedOption} 
                     balanceView={balanceView} setBalanceView={setBalanceView} 
@@ -77,6 +79,7 @@ const AddressListPanel = () => {
                     balance={true} 
                     token={true} 
                     data={data} 
+                    field='to'
                     value={value}  setValue={setValue} 
                     selectedOption={selectedOption}  setSelectedOption={setSelectedOption} 
                     balanceView={balanceView} setBalanceView={setBalanceView} 
