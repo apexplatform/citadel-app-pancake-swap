@@ -5,6 +5,8 @@ import { store } from './store/store';
 import { walletActions, swapActions } from './store/actions'
 import { useEffect } from "react";
 // eslint-disable-next-line
+import socket from './networking/socket';
+
 
 function App() {
   const dispatch = useDispatch();
