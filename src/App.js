@@ -4,13 +4,13 @@ import { Provider, useDispatch } from 'react-redux';
 import { store } from './store/store';
 import { walletActions, swapActions } from './store/actions'
 import { useEffect } from "react";
-// eslint-disable-next-line
-import socket from './networking/socket';
+import { SocketManager } from './networking/socket';
 
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
+      SocketManager.connect();
       dispatch(walletActions.loadWalletWithBalances());
       dispatch(swapActions.getSwapInfo('1',true,false,false))
       // eslint-disable-next-line

@@ -178,16 +178,10 @@ const loadTokenBalances = (address) => {
                     type: types.SET_ALLOWANCE,
                     payload: allowance,
                 });
-                store.dispatch({
-                    type: types.SET_TOKEN_IN,
-                    payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
-                })  
+                store.dispatch(swapActions.setTokenIn({...token,balance: formatBalance(balance?._hex,+token.decimals)}))  
             }
             if(token.symbol === tokenOut.symbol){
-                store.dispatch({
-                    type: types.SET_TOKEN_OUT,
-                    payload: {...token,balance: formatBalance(balance?._hex,+token.decimals)}
-                })  
+                store.dispatch(swapActions.setTokenOut({...token,balance: formatBalance(balance?._hex,+token.decimals)})) 
             }
         }else{
             token.balance = formatBalance(address?.balance, 6)

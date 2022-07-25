@@ -22,7 +22,7 @@ const MainView = () => {
     const showModal = useSelector(state => state.errors.openErrorModal)
     const { validationErrors, errors } = useSelector(state => state.errors)
     const { activeWallet, allowance } = useSelector(state => state.wallet)
-    const { amount } = useSelector(state => state.swap)
+    const { amount, tokenIn } = useSelector(state => state.swap)
     const [showSuccess, setShowSuccess] = useState(errors)
     useEffect(() => {
       setShowSuccess(errors)
@@ -31,7 +31,7 @@ const MainView = () => {
         navigate(window.location.pathname)
       }
       // eslint-disable-next-line 
-    }, [errors,allowance]);
+    }, [errors,allowance,tokenIn]);
     const clearErrors = () => {
         setShowSuccess(false);
         dispatch(errorActions.clearErrors());
