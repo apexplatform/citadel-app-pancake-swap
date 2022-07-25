@@ -5,7 +5,8 @@ import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
 import { swapActions } from '../../store/actions';
 import { useNavigate } from 'react-router-dom';
-import {sortList} from '../helpers'
+import { sortList } from '../helpers';
+import { prettyNumber } from '../helpers/numberFormatter';
 const SelectTokenPanel = () => {
     const config = new Config()
     const { tokens } = useSelector((state) => state.wallet)
@@ -39,7 +40,7 @@ const SelectTokenPanel = () => {
             <Content>
                 <Search style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
                 {tokenList?.map((elem,i) =>(
-                  <AddressBlock logoURI={elem?.logoURI} onClick={() => setToken(elem)} active={activeToken?.symbol === elem?.symbol} style={{marginBottom: '10px'}} data={{...elem, code: elem.symbol}} key={i}/>  
+                  <AddressBlock onClick={() => setToken(elem)} active={activeToken?.symbol === elem?.symbol} style={{marginBottom: '10px'}} data={{...elem, balance: prettyNumber(elem?.balance)}} key={i}/>  
                 ))}
             </Content>
             <Tabbar config={config}/>

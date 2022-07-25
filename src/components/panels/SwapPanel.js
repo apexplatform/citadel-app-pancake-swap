@@ -11,6 +11,7 @@ import SwapButton from '../uikit/SwapButton';
 import ROUTES from '../../routes';
 import BigNumber from "bignumber.js";
 import ConfirmModal from '../uikit/ConfirmModal';
+import { prettyNumber } from '../helpers/numberFormatter';
 const SwapPanel = () => {
     const config = new Config()
     const navigate = useNavigate()
@@ -74,7 +75,7 @@ const SwapPanel = () => {
     };
     const setSelectedOption = (name) => {
         dispatch(swapActions.setSelectedToken(name))
-        navigate(ROUTES.SELECT_TOKEN  + '?' + window.location.search.slice(1))
+        navigate(ROUTES.SELECT_TOKEN)
     }
 
     const setMaxValue = (val) => {
@@ -137,7 +138,7 @@ const SwapPanel = () => {
         setSlippage(val)
         dispatch(swapActions.setSlippageTolerance(val))
     }
-
+    console.log(tokenIn)
     return (
         <div className='panel swap-panel'>
             <Content>
@@ -154,8 +155,9 @@ const SwapPanel = () => {
                         title="From token"
                         onMaxClick={() => setMaxValue('INPUT')}
                         checkAmount={checkAmount}
+                        checkValue={() => {}}
                         value={formattedAmounts["INPUT"]} 
-                        selectedOption={{...tokenIn, code: tokenIn.symbol }} 
+                        selectedOption={{...tokenIn, code: tokenIn.symbol, balance: prettyNumber(tokenIn?.balance)}} 
                         balanceView={balanceView} setBalanceView={setBalanceView} 
                         onClick={() => setSelectedOption('INPUT')}
                         />
@@ -167,12 +169,13 @@ const SwapPanel = () => {
                             data={tokens} 
                             action={true}
                             field='to'
+                            checkValue={() => {}}
                             name='OUTPUT'
                             title="To token"
                             onMaxClick={() => setMaxValue('OUTPUT')}
                             checkAmount={checkAmount}
                             value={formattedAmounts["OUTPUT"]}
-                            selectedOption={{...tokenOut, code: tokenOut.symbol }} 
+                            selectedOption={{...tokenOut, code: tokenOut.symbol, balance: prettyNumber(tokenOut?.balance)}} 
                             balanceView={balanceView} setBalanceView={setBalanceView} 
                             onClick={() => setSelectedOption('OUTPUT')}
                         />

@@ -16,8 +16,8 @@ const initialState = {
     usdPrice: 0
 }
 
-export default function WalletReducer(state=initialState,action){
-    switch (action.type){
+export default function WalletReducer(state = initialState, action) {
+    switch (action.type) {
         case types.SET_WALLETS:
             return {
                 ...state,
@@ -41,34 +41,34 @@ export default function WalletReducer(state=initialState,action){
         case types.SET_SPLASH_MODE:
             return {
                 ...state,
-                showSplash: action.payload
-            }
+                showSplash: action.payload,
+            };
         case types.SET_ACTIVE_WALLET:
             return {
                 ...state,
-                activeWallet: action.payload
-            }
+                activeWallet: action.payload,
+            };
         case types.SET_LOADER:
             return {
                 ...state,
-                loader: action.payload
-            }
+                loader: action.payload,
+            };
         case types.SET_PREPARE_TRANSFER_RESPONSE:
             return {
                 ...state,
-                transactionResponse: action.payload
-            }
+                transactionResponse: action.payload,
+            };
         case types.SET_NETWORKS:
             return {
                 ...state,
-                networks: action.payload
-            }
+                networks: action.payload,
+            };
         case types.SET_STAKE_NODES:
             return {
                 ...state,
-                stakeNodes: action.payload
-            }
+                stakeNodes: action.payload,
+            };
         default:
-            return state
+            return state;
     }
 }

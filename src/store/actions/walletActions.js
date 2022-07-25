@@ -4,7 +4,7 @@ import { ValidationError } from '../../networking/models/Errors';
 import { errorActions, usersActions, swapActions } from './index'
 import { getRequest } from '../../networking/requests/getRequest';
 import { store } from '../store';
-import models from '../../networking/models'
+import models from '../../networking/models';
 import Wallet from '../../networking/models/Wallet';
 import { utils } from '@citadeldao/apps-sdk';
 import BigNumber from 'bignumber.js'
@@ -12,22 +12,22 @@ import axios from 'axios';
 
 const getWalletConstructor = (address) => {
     try {
-        const { activeWallet } = store.getState().wallet
-        const currentWallet = address || activeWallet
+        const { activeWallet } = store.getState().wallet;
+        const currentWallet = address || activeWallet;
         const WalletConstructor = models[currentWallet.network.toUpperCase()];
-        if(WalletConstructor){
-            const wallet = new WalletConstructor(currentWallet);
-            return wallet
-        }
-        return new Wallet(currentWallet)
-    } catch {
-      new Error("Wallet doesn't exists ");
-    }
-  };
-  
 
-const loadWalletWithBalances = () => async(dispatch) => {
-    const walletList = new WalletList()
+        if (WalletConstructor) {
+            return new WalletConstructor(currentWallet);
+        }
+
+        return new Wallet(currentWallet);
+    } catch {
+        new Error('Wallet doesn\'t exists ');
+    }
+};
+
+const loadWalletWithBalances = () => async (dispatch) => {
+    const walletList = new WalletList();
     walletList.loadWalletsWithBalances().then(wallets => {
         console.log(wallets)
         if(wallets instanceof ValidationError){
@@ -54,18 +54,18 @@ const loadWalletWithBalances = () => async(dispatch) => {
                         dispatch(setActiveWallet(item, false))
                     },1000) 
                 }
-                if(!flag){
-                    dispatch(setActiveWallet(wallets[0]))
+                if (!flag) {
+                    dispatch(setActiveWallet(wallets[0]));
                 }
             })
         }).catch(() => {
-            dispatch(setActiveWallet(wallets[0]))
-            setTimeout(()=>{
-                stopSplashLoader()
-            },1000) 
-        })
-    })
-}
+            dispatch(setActiveWallet(wallets[0]));
+            setTimeout(() => {
+                stopSplashLoader();
+            }, 1000);
+        });
+    });
+};
 
 const loadNetworks = () => async(dispatch) => {
     try{
@@ -78,7 +78,7 @@ const loadNetworks = () => async(dispatch) => {
     } catch {}
 }
 
-const preparePermissionTransfer = async(address,status,minAmount) => {
+const preparePermissionTransfer = async (address, status, minAmount) => {
     const wallet = getWalletConstructor(address);
     let d = new Date();
     let year = d.getFullYear();
@@ -86,35 +86,32 @@ const preparePermissionTransfer = async(address,status,minAmount) => {
     let day = d.getDate();
     let expiryDate = new Date(year + 2, month, day);
     let data = {
-        status, expiryDate: expiryDate.toISOString()
-      }
-    if(+minAmount > 0){
-        data.minAmount = +minAmount
+        status, expiryDate: expiryDate.toISOString(),
+    };
+    if (+minAmount > 0) {
+        data.minAmount = +minAmount;
     }
     const transaction = await wallet.setPermissionRestake(data);
-    wallet.prepareTransfer(transaction.data)
-    .then((res) => {
-      if (res.ok) {
-        return store.dispatch({
-          type: types.SET_PREPARE_TRANSFER_RESPONSE,
-          payload: { transaction: transaction.data, wallet },
-        });
-      } else {
-        store.dispatch(errorActions.checkErrors(res.data));
-      }
-    })
-    .catch((err) => {
-      store.dispatch(errorActions.checkErrors(err));
+    wallet.prepareTransfer(transaction.data).then((res) => {
+        if (res.ok) {
+            return store.dispatch({
+                type: types.SET_PREPARE_TRANSFER_RESPONSE,
+                payload: { transaction: transaction.data, wallet },
+            });
+        } else {
+            store.dispatch(errorActions.checkErrors(res.data));
+        }
+    }).catch((err) => {
+        store.dispatch(errorActions.checkErrors(err));
     });
-  };
-  
+};
+
 const stopSplashLoader = () => {
     setTimeout(() => {
-        document.getElementById('root').style.display = 'block'
-        document.getElementById('splash').style.display = 'none'
-    }, 3000)
-}
-
+        document.getElementById('root').style.display = 'block';
+        document.getElementById('splash').style.display = 'none';
+    }, 3000);
+};
 
 const setActiveWallet = (wallet, save = true) => (dispatch) => {
     dispatch({
@@ -156,12 +153,16 @@ const formatBalance = (hex,decimals) => {
 		let balanceArr = balance.split('.')
 		if(balanceArr[1]?.length > 6){
 			balanceArr[1] = balanceArr[1].substring(0,6)
+            if(balanceArr[1] === '000000'){
+                return balanceArr[0]
+            }
 		}
 		return balanceArr[0] + '.' + balanceArr[1]
 	}
 }
 
 const loadTokenBalances = (address) => {
+    console.log(address,'----address')
     const wallet = getWalletConstructor(address)
     const { tokens } = store.getState().wallet;
     const { tokenIn, tokenOut, amount, isExactIn } = store.getState().swap;

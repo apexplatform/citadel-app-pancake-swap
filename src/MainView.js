@@ -4,6 +4,7 @@ import GuidesPanel from './components/panels/GuidesPanel'
 import ROUTES from "./routes";
 import SwapPanel from './components/panels/SwapPanel'
 import TransactionsPanel from './components/panels/TransactionsPanel'
+import SelectTokenPanel from './components/panels/SelectTokenPanel'
 import TransactionsDetailsPanel from './components/panels/TransactionDetails'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,8 +15,7 @@ import { StatusPopup, PopupWindow, TipCard, NotificationCard, Panel, Modal, View
 import InfoPanel from './components/panels/InfoPanel'
 import { Config } from './components/config/config';
 import SelectAddressPanel from './components/panels/SelectAddressPanel';
-import SelectTokenPanel from './components/panels/SelectTokenPanel';
-import { formatByDecimals } from './components/helpers/numberFormatter';
+import { prettyNumber } from './components/helpers/numberFormatter';
 const MainView = () => {
     const location = useLocation();
     const dispatch = useDispatch()
@@ -33,13 +33,14 @@ const MainView = () => {
       // eslint-disable-next-line 
     }, [errors,allowance]);
     const clearErrors = () => {
-      setShowSuccess(false)
-      dispatch(errorActions.clearErrors())
-    }
-    const navigate = useNavigate()
-    let wallet = activeWallet
-    if(activeWallet){
-      wallet = {...activeWallet,balance: formatByDecimals(activeWallet?.balance,6)}
+        setShowSuccess(false);
+        dispatch(errorActions.clearErrors());
+    };
+    const navigate = useNavigate();
+    let wallet = activeWallet;
+
+    if (activeWallet) {
+      wallet = {...activeWallet,balance: prettyNumber(activeWallet?.balance)}
     }
     const config = new Config()
     return(
@@ -65,7 +66,7 @@ const MainView = () => {
               </div> }
             </Modal>
         </View>
-    )
-}
+    );
+};
 
-export default MainView
+export default MainView;

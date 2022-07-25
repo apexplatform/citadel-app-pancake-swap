@@ -4,4 +4,4 @@ const models = {
     BSC: BSCWallet
 }
 
-export default models
+export default models;

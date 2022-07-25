@@ -42,6 +42,7 @@ socket.on('address-balance-updated-app',async(data)=>{
 			payload: wallets,
 		});
 	}	
+	console.log(activeWallet.address === data.address,'----activeWallet.address === data.address')
 	if(activeWallet.address === data.address){
 		store.dispatch(walletActions.loadTokenBalances(activeWallet))
 	}
