@@ -138,7 +138,6 @@ const SwapPanel = () => {
         setSlippage(val)
         dispatch(swapActions.setSlippageTolerance(val))
     }
-    console.log(tokenIn)
     return (
         <div className='panel swap-panel'>
             <Content>

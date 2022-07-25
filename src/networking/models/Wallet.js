@@ -14,6 +14,7 @@ export default class Wallet {
       this.name = opts.name;
       this.code = opts.code;
       this.address = opts.address;
+      this.from = opts.from
       this.publicKey = opts.publicKey;
   }
   async prepareTransfer(params) {
