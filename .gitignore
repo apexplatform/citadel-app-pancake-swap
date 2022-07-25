@@ -18,6 +18,16 @@ package-lock.json
 .env.test.local
 .env.production.local
 
+# pm files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# IDEs and editors
+.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
