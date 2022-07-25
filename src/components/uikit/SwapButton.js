@@ -8,7 +8,6 @@ const SwapButton = (props) => {
         width: 'auto',
         marginTop: '20px',
     }
-    console.log(tokenIn)
 	return (
         <div className='center'>
             {(props.isBNB && tokenIn === 'BNB') && <BigButtons disabled={disableSwap} text='DEPOSIT' onClick={() => dispatch(swapActions.getSwapTransaction())} style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5' hideIcon={true}/>}

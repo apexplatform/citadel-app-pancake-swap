@@ -43,12 +43,12 @@ const SwapPanel = () => {
     };
     const setSelectedOption = (name) => {
         dispatch(swapActions.setSelectedToken(name))
-        navigate(ROUTES.SELECT_TOKEN  + '?' + window.location.search.slice(1))
+        navigate(ROUTES.SELECT_TOKEN)
     }
 
     const setMaxValue = (val) => {
         setExactIn(val === "INPUT" ? true : false);
-        formattedAmounts[val] = 100 // max balance
+        formattedAmounts[val] = val === "INPUT" ? tokenIn.balance : tokenOut.balance
         dispatch(swapActions.setAmount(formattedAmounts[val]));
         dispatch(swapActions.getSwapInfo(formattedAmounts[val],isExactIn));
     }

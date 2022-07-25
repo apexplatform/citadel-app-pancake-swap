@@ -1,10 +1,12 @@
 import { utils } from '@citadeldao/apps-sdk';
 
 const getAccessToken = () => {
-    const request = new utils.Request('get',`${process.env.REACT_APP_BACKEND_URL}/get-access-token`)
-    return request
-}
+    return new utils.Request(
+        'get',
+        `${process.env.REACT_APP_BACKEND_URL}/get-access-token`,
+    );
+};
 
 export const auth = {
-    getAccessToken
-}
+    getAccessToken,
+};

@@ -4,4 +4,4 @@ const models = {
     OSMOSIS: OsmosisWallet
 }
 
-export default models
+export default models;
