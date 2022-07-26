@@ -58,7 +58,7 @@ export class SocketManager {
 					});
 				}	
 				if(activeWallet.address === data.address){
-					store.dispatch(walletActions.loadTokenBalances(activeWallet))
+					walletActions.loadTokenBalances(activeWallet)
 				}
 			})
 			
@@ -74,7 +74,7 @@ export class SocketManager {
 					if(transactionResponse && transactionResponse.type === "Approve"){
 						store.dispatch(swapActions.setTokenIn(tokenIn))
 					}else{
-						store.dispatch(walletActions.loadTokenBalances(activeWallet))
+						walletActions.loadTokenBalances(activeWallet)
 					}
 				}
 			})
