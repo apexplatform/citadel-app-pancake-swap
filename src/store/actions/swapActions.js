@@ -46,8 +46,10 @@ const setAmount = (amount,isExactIn=true) => (dispatch) => {
   });
 };
 
-const setTokenIn = (token) => async(dispatch) => {
-  dispatch(setTrade(null))
+const setTokenIn = (token, tradeUpdate = true) => async(dispatch) => {
+  if(tradeUpdate){
+    dispatch(setTrade(null))
+  }
   dispatch({
     type: types.SET_TOKEN_IN,
     payload: token,
