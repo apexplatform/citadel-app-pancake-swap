@@ -29,7 +29,6 @@ const getWalletConstructor = (address) => {
 const loadWalletWithBalances = () => async (dispatch) => {
     const walletList = new WalletList();
     walletList.loadWalletsWithBalances().then(wallets => {
-        console.log(wallets)
         if(wallets instanceof ValidationError){
             dispatch(errorActions.checkErrors(wallets)) 
             stopSplashLoader()
@@ -162,7 +161,6 @@ const formatBalance = (hex,decimals) => {
 }
 
 const loadTokenBalances = (address) => {
-    console.log(address,'----address')
     const wallet = getWalletConstructor(address)
     const { tokens } = store.getState().wallet;
     const { tokenIn, tokenOut, amount, isExactIn } = store.getState().swap;
