@@ -34,8 +34,8 @@ const SelectAddressPanel = () => {
     console.log(usdPrice)
     return (
         <div className='panel'>
-            <Header border title="Select an address" style={{marginTop: '10px'}} onClick={() => back()} back={true}/>
             <Content>
+                <Header border title="Select an address" style={{margin: '8px 0 16px 0'}} onClick={() => back()} back={true}/>
                 <Search style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
                 {walletList?.map((elem,i) =>(
                   <AddressBlock onClick={() => setActiveWallet(elem)} active={activeWallet?.address === elem?.address} style={{marginBottom: '10px'}} data={{...elem, balance: prettyNumber(elem?.balance)}} key={i} usdPrice={usdPrice > 0 ? prettyNumber(elem.balance * usdPrice,2) : ''}/>  

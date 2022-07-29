@@ -36,17 +36,17 @@ const SelectTokenPanel = () => {
     }
     return (
         <div className='panel'>
-            <Header border title="Select token" style={{marginTop: '10px'}} onClick={() => back()} back={true}/>
             <Content>
+              <Header border title="Select token" style={{margin: '8px 0 16px 0'}} onClick={() => back()} back={true}/>
                 <Search style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
                 {tokenList?.map((elem,i) =>(
                   <AddressBlock 
-                  logoURI={elem.logoURI} 
-                  onClick={() => setToken(elem)} 
-                  active={activeToken?.symbol === elem?.symbol} 
-                  style={{marginBottom: '10px'}} 
-                  data={{...elem, balance: prettyNumber(elem?.balance)}} 
-                  key={i}
+                    logoURI={elem.logoURI} 
+                    onClick={() => setToken(elem)} 
+                    active={activeToken?.symbol === elem?.symbol} 
+                    style={{marginBottom: '10px'}} 
+                    data={{...elem, balance: prettyNumber(elem?.balance)}} 
+                    key={i}
                 />  
                 ))}
             </Content>

@@ -27,8 +27,8 @@ const TransactionDetails = (props) => {
     },[])
   return (
     <div className="panel">
-      <Header config={config} border title={text.TRANSACTIONS_DETAILS} onClick={() => back()} back={true} />
       <Content>
+        <Header config={config} border style={{margin: "8px 0 24px 0"}} title={text.TRANSACTIONS_DETAILS} onClick={() => back()} back={true} />
         <InfoCardBlock className='transactions-details-block'>
           {data.to?.value && 
           <InfoCardItem text='Address'>
