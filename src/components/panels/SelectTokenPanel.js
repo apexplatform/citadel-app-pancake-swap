@@ -40,7 +40,14 @@ const SelectTokenPanel = () => {
             <Content>
                 <Search style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
                 {tokenList?.map((elem,i) =>(
-                  <AddressBlock onClick={() => setToken(elem)} active={activeToken?.symbol === elem?.symbol} style={{marginBottom: '10px'}} data={{...elem, balance: prettyNumber(elem?.balance)}} key={i}/>  
+                  <AddressBlock 
+                  logoURI={elem.logoURI} 
+                  onClick={() => setToken(elem)} 
+                  active={activeToken?.symbol === elem?.symbol} 
+                  style={{marginBottom: '10px'}} 
+                  data={{...elem, balance: prettyNumber(elem?.balance)}} 
+                  key={i}
+                />  
                 ))}
             </Content>
             <Tabbar config={config}/>
