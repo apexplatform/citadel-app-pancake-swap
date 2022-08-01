@@ -45,7 +45,7 @@ const SelectTokenPanel = () => {
                     onClick={() => setToken(elem)} 
                     active={activeToken?.symbol === elem?.symbol} 
                     style={{marginBottom: '10px'}} 
-                    data={{...elem, balance: prettyNumber(elem?.balance)}} 
+                    data={{...elem, code: elem.symbol, balance: prettyNumber(elem?.balance)}} 
                     key={i}
                 />  
                 ))}
