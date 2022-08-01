@@ -38,10 +38,10 @@ const loadWalletWithBalances = () => async (dispatch) => {
             type: types.SET_WALLETS,
             payload: wallets
         })
-        axios.get('https://rest.coinapi.io/v1/assets/BNB?apikey=29F44911-083E-4782-AFF1-E7E9E91A9170').then((res) =>{
-            dispatch({
+        axios.get(process.env.REACT_APP_MAIN_SERVER_URL + '/currency/bsc').then(res => {
+            store.dispatch({
                 type: types.SET_USD_PRICE,
-                payload: res.data[0]?.price_usd
+                payload: res?.data?.data?.USD
             })
         })
         usersActions.loadUserConfig().then(user_configs =>{
