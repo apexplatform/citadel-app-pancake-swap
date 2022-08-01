@@ -182,7 +182,7 @@ const loadTokenBalances = (address) => {
                 store.dispatch(swapActions.setTokenOut({...token,balance: formatBalance(balance?._hex,+token.decimals)}, false)) 
             }
         }else{
-            token.balance = formatBalance(address?.balance, 6)
+            token.balance = address?.balance
         }
     })
     store.dispatch(swapActions.getSwapInfo(amount, isExactIn, false))
