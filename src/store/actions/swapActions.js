@@ -127,6 +127,7 @@ const getTradeFeePrice = (trade) => {
 }
 
 const getSwapInfo = (amountIn, isExactIn=true, isSwap=false, check=true) => async(dispatch) => {
+
   try{
     if(+amountIn > 0){
       const { tokenIn, tokenOut, independentField, trade, slippageTolerance } = store.getState().swap;

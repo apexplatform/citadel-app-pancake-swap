@@ -17,9 +17,9 @@ const SwapPanel = () => {
     const navigate = useNavigate()
     const { wallets } = useSelector((state) => state.wallet)
     const [balanceView, setBalanceView] = useState('View Balance')
-    const [isExactIn, setExactIn] = useState(true);
-    const { independentField, minReceived, slippageTolerance, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
+    const { independentField, minReceived, slippageTolerance, isExactIn, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
     const [slippage, setSlippage] = useState(slippageTolerance)
+    const [isExact, setExactIn] = useState(isExactIn);
     const { tokens } = useSelector(state => state.wallet)
     const formattedPrice = trade?.executionPrice?.toSignificant(6)
     const { priceImpactWithoutFee, realizedLPFee } = swapActions.getTradeFeePrice(trade)
@@ -65,15 +65,19 @@ const SwapPanel = () => {
 			[dependentField]: +amount !== 0 ? parsedAmounts[dependentField]?.toSignificant(6) || 0 : '0',
 		}
 	}
+
     const reverseTokens = () => {
         dispatch(swapActions.setIndependentField(dependentField));
-        setExactIn(!isExactIn)
         dispatch(swapActions.setTokenIn(tokenOut));
         dispatch(swapActions.setTokenOut(tokenIn));
-        dispatch(swapActions.setAmount(formattedAmounts[independentField],!isExactIn));
-        dispatch(swapActions.getSwapInfo(formattedAmounts[independentField],!isExactIn));
+        dispatch(swapActions.setAmount(formattedAmounts[independentField],!isExact));
+        dispatch(swapActions.getSwapInfo(formattedAmounts[independentField],!isExact));
+        setExactIn(!isExact)
     };
     const setSelectedOption = (name) => {
+        dispatch(swapActions.setIndependentField("INPUT"));
+        setExactIn(true)
+        dispatch(swapActions.setAmount(formattedAmounts["INPUT"],true));
         dispatch(swapActions.setSelectedToken(name))
         navigate(ROUTES.SELECT_TOKEN)
     }
@@ -104,7 +108,7 @@ const SwapPanel = () => {
         let interval = null;
 		if (!trade && +amount !== 0) {
 			interval = setInterval(() => {
-                dispatch(swapActions.getSwapInfo(amount,isExactIn));
+                dispatch(swapActions.getSwapInfo(amount,isExact));
 			}, 1000);
 		} else {
 			clearInterval(interval);
