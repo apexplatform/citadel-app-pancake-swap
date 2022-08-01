@@ -169,7 +169,6 @@ const getSwapInfo = (amountIn, isExactIn=true, isSwap=false, check=true) => asyn
     }
     dispatch(checkSwapStatus(check ? amountIn : '0'))
   }catch(e){
-    console.log(e)
     dispatch(errorActions.checkErrors(e))
   }
 }

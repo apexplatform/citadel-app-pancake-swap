@@ -3,14 +3,12 @@ import ROUTES from "../../routes";
 import { useSelector } from "react-redux";
 import { Header, Content, CustomIcon, InfoCardBlock, InfoCardItem } from "@citadeldao/apps-ui-kit/dist/main";
 import text from "../../text.json";
-import { Config } from '../config/config';
 import moment from "moment";
 import BigNumber from "bignumber.js";
 import '../styles/panels/transactions.css';
 import { useNavigate } from 'react-router-dom';
 import { fotmatAddress } from '../helpers/addressFormatter'
 const TransactionDetails = (props) => {
-  const config = new Config()
   const { activeWallet } = useSelector(state => state.wallet)
   const data = useSelector(state => state.transaction.openedTransaction)
   const navigate = useNavigate()
@@ -28,7 +26,7 @@ const TransactionDetails = (props) => {
   return (
     <div className="panel">
       <Content>
-        <Header config={config} border style={{margin: "8px 0 24px 0"}} title={text.TRANSACTIONS_DETAILS} onClick={() => back()} back={true} />
+        <Header border style={{margin: "14px 0 16px 0"}} title={text.TRANSACTIONS_DETAILS} onClick={() => back()} back={true} />
         <InfoCardBlock className='transactions-details-block'>
           {data.to?.value && 
           <InfoCardItem text='Address'>

@@ -26,7 +26,6 @@ const loadUserConfig = async () => {
     const { auth_token } = store.getState().user;
     try {
         let result = await requestManager.send(userRequest.getUserConfig(auth_token));
-        console.log(result, '-loadUserConfig');
         store.dispatch({
             type: types.SET_USER_CONFIG,
             payload: result.data && JSON.parse(result.data),

@@ -30,13 +30,12 @@ const config = new Config()
 r.style.setProperty('--appThemeColor', config.tabbarParamsFromConfig("BACKGROUND_COLOR"));
 
 function listener(event) {
-  console.log('EVENT FROM FRONT', event.data);
+ // console.log('EVENT FROM FRONT', event.data);
   if(event.data?.from === 'metamask'){
     walletActions.updateWalletList(event.data)
   }
 }
 
 if (window.addEventListener) {
-  console.log('subscribe front');
   window.addEventListener("message", listener,false);
 }
