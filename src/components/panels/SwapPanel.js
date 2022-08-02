@@ -166,7 +166,6 @@ const SwapPanel = () => {
                         />
                     <CustomIcon onClick={reverseTokens} icon='swap-icon' id='swap-center-btn' size={windowDimensions < 500 ? 'small' : 'big'} />
                     <SelectToken 
-                            max={true} 
                             balance={true} 
                             token={true} 
                             data={tokens} 
