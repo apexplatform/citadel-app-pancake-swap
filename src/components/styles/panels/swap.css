@@ -1,56 +1,99 @@
-
-.swap-container{
-    margin-bottom: 160px;
+#swap-center-btn{
+    position: absolute;
+    left: 45%;
+    top: 37%;
 }
 
-.swap-row{
+.swap-inputs{
+    position: relative;
+    margin-top: -10px;
+}
+
+.modal-header{
+    border-bottom: 1px dashed #C3CEEB;
+    margin: 0 0 16px;
+    padding-bottom: 10px;
+}
+
+.modal-header h4{
+    margin: 0;
+    font-size: 18px;
+    line-height: 20px;
+    letter-spacing: -0.32px;
+    color: #292929;
+    font-weight: 700;
+}
+
+.approve-step-row{
     display: flex;
-    align-items: center;
-    background: #F7F8FA;
-    border: 1px solid #D3D9DE;
-    border-radius: 6px;
-}
-.swap-row .token-container{
-    width: 42%;
-}
-.swap-row .amount-container{
-    width: 50%;
-}
-.swap-column{
-    display: flex;
-    align-items: baseline;
-    flex-direction: column;
     justify-content: space-between;
-    padding: 15px 15px 0 15px;
-    margin-bottom: 5px;
-}
-.formTokenItem{
-    width: 100%;
-    padding: 0;
-}
-.delimeter{
-    border-top: 1px dashed #D3D9DE;
-    width: 100%;
-}
-.formAddressItem{
-    width: 95%;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: 'Panton';
+    font-weight: 600;
 }
 
-.swap-amount-btn{
-    border: 1px solid #D3D9DE;
-    border-radius: 4px;
-    background-color: white;
-    width: 50px;
-    height: 46px;
+.approve-step-row .active-circle{
+    background-color: #002BCC;
 }
-.swap-block{
-    margin-bottom: -25px !important;
-}
-.swap-amount-btn:hover{
-    background-color: #792EC0;
+.approve-step-row hr{
+    width: 120px;
+    border: 1px solid #C3D6EC;
+    border-top: none;
 }
 
-.swap-amount-btn:hover svg path{
-    fill: white !important;
+.approve-step-row span{
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #C3D6EC;
+    background-color: #00B933;
 }
 
+.approve-step-block{
+    text-align: center;
+    width: 150px;
+    margin: 20px auto;
+}
+
+.approve-step-block p{
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    font-family: 'Panton Bold';
+    margin: 0;
+    margin-right: 4px;
+}
+
+.approve-step-block .active-step{
+    color: #6B93C0;
+    margin-left: 4px;
+}
+
+.purple-text{
+    color: #5639E0;
+}
+
+.green-text{
+    color: #0091A6;
+}
+
+.pink-text{
+    color: #D900AB;
+}
+
+@media screen and (max-width: 500px) {
+    #swap-center-btn{
+        left: 42%;
+        top: 40%;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #swap-center-btn{
+        left: 42%;
+        top: 44%;
+    }
+}

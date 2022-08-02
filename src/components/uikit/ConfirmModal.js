@@ -1,91 +1,41 @@
-import { ModalPage,Div } from '@vkontakte/vkui';
-import {setActivePanel,setActiveModal} from '../../store/actions/panelActions'
-import {connect} from 'react-redux';
-import {useState,useEffect} from 'react'
-import {prepareSwapTransfer,setTrade} from '../../store/actions/swapActions'
-import {getcomputeTradePriceBreakdown,updateTradeInfo} from '../../store/actions/swapActions'
-import '../styles/components/confirmModal.css'
-import text from '../../text.json'
-import ConfirmInfoBlock from '../uikit/ConfirmInfoBlock'
-const ConfirmModal = (props) => {
-    const {fromToken,toToken, amount,fromTokenAmount,toTokenAmount} = props.walletReducer
-    const {trade,priceUpdated,isExactIn,updatedTrade} = props.swapReducer
-    const [accept, setAccept] = useState(priceUpdated)
-    const [accepted, setAccepted] = useState(true)
-	const formattedPrice = trade?.executionPrice?.toSignificant(6)
-	const { priceImpactWithoutFee, realizedLPFee } = props.getcomputeTradePriceBreakdown()
-    const {activeModal} = props.panelReducer
-    const acceptAndUpdate = () => {
-        setAccept(false)
-        setAccepted(false)
-        props.setTrade(updatedTrade)
-    }
-    useEffect(() => {
-        let interval = null;
-        if (activeModal && accepted) {
-            interval = setInterval(() => {
-                props.updateTradeInfo(amount,isExactIn,false,false,true)
-                setAccept(priceUpdated)     
-            }, 30000);
-        } else {
-            clearInterval(interval);
-            setAccepted(true)
-        }
-        return () => clearInterval(interval)
-   }, [activeModal,trade,priceUpdated,fromTokenAmount,toTokenAmount])
-    return(
-        <ModalPage id="confirm" dynamicContentHeight onClose={() => props.setActiveModal(null)}>
-            <div className='confirm-modal-header'>
-                <p>{ text.CONFIRM_SWAP }</p>
-                <img src='img/icons/close.svg' alt ='icon' onClick={() => props.setActiveModal(null)}/>
-            </div>
-            <div className='separator-line'></div>
-            <div className="confirm-modal-row">
-                <div className='confirm-token-item'>
-                    <div className='confirm-row'>
-                        <div className="token-icon center">
-                            <img src={fromToken.logoURI} alt ='icon'/>
-                        </div>
-                        <p className="token-symbol">{fromToken.name}</p>
-                    </div>
-                    <div className="token-content">  
-                        <p className="token-amount">{fromTokenAmount || 0} <span>{fromToken.symbol}</span></p>
-                    </div>
-                </div>
-                <img src='img/icons/arrow-modal.svg' className='confirm-arrow' alt ='icon'/>
-                <div className='confirm-token-item' id='blue-token'>  
-                    <div className='confirm-row'>
-                        <div className="token-icon center">
-                            <img src={toToken.logoURI} alt ='icon'/>
-                        </div>
-                        <p className="token-symbol">{toToken.name}</p>
-                    </div>
-                    <div className="token-content">
-                        <p className="token-amount">{toTokenAmount || 0} <span> {toToken.symbol}</span></p>
-                    </div>
-                </div>
-            </div>
-            {accept &&
-            <Div className='accept-block'>
-                <div>
-                    <img src='img/icons/info-modal.svg' alt ='icon'/>
-                    <h3>{text.PRICE_UPDATED}</h3>
-                </div>
-                <button onClick={() => acceptAndUpdate()}>{text.ACCEPT}</button>
-            </Div>}
-            {/* <p className='confirm-alarm-text'>{text.CONFIRM_TEXT} <span>{amount} </span> {fromToken.symbol} {text.CONFIRM_TEXT_2}</p> */}
-            <ConfirmInfoBlock accepted={accepted} name='confirm' rate={formattedPrice} priceImpact={priceImpactWithoutFee} fee={realizedLPFee?.toSignificant(4) || 0}/>
-            <Div className='swap-btn' id={accept ? "disabled-btn" : undefined} onClick={() => {props.setActiveModal(null);props.prepareSwapTransfer();}}>
-                <span>{text.SWAP}</span>
-            </Div>
-        </ModalPage>
-	  );
-}
+import { Modal, CustomIcon, InfoCardItem, SwapBalanceCard, BigButtons, InfoCardBlock, PriceUpdatedCard, } from '@citadeldao/apps-ui-kit/dist/main'
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom'
+import { errorActions } from '../../store/actions';
 
-const mapStateToProps=(state)=>({
-	panelReducer: state.panelReducer,
-    walletReducer: state.walletReducer,
-    swapReducer: state.swapReducer
-})
+const ConfirmModal = () => {
+    const location = useLocation();
+    const dispatch = useDispatch()
+    const { amount, tokenIn, tokenOut, rate, routes, outAmout } = useSelector(state => state.swap)
+    const showConfirmModal = useSelector(state => state.errors.openConfirmModal)
+    const [disabledSwap, setDisabledSwap] = useState(true)
+   
+return(
+  <Modal show={showConfirmModal && !location.pathname.includes('/info')} showModal={() => dispatch(errorActions.setConfirmModal(false))}>
+  <div className='modal-header row'>
+    <h4>Confirm swap</h4>
+    <CustomIcon icon='close-modal' onClick={() => dispatch(errorActions.setConfirmModal(false))}/>
+  </div>
+  <div>
+    <div className='row'>
+        <SwapBalanceCard width='45%' amount={amount} bgColor='#B7F6FF' color='#00BFDB' token={tokenIn} />
+        <CustomIcon icon='arrow-swap' />
+        <SwapBalanceCard width='45%' amount={outAmout} bgColor='#C6D1FF' color='rgba(58, 94, 229, 1)' token={tokenOut} />
+    </div>
+    <PriceUpdatedCard style={{margin: '16px 0'}} acceptPrice={() => setDisabledSwap(false)} text='Price updated'/>
+    <InfoCardBlock>
+        <InfoCardItem text={'Price'} amount={rate} symbol={'OSMO'} symbol2={'ATOM'}/>
+        <InfoCardItem text={'Price impact'} amount={10} symbol={'%'}/>
+        <InfoCardItem text={'Minimum received'} amount={1} symbol={'OSMO'}/>
+        <InfoCardItem text={'Liquidity Provider Fee'} amount={5} symbol={'%'}/>
+        <InfoCardItem text={'Route'} routes={routes}/>
+    </InfoCardBlock>
+    <div className='center'>
+        <BigButtons text='SWAP' disabled={disabledSwap} style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>
+    </div>
+  </div> 
+</Modal>
+)}
 
-export default connect(mapStateToProps, {setTrade,updateTradeInfo,prepareSwapTransfer,getcomputeTradePriceBreakdown,setActiveModal,setActivePanel}) (ConfirmModal);
+export default ConfirmModal

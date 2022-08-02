@@ -1,33 +1,6 @@
 import { ChainId, Token } from '@pancakeswap/sdk'
 const { MAINNET, TESTNET } = ChainId
 
-// export interface SerializedToken {
-//   chainId: number
-//   address: string
-//   decimals: number
-//   symbol?: string
-//   name?: string
-//   projectLink?: string
-// }
-
-// export function serializeToken(token: Token): SerializedToken {
-//   return {
-//     chainId: token.chainId,
-//     address: token.address,
-//     decimals: token.decimals,
-//     symbol: token.symbol,
-//     name: token.name,
-//     projectLink: token.projectLink,
-//   }
-// }
-interface TokenList {
-  [symbol: string]: Token
-}
-
-// interface SerializedTokenList {
-//   [symbol: string]: SerializedToken
-// }
-
 export const mainnetTokens = {
   wbnb: new Token(
     MAINNET,

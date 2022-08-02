@@ -1,33 +1,33 @@
-import {SET_TRANSACTIONS_CLEAR,SET_OPENED_TRANSACTION,SET_TRANSACTIONS_LIST, SET_TRANSACTIONS_LOADED} from '../actions/types'
+import { types } from '../actions/types';
 
 const initialState = {
     openedTransaction: [],
     transactions: [],
-    hasmoreTransactions: true
-}
-export default function(state=initialState,action){
-    switch (action.type){
-        case SET_OPENED_TRANSACTION:
+    transactionsLoaded: false,
+};
+export default function TransactionsReducer(state = initialState, action) {
+    switch (action.type) {
+        case types.SET_OPENED_TRANSACTION:
             return {
                 ...state,
-                openedTransaction: action.payload
-            }
-        case SET_TRANSACTIONS_LIST:
+                openedTransaction: action.payload,
+            };
+        case types.SET_TRANSACTIONS_LIST:
             return {
                 ...state,
-                transactions: state.transactions.concat(action.payload)
-            }
-        case SET_TRANSACTIONS_CLEAR:
+                transactions: action.payload,
+            };
+        case types.SET_TRANSACTIONS_CLEAR:
             return {
                 ...state,
-                transactions: action.payload
-            }
-        case SET_TRANSACTIONS_LOADED:
+                transactions: action.payload,
+            };
+        case types.SET_TRANSACTIONS_LOADED:
             return {
                 ...state,
-                hasmoreTransactions: action.payload
-            }
+                transactionsLoaded: action.payload,
+            };
         default:
-            return state
+            return state;
     }
 }

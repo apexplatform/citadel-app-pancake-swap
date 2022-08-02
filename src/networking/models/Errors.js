@@ -1,29 +1,20 @@
 export class ValidationError extends Error {
     constructor(message) {
-      super(message);
-      this.name = "ValidationError";
+        super(message);
+        this.name = 'ValidationError';
     }
 }
 
 export class NetworkError extends Error {
     constructor(message) {
-      super(message);
-      this.name = "NetworkError";
+        super(message);
+        this.name = 'NetworkError';
     }
 }
-
 
 export class ImplementationError extends Error {
     constructor(message) {
-      super(message);
-      this.name = "ImplementationError";
-    }
-}
-
-
-export class ArgumentsError extends Error {
-    constructor(message) {
-      super(message);
-      this.name = "ArgumentsError";
+        super(message);
+        this.name = 'ImplementationError';
     }
 }

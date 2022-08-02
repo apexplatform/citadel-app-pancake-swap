@@ -1,91 +1,74 @@
-import {SET_CURRENT_WALLET,SET_TOKEN,SET_TO_ADDRESS,SET_AMOUNT, SET_NETWORKS,SET_FROM_TOKEN,SET_TO_TOKEN,SET_FROM_TOKEN_AMOUNT,SET_WALLETS,SET_TO_AMOUNT,SET_EMPTY_TOKEN_LIST, SET_TOKEN_LIST, SET_INITIAL_LOAD} from '../actions/types'
+import { types } from '../actions/types'
 import tokenList from '../../networking/constants/tokenLists/pancake-default.tokenlist.json'
-import {Currency} from '@pancakeswap/sdk'
-const tokens = [{...Currency.ETHER,symbol: 'BNB', logoURI: "https://pancakeswap.finance/images/tokens/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png"}, ...tokenList['tokens']]
+import { Currency } from '@pancakeswap/sdk'
+const tokens = [{...Currency.ETHER, symbol: 'BNB', name: "Binance Smart Chain", network: 'bsc', logoURI: "https://bscscan.com/token/images/binance_32.png"}, ...tokenList['tokens']]
 
 const initialState = {
-    currentWallet: null,
-    currentToken: 'from',
-    wallets: null,
-    toAddress: null,
-    amount: 0,
-    tokenList: null, 
-    networks: [],
-    fromToken: tokens[2],
-    toToken: tokens[1],
-    fromTokenAmount: 0,
-    toTokenAmount: 0,
-    initialLoader: true
+    wallets: [],
+    networks: null,
+    stakeNodes: null,
+    transactionResponse: null,
+    loader: true,
+    activeWallet: null,
+    showSplash: true,
+    tokens: tokens,
+    allowance: 0,
+    usdPrice: 0
 }
 
-export default function(state=initialState,action){
-    switch (action.type){
-        case SET_CURRENT_WALLET:
-            return {
-                ...state,
-                currentWallet: action.payload
-            }
-        case SET_INITIAL_LOAD:
-            return {
-                ...state,
-                initialLoader: action.payload
-            }
-        case SET_WALLETS:
+export default function WalletReducer(state = initialState, action) {
+    switch (action.type) {
+        case types.SET_WALLETS:
             return {
                 ...state,
                 wallets: action.payload
             }
-        case SET_TOKEN_LIST:
+        case types.SET_USD_PRICE:
             return {
                 ...state,
-                tokenList: action.payload
+                usdPrice: action.payload
             }
-        case SET_EMPTY_TOKEN_LIST:
+        case types.SET_ALLOWANCE:
             return {
                 ...state,
-                tokenList: []
+                allowance: action.payload
             }
-        case SET_TOKEN:
+        case types.SET_TOKENS:
             return {
                 ...state,
-                currentToken: action.payload
+                tokens: action.payload
             }
-        case SET_TO_ADDRESS:
+        case types.SET_SPLASH_MODE:
             return {
                 ...state,
-                toAddress: action.payload
-            }
-        case SET_AMOUNT:
+                showSplash: action.payload,
+            };
+        case types.SET_ACTIVE_WALLET:
             return {
                 ...state,
-                amount: action.payload
-            }
-        case SET_NETWORKS:
+                activeWallet: action.payload,
+            };
+        case types.SET_LOADER:
             return {
                 ...state,
-                networks: action.payload
-            }
-        case SET_FROM_TOKEN:
+                loader: action.payload,
+            };
+        case types.SET_PREPARE_TRANSFER_RESPONSE:
             return {
                 ...state,
-                fromToken: action.payload
-            }
-        case SET_TO_TOKEN:
+                transactionResponse: action.payload,
+            };
+        case types.SET_NETWORKS:
             return {
                 ...state,
-                toToken: action.payload
-            }
-        case SET_FROM_TOKEN_AMOUNT:
+                networks: action.payload,
+            };
+        case types.SET_STAKE_NODES:
             return {
                 ...state,
-                fromTokenAmount: action.payload
-            }
-        case SET_TO_AMOUNT:
-            return {
-                ...state,
-                toTokenAmount: action.payload
-            }
+                stakeNodes: action.payload,
+            };
         default:
-            return state
+            return state;
     }
 }

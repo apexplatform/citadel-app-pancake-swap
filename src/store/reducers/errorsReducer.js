@@ -1,40 +1,46 @@
-import {GET_ERRORS, GET_NETWORK_ERRORS,GET_ARGUMENTS_ERRORS,GET_VALIDATION_ERRORS,GET_IMPLEMENTATION_ERRORS} from '../actions/types'
+import { types } from '../actions/types';
 
 const initialState = {
     errors: null,
     networkErrors: null,
     validationErrors: null,
     implementationErrors: null,
-    argumentsError: null
-}
-export default function(state=initialState,action){
-    switch (action.type){
-        case GET_ERRORS:
+    argumentsError: null,
+    openErrorModal: false,
+};
+export default function ErrorReducer(state = initialState, action) {
+    switch (action.type) {
+        case types.SET_ERRORS:
             return {
                 ...state,
-                errors: action.payload
-            }
-        case GET_NETWORK_ERRORS:
+                errors: action.payload,
+            };
+        case types.SET_ERROR_MODAL:
             return {
                 ...state,
-                networkErrors: action.payload
-            }
-        case GET_ARGUMENTS_ERRORS:
+                openErrorModal: action.payload,
+            };
+        case types.SET_NETWORK_ERRORS:
             return {
                 ...state,
-                argumentsError: action.payload
-            }
-        case GET_VALIDATION_ERRORS:
+                networkErrors: action.payload,
+            };
+        case types.SET_ARGUMENTS_ERRORS:
             return {
                 ...state,
-                validationErrors: action.payload
-            }
-        case GET_IMPLEMENTATION_ERRORS:
+                argumentsError: action.payload,
+            };
+        case types.SET_VALIDATION_ERRORS:
             return {
                 ...state,
-                implementationErrors: action.payload
-            }
+                validationErrors: action.payload,
+            };
+        case types.SET_IMPLEMENTATION_ERRORS:
+            return {
+                ...state,
+                implementationErrors: action.payload,
+            };
         default:
-            return state
+            return state;
     }
 }

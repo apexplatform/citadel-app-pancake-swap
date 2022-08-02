@@ -1,4 +1,7 @@
 import BSCWallet from './walletCoins/BSCWallet'
-export default {
-  BSC: BSCWallet,
+
+const models = {
+    BSC: BSCWallet
 }
+
+export default models;

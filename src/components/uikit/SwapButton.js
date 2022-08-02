@@ -1,87 +1,41 @@
-import { Div, Group } from '@vkontakte/vkui';
-import '../styles/components/swapButton.css'
-import { Icon20ChevronRightOutline } from '@vkontakte/icons';
-import {openConfirmModal,prepareApprove,prepareSwapTransfer} from '../../store/actions/swapActions'
-import {connect} from 'react-redux';
-import Loader from '../uikit/Loader'
-import text from '../../text.json'
-import { useState } from 'react';
-import ROUTES from '../../routes'
-import {setActivePanel,setPreviosPanel} from '../../store/actions/panelActions'
+import { BigButtons } from '@citadeldao/apps-ui-kit/dist/main';
+import { useSelector, useDispatch } from 'react-redux';
+import { swapActions } from '../../store/actions';
 const SwapButton = (props) => {
-    const [approve,setApprove]  = useState(true)
-    const {swapStatus,disableSwap} = props.swapReducer
-    const {fromToken,toToken} = props.walletReducer
-    let textSwap = text.SWAP
-    let isBNB = false
-    if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
-        textSwap = 'Wrap'
-        isBNB = true
-    }else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
-        textSwap = 'Unwrap'
-        isBNB = true
+    const { swapStatus, tokenIn, disableSwap } = useSelector((state) => state.swap)
+    const dispatch = useDispatch()
+    const customStyle = {
+        width: 'auto',
+        marginTop: '20px',
     }
 	return (
-        <Group>
-            {disableSwap ? 
-            <Div className='swap-btn' id="disabled-btn">
-                <span>{text.SWAP}</span>
-            </Div>:
+        <div className='center'>
+            {(props.isBNB && tokenIn === 'BNB') && <BigButtons disabled={disableSwap} text='DEPOSIT' onClick={() => dispatch(swapActions.getSwapTransaction())} style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5' hideIcon={true}/>}
+            {(props.isBNB && tokenIn === 'WBNB') && <BigButtons disabled={disableSwap} text='WITHDRAW' onClick={() => dispatch(swapActions.getSwapTransaction())} style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5' hideIcon={true}/>}
+            {swapStatus === 'enterAmount' && <BigButtons text='ENTER AMOUNT' disabled style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5' hideIcon={true}/>}
+            {swapStatus === 'swap' && <BigButtons disabled={disableSwap} onClick={() => swapActions.checkTradeUpdate()} text='SWAP' style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>}
+            {swapStatus === 'swapAnyway' && <BigButtons disabled={disableSwap}  onClick={() => swapActions.checkTradeUpdate()} text='SWAP ANYWAY' style={customStyle} textColor='#FFFFFF' bgColor='#FF5722' hideIcon={true}/>}
+            {swapStatus === 'insufficientBalance' && <BigButtons disabled text={`Insufficient ${tokenIn.symbol} balance`} style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>}
+            {swapStatus === 'feeError' && <BigButtons disabled text='Insufficient balance for swap fee' style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>}
+            {swapStatus === 'approve' && 
             <div>
-             {swapStatus == 'swapAnyway' &&
-            <Div className='swapAnyway-alarm' onClick={() => { props.setActivePanel(ROUTES.SETTINGS); props.setPreviosPanel(ROUTES.SWAP)}}>
-                <span>{text.SWAP_ANYWAY_ALARM} <span className='bold-span'>{text.SETTINGS}</span></span>
-                <Icon20ChevronRightOutline fill="#E5457A" width={26} height={26}/> 
-            </Div>}
-            {swapStatus == 'swap' &&
-            <Div className='swap-btn' onClick={() => isBNB ? props.prepareSwapTransfer() : props.openConfirmModal(props.isExactIn)}>
-                <span>{textSwap}</span>
-            </Div>}
-            {swapStatus == 'swapAnyway' &&
-            <Div className='swap-btn' id="disabled-btn">
-                <span>{text.SWAP}</span>
-            </Div>}
-            {swapStatus == 'loading' &&
-            <Div className='swap-btn loading-btn' id="disabled-btn">
-                <Loader/><span>{text.LOADING}</span>
-            </Div>}
-            {swapStatus == 'feeError' &&
-            <Div className='swap-btn' id="disabled-btn">
-                <span>{text.FEE_ERROR_TEXT}</span>
-            </Div>}
-            {swapStatus == 'insufficientBalance' &&
-            <Div className='swap-btn' id="disabled-btn" >
-                <span>Insufficient {fromToken.symbol} balance </span>
-            </Div>}
-            {swapStatus == 'enterAmount' &&
-            <Div className='swap-btn' id="disabled-btn">
-                <span>{text.ENTER_AMOUNT}</span>
-            </Div>}
-            {swapStatus == 'approve' &&
-            <Group className='approve-block'>
-                <Div className='approve-lines'>
-                    <p className='number-circle' id={!approve ? "disabled-circle" : undefined}>1</p>
-                    <div className='solid-line' id={!approve ? "disabled-line" : undefined}></div>
-                    <div className='solid-line' id={approve ? "disabled-line" : undefined}></div>
-                    <p className='number-circle' id={approve ? "disabled-circle" : undefined}>2</p>
-                </Div>
-                <div className='approve-row'>
-                    <Div className='swap-btn' onClick={() => props.prepareApprove()} id={!approve ? "disabled-btn" : undefined}>
-                        <span>{text.APPROVE} {fromToken.symbol}</span>
-                    </Div>
-                    <Div className='swap-btn' id={approve ? "disabled-btn" : undefined}>
-                        <span>{text.SWAP}</span>
-                    </Div>
+                <div className='approve-step-block'>
+                    <div className='approve-step-row'>
+                        <span className='active-circle'></span>
+                        <hr/>
+                        <span></span>
+                    </div>
+                    <div className='approve-step-row'>
+                        <p className='active-step'>1</p>
+                        <p>2</p>
+                    </div>
                 </div>
-            </Group>
-            }
+                <div className='row'>
+                    <BigButtons disabled={disableSwap} onClick={() => dispatch(swapActions.getApproveTransaction())} text={`APPROVE ${tokenIn.symbol}`} style={{marginRight: '10px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>
+                    <BigButtons text={'SWAP'} style={{marginLeft: '10px'}} disabled textColor='#FFFFFF' hideIcon={true}/>
+                </div>
             </div>}
-        </Group>
+        </div>
 	); 
 }
-const mapStateToProps=(state)=>({
-	walletReducer: state.walletReducer,
-	swapReducer: state.swapReducer
-})
-
-export default connect(mapStateToProps, {prepareSwapTransfer,setPreviosPanel,prepareApprove,setActivePanel,openConfirmModal}) (SwapButton);
+export default SwapButton

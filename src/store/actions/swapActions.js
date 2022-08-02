@@ -1,341 +1,288 @@
-import {getWalletConstructor, setAmount} from './walletActions'
-import {checkErrors} from './errorsActions'
-import store from '../store';
+import { store } from "../store";
+import { types } from "./types";
+import { errorActions, walletActions } from "./index";
+import { getParsedAmount, getBestTrade } from '../../networking/methods/swap';
+import { getCurrency } from '../../networking/methods/tokens.ts';
+import { basisPointsToPercent, computeTradePriceBreakdown } from '../../networking/utils/price.ts';
 import BigNumber from 'bignumber.js';
-import { SET_TOKEN_IN, SET_TOKEN_OUT, SET_RATE_AMOUT, SET_SLIPPAGE_TOLERANCE, SET_TRADE, SET_MIN_RECEIVED, SET_SWAP_STATUS, SET_EMPTY_TOKEN_LIST,  SET_PARSED_AMOUNT,SET_PREPARE_TRANSFER_RESPONSE, SET_DEADLINE_MINUTE, SET_FIELD, SET_DISABLE_SWAP, SET_EXACT_IN, SET_PRICE_UPDATED, SET_UPDATED_TRADE, SET_ICON_STATUS, SET_ALLOWANCE } from './types'
-import {computeTradePriceBreakdown} from '../../networking/utils/price'
-import { setActiveModal } from './panelActions';
-export const setRateAmount = (amount) => dispatch =>{
-    dispatch({
-        type: SET_RATE_AMOUT,
-        payload: amount
-    })
+
+const setSwapDisable = (status) => (dispatch) => {
+  dispatch({
+    type: types.SET_DISABLE_SWAP,
+    payload: status,
+  });
+};
+const setSwapStatus = (status) => (dispatch) => {
+  dispatch({
+    type: types.SET_SWAP_STATUS,
+    payload: status,
+  });
+};
+  
+const setSlippageTolerance = (procent) => (dispatch) => {
+  dispatch({
+    type: types.SET_SLIPPAGE_TOLERANCE,
+    payload: procent,
+  });
+  const { amount } = store.getState().swap
+  dispatch(checkSwapStatus(amount))
+};
+
+const setIndependentField = (field) => (dispatch) => {
+  dispatch({
+    type: types.SET_FIELD,
+    payload: field,
+  });
+};
+
+const setAmount = (amount,isExactIn=true) => (dispatch) => {
+  dispatch({
+    type: types.SET_AMOUNT,
+    payload: amount,
+  });
+  dispatch({
+    type: types.SET_EXACT_IN,
+    payload: isExactIn,
+  });
+};
+
+const setTokenIn = (token, tradeUpdate = true) => async(dispatch) => {
+  if(tradeUpdate){
+    dispatch(setTrade(null))
+  }
+  dispatch({
+    type: types.SET_TOKEN_IN,
+    payload: token,
+  });
+  if(token.symbol !== 'BNB'){
+    const { activeWallet } = store.getState().wallet;
+    const wallet = walletActions.getWalletConstructor(activeWallet);
+    let allowance = await wallet.loadTokenAllowance(token)
+    store.dispatch({
+      type: types.SET_ALLOWANCE,
+      payload: allowance,
+    });
+    const { amount } = store.getState().swap
+    dispatch(checkSwapStatus(amount))
+  }
+};
+
+const setTokenOut = (token) => (dispatch) => {
+  dispatch(setTrade(null))
+  dispatch({
+    type: types.SET_TOKEN_OUT,
+    payload: token,
+  });
+};
+
+const setSelectedToken = (token) => (dispatch) => {
+  dispatch({
+    type: types.SET_SELECTED_TOKEN,
+    payload: token,
+  });
+};
+
+const setAmountOut = (amount) => dispatch => {
+  dispatch({
+    type: types.SET_OUT_AMOUNT,
+    payload: amount
+  });
 }
-export const setSwapDisable = (status) => dispatch =>{
-    dispatch({
-        type: SET_DISABLE_SWAP,
-        payload: status
-    })
+
+const setAmountIn = (amount) => dispatch => {
+  dispatch({
+    type: types.SET_IN_AMOUNT,
+    payload: amount
+  });
 }
 
 export const setTrade = (bestTrade) => dispatch =>{
-    dispatch({
-        type: SET_TRADE,
-        payload: bestTrade
-    })
-}
-
-export const setIndependentField = (bestTrade) => dispatch =>{
-    dispatch({
-        type: SET_FIELD,
-        payload: bestTrade
-    })
-}
-export const setParsedAmount = (amount) => dispatch =>{
-    dispatch({
-        type: SET_PARSED_AMOUNT,
-        payload: amount
-    })
-}
-
-
-export const setDeadline = (min) => dispatch =>{
-    dispatch({
-        type: SET_DEADLINE_MINUTE,
-        payload: min
-    })
-}
-
-export const setSwapStatus = (status) => dispatch =>{
-    dispatch({
-        type: SET_SWAP_STATUS,
-        payload: status
-    })
+  dispatch({
+      type: types.SET_TRADE,
+      payload: bestTrade
+  })
 }
 
 export const setMinReceive = (amount) => dispatch =>{
-    dispatch({
-        type: SET_MIN_RECEIVED,
-        payload: amount
-    })
+  dispatch({
+      type: types.SET_MIN_RECEIVED,
+      payload: amount
+  })
+}
+function getMinReceived(trade){
+  const { slippageTolerance } = store.getState().swap
+  const pct = basisPointsToPercent(slippageTolerance)
+  return trade?.minimumAmountOut(pct) || 0
 }
 
-export const setSlippageTolerance = (procent) => dispatch =>{
-    dispatch({
-        type: SET_SLIPPAGE_TOLERANCE,
-        payload: procent
-    })
+const setParsedAmount = (amount) => dispatch =>{
+  dispatch({
+      type: types.SET_PARSED_AMOUNT,
+      payload: amount
+  })
 }
 
-export const getTokenBalance = (initial) => async(dispatch) =>{
-    const wallet = getWalletConstructor()
-    if(wallet){
+const getTradeFeePrice = (trade) => {
+  return computeTradePriceBreakdown(trade)
+}
+
+const getSwapInfo = (amountIn, isExactIn=true, isSwap=false, check=true) => async(dispatch) => {
+
+  try{
+    if(+amountIn > 0){
+      const { tokenIn, tokenOut, independentField, trade, slippageTolerance } = store.getState().swap;
+      const inputCurrency = getCurrency(tokenIn.address || tokenIn.symbol)
+      const outputCurrency = getCurrency(tokenOut.address || tokenOut.symbol)
+      let parsedAmount = getParsedAmount(amountIn.toString(), isExactIn ? inputCurrency : outputCurrency)
+      dispatch(setParsedAmount(parsedAmount))
+      const bestTradeExact = dispatch(getBestTrade(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn))
+      dispatch(setAmountIn(independentField === 'INPUT' ? amountIn : trade?.inputAmount?.toSignificant(6)))
+      dispatch(setAmountOut(independentField === 'OUTPUT' ? amountIn : bestTradeExact?.outputAmount?.toSignificant(6)))
+      if(isSwap){
         dispatch({
-            type: SET_EMPTY_TOKEN_LIST,
-            payload: []
+          type: types.SET_UPDATED_TRADE,
+          payload: bestTradeExact
         })
-        const {deadlineMin} = store.getState().swapReducer
-        await dispatch(wallet.getTokenBalances(initial))
-        await dispatch(wallet.getBlockNumber(deadlineMin))
-    }
-}
-
-export const checkTokenAllowance = (token=null) => async(dispatch) =>{
-    const wallet = getWalletConstructor()
-    if(wallet){
-        const {currentWallet,fromToken} = store.getState().walletReducer
-        const amount = await wallet.getTokenAllowance(token || fromToken,currentWallet)
-        
-        dispatch({
-            type: SET_ALLOWANCE,
-            payload: amount
-        })
-    }
-}
-
-export const getcomputeTradePriceBreakdown = () => dispatch =>{
-    const {trade} = store.getState().swapReducer
-    return computeTradePriceBreakdown(trade)
-}
-
-export const openConfirmModal = (isExactIn) => dispatch => {
-    dispatch({
-        type: SET_EXACT_IN,
-        payload: isExactIn
-    })
-    const {amount} = store.getState().walletReducer
-    dispatch(updateTradeInfo(amount,isExactIn,false,true))
-}
-export const prepareSwapTransfer  = () => async(dispatch) => {
-    const wallet = getWalletConstructor()
-    if(wallet){
-        dispatch(setSwapDisable(true))
-        dispatch(setActiveModal(null))
-        const {deadlineMin} = store.getState().swapReducer
-        await dispatch(wallet.getBlockNumber(deadlineMin))
-        const {currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount} = store.getState().walletReducer;
-        const {trade,deadline,slippageTolerance,isExactIn} = store.getState().swapReducer;
-        let transaction = null
-        if(fromToken.symbol == 'BNB' && toToken.symbol == 'WBNB'){
-            transaction = wallet.generateDepositTransaction(currentWallet,fromToken,fromTokenAmount,toToken)
-        }else if(fromToken.symbol == 'WBNB' && toToken.symbol == 'BNB'){
-            transaction = wallet.generateWithdrawTransaction(currentWallet,fromToken,fromTokenAmount,toToken)
+        if(isExactIn){
+          let minAmount = +trade?.outputAmount?.toSignificant(6) * ((100 - +slippageTolerance) / 100)
+          if( minAmount > +bestTradeExact?.outputAmount?.toSignificant(6)){
+            dispatch(errorActions.setConfirmModal(true))
+          }else{
+            dispatch(setTrade(bestTradeExact))
+            dispatch(getSwapTransaction())
+          }
         }else{
-            transaction = wallet.generateSwapTransaction(currentWallet,fromToken,fromTokenAmount,toToken,toTokenAmount,trade,deadline,slippageTolerance,isExactIn)
-        }wallet.prepareTransfer(transaction).then((response) => {
-            if(response?.ok){
-                return dispatch ({
-                    type:SET_PREPARE_TRANSFER_RESPONSE,
-                    payload: data
-                })
-            }else{
-                dispatch(checkErrors(response))
-            }
-        }).catch(err => {
-            dispatch(checkErrors(err))
-        })
-    }
-    setTimeout(() => {
-        dispatch(setSwapDisable(false))
-    }, 5000);
-    let interval = null
-    let tryAgain = true
-    if(tryAgain){
-        interval = setInterval(async()=>{
-            tryAgain = await dispatch(wallet.updateTokenBalances())
-            if(!tryAgain){
-                clearInterval(interval)
-            }
-        },10000)
-    }
-    if(!tryAgain){
-        clearInterval(interval)
-    }
-}
-
-export const prepareApprove  = () => dispatch => {
-    const wallet = getWalletConstructor()
-    if(wallet){
-        const {fromToken,currentWallet} = store.getState().walletReducer;
-        const contractData = {
-            address: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
-            name: "PancakeSwap: Router v2",
-            url: "https://bscscan.com/address/0x10ed43c718714eb63d5aa57b78b54704e256024e"
-        }
-        const transaction = wallet.generateApproveTransaction(fromToken,currentWallet,contractData)
-        wallet.prepareTransfer(transaction).then((ok, data) => {
-            if(ok){
-                return dispatch ({
-                    type:SET_PREPARE_TRANSFER_RESPONSE,
-                    payload: data
-                })
-            }else{
-                dispatch(checkErrors(data))
-            }
-        }).catch(err => {
-            dispatch(checkErrors(err))
-        })
-    }
-}
-
-export const swapTokens = () => dispatch =>{
-    const tokenIn = store.getState().swapReducer.tokenIn
-    const tokenOut = store.getState().swapReducer.tokenOut
-    dispatch({
-        type: SET_TOKEN_IN,
-        payload: tokenOut
-    })
-    dispatch({
-        type: SET_TOKEN_OUT,
-        payload: tokenIn
-    })
-}
-
-export const updateTradeInfo  = (amount = '0',isExactIn=true,updateCall = false,isSwap=false,isConfirm=false) => dispatch => {
-    try{
-        const wallet = getWalletConstructor()
-        if(wallet){
-          // console.log(amount, '---amount')
-            const {fromToken,toToken} = store.getState().walletReducer
-            const {swapStatus,trade} = store.getState().swapReducer
-            const inputCurrency = wallet.getCurrency(fromToken.address || fromToken.symbol)
-            const outputCurrency = wallet.getCurrency(toToken.address || toToken.symbol)
-            let parsedAmount = wallet.getParseAmount(amount, isExactIn ? inputCurrency : outputCurrency)
-            dispatch(setParsedAmount(parsedAmount))
-            const bestTradeExact = dispatch(wallet.getBestTrade(parsedAmount, isExactIn ? outputCurrency : inputCurrency, isExactIn,updateCall))
-       //    console.log(bestTradeExact,'--bestTradeExact')
-          //  console.log(trade?.inputAmount?.toSignificant(6),bestTradeExact?.inputAmount?.toSignificant(6))
-            if(isExactIn){
-                if(trade && trade?.outputAmount?.toSignificant(6) != bestTradeExact?.outputAmount?.toSignificant(6)){
-                    dispatch({
-                        type: SET_PRICE_UPDATED,
-                        payload: true
-                    })
-                }else{
-                    dispatch({
-                        type: SET_PRICE_UPDATED,
-                        payload: false
-                    })
-                }
-            }else{
-                if(trade && trade?.inputAmount?.toSignificant(6) != bestTradeExact?.inputAmount?.toSignificant(6)){
-                    dispatch({
-                        type: SET_PRICE_UPDATED,
-                        payload: true
-                    })
-                }else{
-                    dispatch({
-                        type: SET_PRICE_UPDATED,
-                        payload: false
-                    })
-                }
-            }
-            
-            if(isSwap){
-                if(isExactIn){
-                    if(+trade?.outputAmount?.toSignificant(6) > +bestTradeExact?.outputAmount?.toSignificant(6)){
-                        dispatch({
-                            type: SET_ICON_STATUS,
-                            payload: 'downStatus'
-                        })
-                        dispatch(setActiveModal('confirm'))
-                    }else{
-                        dispatch(setTrade(bestTradeExact))
-                        dispatch(prepareSwapTransfer())
-                    }
-                }else{
-                    if(+trade?.inputAmount?.toSignificant(6) < +bestTradeExact?.inputAmount?.toSignificant(6)){
-                        dispatch({
-                            type: SET_ICON_STATUS,
-                            payload: 'upStatus'
-                        })
-                        dispatch(setActiveModal('confirm'))
-                    }else{
-                        dispatch(setTrade(bestTradeExact))
-                        dispatch(prepareSwapTransfer())
-                    }
-                }        
-                dispatch({
-                    type: SET_UPDATED_TRADE,
-                    payload: bestTradeExact
-                })
-            }else if(isConfirm){
-                dispatch({
-                    type: SET_UPDATED_TRADE,
-                    payload: bestTradeExact
-                })
-                if(isExactIn){
-                    dispatch(setIconStatus(trade,bestTradeExact,'outputAmount'))
-                }else{
-                    dispatch(setIconStatus(trade,bestTradeExact,'inputAmount'))
-                }
-            }else{
-                dispatch(setTrade(bestTradeExact))
-            }  
-            dispatch(setMinReceive(wallet.getMinReceived()))
-        }
-    } catch(err) {
-        dispatch(checkErrors(err))
-    }
-}
-
-export const checkSwapStatus = (amount,setIsactive = () => {},isMax = false,isExactIn=true) => dispatch => {
-    const balance = dispatch(getFromBalance())
-    const {trade,allowanceAmount,slippageTolerance} = store.getState().swapReducer
-    const {fromToken,currentWallet} = store.getState().walletReducer
-    const { priceImpactWithoutFee } = dispatch(getcomputeTradePriceBreakdown())
-    let feeProcent = currentWallet?.code == fromToken?.symbol ? 0.01 : 0
-    if(isMax && !trade){
-        dispatch(updateTradeInfo(BigNumber(balance).minus(feeProcent).toFixed(6),isExactIn))
-        dispatch(setAmount(BigNumber(balance).minus(feeProcent).toFixed(6)))
-        dispatch(checkSwapStatus(BigNumber(balance).minus(feeProcent).toFixed(6),setIsactive))
-        return
-    }
-    if(+amount > 0) {
-        if(+amount > +balance){
-            dispatch(setSwapStatus('insufficientBalance'))
-        } else if(+amount <= BigNumber(+balance).minus(feeProcent).toNumber() && +currentWallet.balance?.mainBalance > 0){
-                    if(BigNumber(allowanceAmount).div(BigNumber(Math.pow(10,+fromToken.decimals))).toNumber() > +amount || fromToken.symbol === 'BNB'){
-                        if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
-                            dispatch(setSwapStatus('swap'))
-                        }else{
-                            dispatch(setSwapStatus('swapAnyway'))
-                        }
-                    } else {
-                        setIsactive(true)
-                        dispatch(setSwapStatus('approve'))
-                    }
-                } else {
-                    dispatch(setSwapStatus('feeError'))
-                }
-    } else {
-        dispatch(setSwapStatus('enterAmount'))
-    }
-    
-}
-
-export const getFromBalance = () => dispatch =>  {
-    const {fromToken} = store.getState().walletReducer
-    if(fromToken.balance) return fromToken.balance
-    return 0
-}
-
-const setIconStatus = (trade,updatedTrade,type) => dispatch => {
-    if(trade && trade?.[type]?.toSignificant(6) == updatedTrade?.[type]?.toSignificant(6)){
-        dispatch({
-            type: SET_ICON_STATUS,
-            payload: 'hideStatus'
-        })
-    }else if(trade && +trade?.[type]?.toSignificant(6) > +updatedTrade?.[type]?.toSignificant(6)){
-        dispatch({
-            type: SET_ICON_STATUS,
-            payload: 'downStatus'
-        })
+          let minAmount = +trade?.inputAmount?.toSignificant(6) * ((100 + +slippageTolerance) / 100)
+          if(minAmount < +bestTradeExact?.inputAmount?.toSignificant(6)){
+            dispatch(errorActions.setConfirmModal(true))
+          }else{
+            dispatch(setTrade(bestTradeExact))
+            dispatch(getSwapTransaction())
+          }
+        }        
+      }else{
+        dispatch(setTrade(bestTradeExact))
+        dispatch(setMinReceive(getMinReceived(bestTradeExact)))
+      } 
     }else{
-        dispatch({
-            type: SET_ICON_STATUS,
-            payload: 'upStatus'
-        })
+      dispatch(setTrade(null))
+      dispatch(setMinReceive(0))
     }
+    dispatch(checkSwapStatus(check ? amountIn : '0'))
+  }catch(e){
+    dispatch(errorActions.checkErrors(e))
+  }
 }
 
+
+const checkSwapStatus = (amount) => dispatch => {
+  const { tokenIn, slippageTolerance, trade } = store.getState().swap
+  const { activeWallet, allowance } = store.getState().wallet
+  const { priceImpactWithoutFee } = getTradeFeePrice(trade)
+  const balance = tokenIn?.balance
+  let feeProcent = activeWallet?.code === tokenIn?.symbol ? 0.01 : 0
+  if(+amount > 0) {
+    if(+amount > +balance){
+      dispatch(setSwapStatus('insufficientBalance'))
+    } else if(+amount <= BigNumber(+balance).minus(feeProcent).toNumber() && +activeWallet?.balance > 0){
+        if(BigNumber(allowance).div(BigNumber(Math.pow(10,+tokenIn.decimals))).toNumber() > +amount || tokenIn.symbol === 'BNB'){
+          if(parseFloat(priceImpactWithoutFee?.toFixed(2)||0) < +slippageTolerance){
+            dispatch(setSwapStatus('swap'))
+          }else{
+            dispatch(setSwapStatus('swapAnyway'))
+          }
+        } else {
+          dispatch(setSwapStatus('approve'))
+        }
+    } else {
+      dispatch(setSwapStatus('feeError'))
+    }
+  } else {
+    dispatch(setSwapStatus('enterAmount'))
+  }
+}
+
+const getApproveTransaction  = () => dispatch => {
+  const wallet = walletActions.getWalletConstructor()
+  if(wallet){
+    const { tokenIn } = store.getState().swap;
+    const contractData = {
+      address: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
+      name: "PancakeSwap: Router v2",
+      url: "https://bscscan.com/address/0x10ed43c718714eb63d5aa57b78b54704e256024e"
+    }
+    const transaction = wallet.generateApproveTransaction(tokenIn,contractData)
+    wallet.prepareTransfer(transaction).then(res => {
+      if(res.ok){
+        return dispatch ({
+          type: types.SET_PREPARE_TRANSFER_RESPONSE,
+          payload: res.data
+        })
+      }else{
+        dispatch(errorActions.checkErrors(res))
+      }
+    }).catch(err => {
+      dispatch(errorActions.checkErrors(err.response?.data?.error))
+    })
+  }
+}
+
+const checkTradeUpdate = () => {
+  const { amount, isExactIn  } = store.getState().swap
+  store.dispatch(getSwapInfo(amount,isExactIn,true))
+}
+
+const getSwapTransaction  = () => async(dispatch) => {
+  const wallet = walletActions.getWalletConstructor()
+  dispatch(setSwapDisable(true))
+  if(wallet){
+    const { deadlineMin } = store.getState().swap
+    const deadline = await wallet.loadBlockNumber(deadlineMin)
+    const {trade,slippageTolerance,isExactIn,tokenIn,tokenOut,amount,amountOut} = store.getState().swap;
+    let transaction = null
+    if(tokenIn.symbol === 'BNB' && tokenOut.symbol === 'WBNB'){
+      transaction = wallet.generateDepositTransaction(tokenIn,amount,tokenOut)
+    }else if(tokenIn.symbol === 'WBNB' && tokenOut.symbol === 'BNB'){
+      transaction = wallet.generateWithdrawTransaction(tokenIn,amount,tokenOut)
+    }else{
+      transaction = wallet.generateSwapTransaction(tokenIn,amount,tokenOut,amountOut,trade,deadline,slippageTolerance,isExactIn)
+    }
+    wallet.prepareTransfer(transaction).then((response) => {
+        if(response?.ok){
+          dispatch ({
+            type: types.SET_PREPARE_TRANSFER_RESPONSE,
+            payload: response.data
+          })
+        }else{
+          dispatch(errorActions.checkErrors(response))
+        }
+    }).catch(err => {
+      dispatch(errorActions.checkErrors(err))
+    })
+  }
+  setTimeout(() => {
+    dispatch(setSwapDisable(false))
+  }, 5000);
+}
+
+
+export const swapActions = {
+  setSwapDisable,
+  setSwapStatus,
+  setSlippageTolerance,
+  setIndependentField,
+  setAmount,
+  setTokenIn,
+  setTokenOut,
+  setAmountOut,
+  setSelectedToken,
+  getSwapInfo,
+  setParsedAmount,
+  getTradeFeePrice,
+  getApproveTransaction,
+  getSwapTransaction,
+  checkTradeUpdate,
+  setAmountIn,
+  setTrade,
+  checkSwapStatus
+};

@@ -1,7 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { DEFAULT_ACTIVE_LIST_URLS, UNSUPPORTED_LIST_URLS, DEFAULT_LIST_OF_LISTS } from '../../networking/constants/constants'
-
-import { UPDATE_VERSION, ADD_LIST, REMOVE_LIST, ENABLE_LIST, DISABLE_LIST, ACCEPT_LIST_UPDATE } from '../actions/types'
+import { types } from '../actions/types'
 
 const NEW_LIST_STATE = {
   error: null,
@@ -22,12 +21,12 @@ const initialState = {
 
 export default createReducer(initialState, (builder) =>
   builder
-    .addCase(ADD_LIST, (state, { payload: url }) => {
+    .addCase(types.ADD_LIST, (state, { payload: url }) => {
       if (!state.byUrl[url]) {
         state.byUrl[url] = NEW_LIST_STATE
       }
     })
-    .addCase(REMOVE_LIST, (state, { payload: url }) => {
+    .addCase(types.REMOVE_LIST, (state, { payload: url }) => {
       if (state.byUrl[url]) {
         delete state.byUrl[url]
       }
@@ -36,7 +35,7 @@ export default createReducer(initialState, (builder) =>
         state.activeListUrls = state.activeListUrls.filter((u) => u !== url)
       }
     })
-    .addCase(ENABLE_LIST, (state, { payload: url }) => {
+    .addCase(types.ENABLE_LIST, (state, { payload: url }) => {
       if (!state.byUrl[url]) {
         state.byUrl[url] = NEW_LIST_STATE
       }
@@ -49,12 +48,12 @@ export default createReducer(initialState, (builder) =>
         state.activeListUrls = [url]
       }
     })
-    .addCase(DISABLE_LIST, (state, { payload: url }) => {
+    .addCase(types.DISABLE_LIST, (state, { payload: url }) => {
       if (state.activeListUrls && state.activeListUrls.includes(url)) {
         state.activeListUrls = state.activeListUrls.filter((u) => u !== url)
       }
     })
-    .addCase(ACCEPT_LIST_UPDATE , (state, { payload: url }) => {
+    .addCase(types.ACCEPT_LIST_UPDATE , (state, { payload: url }) => {
       if (!state.byUrl[url]?.pendingUpdate) {
         throw new Error('accept list update called without pending update')
       }
@@ -64,7 +63,7 @@ export default createReducer(initialState, (builder) =>
         current: state.byUrl[url].pendingUpdate,
       }
     })
-    .addCase(UPDATE_VERSION, (state) => {
+    .addCase(types.UPDATE_VERSION, (state) => {
       // state loaded from localStorage, but new lists have never been initialized
       if (!state.lastInitializedDefaultListOfLists) {
         state.byUrl = initialState.byUrl

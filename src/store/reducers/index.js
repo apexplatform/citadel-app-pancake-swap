@@ -1,13 +1,23 @@
-import  {combineReducers} from "redux";
-import userReducer from './userReducer'
-import panelReducer from './panelReducer'
-import transactionsReducer from './transactionsReducer'
-import walletReducer from './walletReducer'
-import errorsReducer from './errorsReducer'
-import swapReducer from './swapReducer'
-import blockReducer from './blockReducer'
-import multicalReducer from './multicalReducer'
-import listReducer from "./listReducer";
-export default combineReducers({
-    userReducer,panelReducer,listReducer,transactionsReducer,blockReducer,multicalReducer,walletReducer,errorsReducer,swapReducer
-})
+import { combineReducers } from 'redux';
+import TransactionsReducer from './transactionsReducer';
+import UserReducer from './userReducer';
+import ErrorReducer from './errorsReducer';
+import WalletReducer from './walletReducer';
+import PanelReducer from './panelReducer';
+import SwapReducer from './swapReducer';
+import PoolReducer from './poolReducer';
+import MulticalReducer from './multicalReducer';
+import ListReducer from "./listReducer";
+import BlockReducer from './blockReducer';
+export const state = combineReducers({
+    transaction: TransactionsReducer,
+    user: UserReducer,
+    errors: ErrorReducer,
+    wallet: WalletReducer,
+    panels: PanelReducer,
+    swap: SwapReducer,
+    pool: PoolReducer,
+    multical: MulticalReducer,
+    lists: ListReducer,
+    blocks: BlockReducer
+});

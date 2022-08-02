@@ -1,49 +1,79 @@
 import { ValidationError } from './Errors';
-import {getWalletConstructor} from '../../store/actions/walletActions'
-import { networks } from './network';
+import { walletActions } from '../../store/actions';
+import axios from 'axios';
+import { types } from '../../store/actions/types' 
+import { store } from '../../store/store'
 export class WalletList {
-    getWallets(){
-        try{
+    getTxUrl(net) {
+        if (net === 'eth') {
+            return (txHash) => `https://etherscan.io/tx/${txHash}`;
+        } else if (net === 'bsc') {
+            return (txHash) => `https://bscscan.com/tx/${txHash}`;
+        } else if (net === 'orai') {
+            return (txHash) => `https://scan.orai.io/txs/${txHash}`;
+        } else if (net === 'cheqd') {
+            return (txHash) => `https://explorer.cheqd.io/transactions/${txHash}`;
+        } else {
+            return (txHash) => `https://www.mintscan.io/${net}/txs/${txHash}`;
+        }
+    }
+
+    async getWallets() {
+        try {
             const qs = require('querystring');
             const params = window.location.search.slice(1);
             const paramsAsObject = qs.parse(params);
             let arr = JSON.parse(paramsAsObject.wallets)
-            let wallets = arr.length ? eval(paramsAsObject.wallets).map(item => {
+            let  wallets = null
+            const res = await axios.get(process.env.REACT_APP_MAIN_SERVER_URL + '/networks.json')
+            let networks = res.data
+            store.dispatch({
+                type: types.SET_NETWORKS,
+                payload: networks
+            })
+            // eslint-disable-next-line
+            wallets = arr.length ? eval(paramsAsObject.wallets).map(item => {
                 return {
                     address: item?.address,
                     network: item?.net,
-                    name: networks[item?.net].name,
-                    code: networks[item?.net].code,
-                    getTxUrl:  networks[item?.net].getTxUrl
+                    name: networks[item?.net]?.name,
+                    code: networks[item?.net]?.code,
+                    decimals: networks[item?.net]?.decimals,
+                    publicKey: item?.publicKey,
+                    from: item?.from,
+                    getTxUrl: this.getTxUrl(item?.net)
                 }
-            }) : new ValidationError(e)
+            }) : new ValidationError()
             return wallets
         }catch(e){
             return new ValidationError(e)
         }
-     
     }
-    loadWalletsWithBalances(){
-        const wallets = this.getWallets()
-        if(wallets instanceof ValidationError){
-            return wallets
+
+    async loadWalletsWithBalances() {
+        const wallets = await this.getWallets();
+        if (wallets instanceof ValidationError) {
+            return wallets;
         }
         try{
             if(wallets.length > 0){
-                wallets.forEach(async item => {
-                    const wallet = getWalletConstructor(item)
+                wallets.forEach(async (item,i) => {
+                    const wallet = walletActions.getWalletConstructor(item)
                     if(wallet){
                         let response = await wallet.getWalletBalance()
-                        if(response.ok){
-                            item.balance = response.data
+                        if(response?.ok){
+                            item.balance = response.data.mainBalance
+                        }else{
+                            response = await wallet.getWalletBalance()
+                            item.balance = response.data.mainBalance
                         }
-                    } 
-                })
+                    }
+                });
             }
-        }catch{}
-        return wallets
+        } catch {
+        }
+        return wallets;
     }
-    
+
 }
 
-// https://localhost:10888/?token=ccace86f-d539-4c34-a365-9711edf629eb&wallets=[%220x4dd28bee5135fc5dbb358a68ba941a5bf8e7aab2%22]
