@@ -7,7 +7,7 @@ const InfoPanel = (props) => {
     const [active, setActive] = useState('Guides')
     const headerRef = useRef()
     return (
-        <section id='info-panel'>
+        <section className='info-panel'>
             <div className='panel-header-line' style={{background: props.config.headerParamsFromConfig('TOP_BACKGROUND_COLOR') }}></div>
             <Header refs={headerRef}/>
             <Content>

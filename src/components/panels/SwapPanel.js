@@ -187,7 +187,12 @@ const SwapPanel = () => {
                 <InfoCardItem text={'Price impact'} symbol={'%'}><span className='green-text'>{priceImpactWithoutFee ? (priceImpactWithoutFee.lessThan(ONE_BIPS) ? '<0.01' : `${priceImpactWithoutFee.toFixed(2)}`) : '-'}</span></InfoCardItem>
                 <InfoCardItem text={'Minimum received'} symbol={tokenOut.symbol}><span className='purple-text'>{minReceived !== 0 ? minReceived?.toSignificant(4) : minReceived}</span></InfoCardItem>
                 <InfoCardItem text={'Liquidity Provider Fee'} symbol={tokenIn.symbol}><span className='pink-text'>{realizedLPFee?.toSignificant(4) || 0}</span></InfoCardItem>
-                <InfoCardItem text={'Route'} routes={routes}/>
+                {
+                    routes.length ?
+                    <InfoCardItem text={'Route'} routes={routes}/>:
+                    <InfoCardItem text={'Route'} symbol={'-'}/>
+                }
+               
             </InfoCardBlock>
             <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippageTolerance} />
             <SwapButton isBNB={isBNB}/>
