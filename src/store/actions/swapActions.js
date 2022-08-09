@@ -67,8 +67,10 @@ const setTokenIn = (token, tradeUpdate = true) => async(dispatch) => {
   }
 };
 
-const setTokenOut = (token) => (dispatch) => {
-  dispatch(setTrade(null))
+const setTokenOut = (token,tradeUpdate = true) => (dispatch) => {
+  if(tradeUpdate){
+    dispatch(setTrade(null))
+  }
   dispatch({
     type: types.SET_TOKEN_OUT,
     payload: token,
