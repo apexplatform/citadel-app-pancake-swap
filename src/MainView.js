@@ -58,7 +58,7 @@ const MainView = () => {
               <SelectAddressPanel id={ROUTES.SELECT_ADDRESS} />
               <SelectTokenPanel id={ROUTES.SELECT_TOKEN} />
               <TransactionsDetailsPanel id={ROUTES.TRANSACTION_DETAILS} />
-              <Modal id={ROUTES.SWAP} show={showModal && !location.pathname.includes('/info')}>
+              <Modal id={ROUTES.SWAP} show={showModal && !location.pathname.includes('/info')} borderRadius={borderRadius}>
                 { validationErrors?.text && <div>
                   <NotificationCard text={text.ADDRESS_ERROR_HEADER} iconColor="#00B2FE" boldText/>
                   <p className='description-text'>{text.ADDRESS_ERROR_DESCRIPTION}</p>
