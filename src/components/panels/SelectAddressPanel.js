@@ -4,8 +4,10 @@ import AddressBlock from '@citadeldao/apps-ui-kit/dist/components/uiKit/AddressB
 import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
 import { walletActions } from '../../store/actions';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { prettyNumber } from '../helpers/numberFormatter';
+import queryString from 'query-string';
+
 const SelectAddressPanel = () => {
     const config = new Config()
     const { wallets, activeWallet, usdPrice } = useSelector((state) => state.wallet)
@@ -41,7 +43,7 @@ const SelectAddressPanel = () => {
                   <AddressBlock onClick={() => setActiveWallet(elem)} active={activeWallet?.address === elem?.address} style={{marginBottom: '10px'}} data={{...elem, balance: prettyNumber(elem?.balance)}} key={i} usdPrice={usdPrice > 0 ? prettyNumber(elem.balance * usdPrice,2) : ''}/>  
                 ))}
             </Content>
-            <Tabbar config={config}/>
+            <Tabbar config={config}  bottomInset={`${queryString.parse(window.location.search).bottomInset}`}/>
         </div>
     )
 }

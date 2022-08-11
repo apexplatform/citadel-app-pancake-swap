@@ -12,6 +12,8 @@ import ROUTES from '../../routes';
 import BigNumber from "bignumber.js";
 import ConfirmModal from '../uikit/ConfirmModal';
 import { prettyNumber } from '../helpers/numberFormatter';
+import queryString from 'query-string';
+
 const SwapPanel = () => {
     const config = new Config()
     const navigate = useNavigate()
@@ -142,6 +144,7 @@ const SwapPanel = () => {
         setSlippage(val)
         dispatch(swapActions.setSlippageTolerance(val))
     }
+    
     return (
         <div className='panel swap-panel'>
             <Content>
@@ -198,7 +201,7 @@ const SwapPanel = () => {
             <SwapButton isBNB={isBNB}/>
             </Content>
             <ConfirmModal />
-            <Tabbar config={config}/>
+            <Tabbar config={config}  bottomInset={`${queryString.parse(window.location.search).bottomInset}`}/>
         </div>
     )
 }

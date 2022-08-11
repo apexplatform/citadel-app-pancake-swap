@@ -7,6 +7,7 @@ import {useNavigate} from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
 import ROUTES from "../../routes";
 import { Config } from '../config/config';
+import queryString from 'query-string';
 
 const TransactionsPanel = () => {
     const navigate = useNavigate()
@@ -42,7 +43,7 @@ const TransactionsPanel = () => {
                     !loader && <Loader />
                 }      
             </Content>
-            <Tabbar config={config}/>
+            <Tabbar config={config}  bottomInset={`${queryString.parse(window.location.search).bottomInset}`}/>
         </div>
     )
 }

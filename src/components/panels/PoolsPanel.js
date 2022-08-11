@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { Content, Tabbar, Search, Tablist, Tab, PoolItemInfo } from '@citadeldao/apps-ui-kit/dist/main';
 import PoolItem from '@citadeldao/apps-ui-kit/dist/components/uiKit/PoolItem'
 import { Config } from '../config/config';
+import queryString from 'query-string';
 // import { useSelector } from 'react-redux';
 // import { walletActions } from '../../store/actions';
 // import { useNavigate } from 'react-router-dom';
@@ -76,7 +77,7 @@ const PoolsPanel = () => {
                     </Tab>
                 </Tablist> 
             </Content>
-            <Tabbar config={config}/>
+            <Tabbar config={config}  bottomInset={`${queryString.parse(window.location.search).bottomInset}`}/>
         </div>
     )
 }

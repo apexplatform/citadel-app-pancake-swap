@@ -6,16 +6,17 @@ import SwapPanel from './components/panels/SwapPanel'
 import TransactionsPanel from './components/panels/TransactionsPanel'
 import SelectTokenPanel from './components/panels/SelectTokenPanel'
 import TransactionsDetailsPanel from './components/panels/TransactionDetails'
-import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { errorActions, swapActions } from './store/actions'
 import text from './text.json'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { StatusPopup, PopupWindow, TipCard, NotificationCard, Panel, Modal, View, AddressSectionCard}  from '@citadeldao/apps-ui-kit/dist/main';
 import InfoPanel from './components/panels/InfoPanel'
 import { Config } from './components/config/config';
 import SelectAddressPanel from './components/panels/SelectAddressPanel';
 import { prettyNumber } from './components/helpers/numberFormatter';
+import queryString from 'query-string';
+
 const MainView = () => {
     const location = useLocation();
     const dispatch = useDispatch()
@@ -42,10 +43,11 @@ const MainView = () => {
     if (activeWallet) {
       wallet = {...activeWallet,balance: prettyNumber(activeWallet?.balance)}
     }
+
     const config = new Config()
     return(
         <View>
-            <Panel config={config}>
+            <Panel config={config} style={{borderRadius: `${queryString.parse(window.location.search).borderRadius}px`}}>
               <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS)} className='select-address-card' data={wallet} id='/show'></AddressSectionCard>
               <PopupWindow show={showSuccess} id='/show'>
                   <StatusPopup text={errors?.text} type='error' showPopup={clearErrors}/>       
@@ -65,7 +67,6 @@ const MainView = () => {
               </Modal>
             </Panel>
             <InfoPanel config={config}/>
-           
         </View>
     );
 };
