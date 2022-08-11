@@ -6,10 +6,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { walletActions } from '../../store/actions';
 import { useNavigate} from 'react-router-dom';
 import { prettyNumber } from '../helpers/numberFormatter';
-import queryString from 'query-string';
 
 const SelectAddressPanel = () => {
     const config = new Config()
+    const { bottomInset } = useSelector(state => state.panels)
     const { wallets, activeWallet, usdPrice } = useSelector((state) => state.wallet)
     const [walletList, setWalletList] = useState(wallets)
     const previousPanel = useSelector(state => state.panels.previousPanel)
@@ -43,7 +43,7 @@ const SelectAddressPanel = () => {
                   <AddressBlock onClick={() => setActiveWallet(elem)} active={activeWallet?.address === elem?.address} style={{marginBottom: '10px'}} data={{...elem, balance: prettyNumber(elem?.balance)}} key={i} usdPrice={usdPrice > 0 ? prettyNumber(elem.balance * usdPrice,2) : ''}/>  
                 ))}
             </Content>
-            <Tabbar config={config}  bottomInset={`${queryString.parse(window.location.search).bottomInset}`}/>
+            <Tabbar config={config}  bottomInset={bottomInset}/>
         </div>
     )
 }

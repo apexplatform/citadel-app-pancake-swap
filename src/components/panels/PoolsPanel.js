@@ -2,13 +2,13 @@ import React, {useState} from 'react';
 import { Content, Tabbar, Search, Tablist, Tab, PoolItemInfo } from '@citadeldao/apps-ui-kit/dist/main';
 import PoolItem from '@citadeldao/apps-ui-kit/dist/components/uiKit/PoolItem'
 import { Config } from '../config/config';
-import queryString from 'query-string';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 // import { walletActions } from '../../store/actions';
 // import { useNavigate } from 'react-router-dom';
 const PoolsPanel = () => {
     const config = new Config()
     const [active, setActive] = useState('tab1')
+    const { bottomInset } = useSelector(state => state.panels)
     const pool = {
         id: 1,
         apr: 0.32,
@@ -77,7 +77,7 @@ const PoolsPanel = () => {
                     </Tab>
                 </Tablist> 
             </Content>
-            <Tabbar config={config}  bottomInset={`${queryString.parse(window.location.search).bottomInset}`}/>
+            <Tabbar config={config}  bottomInset={bottomInset}/>
         </div>
     )
 }

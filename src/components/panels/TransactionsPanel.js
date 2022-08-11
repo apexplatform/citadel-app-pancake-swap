@@ -7,12 +7,12 @@ import {useNavigate} from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
 import ROUTES from "../../routes";
 import { Config } from '../config/config';
-import queryString from 'query-string';
 
 const TransactionsPanel = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const config = new Config()
+    const { bottomInset } = useSelector(state => state.panels)
     const dispatch = useDispatch();
     const { activeWallet } = useSelector((state) => state.wallet)
     const transactions = useSelector((state) => state.transaction.transactions)
@@ -43,7 +43,7 @@ const TransactionsPanel = () => {
                     !loader && <Loader />
                 }      
             </Content>
-            <Tabbar config={config}  bottomInset={`${queryString.parse(window.location.search).bottomInset}`}/>
+            <Tabbar config={config}  bottomInset={bottomInset}/>
         </div>
     )
 }

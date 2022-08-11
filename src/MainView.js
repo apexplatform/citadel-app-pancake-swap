@@ -15,7 +15,6 @@ import InfoPanel from './components/panels/InfoPanel'
 import { Config } from './components/config/config';
 import SelectAddressPanel from './components/panels/SelectAddressPanel';
 import { prettyNumber } from './components/helpers/numberFormatter';
-import queryString from 'query-string';
 
 const MainView = () => {
     const location = useLocation();
@@ -24,6 +23,7 @@ const MainView = () => {
     const { validationErrors, errors } = useSelector(state => state.errors)
     const { activeWallet, allowance } = useSelector(state => state.wallet)
     const { amount, tokenIn } = useSelector(state => state.swap)
+    const { borderRadius } = useSelector(state => state.panels)
     const [showSuccess, setShowSuccess] = useState(errors)
     useEffect(() => {
       setShowSuccess(errors)
@@ -47,7 +47,7 @@ const MainView = () => {
     const config = new Config()
     return(
         <View>
-            <Panel config={config} style={{borderRadius: `${queryString.parse(window.location.search).borderRadius}px`}}>
+            <Panel config={config} style={{borderRadius: `${borderRadius}px`}}>
               <AddressSectionCard onClick={() => navigate(ROUTES.SELECT_ADDRESS)} className='select-address-card' data={wallet} id='/show'></AddressSectionCard>
               <PopupWindow show={showSuccess} id='/show'>
                   <StatusPopup text={errors?.text} type='error' showPopup={clearErrors}/>       

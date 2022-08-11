@@ -7,10 +7,10 @@ import { swapActions } from '../../store/actions';
 import { useNavigate } from 'react-router-dom';
 import { sortList } from '../helpers';
 import { prettyNumber } from '../helpers/numberFormatter';
-import queryString from 'query-string';
 
 const SelectTokenPanel = () => {
     const config = new Config()
+    const { bottomInset } = useSelector(state => state.panels)
     const { tokens } = useSelector((state) => state.wallet)
     const { tokenIn, tokenOut, selectedToken } = useSelector((state) => state.swap)
     const previousPanel = useSelector(state => state.panels.previousPanel)
@@ -52,7 +52,7 @@ const SelectTokenPanel = () => {
                 />  
                 ))}
             </Content>
-            <Tabbar config={config}  bottomInset={`${queryString.parse(window.location.search).bottomInset}`}/>
+            <Tabbar config={config}  bottomInset={bottomInset}/>
         </div>
     )
 }
