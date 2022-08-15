@@ -33,7 +33,6 @@ const SelectAddressPanel = () => {
       dispatch(walletActions.setActiveWallet(wallet))
       back();
     }
-    console.log(usdPrice)
     return (
         <div className='panel'>
             <Content>

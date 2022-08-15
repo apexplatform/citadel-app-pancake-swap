@@ -2,6 +2,7 @@ import { types } from './types';
 import text from '../../text.json';
 import { ValidationError } from '../../networking/models/Errors';
 import * as Sentry from '@sentry/react';
+import { store } from '../store';
 
 const errorList = [
     {
@@ -169,7 +170,7 @@ const checkErrors = (error) => dispatch => {
             payload: true,
         });
     } else if (error) {
-        let errorText = 'Something went wrong.';
+        let errorText = error?.message || 'Something went wrong.';
         for (let i = 0; i < errorList.length; i++) {
             if (error.message?.toLowerCase().includes(errorList[i].error.toLowerCase())) {
                 errorText = errorList[i].description;
@@ -178,6 +179,9 @@ const checkErrors = (error) => dispatch => {
         }
         dispatch(setCustomErrors({ text: errorText }));
         Sentry.captureException(error?.message || error);
+        setTimeout(() => {
+            store.dispatch(errorActions.clearErrors())
+        },7000)
     }
 };
 
