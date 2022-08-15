@@ -12,9 +12,11 @@ import ROUTES from '../../routes';
 import BigNumber from "bignumber.js";
 import ConfirmModal from '../uikit/ConfirmModal';
 import { prettyNumber } from '../helpers/numberFormatter';
+
 const SwapPanel = () => {
     const config = new Config()
     const navigate = useNavigate()
+    const { bottomInset } = useSelector(state => state.panels)
     const { wallets } = useSelector((state) => state.wallet)
     const [balanceView, setBalanceView] = useState('View Balance')
     const { independentField, minReceived, slippageTolerance, isExactIn, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
@@ -142,10 +144,12 @@ const SwapPanel = () => {
         setSlippage(val)
         dispatch(swapActions.setSlippageTolerance(val))
     }
+    
     return (
         <div className='panel swap-panel'>
             <Content>
                 <div className='swap-inputs'>
+                    
                     <SelectToken 
                         max={true} 
                         balance={true} 
@@ -192,13 +196,12 @@ const SwapPanel = () => {
                     <InfoCardItem text={'Route'} routes={routes}/>:
                     <InfoCardItem text={'Route'} symbol={'-'}/>
                 }
-               
             </InfoCardBlock>
-            <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippageTolerance} />
-            <SwapButton isBNB={isBNB}/>
+                <EditAmount data={{code: '%'}} style={{marginTop: '20px'}} text={'Slippage tolerance'} value={slippage} minValue={0} saveValue={() => {}} maxValue={100000}  setValue={setSlippageTolerance} />
+                <SwapButton isBNB={isBNB}/>
             </Content>
             <ConfirmModal />
-            <Tabbar config={config}/>
+            <Tabbar config={config}  bottomInset={bottomInset}/>
         </div>
     )
 }

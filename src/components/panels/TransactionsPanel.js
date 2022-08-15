@@ -12,6 +12,7 @@ const TransactionsPanel = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const config = new Config()
+    const { bottomInset } = useSelector(state => state.panels)
     const dispatch = useDispatch();
     const { activeWallet } = useSelector((state) => state.wallet)
     const transactions = useSelector((state) => state.transaction.transactions)
@@ -42,7 +43,7 @@ const TransactionsPanel = () => {
                     !loader && <Loader />
                 }      
             </Content>
-            <Tabbar config={config}/>
+            <Tabbar config={config}  bottomInset={bottomInset}/>
         </div>
     )
 }
