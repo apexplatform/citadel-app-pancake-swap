@@ -28,9 +28,6 @@ const MainView = () => {
     useEffect(() => {
       setShowSuccess(errors)
       dispatch(swapActions.checkSwapStatus(amount))
-      if(window.location.pathname.includes('/info/')){
-        navigate(window.location.pathname)
-      }
       // eslint-disable-next-line 
     }, [errors,allowance,tokenIn]);
     const clearErrors = () => {
