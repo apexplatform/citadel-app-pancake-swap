@@ -58,7 +58,7 @@ const TransactionDetails = (props) => {
             </span>
           </InfoCardItem>
           <InfoCardItem text='Data & time'>
-            <p className="transaction-datetime">{moment().from(data.date?.value)}</p>
+            <p className="transaction-datetime">{moment(data.date?.value).from(new Date())}</p>
           </InfoCardItem>
 
           {data?.meta_info?.length && data?.meta_info?.map((item, i) => (

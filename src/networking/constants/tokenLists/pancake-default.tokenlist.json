@@ -52,6 +52,18 @@
         "network":"bsc"
      },
      {
+         "net": "bsc_bsw",
+         "name": "Biswap",
+         "code": "BSW",
+         "symbol": "BSW",
+         "address": "0x965f527d9159dce6288a2219db51fc6eef120dd1",
+         "chainId":56,
+         "decimals":18,
+         "logoURI":"https://bscscan.com/token/images/biswap_32.png",
+         "coingeckoCode": "biswap",
+         "network":"bsc"
+      },
+     {
         "name":"Binance Pegged ETH",
         "symbol":"ETH",
         "address":"0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
