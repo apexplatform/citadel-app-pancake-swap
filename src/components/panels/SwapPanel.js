@@ -122,14 +122,10 @@ const SwapPanel = () => {
 
     const checkAmount = (val,name) => {
         // eslint-disable-next-line 
-        val = val.replace(/[^0-9\.]/g, "");
+        val = val.replace(/[^0-9\.]/g, '')
         if(val.split(".").length - 1 !== 1 && val[val.length-1] === '.') return
-        if (
-          val.length === 2 &&
-          val[1] !== "." &&
-          val[1] === "0"
-        ) {
-            dispatch(swapActions.setAmount(val,name === "INPUT" ? true : false));
+        if (val.length === 2 && val[1] !== '.' && val[1] === '0' && val[0] === '0') {
+            dispatch(swapActions.setAmount(val[0],name === "INPUT" ? true : false));
         } else if (val[0] === "0" && val[1] !== ".") {
             dispatch(swapActions.setAmount(BigNumber(val).toFixed(),name === "INPUT" ? true : false));
         } else {
