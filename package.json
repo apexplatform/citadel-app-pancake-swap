@@ -5,7 +5,7 @@
   "homepage": "./",
   "dependencies": {
     "@citadeldao/apps-sdk": "^0.0.18",
-    "@citadeldao/apps-ui-kit": "^0.307.0",
+    "@citadeldao/apps-ui-kit": "^0.383.0",
     "@ethersproject/abi": "^5.6.4",
     "@ethersproject/address": "^5.6.1",
     "@pancakeswap/sdk": "^2.4.5",

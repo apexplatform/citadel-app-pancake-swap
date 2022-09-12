@@ -1,4 +1,4 @@
-import { Modal, CustomIcon, ModalHeader, InfoCardItem, SwapBalanceCard, BigButtons, InfoCardBlock, PriceUpdatedCard, } from '@citadeldao/apps-ui-kit/dist/main'
+import { Modal, Icon, ModalHeader, InfoCardItem, SwapBalanceCard, Button, InfoCardBlock, PriceUpdatedCard, } from '@citadeldao/apps-ui-kit/dist/main'
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom'
@@ -17,7 +17,7 @@ return(
     <div>
       <div className='row'>
           <SwapBalanceCard width='45%' amount={amount} bgColor='#B7F6FF' color='#00BFDB' token={tokenIn} />
-          <CustomIcon icon='arrow-swap' />
+          <Icon name='triangle-right' width='16px'/>
           <SwapBalanceCard width='45%' amount={outAmout} bgColor='#C6D1FF' color='rgba(58, 94, 229, 1)' token={tokenOut} />
       </div>
       <PriceUpdatedCard style={{margin: '16px 0'}} acceptPrice={() => setDisabledSwap(false)} text='Price updated'/>
@@ -29,7 +29,7 @@ return(
           <InfoCardItem text={'Route'} routes={routes}/>
       </InfoCardBlock>
       <div className='center'>
-          <BigButtons text='SWAP' disabled={disabledSwap} style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'  hideIcon={true}/>
+        <Button disabled={disabledSwap} hoverBgColor='#5639E0' style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5'>SWAP</Button>
       </div>
     </div> 
   </Modal>
