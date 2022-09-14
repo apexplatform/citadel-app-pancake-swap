@@ -1,7 +1,8 @@
-#swap-center-btn{
+.swap-center-btn{
     position: absolute;
     left: 45%;
-    top: 37%;
+    top: 36%;
+    z-index: 1;
 }
 
 .swap-inputs{
@@ -84,15 +85,7 @@
 }
 
 @media screen and (max-width: 500px) {
-    #swap-center-btn{
+    .swap-center-btn{
         left: 42%;
-        top: 40%;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    #swap-center-btn{
-        left: 42%;
-        top: 44%;
     }
 }

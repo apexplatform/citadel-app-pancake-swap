@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import { Content, CustomIcon, Tabbar, EditAmount, SelectToken, InfoCardBlock, InfoCardItem} from '@citadeldao/apps-ui-kit/dist/main';
+import { Content, IconButton, Tabbar, EditAmount, SelectToken, InfoCardBlock, InfoCardItem} from '@citadeldao/apps-ui-kit/dist/main';
 import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -99,24 +99,18 @@ const SwapPanel = () => {
         dispatch(swapActions.setAmount(formattedAmounts[val],val === "INPUT" ? true : false));
         dispatch(swapActions.getSwapInfo(formattedAmounts[val],val === "INPUT" ? true : false));
     }
-    const [windowDimensions, setWindowDimensions] = useState(window.innerWidth);
     useEffect(() => { 
-        function handleResize() {
-            const { innerWidth: width } = window;
-            setWindowDimensions(width);
-        }
-        window.addEventListener('resize', handleResize);
-
+    
         let interval = null;
 		if (!trade && +amount !== 0) {
 			interval = setInterval(() => {
+                console.log(amount,'--v')
                 dispatch(swapActions.getSwapInfo(amount,isExact));
 			}, 1000);
 		} else {
 			clearInterval(interval);
 		}
-		return () => { clearInterval(interval); window.removeEventListener('resize', handleResize)};
-
+		return () => { clearInterval(interval);};
         // eslint-disable-next-line 
     },[amount,tokenIn,tokenOut,trade])
 
@@ -164,7 +158,7 @@ const SwapPanel = () => {
                         balanceView={balanceView} setBalanceView={setBalanceView} 
                         onClick={() => setSelectedOption('INPUT')}
                         />
-                    <CustomIcon onClick={reverseTokens} icon='swap-icon' id='swap-center-btn' size={windowDimensions < 500 ? 'small' : 'big'} />
+                    <IconButton onClick={reverseTokens} type="hexagon" icon='arrows-towards'  className='swap-center-btn' width={60} height={60} bgColor="#C6D1FF" iconColor="#173296" borderColor="#869FFF"/>
                     <SelectToken 
                             balance={true} 
                             token={true} 
