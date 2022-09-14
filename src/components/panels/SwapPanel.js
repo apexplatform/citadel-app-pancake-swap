@@ -104,12 +104,13 @@ const SwapPanel = () => {
         let interval = null;
 		if (!trade && +amount !== 0) {
 			interval = setInterval(() => {
+                console.log(amount,'--v')
                 dispatch(swapActions.getSwapInfo(amount,isExact));
 			}, 1000);
 		} else {
 			clearInterval(interval);
 		}
-	
+		return () => { clearInterval(interval);};
         // eslint-disable-next-line 
     },[amount,tokenIn,tokenOut,trade])
 
