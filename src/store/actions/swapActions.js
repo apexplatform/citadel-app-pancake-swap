@@ -240,12 +240,12 @@ const getSwapTransaction  = () => async(dispatch) => {
   if(wallet){
     const { deadlineMin } = store.getState().swap
     const deadline = await wallet.loadBlockNumber(deadlineMin)
-    const {trade,slippageTolerance,isExactIn,tokenIn,tokenOut,amountOut,amountIn} = store.getState().swap;
+    const {trade,slippageTolerance,isExactIn,tokenIn,tokenOut,amountOut,amount,amountIn} = store.getState().swap;
     let transaction = null
     if(tokenIn.symbol === 'BNB' && tokenOut.symbol === 'WBNB'){
-      transaction = wallet.generateDepositTransaction(tokenIn,amountIn,tokenOut)
+      transaction = wallet.generateDepositTransaction(tokenIn,amount,tokenOut)
     }else if(tokenIn.symbol === 'WBNB' && tokenOut.symbol === 'BNB'){
-      transaction = wallet.generateWithdrawTransaction(tokenIn,amountIn,tokenOut)
+      transaction = wallet.generateWithdrawTransaction(tokenIn,amount,tokenOut)
     }else{
       transaction = wallet.generateSwapTransaction(tokenIn,amountIn,tokenOut,amountOut,trade,deadline,slippageTolerance,isExactIn)
     }
