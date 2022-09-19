@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Content, Header, Tabbar, Search } from '@citadeldao/apps-ui-kit/dist/main';
+import { Content, Header, Tabbar, Input } from '@citadeldao/apps-ui-kit/dist/main';
 import AddressBlock from '@citadeldao/apps-ui-kit/dist/components/uiKit/AddressBlock'
 import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
@@ -37,7 +37,7 @@ const SelectAddressPanel = () => {
         <div className='panel'>
             <Content>
                 <Header border title="Select an address" style={{margin: '8px 0 16px 0'}} onClick={() => back()} back={true}/>
-                <Search style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
+                <Input type="search" style={{marginBottom: '10px'}} onChange={searchWallet} placeholder='Start typing..'/>
                 {walletList?.map((elem,i) =>(
                   <AddressBlock onClick={() => setActiveWallet(elem)} active={activeWallet?.address === elem?.address} style={{marginBottom: '10px'}} data={{...elem, balance: prettyNumber(elem?.balance)}} key={i} usdPrice={usdPrice > 0 ? prettyNumber(elem.balance * usdPrice,2) : ''}/>  
                 ))}
