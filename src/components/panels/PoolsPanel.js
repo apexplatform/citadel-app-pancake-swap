@@ -42,7 +42,7 @@ const PoolsPanel = () => {
             <Content>
                   <Tablist active={active} setActive={setActive} type="button">
                     <Tab id='tab1' label='All'>
-                        <Search style={{margin: '10px 0 16px'}} placeholder='Start typing..'/>
+                        <Input type="search" style={{margin: '10px 0 16px'}} placeholder='Start typing..'/>
                         <PoolItem  
                             id={pool.id}
                             apr={pool.apr}
@@ -70,10 +70,10 @@ const PoolsPanel = () => {
                         </PoolItem>
                     </Tab>
                     <Tab id='tab2' label='Incentivized Pools'>
-                        <Search style={{margin: '10px 0'}} placeholder='Start typing..'/>
+                        <Input type="search" style={{margin: '10px 0'}} placeholder='Start typing..'/>
                     </Tab>
                     <Tab id='tab3' label='My Pools'>
-                        <Search style={{margin: '10px 0'}} placeholder='Start typing..'/>
+                        <Input type="search" style={{margin: '10px 0'}} placeholder='Start typing..'/>
                     </Tab>
                 </Tablist> 
             </Content>
