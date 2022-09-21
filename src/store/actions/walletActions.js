@@ -171,12 +171,12 @@ const loadTokenBalances = (address) => {
                 token.balance = formatBalance(balance?._hex,+token.decimals)
             }
             if(token.symbol === tokenIn.symbol){	
+                store.dispatch(swapActions.setTokenIn({...token,balance: formatBalance(balance?._hex,+token.decimals)}, false)) 
                 let allowance = await wallet.loadTokenAllowance(token)
                 store.dispatch({
                     type: types.SET_ALLOWANCE,
                     payload: allowance,
-                });
-                store.dispatch(swapActions.setTokenIn({...token,balance: formatBalance(balance?._hex,+token.decimals)}, false))  
+                }); 
             }
             if(token.symbol === tokenOut.symbol){
                 store.dispatch(swapActions.setTokenOut({...token,balance: formatBalance(balance?._hex,+token.decimals)}, false)) 
