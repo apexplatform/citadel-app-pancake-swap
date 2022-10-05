@@ -178,11 +178,12 @@ const getSwapInfo = (amountIn, isExactIn=true, isSwap=false, check=true) => asyn
 
 
 const checkSwapStatus = (amount) => dispatch => {
-  const { tokenIn, slippageTolerance, trade } = store.getState().swap
+  const { tokenIn, slippageTolerance, trade, independentField } = store.getState().swap
   const { activeWallet, allowance } = store.getState().wallet
   const { priceImpactWithoutFee } = getTradeFeePrice(trade)
   const balance = tokenIn?.balance
   let feeProcent = activeWallet?.code === tokenIn?.symbol ? 0.01 : 0
+  amount = independentField === 'INPUT' ? amount : trade?.inputAmount?.toSignificant(6)
   if(+amount > 0) {
     if(+amount > +balance){
       dispatch(setSwapStatus('insufficientBalance'))
