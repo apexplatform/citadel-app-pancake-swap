@@ -15,7 +15,7 @@ const SwapButton = (props) => {
             {swapStatus === 'enterAmount' && <Button disabled style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5' hidename={true}>ENTER AMOUNT</Button>}
             {swapStatus === 'swap' && <Button disabled={disableSwap} onClick={() => swapActions.checkTradeUpdate()} style={{marginTop: '20px'}} textColor='#FFFFFF' bgColor='#7C63F5' hoverBgColor='#5639E0'>SWAP</Button>}
             {swapStatus === 'swapAnyway' && <Button disabled={disableSwap}  onClick={() => swapActions.checkTradeUpdate()} style={customStyle} textColor='#FFFFFF' bgColor='#FF5722' hoverBgColor='#5639E0'>SWAP ANYWAY</Button>}
-            {swapStatus === 'insufficientBalance' && <Button disabled style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5'>{`Insufficient ${tokenIn.code} balance`}</Button>}
+            {swapStatus === 'insufficientBalance' && <Button disabled style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5'>{`Insufficient ${tokenIn.symbol} balance`}</Button>}
             {swapStatus === 'feeError' && <Button disabled style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5'>Insufficient balance for swap fee</Button>}
             {swapStatus === 'disabled' && <Button disabled style={customStyle} textColor='#FFFFFF' bgColor='#7C63F5'>SWAP</Button>}
 
