@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { TransactionItem, Loader, Content, Tabbar } from "@citadeldao/apps-ui-kit/dist/main"
+import { TransactionCard, Loader, Content, Tabbar } from "@citadeldao/apps-ui-kit/dist/main"
 import text from "../../text.json"
 import { transactionActions, panelActions } from '../../store/actions';
 import {useDispatch,useSelector} from "react-redux";
@@ -30,7 +30,7 @@ const TransactionsPanel = () => {
         <div className='panel'>
             <Content> 
                 { (loader && transactions?.length > 0) && transactions?.map((item, i) => (
-                    <TransactionItem data={item} key={i} onClick={setOpenedTransaction}/>
+                    <TransactionCard data={item} key={i} onClick={setOpenedTransaction}/>
                 ))}
                 { (loader && transactions?.length === 0) &&
                     <div className="no-transactions-block">

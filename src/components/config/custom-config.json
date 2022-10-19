@@ -16,6 +16,22 @@
         "BACKGROUND_COLOR": "#FFF",
         "TOP_BACKGROUND_COLOR": "#00BFDB"
     },
+    "SPLASH": {
+        "title": "Pancakeswap",
+        "fullName": "Pancake Swap",
+        "description": "PancakeSwap is a decentralized exchange that runs on Binance Smart Chain.",
+        "background_color": "#00BFDB",
+        "background": "bg.svg",
+        "circle_1": "#FFFFFF",
+        "circle_2": "rgba(255, 255, 255, 0.5)",
+        "circle_3": "rgba(255, 255, 255, 0.3)",
+        "circle_4": "rgba(255, 255, 255, 0.2)",
+        "textColor": "#000000",
+        "mobileTextColor": "#000000",
+        "iconColor": "",
+        "mobileIconColor": "",
+        "logo": "logo.svg"
+    },
     "DEFAULT_ADDRESS_BLOCK": true
 }
 
