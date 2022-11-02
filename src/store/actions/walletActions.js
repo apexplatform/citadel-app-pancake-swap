@@ -214,7 +214,7 @@ const updateWalletList = async(wallet) => {
                 store.dispatch(errorActions.checkErrors(new ValidationError())) 
             }
         }
-    }else{
+    }else if(wallet.net === 'bsc'){
         const walletList = new WalletList()
         wallet.network = wallet.net
         wallet.name = networks[wallet?.net]?.name
