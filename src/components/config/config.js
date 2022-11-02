@@ -17,6 +17,24 @@ export class Config {
         }
         return defaultConfig['HEADER'][param]
     }
+    splashParamsFromConfig(){
+        if (customConfig['SPLASH']){
+            const config = { ...customConfig['SPLASH'] };
+
+            if (config.background) {
+                config.background = require(`../../assets/img/splash/${config.background}`);
+            }
+
+            if (config.logo) {
+                config.logo = require(`../../assets/img/splash/${config.logo}`);
+            }
+
+            return config;
+        } else {
+            console.warn('Provide param "SPLASH" to custom config');
+        }
+        return defaultConfig['SPLASH']
+    }
 
     get showAddressBlock() {
         if (customConfig.DEFAULT_ADDRESS_BLOCK){

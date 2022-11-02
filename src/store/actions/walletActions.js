@@ -53,10 +53,10 @@ const loadWalletWithBalances = () => async (dispatch) => {
                         dispatch(setActiveWallet(item, false))
                     },1000) 
                 }
-                if (!flag) {
-                    dispatch(setActiveWallet(wallets[0]));
-                }
             })
+            if (!flag) {
+                dispatch(setActiveWallet(wallets[0]));
+            }
         }).catch(() => {
             dispatch(setActiveWallet(wallets[0]));
             setTimeout(() => {

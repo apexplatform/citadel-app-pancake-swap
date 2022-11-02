@@ -2,12 +2,12 @@ import React from 'react'
 import { GuidesCard } from '@citadeldao/apps-ui-kit/dist/main'
 import text from '../../text.json'
 import '../styles/uiKit/guides.css'
-import { ReactComponent as Guide1 } from '../guides/guide1.svg'
-import { ReactComponent as Guide2 } from '../guides/guide2.svg'
-import { ReactComponent as Guide3 } from '../guides/guide3.svg'
-import { ReactComponent as Guide4 } from '../guides/guide4.svg'
-import { ReactComponent as Guide5 } from '../guides/guide5.svg'
-import { ReactComponent as Guide6 } from '../guides/guide6.svg'
+import { ReactComponent as Guide1 } from '../../assets/img/guides/guide1.svg'
+import { ReactComponent as Guide2 } from '../../assets/img/guides/guide2.svg'
+import { ReactComponent as Guide3 } from '../../assets/img/guides/guide3.svg'
+import { ReactComponent as Guide4 } from '../../assets/img/guides/guide4.svg'
+import { ReactComponent as Guide5 } from '../../assets/img/guides/guide5.svg'
+import { ReactComponent as Guide6 } from '../../assets/img/guides/guide6.svg'
 const GuidesPanel = () => {
     return (
         <div className='guides-panel'>
