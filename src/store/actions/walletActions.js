@@ -165,6 +165,9 @@ const loadTokenBalances = (address) => {
     const { tokens } = store.getState().wallet;
     const { tokenIn, tokenOut, amount, isExactIn } = store.getState().swap;
     tokens.forEach(async(token) => {
+        token.value = token?.symbol
+        token.icon = token.logoURI
+        token.label = token?.symbol
         if(token?.address){
             let balance = await wallet.getTokenBalance(token)
             if(balance){

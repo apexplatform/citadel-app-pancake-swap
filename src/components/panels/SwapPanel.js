@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import { Content, IconButton, Tabbar, EditAmount, SelectToken, InfoCardBlock, InfoCardItem} from '@citadeldao/apps-ui-kit/dist/main';
+import { Content, IconButton, Tabbar, EditAmount, FormGroupBalance, InputSelect, InfoCardBlock, InfoCardItem} from '@citadeldao/apps-ui-kit/dist/main';
 import { Config } from '../config/config';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -18,7 +18,6 @@ const SwapPanel = () => {
     const navigate = useNavigate()
     const { bottomInset } = useSelector(state => state.panels)
     const { wallets } = useSelector((state) => state.wallet)
-    const [balanceView, setBalanceView] = useState('View Balance')
     const { independentField, minReceived, slippageTolerance, isExactIn, parsedAmount, amount, trade, tokenIn, tokenOut } = useSelector(state => state.swap)
     const [slippage, setSlippage] = useState(slippageTolerance)
     const [isExact, setExactIn] = useState(isExactIn);
@@ -94,7 +93,7 @@ const SwapPanel = () => {
         }
         let currentToken = val === "INPUT" ? tokenIn : tokenOut
         if(currentToken.symbol === 'BNB' && formattedAmounts[val] > 0.01){
-            formattedAmounts[val] = formattedAmounts[val] - 0.01
+            formattedAmounts[val] = BigNumber(formattedAmounts[val]).minus(0.01).toNumber()
         }
         dispatch(swapActions.setAmount(formattedAmounts[val],val === "INPUT" ? true : false));
         dispatch(swapActions.getSwapInfo(formattedAmounts[val],val === "INPUT" ? true : false));
@@ -138,43 +137,45 @@ const SwapPanel = () => {
     return (
         <div className='panel swap-panel'>
             <Content>
-                <div className='swap-inputs'>
-                    
-                    <SelectToken 
-                        max={true} 
-                        balance={true} 
-                        token={true} 
-                        data={tokens} 
-                        style={{marginBottom: '30px'}}
-                        action={true}
-                        field='from'
-                        name='INPUT'
-                        title="From token"
-                        onMaxClick={() => setMaxValue('INPUT')}
-                        checkAmount={checkAmount}
-                        checkValue={() => {}}
-                        value={formattedAmounts["INPUT"]} 
-                        selectedOption={{...tokenIn, code: tokenIn.symbol, balance: prettyNumber(tokenIn?.balance)}} 
-                        balanceView={balanceView} setBalanceView={setBalanceView} 
-                        onClick={() => setSelectedOption('INPUT')}
+            <div className='swap-inputs'>
+                    <FormGroupBalance  placement="end" balance={prettyNumber(tokenIn?.balance)} text="Balance" currency={tokenIn.symbol}/>
+                        <InputSelect
+                            input={{
+                                value: formattedAmounts["INPUT"],
+                                label: 'Amount',
+                                name: 'INPUT',
+                                onChange: checkAmount,
+                                action: { text: 'Max', onClick: () => setMaxValue('INPUT') }
+                            }}
+                            select={{
+                                value: tokenIn.symbol,
+                                options: tokens,
+                                label: 'Token from',
+                                readonly: true,
+                                onClick: () => setSelectedOption('INPUT')
+                            }}
+                            currencyKey = 'symbol'
                         />
+                        <br/>
                     <IconButton onClick={reverseTokens} type="hexagon" icon='arrows-towards'  className='swap-center-btn' width={60} height={60} bgColor="#C6D1FF" iconColor="#173296" borderColor="#869FFF"/>
-                    <SelectToken 
-                            balance={true} 
-                            token={true} 
-                            data={tokens} 
-                            action={true}
-                            field='to'
-                            checkValue={() => {}}
-                            name='OUTPUT'
-                            title="To token"
-                            onMaxClick={() => setMaxValue('OUTPUT')}
-                            checkAmount={checkAmount}
-                            value={formattedAmounts["OUTPUT"]}
-                            selectedOption={{...tokenOut, code: tokenOut.symbol, balance: prettyNumber(tokenOut?.balance)}} 
-                            balanceView={balanceView} setBalanceView={setBalanceView} 
-                            onClick={() => setSelectedOption('OUTPUT')}
+                         <InputSelect
+                            input={{
+                                value: formattedAmounts["OUTPUT"],
+                                label: 'Amount',
+                                name: 'OUTPUT',
+                                onChange: checkAmount,
+                                action: { text: 'Max', onClick: () => setMaxValue('OUTPUT') }
+                            }}
+                            select={{
+                                value: tokenOut.symbol,
+                                options: tokens,
+                                label: 'To token',
+                                readonly: true,
+                                onClick: () => setSelectedOption('OUTPUT')
+                            }}
+                            currencyKey = 'symbol'
                         />
+                    <FormGroupBalance  placement="end" balance={prettyNumber(tokenOut?.balance)} text="Balance" currency={tokenOut.symbol}/>
                 </div>
             <InfoCardBlock style={{marginTop: '10px'}}>
                 <InfoCardItem text={'Price'} symbol={tokenOut.symbol} symbol2={tokenIn.symbol}><span className='purple-text'>{formattedPrice || '-'}</span></InfoCardItem>
