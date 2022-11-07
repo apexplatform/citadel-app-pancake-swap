@@ -1,4 +1,4 @@
-import { Modal, Icon, ModalHeader, InfoCardItem, SwapBalanceCard, Button, InfoCardBlock, PriceUpdatedCard, } from '@citadeldao/apps-ui-kit/dist/main'
+import { Modal, Icon, InfoCardItem, SwapBalanceCard, Button, InfoCardBlock, PriceUpdatedCard, } from '@citadeldao/apps-ui-kit/dist/main'
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom'
@@ -13,12 +13,12 @@ const ConfirmModal = () => {
    
 return(
   <Modal show={showConfirmModal && !location.pathname.includes('/info')} showModal={() => dispatch(errorActions.setConfirmModal(false))}>
-    <ModalHeader title="Confirm swap" onClick={() => dispatch(errorActions.setConfirmModal(false))}/>
     <div>
+      <br/>
       <div className='row'>
-          <SwapBalanceCard width='45%' amount={amount} bgColor='#B7F6FF' color='#00BFDB' token={tokenIn} />
+          <SwapBalanceCard width='45%' icon='bsc' amount={amount} bgColor='#B7F6FF' color='#00BFDB' token={tokenIn} />
           <Icon name='triangle-right' width='16px'/>
-          <SwapBalanceCard width='45%' amount={outAmout} bgColor='#C6D1FF' color='rgba(58, 94, 229, 1)' token={tokenOut} />
+          <SwapBalanceCard width='45%'  icon='bsc' amount={outAmout} bgColor='#C6D1FF' color='rgba(58, 94, 229, 1)' token={tokenOut} />
       </div>
       <PriceUpdatedCard style={{margin: '16px 0'}} acceptPrice={() => setDisabledSwap(false)} text='Price updated'/>
       <InfoCardBlock>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { GuidesCard } from '@citadeldao/apps-ui-kit/dist/main'
+import { Accordion } from '@citadeldao/apps-ui-kit/dist/main'
 import text from '../../text.json'
 import '../styles/uiKit/guides.css'
 import { ReactComponent as Guide1 } from '../../assets/img/guides/guide1.svg'
@@ -15,20 +15,20 @@ const GuidesPanel = () => {
                 <h3 className='heading-text-h3'>Guides & Questions</h3>
                 <p className='description-text'>Learn more about Pancakeswap</p>
             </div>
-            <GuidesCard text={text.GUIDES_HEADER_1}>
+            <Accordion title={text.GUIDES_HEADER_1} type="guide">
                 <p>{text.GUIDES_DESCRIPTION_1}</p>
                 <Guide1 className='quide-img'/>
                 <p>{text.GUIDES_DESCRIPTION_1_2}</p>
-            </GuidesCard>
-            <GuidesCard text={text.GUIDES_HEADER_2}>
+            </Accordion>
+            <Accordion title={text.GUIDES_HEADER_2} type="guide">
                 <div>
                     <p style={{marginBottom : '10px'}}>{text.GUIDES_DESCRIPTION_2}</p>
                     <Guide2 style={{marginBottom : '10px'}} className='quide-img' />
                     <p>{text.GUIDES_DESCRIPTION_2_2}</p>
                     <Guide3 className='quide-img' />
                 </div>
-            </GuidesCard>
-            <GuidesCard text={text.GUIDES_HEADER_3}>
+            </Accordion>
+            <Accordion title={text.GUIDES_HEADER_3} type="guide">
                 <div>
                     <p>{text.GUIDES_DESCRIPTION_3}</p>
                     <Guide4 className='quide-img' />
@@ -36,24 +36,24 @@ const GuidesPanel = () => {
                     <Guide5 className='quide-img' />
                     <p>{text.GUIDES_DESCRIPTION_3_3}</p>
                 </div>
-            </GuidesCard>
-            <GuidesCard text={text.GUIDES_HEADER_4}>
+            </Accordion>
+            <Accordion title={text.GUIDES_HEADER_4} type="guide">
                 <div>
                     <p style={{marginBottom : '10px'}}>{text.GUIDES_DESCRIPTION_4}</p>
                     <Guide6 style={{marginBottom : '10px'}} className='quide-img' />
                     <p>{text.GUIDES_DESCRIPTION_4_2}</p>
                 </div>
-            </GuidesCard>
-            <GuidesCard text={text.GUIDES_HEADER_5}>
+            </Accordion>
+            <Accordion title={text.GUIDES_HEADER_5} type="guide">
                 <div className='row guide-content-4'>
                     <p>{text.GUIDES_DESCRIPTION_5}</p>
                 </div>
-            </GuidesCard>
-            <GuidesCard text={text.GUIDES_HEADER_6}>
+            </Accordion>
+            <Accordion title={text.GUIDES_HEADER_6} type="guide">
                 <div className='row guide-content-4'>
                     <p>{text.GUIDES_DESCRIPTION_6}</p>
                 </div>
-            </GuidesCard>
+            </Accordion>
         </div>
     )
 }

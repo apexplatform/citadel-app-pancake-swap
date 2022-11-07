@@ -7,6 +7,7 @@ const initialState = {
     implementationErrors: null,
     argumentsError: null,
     openErrorModal: false,
+    openConfirmModal: false
 };
 export default function ErrorReducer(state = initialState, action) {
     switch (action.type) {
@@ -29,6 +30,11 @@ export default function ErrorReducer(state = initialState, action) {
             return {
                 ...state,
                 argumentsError: action.payload,
+            };
+        case types.SET_CONFIRM_MODAL:
+            return {
+                ...state,
+                openConfirmModal: action.payload,
             };
         case types.SET_VALIDATION_ERRORS:
             return {

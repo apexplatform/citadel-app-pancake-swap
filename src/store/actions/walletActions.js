@@ -165,6 +165,9 @@ const loadTokenBalances = (address) => {
     const { tokens } = store.getState().wallet;
     const { tokenIn, tokenOut, amount, isExactIn } = store.getState().swap;
     tokens.forEach(async(token) => {
+        token.value = token?.symbol
+        token.icon = token.logoURI
+        token.label = token?.symbol
         if(token?.address){
             let balance = await wallet.getTokenBalance(token)
             if(balance){
@@ -214,7 +217,7 @@ const updateWalletList = async(wallet) => {
                 store.dispatch(errorActions.checkErrors(new ValidationError())) 
             }
         }
-    }else{
+    }else if(wallet.net === 'bsc'){
         const walletList = new WalletList()
         wallet.network = wallet.net
         wallet.name = networks[wallet?.net]?.name

@@ -1,13 +1,20 @@
 .swap-center-btn{
     position: absolute;
-    left: 45%;
-    top: 36%;
+    width: 50px !important;
+    height: 50px !important;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
 }
 
 .swap-inputs{
     position: relative;
     margin-top: -10px;
+}
+
+.swap-inputs .form-group:first-child {
+    margin-bottom: 24px;
 }
 
 .modal-header{
@@ -84,8 +91,13 @@
     color: #D900AB;
 }
 
-@media screen and (max-width: 500px) {
-    .swap-center-btn{
-        left: 42%;
+@media (min-width: 560px) and (max-width: 1024px), (min-width: 1220px) {
+    .swap-center-btn {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .swap-inputs .form-group:first-child {
+        margin-bottom: 30px;
     }
 }
